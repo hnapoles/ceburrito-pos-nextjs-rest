@@ -7,9 +7,12 @@ import  EditFormUser from '@/app/modules/settings/users/views/users-edit-form'
 export default async function Page({ params }: { params: { id: string } }) {
     const { id } = await params;
 
+    /*
     const [user] = await Promise.all([
        getUserByIdService(id),
       ]);
+    */
+   const user = await  getUserByIdService(id);
 
       if (!user) {
         notFound();

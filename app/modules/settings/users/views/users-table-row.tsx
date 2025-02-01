@@ -17,18 +17,30 @@ import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
 import { deleteUserByIdService } from '@/app/modules/settings/users/services/users.service';
-//import { deleteProduct } from '@/app/lib/actions/product-actions';
+import { User } from '@/app/modules/settings/users/models/users.interface'
 
-import { AppUser } from '@prisma/client';
 
-export function UserTableRow({ user }: { user: AppUser}) {
+//import { AppUser } from '@prisma/client';
+
+export function UserTableRow({ user }: { user: User}) {
 
   const pathname = usePathname();
 
+  /*
   async function deleteUserAction(formData: FormData) {
     let id = formData.get('id');
     if (id) {
-        await deleteUserByIdService('123');
+        await deleteUserByIdService(user.id);
+        revalidatePath('/settings/users');
+    }
+    
+  }
+    */
+
+  async function deleteUserAction(id:string) {
+    
+    if (id) {
+        await deleteUserByIdService(id);
         revalidatePath('/settings/users');
     }
     
@@ -54,7 +66,7 @@ export function UserTableRow({ user }: { user: AppUser}) {
         </Badge>
       </TableCell>
       <TableCell className="hidden md:table-cell">{user.primaryRole}</TableCell>
-      <TableCell className="hidden md:table-cell">{user.emailVerified?.toString()}</TableCell>
+      <TableCell className="hidden md:table-cell">{user.isVerified?.toString()}</TableCell>
       <TableCell className="hidden md:table-cell">
         {user.createdAt?.toLocaleString('en-US', { timeZone: 'America/Chicago' })}
       </TableCell>
@@ -72,8 +84,8 @@ export function UserTableRow({ user }: { user: AppUser}) {
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <DropdownMenuItem>
-              <form action={deleteUserAction}>
-                <button type="submit">Delete</button>
+              <form>
+                <button type="submit" onClick={()=> deleteUserAction(user.id)} >Delete</button>
               </form>
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -1,10 +1,11 @@
 import UsersMainPage from '@/app/modules/settings/users/views/users-page-main';
 
 import { getAllUsersByPageService, getAllUsersService } from '@/app/modules/settings/users/services/users.service';
-import { AppUser } from '@prisma/client';
+//import { AppUser } from '@prisma/client';
+import { User } from '@/app/modules/settings/users/models/users.interface'
 
 interface IUserList {
-    users: AppUser[],
+    users: User[],
     offset: number | 10,
     pageNumber: number | 1,
     totalUsers: number | 1

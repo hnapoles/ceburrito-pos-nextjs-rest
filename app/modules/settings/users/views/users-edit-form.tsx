@@ -41,13 +41,15 @@ import {
 import { UserFormSchema } from "../models/users.form.schema"
 import { updateUserByIdService } from "../services/users.service"
 
-import { AppUser } from "@prisma/client";
+//import { AppUser } from "@prisma/client";
+import { User } from '@/app/modules/settings/users/models/users.interface'
+
 import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 
 export default function EditFormUser({
     user
 }: {
-    user: AppUser
+    user: User
 }) {
 
     const form = useForm<z.infer<typeof UserFormSchema>>({
@@ -55,7 +57,7 @@ export default function EditFormUser({
         defaultValues: {
             id: user.id,
             email: user.email,
-            name: user.name,
+            name: user.username,
             primaryRole: user.primaryRole
         }
     })

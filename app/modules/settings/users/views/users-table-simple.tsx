@@ -22,7 +22,8 @@ import {
   import { ChevronLeft, ChevronRight } from 'lucide-react';
   import { Button } from '@/components/ui/button';
   
-  import { AppUser } from '@prisma/client';
+  //import { AppUser } from '@prisma/client';
+  import { User } from '@/app/modules/settings/users/models/users.interface'
 
   
   export function UsersTableSimple({
@@ -31,7 +32,7 @@ import {
     pageNumber,
     totalUsers
   }: {
-    users: AppUser[];
+    users: User[];
     offset: number;
     pageNumber: number;
     totalUsers: number;
@@ -68,7 +69,7 @@ import {
                 <TableHead>Email</TableHead>
                 <TableHead className="hidden md:table-cell">Primary Role</TableHead>
                 <TableHead className="hidden md:table-cell">
-                  Total Sales
+                  Email Verified?
                 </TableHead>
                 <TableHead className="hidden md:table-cell">Created at</TableHead>
                 <TableHead>

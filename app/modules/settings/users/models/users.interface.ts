@@ -5,7 +5,22 @@ export interface IGetAllUsersByPageService {
 }
 
 export interface IUpdateUserByIdService {
-     email: string,
-     name: string,
-     primaryRole: string
+    email: string,
+    name: string,
+    primaryRole: string
+}
+
+
+export interface User {
+    id: string,
+    username: string,
+    email: string,
+    primaryRole: string
+    isVerified: boolean,
+    isActive: boolean,
+    createdAt: Date,
+    updatedAt: Date,
+    createdBy: string,
+    updatedBy: string,
+    imageUrl: string | null,
 }

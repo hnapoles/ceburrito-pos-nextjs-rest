@@ -5,11 +5,12 @@ import { File, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { UsersTableSimple } from './users-table-simple';
-import { AppUser } from '@prisma/client';
+//import { AppUser } from '@prisma/client';
+import { User } from '@/app/modules/settings/users/models/users.interface'
 import { SearchInput } from './search-input';
 
 interface IUserListProps {
-    users: AppUser[],
+    users: User[],
     offset: number | 10,
     pageNumber: number | 1,
     totalUsers: number | 1
