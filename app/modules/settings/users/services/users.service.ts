@@ -11,6 +11,8 @@ const prisma = new PrismaClient()
 
 import { fetchApi } from '@/lib/api-utils';
 
+const HOST_API_URL = process.env.HOST_API_URL || "http://172.104.117.139:3000/api/v1";
+
 export async function getAllUsersService() {
    
     try {
@@ -50,9 +52,10 @@ export async function getAllUsersByPageService(p: IGetAllUsersByPageService) {
     }
 
     const accessToken = session.accessToken
-    const skip = (p.pageNumber - 1) * p.recordsPerPage;
+    //const skip = (p.pageNumber - 1) * p.recordsPerPage;
 
-    const { data: response, error, status } = await fetchApi<GetUsersResponse>("http://172.104.117.139:3000/api/v1/users", { token : accessToken })
+    const { data: response, error, status } = await fetchApi<GetUsersResponse>(`${HOST_API_URL}/users?page=${p.pageNumber}&limit=${p.recordsPerPage}&keyword=${p.keyword}`, 
+        { token : accessToken })
 
     console.log('auth server error ', error)
           console.log('new data', response);
@@ -63,37 +66,7 @@ export async function getAllUsersByPageService(p: IGetAllUsersByPageService) {
 
           return users;
     
-    /*
-    var whereClause = {};
-    if (p.search) {
-        whereClause = {
-            OR: [
-              { name: { contains: p.search, mode: "insensitive" } },  // Case-insensitive
-              { email: { contains: p.search, mode: "insensitive" } }
-            ]
-        };
-    } else {
-        whereClause = {
-        }
-    }
-
-    try {
-        const users = await prisma.appUser.findMany({
-            where: whereClause,
-            //select: { password: false },
-            skip: skip,
-            take: p.recordsPerPage,
-            orderBy: {
-                name: 'asc'
-            }
-        });
-        
-        return users
-    } catch (err) {
-        console.log(err);
-        return null;
-    }
-    */
+    
     
 }
 

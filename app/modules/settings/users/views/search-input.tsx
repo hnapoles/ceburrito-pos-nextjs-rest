@@ -20,8 +20,8 @@ export function SearchInput() {
   const [isPending, startTransition] = useTransition();
 
   function searchAction(formData: FormData) {
-    let value = formData.get('q') as string;
-    let params = new URLSearchParams({ q: value });
+    let value = formData.get('keyword') as string;
+    let params = new URLSearchParams({ keyword: value });
     startTransition(() => {
       //router.replace(`/dashboard/settings/users?${params.toString()}`);
       router.replace(`${pathname}?${params.toString()}`);
@@ -34,9 +34,9 @@ export function SearchInput() {
     const params = new URLSearchParams(searchParams);
     params.set('page', '1');
     if (term) {
-      params.set('query', term);
+      params.set('keyword', term);
     } else {
-      params.delete('query');
+      params.delete('keyword');
     }
     router.replace(`${pathname}?${params.toString()}`);
   }, 3000);
@@ -47,10 +47,10 @@ export function SearchInput() {
     <form action={searchAction} className="relative ml-auto flex-1 md:grow-0">
       <Search className="absolute left-2.5 top-[.75rem] h-4 w-4 text-muted-foreground" />
       <Input
-        name="q"
+        name="keyword"
         type="search"
         placeholder="Search..."
-        defaultValue={searchParams.get('q')?.toString()}
+        defaultValue={searchParams.get('keyword')?.toString()}
         className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
       />
       {isPending && <Spinner />}

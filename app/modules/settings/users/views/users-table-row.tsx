@@ -47,7 +47,7 @@ export function UserTableRow({ user }: { user: AppUser}) {
           width="64" /> : null
         }
       </TableCell>
-      <TableCell className="font-medium">{user.name}</TableCell>
+      <TableCell className="font-medium">{user.username}</TableCell>
       <TableCell>
         <Badge variant="outline">
           {user.email}

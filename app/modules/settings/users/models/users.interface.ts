@@ -1,5 +1,5 @@
 export interface IGetAllUsersByPageService {
-    search: string | null,
+    keyword: string | null,
     recordsPerPage: number | 10;
     pageNumber: number | 1;
 }
