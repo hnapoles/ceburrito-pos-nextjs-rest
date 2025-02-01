@@ -7,7 +7,7 @@ export const UserFormSchema = z.object({
     .string()
     .email("Please enter a valid email address")
     .nonempty("Email is required"),
-  name: z
+  username: z
     .string()
     .min(6, {
       message: "User name must be at least 6 characters.",
@@ -27,7 +27,7 @@ export const NewUserFormSchema = z.object({
         required_error: "Please enter valid email address.",
       })
       .email(),
-    name: z
+    username: z
       .string()
       .min(6, {
         message: "User name must be at least 6 characters.",

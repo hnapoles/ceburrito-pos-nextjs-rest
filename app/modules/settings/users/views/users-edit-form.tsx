@@ -57,7 +57,7 @@ export default function EditFormUser({
         defaultValues: {
             id: user.id,
             email: user.email,
-            name: user.username,
+            username: user.username,
             primaryRole: user.primaryRole
         }
     })
@@ -70,6 +70,7 @@ export default function EditFormUser({
 
     async function onSubmit(data: z.infer<typeof UserFormSchema>) {
         await updateUserByIdService(user.id, data);
+        console.log(data)
         toast({
             title: "Data saved for user",
             description: (
@@ -147,7 +148,7 @@ export default function EditFormUser({
                         />
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="username"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>User Name</FormLabel>

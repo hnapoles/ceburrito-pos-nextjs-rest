@@ -21,7 +21,7 @@ export default async function Page(
   const offset = searchParams.offset ?? 10;
   const pageNumber = searchParams.pageNumber ?? 1;
 
-  console.log('new keyword ', keyword)
+  //console.log('new keyword ', keyword)
 
   const totalUsers = 12;
   const users = await getAllUsersByPageService({keyword: keyword, recordsPerPage: offset, pageNumber: pageNumber });

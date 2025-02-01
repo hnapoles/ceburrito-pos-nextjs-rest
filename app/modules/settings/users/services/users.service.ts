@@ -80,7 +80,7 @@ export async function getAllUsersByPageService(p: IGetAllUsersByPageService) {
             { token: accessToken })
 
     console.log('server error ', error)
-    console.log('new data', response);
+    //console.log('new data', response);
 
     if (!response || !response.data || error) return null;
 
@@ -144,40 +144,28 @@ export async function createUserService(newUser: IUpdateUserByIdService) {
 }
 
 export async function updateUserByIdService(id: string, newUser: IUpdateUserByIdService ) {
-    try {
-        const user = await prisma.appUser.update({
-            where: {
-                id: id
-            },
-            data: newUser
-        });
-        return { success: true, message: "User data saved.", data: user };
 
-    } catch (err) {
-        console.log(err);
-        return { success: false, message: "Db error", data: {} };
+    const session = await auth();
+    if (!session) {
+        console.log("Please log in first");
+        return { success: false, message: "Not logged in", data: [] };
     }
-    //revalidatePath('/dashboard/settings/users');
-    //redirect('/dashboard/settings/users');
+    const accessToken = session.accessToken
+
+    console.log('json stringify newUser', JSON.stringify(newUser));
+   
+    const { data: response, error, status } 
+        = await fetchApi<DeleteUserResponse>(`${HOST_API_URL}/users/${id}`, 
+            { token : accessToken, method: 'PUT', body: JSON.stringify(newUser) } )
+    
+    if (!response || !response.success || error) return { success: false, message: response?.message, data: [] };
+
+    return { success: true, message: response?.message, data: response?.data };
+    
 
 }
 
 export async function getUserByIdService(id: string) {
-
-
-    /*
-    try {
-        const user = await prisma.appUser.findUnique({
-            where: {
-                id: id
-            }
-        });
-        return user
-    } catch (err) {
-        console.error(err);
-        return null
-    }
-    */
 
     const session = await auth();
     if (!session) {
@@ -191,7 +179,7 @@ export async function getUserByIdService(id: string) {
             { token: accessToken })
 
     console.log('server error ', error)
-    console.log('new data', response);
+    //console.log('new data', response);
 
     if (!response || !response.data || !response.success || error) return null;
 

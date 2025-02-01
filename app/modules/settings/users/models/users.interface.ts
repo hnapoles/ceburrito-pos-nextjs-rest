@@ -6,7 +6,7 @@ export interface IGetAllUsersByPageService {
 
 export interface IUpdateUserByIdService {
     email: string,
-    name: string,
+    username: string,
     primaryRole: string
 }
 
