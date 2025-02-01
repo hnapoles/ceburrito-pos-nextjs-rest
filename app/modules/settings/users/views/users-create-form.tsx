@@ -52,7 +52,8 @@ export default function CreateFormUser() {
     const form = useForm<z.infer<typeof NewUserFormSchema>>({
         resolver: zodResolver(NewUserFormSchema),
         defaultValues: {
-            name: "",
+            username: "",
+            password: "",
             email: "",
             primaryRole: "",
           },
@@ -202,7 +203,7 @@ export default function CreateFormUser() {
                         />
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="username"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>User Name</FormLabel>
@@ -212,6 +213,23 @@ export default function CreateFormUser() {
                                         {...field} />
                                     <FormDescription>
                                         This is a unique name{" "}.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <Input
+                                        type="text"
+                                        placeholder=""
+                                        {...field} />
+                                    <FormDescription>
+                                        This is a secret password{" "}.
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>

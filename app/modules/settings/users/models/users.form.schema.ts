@@ -35,6 +35,14 @@ export const NewUserFormSchema = z.object({
       .max(30, {
         message: "User name must not be longer than 30 characters.",
       }),
+    password: z
+      .string()
+      .min(6, {
+        message: "Password must be at least 6 characters.",
+      })
+      .max(30, {
+        message: "User name must not be longer than 30 characters.",
+      }),
     primaryRole: z.string({
         required_error: "Please select a primary role.",
     }),

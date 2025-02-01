@@ -10,6 +10,14 @@ export interface IUpdateUserByIdService {
     primaryRole: string
 }
 
+export interface ICreateUserService {
+    email: string,
+    password: string,
+    username: string,
+    primaryRole: string
+}
+
+
 
 export interface User {
     id: string,

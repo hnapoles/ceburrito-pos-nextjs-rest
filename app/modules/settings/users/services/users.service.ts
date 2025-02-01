@@ -4,7 +4,7 @@
 
 import { auth } from "@/app/modules/auth/services/auth";
 
-import { IGetAllUsersByPageService, IUpdateUserByIdService } from "@/app/modules/settings/users/models/users.interface";
+import { IGetAllUsersByPageService, IUpdateUserByIdService, ICreateUserService } from "@/app/modules/settings/users/models/users.interface";
 
 import { PrismaClient, Prisma } from "@prisma/client"
 const prisma = new PrismaClient()
@@ -112,34 +112,23 @@ export async function deleteUserByIdService(id: string) {
 
 
 
-export async function createUserService(newUser: IUpdateUserByIdService) {
-    const newRecord = {...newUser, createdBy: 'boboy', updatedBy: 'boboy', password: '123'}
-    if (!newRecord) {
-        return { success: false, message: 'Invalid data parameters sent', data: {} };
+export async function createUserService(newUser: ICreateUserService) {
+    const session = await auth();
+    if (!session) {
+        console.log("Please log in first");
+        return { success: false, message: "Not logged in", data: [] };
     }
-    try {
-        const user = await prisma.appUser.create({
-            data: newRecord
-        });
-        //revalidatePath('/dashboard/settings/users');
-        //redirect('/dashboard/settings/users');
-        return { success: true, message: "User data saved.", data: user };
+    const accessToken = session.accessToken
 
-    } catch (err) {
-        console.error(err);
-        var message = "Database error";
-        if (err instanceof Prisma.PrismaClientKnownRequestError) {
-            switch (err.code) {
-              case "P2002":
-                message = "Duplicate entry.";
-              case "P2025":
-                message = "Record not found.";
-              default:
-                message = "Database error.";
-            }
-          }
-        return { success: false, message: message, data: {} };
-    } 
+    console.log('json stringify newUser', JSON.stringify(newUser));
+   
+    const { data: response, error, status } 
+        = await fetchApi<DeleteUserResponse>(`${HOST_API_URL}/users/`, 
+            { token : accessToken, method: 'POST', body: JSON.stringify(newUser) } )
+    
+    if (!response || !response.success || error) return { success: false, message: response?.message, data: [] };
+
+    return { success: true, message: response?.message, data: response?.data };
 
 }
 
