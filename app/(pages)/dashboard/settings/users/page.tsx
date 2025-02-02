@@ -1,8 +1,15 @@
+
+
 import UsersMainPage from '@/app/modules/settings/users/views/users-page-main';
 
 import { getAllUsersByPageService, getAllUsersService } from '@/app/modules/settings/users/services/users.service';
 //import { AppUser } from '@prisma/client';
 import { User } from '@/app/modules/settings/users/models/users.interface'
+
+import { ShowErrorDialog } from '@/app/providers/show-error-dialog';
+import { errorMonitor } from 'node:events';
+
+
 
 interface IUserList {
     users: User[],
@@ -24,19 +31,26 @@ export default async function Page(
   //console.log('new keyword ', keyword)
 
   const totalUsers = 12;
-  const users = await getAllUsersByPageService({keyword: keyword, recordsPerPage: offset, pageNumber: pageNumber });
 
-  if (users) {
-    return (
-        <UsersMainPage users={users} offset={offset} pageNumber={pageNumber} totalUsers={totalUsers} />
-    )
-  }
-  
-  return (
-    <div>
-        No users found!
-    </div>
-  )
+  const fetchUsers = async () => {
+    try {
+      const response = await getAllUsersByPageService({keyword: keyword, recordsPerPage: offset, pageNumber: pageNumber });
+      console.log(' res data', response.data)
+      const { data: users} = response.data
+      return (
+        <UsersMainPage users={response.data} offset={offset} pageNumber={pageNumber} totalUsers={totalUsers} />
+      )
+    } catch (err) {
+      console.log(errorMonitor)
+      return (
+        <div>
+            No users found!
+        </div>
+      )
+    }
+  };
+
+  await fetchUsers();
 
   
 }

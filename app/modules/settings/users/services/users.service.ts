@@ -13,19 +13,6 @@ import { fetchApi } from '@/lib/api-utils';
 
 const HOST_API_URL = process.env.HOST_API_URL || "http://172.104.117.139:3000/api/v1";
 
-export async function getAllUsersService() {
-   
-    try {
-        const users = await prisma.appUser.findMany();
-        
-        return { success: true, message: "Got data", data: users };
-    } catch (err) {
-        console.log(err);
-        return { success: false, message: "Db error", data: [] };
-    }
-
-}
-
 type GetUsersResponse = {
     success: boolean,
     message: string,
@@ -61,36 +48,43 @@ type GetAllUsersResponse = {
     }]
 }
 
-interface DeleteUserResponse extends GetUsersResponse {
+interface IUserResponse {
+    id: string,
+    username: string,
+    email: string,
+    primaryRole: string
+    isVerified: boolean,
+    isActive: boolean,
+    createdAt: Date,
+    updatedAt: Date,
+    createdBy: string,
+    updatedBy: string,
+    imageUrl: string | null,
+    accessToken: string | null
 }
 
+/*
+// Fetch Users (GET)
+export const getUsers = async (): Promise<User[]> => {
+  return apiRequest<User[]>({ url: '/users' });
+};
 
-export async function getAllUsersByPageService(p: IGetAllUsersByPageService) {
+// Create New User (POST)
+export const createUser = async (userData: { name: string; email: string }): Promise<User> => {
+  return apiRequest<User>({
+    url: '/users',
+    method: 'POST',
+    data: userData,
+  });
+};
+*/
 
-    const session = await auth();
-    if (!session) {
-        console.log("Please log in first");
-        return null;
-    }
-    const accessToken = session.accessToken
-    //const skip = (p.pageNumber - 1) * p.recordsPerPage;
+import { apiRequest } from '@/lib/axios-client';
 
-    const { data: response, error, status }
-        = await fetchApi<GetAllUsersResponse>(`${HOST_API_URL}/users?page=${p.pageNumber}&limit=${p.recordsPerPage}&keyword=${p.keyword}`,
-            { token: accessToken })
-
-    console.log('server error ', error)
-    //console.log('new data', response);
-
-    if (!response || !response.data || error) return null;
-
-    const { data: users } = response;
-
-    return users;
-    
-    
-    
-}
+export const getAllUsersByPageService = async (p: IGetAllUsersByPageService): Promise<GetAllUsersResponse> => {
+    return apiRequest<GetAllUsersResponse>({ url: `${HOST_API_URL}/users?page=${p.pageNumber}&limit=${p.recordsPerPage}&keyword=${p.keyword}`});
+};
+  
 
 export async function deleteUserByIdService(id: string) {
 
@@ -154,30 +148,10 @@ export async function updateUserByIdService(id: string, newUser: IUpdateUserById
 
 }
 
-export async function getUserByIdService(id: string) {
+export const getUserByIdService = async (id: string): Promise<IUserResponse> => {
+    return apiRequest<IUserResponse>({ url: `${HOST_API_URL}/users/${id}`});
+};
 
-    const session = await auth();
-    if (!session) {
-        console.log("Please log in first");
-        return null;
-    }
-    const accessToken = session.accessToken
-   
-    const { data: response, error, status }
-        = await fetchApi<GetUsersResponse>(`${HOST_API_URL}/users/${id}`,
-            { token: accessToken })
-
-    console.log('server error ', error)
-    //console.log('new data', response);
-
-    if (!response || !response.data || !response.success || error) return null;
-
-    const { data: user } = response;
-
-    return user;
-    
-    
-}
 
 export async function checkEmailExistsService(email: string): Promise<boolean> {
     const user = await prisma.appUser.findUnique({

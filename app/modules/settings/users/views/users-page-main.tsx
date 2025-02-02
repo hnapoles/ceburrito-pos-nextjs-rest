@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,6 +19,10 @@ interface IUserListProps {
 }
 
 const UsersMainPage: React.FC<IUserListProps> = ({ users, offset, pageNumber, totalUsers }) => {
+    
+
+    console.log('here in page ', users)
+    
     return (
         <Tabs defaultValue="all">
             <div className="flex items-center">
@@ -62,6 +68,7 @@ const UsersMainPage: React.FC<IUserListProps> = ({ users, offset, pageNumber, to
             </TabsContent>
         </Tabs>
     )
+    
 }
 
 export default UsersMainPage

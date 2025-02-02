@@ -1,3 +1,4 @@
+
 import { Analytics } from '@vercel/analytics/react';
 import { User } from '@/app/modules/nav/views/user';
 import NavProvider from '@/app/modules/nav/providers/nav-provider';
@@ -7,11 +8,18 @@ import DesktopNav from '@/app/modules/nav/views/desktop-nav'
 import MobileNav from '@/app/modules/nav/views/mobile-nav'
 import PagesBreadCrumb from '@/app/modules/nav/views/pages-bread-crumb'
 
+import ServerErrorDialog from '@/app/providers/server-error-dialog';
+import { ErrorProvider } from '@/app/providers/error-context';
+
 export default function PagesDefaultLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
+
+  
+
+
   return (
     <NavProvider>
       <main className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -27,11 +35,15 @@ export default function PagesDefaultLayout({
         
           </header>
           <main className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-4 bg-muted/40">
-            {children}
+          
+              {children}
+             
           </main>
         </div>
         <Analytics />
+        
       </main>
     </NavProvider>
+    
   );
 }
