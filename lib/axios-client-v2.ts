@@ -5,7 +5,7 @@ import axios, { AxiosInstance,
   //AxiosRequestConfig, 
   InternalAxiosRequestConfig, 
   AxiosResponse, 
-  Method } from 'axios';
+  Method, type AxiosError } from 'axios';
 //import { getSession } from 'next-auth/react';
 
 // Create Axios instance
@@ -98,7 +98,13 @@ export const apiRequest = async <T>({ url, method = 'GET', data, params, headers
   }
 };
 
-export const apiDq = async <T>({ operation, data, params, headers }: DqRequestOptions): Promise<T> => {
+export type ApiResponse<T> = {
+    data: T | null
+    error: string | null
+  }
+  
+
+export const apiDq = async <T>({ operation, data, params, headers }: DqRequestOptions):  Promise<ApiResponse<T>> => {
 
   //all Dq calls are POST
   const method = 'POST'
@@ -111,7 +117,7 @@ export const apiDq = async <T>({ operation, data, params, headers }: DqRequestOp
       apiKey = session?.apiKey
   }
 
-  const url = `${base}/${operation}/${apiKey}`
+  const url = `${base}/${operation}/${apiKey}1`
 
   try {
     const response = await axiosInstance.request<T>({
@@ -121,8 +127,9 @@ export const apiDq = async <T>({ operation, data, params, headers }: DqRequestOp
       params,
       headers,
     });
-    return response.data;
+    return {data: response.data, error: null};
   } catch (error) {
+    /*
     console.error(`Error in Dq API Request [${method} ${url}]:`);
     if (axios.isAxiosError(error)) {
       // Handle Axios-specific errors
@@ -147,6 +154,43 @@ export const apiDq = async <T>({ operation, data, params, headers }: DqRequestOp
 
     //console.error(`Error in Dq API Request [${method} ${url}]:`, error);
     throw error;
+    */
+
+    //console.error(`Error in Dq API Request [${method} ${url}]:`);
+    console.error("API call failed:", error)
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError
+      if (axiosError.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+
+        // Access the full error response if needed
+        let errResponseData = null;
+        if (axiosError && axiosError.response && axiosError.response.data && axiosError.response.data) {
+            errResponseData = axiosError.response.data;
+            console.error('Full Error Response:', axiosError.response.data);
+        }
+            
+
+        return {
+          data: null,
+          error: `Server error: ${axiosError.response.status} ${axiosError.response.statusText} ${JSON.stringify(errResponseData)}`,
+        }
+      } else if (axiosError.request) {
+        // The request was made but no response was received
+        return {
+          data: null,
+          error: "No response received from server. It might be down or you might be offline.",
+        }
+      }
+    }
+    // Something happened in setting up the request that triggered an Error
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : "An unknown error occurred",
+    }
+  
+
   }
 };
 

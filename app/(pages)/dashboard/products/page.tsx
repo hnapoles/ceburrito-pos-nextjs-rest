@@ -6,19 +6,32 @@ import {
     CardTitle
   } from '@/components/ui/card';
 
-  import { apiDq } from '@/lib/axios-client';
+  import { apiDq } from '@/lib/axios-client-v2';
 
   import {IDqFindResponse} from '@/app/modules/settings/users/services/users.service'
+
+  import ErrorDisplay  from './error-display'
+
+  export interface Product {
+    id: string
+    name: string
+    description: string
+    price?: number
+  }
   
   export default async function ProductsPage() {
 
 
-    try {
-      const products = await apiDq<IDqFindResponse>({operation: 'Find', data: { entity: "product"}, params: {keyword: "car"} })
-      console.log(products)
-    } catch(err) {
-      
-    }
+  
+      const {data: products, error} = await apiDq<Product[]>({operation: 'Find', data: { entity: "xproduct"}, params: {keyword: "phone"} })
+     
+      if (error) {
+        return <ErrorDisplay message={error} />
+      }
+    
+      if (!products || products.length === 0) {
+        return <div>No products available.</div>
+      }
 
 
     return (

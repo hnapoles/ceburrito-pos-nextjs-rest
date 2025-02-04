@@ -34,11 +34,11 @@ export default async function Page(
 
   const fetchUsers = async () => {
     try {
-      const response = await getAllUsersByPageService({keyword: keyword, recordsPerPage: offset, pageNumber: pageNumber });
-      console.log(' res data', response.data)
+      const users = await getAllUsersByPageService({keyword: keyword, recordsPerPage: offset, pageNumber: pageNumber });
+      console.log(' res data', users)
       //const { data: users} = response.data
       return (
-        <UsersMainPage users={response.data} offset={offset} pageNumber={pageNumber} totalUsers={totalUsers} />
+        <UsersMainPage users={users} offset={offset} pageNumber={pageNumber} totalUsers={totalUsers} />
       )
     } catch (err) {
       console.log(errorMonitor)

@@ -9,7 +9,7 @@ import { IGetAllUsersByPageService, IUpdateUserByIdService, ICreateUserService }
 //import { PrismaClient, Prisma } from "@prisma/client"
 //const prisma = new PrismaClient()
 
-import { fetchApi } from '@/lib/api-utils';
+import { fetchApi } from '@/lib/fetch-api-utils';
 
 const HOST_API_URL = process.env.HOST_API_URL || "http://172.104.117.139:3000/api/v1";
 
