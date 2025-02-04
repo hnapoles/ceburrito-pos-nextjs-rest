@@ -14,10 +14,10 @@ import {
 
 
     try {
-      const products = await apiDq<IDqFindResponse>({operation: 'Find', data: { entity: "product"} })
-      console.log(products)
+      const response = await apiDq<IDqFindResponse>({operation: 'Find', data: { entity: "xproduct"} })
+      console.log(response)
     } catch(err) {
-      console.log(err)
+      
     }
 
 
