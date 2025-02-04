@@ -110,7 +110,7 @@ export const apiDq = async <T>({ operation, data, params, headers }: DqRequestOp
       apiKey = session?.apiKey
   }
 
-  const url = `${base}/${operation}/${apiKey}1`
+  const url = `${base}/${operation}/${apiKey}`
 
   try {
     const response = await axiosInstance.request<T>({

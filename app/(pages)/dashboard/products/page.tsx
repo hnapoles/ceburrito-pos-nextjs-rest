@@ -14,8 +14,8 @@ import {
 
 
     try {
-      const response = await apiDq<IDqFindResponse>({operation: 'Find', data: { entity: "xproduct"} })
-      console.log(response)
+      const products = await apiDq<IDqFindResponse>({operation: 'Find', data: { entity: "product"}, params: {keyword: "car"} })
+      console.log(products)
     } catch(err) {
       
     }
