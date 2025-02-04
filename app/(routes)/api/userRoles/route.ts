@@ -8,9 +8,9 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   return Response.json(roles, {status: 200});
 }
 */
-import { NextApiRequest, NextApiResponse } from "next";
+//import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET() {
   const roles = ["admin", "manager", "user"]
-  return Response.json(roles, {status: 200});
+  return Response.json(roles);
 }
