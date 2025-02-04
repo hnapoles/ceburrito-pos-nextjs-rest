@@ -6,8 +6,8 @@ import { auth } from "@/app/modules/auth/services/auth";
 
 import { IGetAllUsersByPageService, IUpdateUserByIdService, ICreateUserService } from "@/app/modules/settings/users/models/users.interface";
 
-import { PrismaClient, Prisma } from "@prisma/client"
-const prisma = new PrismaClient()
+//import { PrismaClient, Prisma } from "@prisma/client"
+//const prisma = new PrismaClient()
 
 import { fetchApi } from '@/lib/api-utils';
 
@@ -158,10 +158,11 @@ export async function updateUserByIdService(id: string, newUser: IUpdateUserById
 }
 
 
-
+/*
 export async function checkEmailExistsService(email: string): Promise<boolean> {
     const user = await prisma.appUser.findUnique({
       where: { email },
     })
     return !!user
 }
+*/

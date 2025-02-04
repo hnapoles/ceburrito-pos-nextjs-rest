@@ -39,7 +39,7 @@ import {
 
 
 import { NewUserFormSchema } from "../models/users.form.schema"
-import { createUserService, checkEmailExistsService } from "../services/users.service"
+import { createUserService } from "../services/users.service"
 
 //import { AppUser } from "@prisma/client";
 import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
@@ -74,6 +74,7 @@ export default function CreateFormUser() {
 
     const validateEmailOnBlur = async (email: string) => {
 
+        /*
         if (email && !form.formState.errors.email) {
             const emailExists = await checkEmailExistsService(email)
             if (emailExists) {
@@ -86,7 +87,8 @@ export default function CreateFormUser() {
               form.clearErrors("email")
             }
         } 
-   
+        */
+
         /*
         //const email = getValues("email");
 
