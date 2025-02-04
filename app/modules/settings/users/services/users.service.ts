@@ -28,6 +28,7 @@ type GetUsersResponse = {
         createdBy: string,
         updatedBy: string,
         imageUrl: string | null,
+        accessToken: string | null
     }
 }
 
@@ -44,7 +45,9 @@ type GetAllUsersResponse = {
         createdAt: Date,
         updatedAt: Date,
         createdBy: string,
-        updatedBy: string
+        updatedBy: string,
+        imageUrl: string | null,
+        accessToken: string | null
     }]
 }
 
@@ -85,6 +88,12 @@ export const getAllUsersByPageService = async (p: IGetAllUsersByPageService): Pr
     return apiRequest<GetAllUsersResponse>({ url: `${HOST_API_URL}/users?page=${p.pageNumber}&limit=${p.recordsPerPage}&keyword=${p.keyword}`});
 };
   
+export const getUserByIdService = async (id: string): Promise<IUserResponse> => {
+    return apiRequest<IUserResponse>({ url: `${HOST_API_URL}/users/${id}`});
+};
+
+
+
 
 export async function deleteUserByIdService(id: string) {
 
@@ -96,7 +105,7 @@ export async function deleteUserByIdService(id: string) {
     const accessToken = session.accessToken
    
     const { data: response, error, status } 
-        = await fetchApi<DeleteUserResponse>(`${HOST_API_URL}/users/${id}`, 
+        = await fetchApi<GetAllUsersResponse>(`${HOST_API_URL}/users/${id}`, 
             { token : accessToken, method: 'DELETE' } )
     
     if (!response || !response.success || error) return { success: false, message: response?.message, data: [] };
@@ -117,7 +126,7 @@ export async function createUserService(newUser: ICreateUserService) {
     console.log('json stringify newUser', JSON.stringify(newUser));
    
     const { data: response, error, status } 
-        = await fetchApi<DeleteUserResponse>(`${HOST_API_URL}/users/`, 
+        = await fetchApi<GetUsersResponse>(`${HOST_API_URL}/users/`, 
             { token : accessToken, method: 'POST', body: JSON.stringify(newUser) } )
     
     if (!response || !response.success || error) return { success: false, message: response?.message, data: [] };
@@ -138,7 +147,7 @@ export async function updateUserByIdService(id: string, newUser: IUpdateUserById
     console.log('json stringify newUser', JSON.stringify(newUser));
    
     const { data: response, error, status } 
-        = await fetchApi<DeleteUserResponse>(`${HOST_API_URL}/users/${id}`, 
+        = await fetchApi<GetAllUsersResponse>(`${HOST_API_URL}/users/${id}`, 
             { token : accessToken, method: 'PUT', body: JSON.stringify(newUser) } )
     
     if (!response || !response.success || error) return { success: false, message: response?.message, data: [] };
@@ -148,9 +157,6 @@ export async function updateUserByIdService(id: string, newUser: IUpdateUserById
 
 }
 
-export const getUserByIdService = async (id: string): Promise<IUserResponse> => {
-    return apiRequest<IUserResponse>({ url: `${HOST_API_URL}/users/${id}`});
-};
 
 
 export async function checkEmailExistsService(email: string): Promise<boolean> {

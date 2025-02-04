@@ -1,5 +1,6 @@
 import { auth } from "@/app/modules/auth/services/auth";
 
+
 import axios, { AxiosInstance, 
   //AxiosRequestConfig, 
   InternalAxiosRequestConfig, 
@@ -19,10 +20,13 @@ const axiosInstance: AxiosInstance = axios.create({
 // Request Interceptor to Attach Token
 axiosInstance.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
+    
     const session = await auth();
     if (session?.accessToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
+      
+    
     return config;
   },
   (error) => Promise.reject(error)

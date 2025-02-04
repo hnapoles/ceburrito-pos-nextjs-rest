@@ -2,11 +2,11 @@
 
 import UsersMainPage from '@/app/modules/settings/users/views/users-page-main';
 
-import { getAllUsersByPageService, getAllUsersService } from '@/app/modules/settings/users/services/users.service';
+import { getAllUsersByPageService} from '@/app/modules/settings/users/services/users.service';
 //import { AppUser } from '@prisma/client';
 import { User } from '@/app/modules/settings/users/models/users.interface'
 
-import { ShowErrorDialog } from '@/app/providers/show-error-dialog';
+//import { ShowErrorDialog } from '@/app/providers/show-error-dialog';
 import { errorMonitor } from 'node:events';
 
 
@@ -36,7 +36,7 @@ export default async function Page(
     try {
       const response = await getAllUsersByPageService({keyword: keyword, recordsPerPage: offset, pageNumber: pageNumber });
       console.log(' res data', response.data)
-      const { data: users} = response.data
+      //const { data: users} = response.data
       return (
         <UsersMainPage users={response.data} offset={offset} pageNumber={pageNumber} totalUsers={totalUsers} />
       )

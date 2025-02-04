@@ -4,14 +4,12 @@ import { getUserByIdService } from '@/app/modules/settings/users/services/users.
 import  EditFormUser from '@/app/modules/settings/users/views/users-edit-form'
 
 
-export default async function Page({ params }: { params: { id: string } }) {
-    const { id } = await params;
+export default async function Page({ params }: {
+  params: Promise<{ id: string }>
+} ) {
 
-    /*
-    const [user] = await Promise.all([
-       getUserByIdService(id),
-      ]);
-    */
+    const id = (await params).id
+
    const user = await  getUserByIdService(id);
 
       if (!user) {
