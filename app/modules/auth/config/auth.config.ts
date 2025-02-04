@@ -44,6 +44,7 @@ export const authConfig = {
         token.primaryRole = user.primaryRole
         token.email = user.email
         token.accessToken = user.accessToken 
+        token.apiKey = user.apiKey
           //no need to generate token. The api server generates the accessToken for now
           // Generate a JWT token
           //const JWT_TOKEN_EXPIRES_IN = process.env.JWT_TOKEN_EXPIRES_IN || '1h'
@@ -62,6 +63,7 @@ export const authConfig = {
         session.user.email = token.email as string
         session.user.primaryRole = token.primaryRole as string
         session.accessToken = token.accessToken as string
+        session.apiKey = token.apiKey
       }
       return session
     },

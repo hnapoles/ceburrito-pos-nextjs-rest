@@ -9,6 +9,7 @@ export interface IUserResponse {
     updatedAt: Date,
     createdBy: string,
     updatedBy: string,
-    imageUrl: string | null,
-    accessToken: string | null
+    imageUrl?: string | null,
+    accessToken?: string | null,
+    apiKey?: string | null
 }

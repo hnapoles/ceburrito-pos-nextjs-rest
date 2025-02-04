@@ -66,6 +66,10 @@ interface IUserResponse {
     accessToken: string | null
 }
 
+export interface IDqFindResponse {
+    data: []
+}
+
 /*
 // Fetch Users (GET)
 export const getUsers = async (): Promise<User[]> => {
