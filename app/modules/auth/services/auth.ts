@@ -4,6 +4,8 @@ import { authConfig } from '@/app/modules//auth/config/auth.config';
 import { z } from 'zod';
 
 import { apiRequest } from '@/lib/axios-client';
+import axios from "axios";
+
 
 import { IUserResponse } from '../../settings/users/models/users-models';
 
@@ -23,25 +25,37 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const { email, password } = parsedCredentials.data;
 
           try {
-            const user = await apiRequest<IUserResponse>({
-              url: LOGIN_URL,
-              method: 'POST',
-              data: { email, password },
+            const response = await axios.post(LOGIN_URL, {
+              email, password
             });
-            if (user) {
-              return user  
-            } 
-            return null
-          } catch (err) {
-            console.log('error during login ', err);
-            return null
+  
+            if (response.status === 200 && response.data) {
+              return response.data; // Assuming API returns user data on success
+            } else {
+              return null; // Invalid credentials
+            }
+          } catch (error: any) {
+            if (error.response) {
+              // Handle API response errors like 401, 403, 500
+              console.error("API Error:", error.response.data);
+              throw new Error(error.response.data.message || "Invalid credentials");
+            } else if (error.request) {
+              // Handle no response from server
+              console.error("No Response from API:", error.request);
+              throw new Error("No response from authentication server");
+            } else {
+              // Other unexpected errors
+              console.error("Unexpected Error:", error.message);
+              throw new Error("An unexpected error occurred");
+            }
           }
+
+         
 
         }
         
 
-        console.log('Invalid credentials');
-        return null;
+        
       },
     }),
   ],

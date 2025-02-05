@@ -1,5 +1,10 @@
 import { auth } from "@/app/modules/auth/services/auth";
 
+export type ApiResponse<T> = {
+    data: T | null
+    error: string | null
+}
+  
 
 import axios, { AxiosInstance, 
   //AxiosRequestConfig, 
@@ -60,7 +65,7 @@ interface DqRequestOptions {
   headers?: Record<string, string>;
 }
 
-export const apiRequest = async <T>({ url, method = 'GET', data, params, headers }: RequestOptions): Promise<T> => {
+export const apiRequest = async <T>({ url, method = 'GET', data, params, headers }: RequestOptions): Promise<ApiResponse<T>> => {
   try {
     const response = await axiosInstance.request<T>({
       url,
@@ -69,40 +74,44 @@ export const apiRequest = async <T>({ url, method = 'GET', data, params, headers
       params,
       headers,
     });
-    return response.data;
+    return {data: response.data, error: null};
   } catch (error) {
+    console.error(`Error in Dq API Request [${method} ${url}]:`);
+    console.error("API call failed:", error)
     if (axios.isAxiosError(error)) {
-      // Handle Axios-specific errors
-      if (error.response) {
-        // Server responded with a status other than 2xx
-        console.error('Error Status:', error.response.status);
-        console.error('Error Message:', error.response.data.message || 'Unknown error');
+      const axiosError = error as AxiosError
+      if (axiosError.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
 
         // Access the full error response if needed
-        console.log('Full Error Response:', error.response.data);
-      } else if (error.request) {
-        // Request was made but no response received
-        console.error('No response received:', error.request);
-      } else {
-        // Something else happened while setting up the request
-        console.error('Error:', error.message);
+        let errResponseData = null;
+        if (axiosError && axiosError.response && axiosError.response.data && axiosError.response.data) {
+            errResponseData = axiosError.response.data;
+            console.error('Full Error Response:', axiosError.response.data);
+        }
+        return {
+          data: null,
+          error: `Server error: ${axiosError.response.status} ${axiosError.response.statusText} ${JSON.stringify(errResponseData)}`,
+        }
+      } else if (axiosError.request) {
+        // The request was made but no response was received
+        return {
+          data: null,
+          error: "No response received from server. It might be down or you might be offline.",
+        }
       }
-    } else {
-      // Handle non-Axios errors (unexpected errors)
-      console.error('Unexpected Error:', error);
     }
-
-
-    //console.error(`Error in API Request [${method} ${url}]:`, error);
-    throw error;
+    // Something happened in setting up the request that triggered an Error
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : "An unknown error occurred",
+    }
+  
   }
 };
 
-export type ApiResponse<T> = {
-    data: T | null
-    error: string | null
-  }
-  
+
 
 export const apiDq = async <T>({ operation, data, params, headers }: DqRequestOptions):  Promise<ApiResponse<T>> => {
 
@@ -117,7 +126,7 @@ export const apiDq = async <T>({ operation, data, params, headers }: DqRequestOp
       apiKey = session?.apiKey
   }
 
-  const url = `${base}/${operation}/${apiKey}1`
+  const url = `${base}/${operation}/${apiKey}`
 
   try {
     const response = await axiosInstance.request<T>({
@@ -129,34 +138,7 @@ export const apiDq = async <T>({ operation, data, params, headers }: DqRequestOp
     });
     return {data: response.data, error: null};
   } catch (error) {
-    /*
     console.error(`Error in Dq API Request [${method} ${url}]:`);
-    if (axios.isAxiosError(error)) {
-      // Handle Axios-specific errors
-      if (error.response) {
-        // Server responded with a status other than 2xx
-        //console.error('Error Status:', error.response.status);
-        //console.error('Error Message:', error.response.data.message || 'Unknown error');
-
-        // Access the full error response if needed
-        if (error && error.response && error.response.data) console.log('Full Error Response:', error.response.data);
-      } else if (error.request) {
-        // Request was made but no response received
-        console.error('No response received:', error.request);
-      } else {
-        // Something else happened while setting up the request
-        console.error('Error:', error.message);
-      }
-    } else {
-      // Handle non-Axios errors (unexpected errors)
-      console.error('Unexpected Error:', error);
-    }
-
-    //console.error(`Error in Dq API Request [${method} ${url}]:`, error);
-    throw error;
-    */
-
-    //console.error(`Error in Dq API Request [${method} ${url}]:`);
     console.error("API call failed:", error)
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError

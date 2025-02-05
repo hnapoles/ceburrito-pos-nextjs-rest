@@ -23,7 +23,7 @@ import {
 
 
   
-      const {data: products, error} = await apiDq<Product[]>({operation: 'Find', data: { entity: "xproduct"}, params: {keyword: "phone"} })
+      const {data: products, error} = await apiDq<Product[]>({operation: 'Find', data: { entity: "product"}, params: {keyword: "phone"} })
      
       if (error) {
         return <ErrorDisplay message={error} />
@@ -39,7 +39,7 @@ import {
         <CardHeader>
           <CardTitle>Products</CardTitle>
           <CardDescription>View products.</CardDescription>
-          
+          {JSON.stringify(products)}
         </CardHeader>
         <CardContent></CardContent>
       </Card>
