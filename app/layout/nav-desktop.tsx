@@ -1,13 +1,6 @@
 import Link from 'next/link';
 import {
-  Home,
-  LineChart,
-  Package,
-  //Package2,
-  //PanelLeft,
   Settings,
-  ShoppingCart,
-  Users2
 } from 'lucide-react';
 
 import { LucideIcon } from "lucide-react";
@@ -21,10 +14,7 @@ import {
 import { VercelLogo } from './icons';
 import { NavItem } from './nav-item';
 
-//import { HeroIconNamed } from '@/components/icons/hero-icon-named'
-//import { HomeIcon } from '@heroicons/react/24/outline';
-
-type NavItems = {
+interface NavItems {
   title: string,
   href: string,
   iconName: LucideIcon
@@ -33,37 +23,6 @@ type NavItems = {
 interface NavItemsProps {
   navItems: NavItems[]
 }
-
-/*
-const navItems = [
-    {
-        title: "Dashboard",
-        href: "/dashboard",
-        iconName: Home
-    },
-    {
-      title: "Orders",
-      href: "/orders",
-      iconName: ShoppingCart
-    },
-    {
-      title: "Products",
-      href: "/products",
-      iconName: Package
-    },
-    {
-      title: "Customers",
-      href: "/customers",
-      iconName: Users2
-    },
-    {
-      title: "Analytics",
-      href: "/analytics",
-      iconName: LineChart
-    }
-]
-*/
-
 
 const DesktopNav: React.FC<NavItemsProps> = ({navItems}) => {
   return (
