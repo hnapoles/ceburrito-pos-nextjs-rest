@@ -4,6 +4,9 @@ import Google from "next-auth/providers/google"
 
 import { SignJWT, jwtVerify } from "jose";
 
+import { apiRequest } from "./lib/axios-client-v2";
+import { IUserResponse } from "./app/model/users-model";
+
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 const JWT_TOKEN_EXPIRES_IN = process.env.JWT_TOKEN_EXPIRES_IN || '1h'
 if (!JWT_SECRET) {
@@ -16,6 +19,8 @@ if (!JWT_TOKEN_EXPIRES_IN) {
 const secretKey = process.env.JWT_SECRET!;
 const secret = new TextEncoder().encode(secretKey);
 
+const appApiServerUrl = process.env.APP_API_SERVER_URL || "http://172.104.117.139:3000/"
+
 declare module "next-auth" {
     /**
      * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
@@ -24,6 +29,8 @@ declare module "next-auth" {
       user: {
         /** The user's postal address. */
         accessToken: string,
+        apiKey?: string,
+        primaryRole?: string,
         /**
          * By default, TypeScript merges new interface properties and overwrites existing ones.
          * In this case, the default session user properties will be overwritten,
@@ -68,11 +75,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         .setExpirationTime(JWT_TOKEN_EXPIRES_IN) // Token expires in 2 hours
         .sign(secret);
 
+        //get more user data from the server
+        let apiKey = ""
+        let primaryRole = ""
+        if (accessToken) {
+          const { data, error } = await apiRequest<IUserResponse>({ url: `${appApiServerUrl}/auth/login/jwt`, 
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer '+accessToken,
+            },
+          });
+
+          if (error) {
+            console.log('error from api serer => ', error)
+            apiKey = 'error-from-api-server'
+            primaryRole = 'error-from-api-server'
+          } else {
+            if (data && data.apiKey) {
+              apiKey = data.apiKey
+            }
+            if (data && data.primaryRole) {
+              primaryRole = data.primaryRole
+            }
+          }
+
+
+        }
+
         return {
             ...session,
             user: {
                 ...session.user,
-                accessToken: accessToken
+                accessToken: accessToken,
+                apiKey: apiKey,
+                primaryRole: primaryRole
             }
         }
     }, 
