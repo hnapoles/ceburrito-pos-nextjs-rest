@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 import { listNavItems } from '@/app/model/nav-model';
 
@@ -31,7 +31,20 @@ const MobileNav: React.FC = () => {
             <span className="sr-only">Toggle Menu</span>
           </Button>
         </SheetTrigger>
+       
+        
         <SheetContent side="left" className="sm:max-w-xs">
+        
+       
+          {/** do not remove code below - this is to fix bug 
+           * Shadcn `DialogContent` requires a `DialogTitle` for the component to be accessible for screen reader users
+           * **/}
+          <SheetHeader className="sr-only">
+                        <SheetTitle className="sr-only">Sidebar</SheetTitle>
+           <SheetDescription className="sr-only">Sidebar</SheetDescription>
+          </SheetHeader>
+           {/** do not remove code above **/}
+         
           <nav className="grid gap-6 text-lg font-medium">
             <Link
               href="#"
