@@ -1,4 +1,6 @@
 import type { NextAuthConfig } from 'next-auth';
+import Google from "next-auth/providers/google"
+
 
 //import jwt from 'jsonwebtoken';
 
@@ -17,7 +19,8 @@ if (!JWT_TOKEN_EXPIRES_IN) {
 
 export const authConfig = {
   pages: {
-    signIn: '/login',
+    signIn: '/google',
+    error: "/auth/error" // Redirect to custom error page
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
@@ -80,7 +83,12 @@ export const authConfig = {
       //return baseUrl
     }
   },
-  providers: [], // Add providers with an empty array for now,
+  providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
   session: {
     maxAge: 60 * 60,
     strategy: "jwt", // Use JWT to store session info

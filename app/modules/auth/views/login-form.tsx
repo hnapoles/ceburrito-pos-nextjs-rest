@@ -1,4 +1,5 @@
 "use client"
+import { signIn } from '@/app/modules/auth/services/auth';
 
 import { toast } from "@/hooks/use-toast"
 
@@ -111,6 +112,7 @@ export function LoginForm() {
             {/*<Button variant="outline" className="w-full">
               Login with Google
             </Button>*/}
+              
           </div>
           <div className="mt-4 text-left text-sm">
             {" "}
@@ -134,6 +136,9 @@ export function LoginForm() {
       </Card>
 
     </form>
+   
+
+      
   )
 }
 
