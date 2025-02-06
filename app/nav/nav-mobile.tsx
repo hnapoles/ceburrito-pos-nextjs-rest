@@ -42,21 +42,22 @@ const MobileNav: React.FC = () => {
             </Link>
 
             {listNavItems.map( (item) => (
-          
-            
-                  <Link href={item.href} className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground" key={item.title}>
+                  <Link 
+                    href={item.href} 
+                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground" key={item.title}
+                    onClick={() => {setOpenSheet(false)} }
+                  >
                     <item.iconName
                         className="h-5 w-5 text-black" />
                         
-                  {item.title}
+                    {item.title}
                   </Link>
-        
-    
             ))}
             
             <Link
               href="/settings"
               className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+              onClick={() => {setOpenSheet(false)} }
             >
               <Settings className="h-5 w-5" />
               Settings

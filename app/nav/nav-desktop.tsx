@@ -36,12 +36,10 @@ const DesktopNav: React.FC = () => {
 
         {listNavItems.map( (item) => (
           
-         <div key={item.title}>
-          <NavItem href={item.href} label={item.title}>
+          <NavItem href={item.href} label={item.title} key={item.title}>
             <item.iconName
                 className="h-5 w-5 text-black" />
           </NavItem>
-        </div> 
 
         ))}
 
