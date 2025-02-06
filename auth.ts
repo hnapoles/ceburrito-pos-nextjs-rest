@@ -45,6 +45,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google],
   session: { strategy: "jwt" },
   callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+
+      return isLoggedIn;
+
+    },
     async jwt({token, account}) {
 
         if (account) {
@@ -69,13 +75,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 accessToken: accessToken
             }
         }
-    },
+    }, 
     async redirect({ url, baseUrl }) {
         // Allows relative callback URLs
+        /*
         const queryString = url.split('?')[1]
         const callbackUrl = new URLSearchParams(queryString).get('callbackUrl')
         if (callbackUrl) return `${callbackUrl}`
         return '/dashboard'
+        */
+        return url.startsWith(baseUrl) ? url : baseUrl;
     },
-  }
+  } //end of callbacks
+    
 })

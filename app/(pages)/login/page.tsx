@@ -1,20 +1,11 @@
+'use client'
 
-import { signIn } from "@/auth"
+//import { GoogleSignIn } from "./google-signin"
+import { signIn } from "next-auth/react";
+import { useState } from "react";
  
-/*
-export default function SignIn() {
-  return (
-    <form
-      action={async () => {
-        "use server"
-        await signIn("google")
-      }}
-    >
-      <button type="submit">Signin with Google</button>
-    </form>
-  )
-} 
-*/
+import { useSearchParams } from "next/navigation"
+import { Suspense } from 'react'
 
 import Image from 'next/image'
 
@@ -29,23 +20,34 @@ import {
 
 import { Button } from "@/components/ui/button"
 
+
 export default function SignIn() {
   return (
     <div className="flex h-screen w-full items-center justify-center px-4">
-      <LoginForm />
+      <Suspense>
+        <LoginForm />
+      </Suspense>
+      
     </div>
   )
 } 
 
+
 const LoginForm = () => {
 
-    return (
-      <form
-      action={async () => {
-        "use server"
-        await signIn("google")
-      }}
-     >
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"; // Default redirect
+  
+  const [loading, setLoading] = useState(false);
+
+  const handleSignIn = async () => {
+    setLoading(true);
+    await signIn("google", { callbackUrl });
+    setLoading(false);
+  };
+
+  return (
+    <form action={handleSignIn} >
       <Card className="flex min-h-full flex-1 flex-col justify-center px-6 py-4 lg:px-8"> {/*className="mx-auto max-w-sm">*/}
           
   
@@ -76,7 +78,7 @@ const LoginForm = () => {
                   width={20}
                   height={20}
                 />
-                Login with Google
+                {loading ? "Signing in..." : "Log in with Google"}
               </Button>
                 
            
