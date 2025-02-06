@@ -4,21 +4,22 @@ import { useState } from 'react';
 
 import Link from 'next/link';
 import {
-  Home,
-  LineChart,
-  Package,
+  //Home,
+  //LineChart,
+  //Package,
   Package2,
   PanelLeft,
-  //Settings,
-  ShoppingCart,
-  Users2
+  Settings,
+  //ShoppingCart,
+  //Users2
 } from 'lucide-react';
-
 
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
-export default function MobileNav() {
+import { listNavItems } from '@/app/model/nav-model';
+
+const MobileNav: React.FC = () => {
 
     const [openSheet, setOpenSheet] = useState(false);
   
@@ -37,48 +38,33 @@ export default function MobileNav() {
               className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
             >
               <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-              <span className="sr-only">Vercel</span>
+              <span className="sr-only">Ceburrito</span>
             </Link>
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-            >
-              <Home className="h-5 w-5" />
-              Dashboard
-            </Link>
-            <Link
-              href="/orders"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              Orders
-            </Link>
-            <Link
-              href="/products"
-              className="flex items-center gap-4 px-2.5 text-foreground"
-            >
-              <Package className="h-5 w-5" />
-              Products
-            </Link>
+
+            {listNavItems.map( (item) => (
+          
+            
+                  <Link href={item.href} className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground" key={item.title}>
+                    <item.iconName
+                        className="h-5 w-5 text-black" />
+                        
+                  {item.title}
+                  </Link>
         
-            <Link
-              href="/customers"
-              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-              onClick={() => {setOpenSheet(false)}}
-            >
-              <Users2 className="h-5 w-5" />
-              Customers
-            </Link>
-       
+    
+            ))}
+            
             <Link
               href="/settings"
               className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
             >
-              <LineChart className="h-5 w-5" />
+              <Settings className="h-5 w-5" />
               Settings
             </Link>
           </nav>
         </SheetContent>
       </Sheet>
     );
-  }
+}
+
+export default MobileNav
