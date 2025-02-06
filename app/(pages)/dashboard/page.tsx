@@ -1,19 +1,7 @@
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle
-  } from '@/components/ui/card';
-  
-  export default function DashboardPage() {
+export default function Page() {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Dashboard</CardTitle>
-          <CardDescription>View dashboard.</CardDescription>
-        </CardHeader>
-        <CardContent></CardContent>
-      </Card>
-    );
-  }
+      <div className="flex h-screen w-full items-center justify-center px-4">
+        Dashboard
+      </div>
+    )
+} 
