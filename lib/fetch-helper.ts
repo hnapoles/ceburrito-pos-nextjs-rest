@@ -91,6 +91,57 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
     }
   }
 
+  export async function apiClientDq<TResponse, TBody = unknown>(
+    //url: string,
+    operation: string,
+    options: FetchOptions<TBody> = {}
+  ): Promise<TResponse> {
+    const { method = 'POST', body, headers = {}, timeout = 10000 } = options;
+  
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    let token, apiKey
+    const session = await auth();
+    if (session?.user.accessToken) {
+        token= session.user.accessToken
+    }
+    if (session?.user.apiKey) {
+        apiKey = session?.user.apiKey
+    }
+  
+    const base = process.env.HOST_DQ_URL || "http://172.104.117.139:3000/v1/dq"
+    const url = `${base}/${operation}/${apiKey}`
+
+
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...headers,
+        },
+        body: body ? JSON.stringify(body) : undefined,
+        signal: controller.signal,
+      });
+  
+      clearTimeout(timeoutId);
+  
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP Error: ${response.status}`);
+      }
+  
+      return (await response.json()) as TResponse;
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        throw new Error('Request timed out');
+      }
+      throw error;
+    }
+  }
+
 /* how to use examples */
 /*
 import { apiClient } from '@/utils/apiClient';
