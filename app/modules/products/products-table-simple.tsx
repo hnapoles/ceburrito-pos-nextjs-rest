@@ -26,7 +26,7 @@ import {
 import { IProduct } from '@/app/model/products-model';
 
   
-  export default function ProductsTableSimple({
+export default function ProductsTableSimple({
     data,
     limit,
     page,
@@ -67,7 +67,7 @@ import { IProduct } from '@/app/model/products-model';
                 </TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Description</TableHead>
-                <TableHead className="hidden md:table-cell">Image</TableHead>
+                <TableHead className="hidden md:table-cell">ID</TableHead>
                 <TableHead className="hidden md:table-cell">Created at</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -76,7 +76,7 @@ import { IProduct } from '@/app/model/products-model';
             </TableHeader>
             <TableBody>
               {data.map((row) => (
-                <ProductsTableRow key={row.name} product={row} />
+                <ProductsTableRow key={row._id} product={row} />
               ))}
             </TableBody>
           </Table>

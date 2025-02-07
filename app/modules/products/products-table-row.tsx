@@ -1,4 +1,5 @@
-import { revalidatePath } from 'next/cache';
+'use client'
+
 import Link from "next/link"
 
 import { usePathname } from 'next/navigation';
@@ -16,25 +17,30 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-
 import { IProduct } from '@/app/model/products-model'; 
 
+import { deleteProductById } from '@/app/service/products-service';
 
-export default async function ProductsTableRow({ product }: { product: IProduct}) {
+import { revalidateAndRedirectUrl } from "@/app/service/revalidate-path";
+
+export default function ProductsTableRow({ product }: { product: IProduct}) {
 
   const pathname = usePathname();
 
   
   async function deleteUserAction(id:string) {
+
+    console.log('here ')
     
     if (id) {
-        //await deleteUserByIdService(id);
-        revalidatePath('/settings/products');
+        console.log('here 2')
+        await deleteProductById(id);
+        revalidateAndRedirectUrl('/dashboard/products')
     }
     
   }
 
-  const editLink = `${pathname}/${product.id}`
+  const editLink = `${pathname}/${product._id}`
 
   return (
     <TableRow>
@@ -53,7 +59,7 @@ export default async function ProductsTableRow({ product }: { product: IProduct}
           {product.description}
         </Badge>
       </TableCell>
-      <TableCell className="hidden md:table-cell">{product.imageUrl}</TableCell>
+      <TableCell className="hidden md:table-cell">{product._id}</TableCell>
       <TableCell className="hidden md:table-cell">
         {product.createdAt?.toLocaleString('en-US', { timeZone: 'America/Chicago' })}
       </TableCell>
@@ -71,9 +77,9 @@ export default async function ProductsTableRow({ product }: { product: IProduct}
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <DropdownMenuItem>
-              <form>
-                <button type="submit" onClick={()=> deleteUserAction(product.id)} >Delete</button>
-              </form>
+              
+                <button type="submit" onClick={()=> deleteUserAction(product._id)} >Delete</button>
+            
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

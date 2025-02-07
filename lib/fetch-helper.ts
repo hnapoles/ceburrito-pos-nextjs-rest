@@ -116,6 +116,8 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
 
     const defaultMethod = 'POST'
 
+    console.log(url)
+
     try {
       const response = await fetch(url, {
         method: defaultMethod,
