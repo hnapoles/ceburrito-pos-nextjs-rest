@@ -1,25 +1,10 @@
 
 import NextAuth,  { type DefaultSession } from "next-auth"
 import Google from "next-auth/providers/google"
+import { generateAccessToken } from "./lib/generate-access-token";
+//import { getServerData } from "./lib/get-server-data";
 
-import { SignJWT, jwtVerify } from "jose";
-
-import { apiRequest } from "./lib/axios-client-v2";
-import { IUserResponse } from "./app/model/users-model";
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
-const JWT_TOKEN_EXPIRES_IN = process.env.JWT_TOKEN_EXPIRES_IN || '1h'
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined in the environment variables")
-}
-if (!JWT_TOKEN_EXPIRES_IN) {
-  throw new Error("JWT_TOKEN_EXPIRES_IN is not defined in the environment variables")
-}
-
-const secretKey = process.env.JWT_SECRET!;
-const secret = new TextEncoder().encode(secretKey);
-
-const appApiServerUrl = process.env.APP_API_SERVER_URL || "http://172.104.117.139:3000/"
+const appApiServerUrl = process.env.APP_API_SERVER_URL || "http://172.104.117.139:3000"
 
 declare module "next-auth" {
     /**
@@ -41,8 +26,6 @@ declare module "next-auth" {
     }
 }
 
-export const runtime = "nodejs";
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: false,
   pages: {
@@ -63,52 +46,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (account) {
             token.provider = account.provider; // Store provider in token
         }
+
+        /*
+        const result = await getServerData(accessToken);
+        token.apiKey = result.apiKey
+        token.primaryRole = result.primaryRole
+        */
     
         return token
     },
     async session({ session, token }) {
 
-        // Generate a JWT token
-        const accessToken = await new SignJWT({username: session.user.email, email: session.user.email, provider: token.provider})
-        .setProtectedHeader({ alg: "HS256" })
-        .setIssuedAt()
-        .setExpirationTime(JWT_TOKEN_EXPIRES_IN) // Token expires in 2 hours
-        .sign(secret);
-
-        //get more user data from the server
-        let apiKey = ""
-        let primaryRole = ""
-        if (accessToken) {
-          const { data, error } = await apiRequest<IUserResponse>({ url: `${appApiServerUrl}/auth/login/jwt`, 
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer '+accessToken,
-            },
-          });
-
-          if (error) {
-            console.log('error from api serer => ', error)
-            apiKey = 'error-from-api-server'
-            primaryRole = 'error-from-api-server'
-          } else {
-            if (data && data.apiKey) {
-              apiKey = data.apiKey
-            }
-            if (data && data.primaryRole) {
-              primaryRole = data.primaryRole
-            }
-          }
-
-
+        const accessToken = await generateAccessToken(session.user.email, session.user.email, 'google')   
+  
+        const response = await fetch(`${appApiServerUrl}/auth/login/jwt`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Example header
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to get server data");
         }
-
+        const data = await response.json();
+       
         return {
             ...session,
             user: {
                 ...session.user,
                 accessToken: accessToken,
-                apiKey: apiKey,
-                primaryRole: primaryRole
+                apiKey: data.apiKey,
+                primaryRole: data.primaryRole,
             }
         }
     }, 
