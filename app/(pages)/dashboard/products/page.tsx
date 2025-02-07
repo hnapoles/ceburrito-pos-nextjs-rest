@@ -1,22 +1,32 @@
 import { apiClientDq } from "@/lib/fetch-helper"
 
-import { IProductResponse } from "@/app/model/products-model"
+import { IProduct } from "@/app/model/products-model"
 import { ApiOperationNames, FindAllByKeywordWithPageLimitProps } from "@/app/model/api-model"
 
-export default async function Page() {
-        
-    let products : IProductResponse[] = []
+import ProductsMainPage from "@/app/modules/products/products-main-page";
+
+export default async function Page(
+  props: {
+    searchParams: Promise<{ keyword: string, page: number, limit: number }>;
+}) {
+
+    const searchParams = await props.searchParams;
+    const keyword = searchParams.keyword ?? ''
+    const limit = searchParams.limit ?? '10'
+    const page = searchParams.page ?? '1'
+          
+    let products : IProduct[] = []
   
     const apiProps : FindAllByKeywordWithPageLimitProps = {
       entity: 'product',
       operation: ApiOperationNames.FindAllByKeywordWithPageLimit,
-      keyword: 'iphone',
-      page: 1,
-      limit: 10,
+      keyword: keyword,
+      page: page.toString(),
+      limit: limit.toString(),
     }
     
     try {
-      const results = await apiClientDq<IProductResponse[], FindAllByKeywordWithPageLimitProps>(ApiOperationNames.FindAllByKeywordWithPageLimit, 
+      const results = await apiClientDq<IProduct[], FindAllByKeywordWithPageLimitProps>(ApiOperationNames.FindAllByKeywordWithPageLimit, 
           { method: 'POST',
             body: apiProps,
           });
@@ -25,12 +35,11 @@ export default async function Page() {
       console.log('error calling api ', error)
     }
 
+    const totalProducts = 10;
+
     if (products) {      
       return (
-        <div className="flex h-screen w-full items-center justify-center px-4">
-          Products
-          {JSON.stringify(products)}
-        </div>
+        <ProductsMainPage products={products} limit={limit} page={page} totalDataCount={totalProducts} />
       )
     }
     

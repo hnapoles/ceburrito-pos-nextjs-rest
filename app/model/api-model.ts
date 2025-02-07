@@ -10,6 +10,6 @@ export interface FindAllByKeywordWithPageLimitProps {
     entity:         string,
     operation?:     ApiOperationNames | ApiOperationNames.FindAllByKeywordWithPageLimit,
     keyword?:       string | '',
-    limit?:         string | 10,
-    page?:          string | 1,           
+    limit?:         string | '10', //string due to searchParams
+    page?:          string | '1',           
 }

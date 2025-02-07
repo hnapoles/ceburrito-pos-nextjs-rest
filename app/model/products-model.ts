@@ -1,4 +1,4 @@
-export interface IProductResponse {
+export interface IProduct {
     id: string,
     name: string,
     description: string,
@@ -7,4 +7,11 @@ export interface IProductResponse {
     updatedAt: Date,
     createdBy: string,
     updatedBy: string,
+}
+
+export interface IProductListProps {
+    products: IProduct[],
+    limit: number | 10,
+    page: number | 1,
+    totalDataCount: number | 1
 }
