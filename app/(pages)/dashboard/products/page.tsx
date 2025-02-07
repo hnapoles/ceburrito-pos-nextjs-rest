@@ -9,7 +9,10 @@ export default async function Page() {
   
     const apiProps : FindAllByKeywordWithPageLimitProps = {
       entity: 'product',
-      operation: ApiOperationNames.FindAllByKeywordWithPageLimit
+      operation: ApiOperationNames.FindAllByKeywordWithPageLimit,
+      keyword: 'iphone',
+      page: 1,
+      limit: 10,
     }
     
     try {

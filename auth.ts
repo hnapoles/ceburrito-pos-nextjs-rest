@@ -2,7 +2,8 @@
 import NextAuth,  { type DefaultSession } from "next-auth"
 import Google from "next-auth/providers/google"
 import { generateAccessToken } from "./lib/generate-access-token";
-//import { getServerData } from "./lib/get-server-data";
+
+import type { JWT } from "next-auth/jwt";
 
 const appApiServerUrl = process.env.APP_API_SERVER_URL || "http://172.104.117.139:3000"
 
@@ -13,6 +14,7 @@ declare module "next-auth" {
     interface Session {
       user: {
         /** The user's postal address. */
+        provider?: string,
         accessToken: string,
         apiKey?: string,
         primaryRole?: string,
@@ -24,6 +26,12 @@ declare module "next-auth" {
          */
       } & DefaultSession["user"]
     }
+}
+// Extend JWT type to include `provider`
+declare module "next-auth/jwt" {
+  interface JWT {
+    provider: string; // ✅ Fix: Allow TypeScript to recognize this property
+  }
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -42,17 +50,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     },
     async jwt({token, account}) {
-
         if (account) {
-            token.provider = account.provider; // Store provider in token
-        }  
-        console.log('token ', token)
-        console.log('account ', account)
+          token.provider = account.provider;
+        }
+      
         return token
     },
     async session({ session, token }) {
 
-        const accessToken = await generateAccessToken(session.user.email, session.user.email, 'google' )   
+        const accessToken = await generateAccessToken(session.user.email, session.user.email, token.provider )   
   
         const response = await fetch(`${appApiServerUrl}/auth/login/jwt`, {
           method: "POST",
@@ -73,6 +79,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 accessToken: accessToken,
                 apiKey: data.apiKey,
                 primaryRole: data.primaryRole,
+                provider: token.provider,
             }
         }
     }, 
