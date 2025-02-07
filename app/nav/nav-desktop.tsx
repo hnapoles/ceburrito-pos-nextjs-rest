@@ -1,14 +1,9 @@
 import Link from 'next/link';
 
-import Image from 'next/image'
+//import Image from 'next/image'
 import {
   Settings,
 } from 'lucide-react';
-
-import { LucideIcon } from "lucide-react";
-
-import * as LucideIcons from "lucide-react";
-
 
 import {
   Tooltip,
@@ -16,7 +11,6 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip';
 
-import { VercelLogo } from './icons';
 import { NavItem } from './nav-item';
 
 import { listNavItems } from '@/app/model/nav-model';

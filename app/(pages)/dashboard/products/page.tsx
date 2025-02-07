@@ -7,13 +7,13 @@ export default async function Page() {
         
     let products : IProductResponse[] = []
   
-    let apiProps : FindAllByKeywordWithPageLimitProps = {
+    const apiProps : FindAllByKeywordWithPageLimitProps = {
       entity: 'product',
       operation: ApiOperationNames.FindAllByKeywordWithPageLimit
     }
     
     try {
-      const results = await apiClientDq<IProductResponse[], {}>(ApiOperationNames.FindAllByKeywordWithPageLimit, 
+      const results = await apiClientDq<IProductResponse[], FindAllByKeywordWithPageLimitProps>(ApiOperationNames.FindAllByKeywordWithPageLimit, 
           { method: 'POST',
             body: apiProps,
           });

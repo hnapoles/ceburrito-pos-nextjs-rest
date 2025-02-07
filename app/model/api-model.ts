@@ -8,7 +8,7 @@ export enum ApiOperationNames {
 
 export interface FindAllByKeywordWithPageLimitProps {
     entity:         string,
-    operation?:      ApiOperationNames | ApiOperationNames.FindAllByKeywordWithPageLimit,
+    operation?:     ApiOperationNames | ApiOperationNames.FindAllByKeywordWithPageLimit,
     keyword?:       string | '',
     limit?:         string | 10,
     page?:          string | 1,           

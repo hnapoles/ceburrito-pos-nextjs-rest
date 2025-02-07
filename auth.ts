@@ -45,19 +45,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (account) {
             token.provider = account.provider; // Store provider in token
-        }
-
-        /*
-        const result = await getServerData(accessToken);
-        token.apiKey = result.apiKey
-        token.primaryRole = result.primaryRole
-        */
-    
+        }  
+        console.log('token ', token)
+        console.log('account ', account)
         return token
     },
     async session({ session, token }) {
 
-        const accessToken = await generateAccessToken(session.user.email, session.user.email, 'google')   
+        const accessToken = await generateAccessToken(session.user.email, session.user.email, 'google' )   
   
         const response = await fetch(`${appApiServerUrl}/auth/login/jwt`, {
           method: "POST",
