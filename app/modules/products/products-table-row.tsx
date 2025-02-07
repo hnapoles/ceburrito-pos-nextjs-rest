@@ -1,5 +1,6 @@
-'use client'
+'use client';
 
+import { useState } from "react";
 import Link from "next/link"
 
 import { usePathname } from 'next/navigation';
@@ -14,6 +15,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+//import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
@@ -23,22 +26,32 @@ import { deleteProductById } from '@/app/service/products-service';
 
 import { revalidateAndRedirectUrl } from "@/app/service/revalidate-path";
 
+//import { ConfirmDialog } from "@/app/nav/confirm-dialog";
+
 export default function ProductsTableRow({ product }: { product: IProduct}) {
 
   const pathname = usePathname();
 
-  
-  async function deleteUserAction(id:string) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogData, setDialogData] = useState({ title: "", description: "", productId: "" });
 
-    console.log('here ')
-    
-    if (id) {
-        console.log('here 2')
-        await deleteProductById(id);
-        revalidateAndRedirectUrl('/dashboard/products')
-    }
-    
-  }
+  const handleOpenDialog = (productId: string) => {
+    setDialogData({
+      title: "Delete Product",
+      description: `Are you sure you want to delete product ID ${productId}? This action cannot be undone.`,
+      productId: productId,
+    });
+    setDialogOpen(true);
+    // Ensure the dropdown closes before opening the dialog
+    //setTimeout(() => setDialogOpen(true), 100);
+  };
+
+  const handleConfirmDelete = async (id: string) => {
+    console.log("Deleting product:", dialogData.productId);
+    setDialogOpen(false);
+    await deleteProductById(id);
+    revalidateAndRedirectUrl(pathname);
+  };
 
   const editLink = `${pathname}/${product._id}`
 
@@ -64,6 +77,8 @@ export default function ProductsTableRow({ product }: { product: IProduct}) {
         {product.createdAt?.toLocaleString('en-US', { timeZone: 'America/Chicago' })}
       </TableCell>
       <TableCell>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        {/* Dropdown Menu Inside the Dialog */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button aria-haspopup="true" size="icon" variant="ghost">
@@ -78,12 +93,34 @@ export default function ProductsTableRow({ product }: { product: IProduct}) {
             </Link>
             <DropdownMenuItem>
               
-                <button type="submit" onClick={()=> deleteUserAction(product._id)} >Delete</button>
+                <button  onClick={()=> handleOpenDialog(product._id)} >Delete</button>
+                
             
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {/* Dialog Content */}
+        <DialogContent>
+            <DialogHeader>
+            <DialogTitle>Delete Product</DialogTitle>
+            <DialogDescription>
+                Are you sure you want to delete product <strong>{product.name}</strong> with _id <strong>{product._id}</strong>? 
+            </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                Cancel
+            </Button>
+            <Button variant="destructive" onClick={() => handleConfirmDelete(product._id)}>
+                Confirm
+            </Button>
+            </DialogFooter>
+        </DialogContent>
+
+        </Dialog>
       </TableCell>
     </TableRow>
   );
 }
+
