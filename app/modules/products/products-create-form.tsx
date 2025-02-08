@@ -37,26 +37,23 @@ import {
     CardTitle
 } from '@/components/ui/card';
 
-
-import { NewUserFormSchema } from "../models/users.form.schema"
-import { createUserService } from "../services/users.service"
-
-
 import { revalidateAndRedirectUrl } from "@/app/service/revalidate-path";
 
+import { ZodSchemaNewProduct, NewProductData } from "@/app/model/products-model";
+
+const defaultValues: NewProductData = {
+    name: "",
+    description: "",
+    category: ""
+}
 
 
 export default function UserCreateForm() {
     const emailInputRef = useRef<HTMLInputElement>(null); // Ref for the email input field
 
-    const form = useForm<z.infer<typeof NewUserFormSchema>>({
-        resolver: zodResolver(NewUserFormSchema),
-        defaultValues: {
-            username: "",
-            password: "",
-            email: "",
-            primaryRole: "",
-          },
+    const form = useForm<NewProductData>({
+        resolver: zodResolver(ZodSchemaNewProduct),
+        defaultValues: defaultValues,
         mode: "onBlur",
     })
 
@@ -74,60 +71,13 @@ export default function UserCreateForm() {
 
     const validateEmailOnBlur = async (email: string) => {
 
-        /*
-        if (email && !form.formState.errors.email) {
-            const emailExists = await checkEmailExistsService(email)
-            if (emailExists) {
-              form.setError("email", {
-                type: "manual",
-                message: "This email is already registered",
-              })
-              emailInputRef.current?.focus()
-            } else {
-              form.clearErrors("email")
-            }
-        } 
-        */
-
-        /*
-        //const email = getValues("email");
-
-        try {
-            // Perform Zod validation first
-            const isValid = await trigger("email"); // Triggers validation for "email" only
-            if (!isValid) {
-               
-                emailInputRef.current?.focus();
-                return; // Exit if Zod validation fails
-            }
-
-            const emailExist = await checkEmailExistsService(email);
-
-            if (emailExist) {
-                form.setError("email", {
-                    type: "manual",
-                    message: "Email already exists.",
-                });
-               
-                emailInputRef.current?.focus();
-            } else {
-                clearErrors("email");
-            }
-        } catch (error) {
-            setError("email", {
-                type: "manual",
-                message: "An error occurred. Please try again.",
-            });
-            
-            emailInputRef.current?.focus();
-        }
-            */
+        
     };
 
-    async function onSubmit(data: z.infer<typeof NewUserFormSchema>) {
+    async function onSubmit(data: NewProductData) {
         console.log('create form data');
         console.log(data);
-        const userCreate = await createUserService(data);
+        //const userCreate = await createUserService(data);
         console.log(userCreate);
         if (!userCreate.success) {
                 form.setError("email", {
@@ -179,36 +129,13 @@ export default function UserCreateForm() {
             <CardContent>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+                        
                         <FormField
                             control={form.control}
-                            name="email"
+                            name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <Input
-                                        type="email"
-                                        placeholder="user@email.com"
-                                        {...field}
-                                       
-                                        onKeyDown={async (e) => {
-                                            if (e.key === "Enter") {
-                                              e.preventDefault()
-                                              await validateEmailOnBlur(field.value)
-                                            }
-                                          }}
-                                          ref={emailInputRef} // Attach ref to the input
-                                        disabled={isSubmitting}
-                                    />
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>User Name</FormLabel>
+                                    <FormLabel>Product Name</FormLabel>
                                     <Input
                                         type="text"
                                         placeholder=""
@@ -222,10 +149,10 @@ export default function UserCreateForm() {
                         />
                         <FormField
                             control={form.control}
-                            name="password"
+                            name="description"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Password</FormLabel>
+                                    <FormLabel>Description</FormLabel>
                                     <Input
                                         type="text"
                                         placeholder=""
@@ -239,14 +166,14 @@ export default function UserCreateForm() {
                         />
                         <FormField
                             control={form.control}
-                            name="primaryRole"
+                            name="category"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Primary Role</FormLabel>
+                                    <FormLabel>Category</FormLabel>
                                     <Select onValueChange={field.onChange} defaultValue="">
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select user primary role" />
+                                                <SelectValue placeholder="Select product category" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
