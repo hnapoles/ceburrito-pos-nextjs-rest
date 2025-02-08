@@ -1,5 +1,7 @@
+'use client';
+
 import Link from "next/link"
-//import { IProduct } from "@/app/model/products-model";
+import { usePathname } from 'next/navigation';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -10,6 +12,9 @@ import ProductsTableSimple from "./products-table-simple";
 import { IProductListProps } from "@/app/model/products-model";
 
 const ProductsMainPage: React.FC<IProductListProps> = ({ products, limit, page, totalDataCount }) => {
+
+    const pathname = usePathname();
+    const createLink = `${pathname}/create`
     
     return (
         <Tabs defaultValue="all">
@@ -39,7 +44,7 @@ const ProductsMainPage: React.FC<IProductListProps> = ({ products, limit, page, 
                     </Button>
                     */}
                     <Link
-                        href="/dashboard/settings/users/create"
+                        href={createLink}
                         className="ml-5 px-2 h-8 lg:flex rounded-md bg-purple-500 px-4 py-2 text-sm text-white transition-colors hover:bg-purple-400"
                     >
                         Add New
