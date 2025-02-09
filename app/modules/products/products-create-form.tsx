@@ -49,7 +49,7 @@ const defaultValues: NewProductData = {
 
 
 export default function UserCreateForm() {
-    const emailInputRef = useRef<HTMLInputElement>(null); // Ref for the email input field
+    
 
     const form = useForm<NewProductData>({
         resolver: zodResolver(ZodSchemaNewProduct),
@@ -78,14 +78,6 @@ export default function UserCreateForm() {
         console.log('create form data');
         console.log(data);
         //const userCreate = await createUserService(data);
-        console.log(userCreate);
-        if (!userCreate.success) {
-                form.setError("email", {
-                type: "manual",
-                message: userCreate.message,
-              })
-              emailInputRef.current?.focus()
-        }
         
         toast({
             title: "Data saved for user",
@@ -95,26 +87,18 @@ export default function UserCreateForm() {
                 </pre>
             ),
         });
-        revalidateAndRedirectUrl('/dashboard/settings/users');
+        //revalidateAndRedirectUrl('/dashboard/products');
     }
 
-    const [roles, setRoles] = useState<string[]>([]);
-    useEffect(() => {
-        const fetchRoles = async () => {
-            try {
-                const response = await fetch("/api/userRoles");
-                if (!response.ok) {
-                    throw new Error("Failed to fetch roles");
-                }
-                const data: string[] = await response.json();
-                setRoles(data);
-            } catch (error: any) {
-                console.error(error);
-            } finally {
+    const [categories, setCategories] = useState<string[]>([]);
 
-            }
+    useEffect(() => {
+        const fetchCategories = async () => {
+                const data = ["food", "drinks", "dessert"]
+                setCategories(data);
+            
         };
-        fetchRoles();
+        fetchCategories();
 
     }, []);
 
@@ -177,15 +161,14 @@ export default function UserCreateForm() {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {roles.map((role) => (
-                                                <SelectItem key={role} value={role}>{role}</SelectItem>
+                                            {categories.map((c) => (
+                                                <SelectItem key={c} value={c}>{c}</SelectItem>
                                             ))}
 
                                         </SelectContent>
                                     </Select>
                                     <FormDescription>
-                                        This is defines user permissions and access{" "}
-                                        <Link href="/examples/forms">email settings</Link>.
+                                        This is defines product category{" "}
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
