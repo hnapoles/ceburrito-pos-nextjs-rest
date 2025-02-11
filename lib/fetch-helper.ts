@@ -94,7 +94,9 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
 
   export async function apiClientDq<TResponse, TBody = unknown>(
     //url: string,
+    entity: string,
     operation: ApiOperationNames,
+    id?: string,
     options: FetchOptions<TBody> = {}
   ): Promise<TResponse> {
     const { method = 'GET', body, headers = {}, timeout = 10000 } = options;
@@ -110,11 +112,32 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
     if (session?.user?.apiKey) {
         apiKey = session?.user?.apiKey
     }
-  
-    const base = process.env.HOST_DQ_URL || "http://172.104.117.139:3000/v1/dq"
-    const url = `${base}/${operation}/${apiKey}`
 
-    const defaultMethod = 'POST'
+    const base = process.env.APP_API_SERVER_DQ_URL || "http://172.104.117.139:3000/v1/dq"
+    let url = "";
+    let defaultMethod = 'GET'
+    switch (operation) {
+      case "FindAll":
+        defaultMethod = 'POST'
+        url = `${base}/entities/${apiKey}/${entity}/${operation}/find`;
+      case "FindOne":
+        defaultMethod = 'GET'
+        url = `${base}/entities/${apiKey}/${entity}/${operation}/${id}`;
+      case "Delete":
+        defaultMethod = 'DELETE'
+        url = `${base}/entities/${apiKey}/${entity}/${operation}/${id}`;
+      case "Update":
+        defaultMethod = 'PUT'
+        url = `${base}/entities/${apiKey}/${entity}/${operation}/${id}`;
+      default:
+        defaultMethod = 'POST'
+        url = `${base}/entities/${apiKey}/${entity}/${operation}/find`;
+  }
+  
+    //const base = process.env.APP_API_SERVER_DQ_URL || "http://172.104.117.139:3000/v1/dq"
+    //const url = `${base}/entities/${apiKey}/${entity}/${operation}/find`
+
+    //const defaultMethod = 'POST'
 
     console.log(url)
 

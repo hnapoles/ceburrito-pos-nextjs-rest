@@ -1,15 +1,15 @@
 
 export enum ApiOperationNames {
-    FindAllByKeywordWithPageLimit = "FindAllByKeywordWithPageLimit",
-	AddNewRecord                  = "AddNewRecord",
-	FindOneForUpdate              = "FindOneForUpdate",
-	FindOneForDelete              = "FindOneForDelete",
-    FindOneForDisplay             = "FindOneForDisplay",
+    FindAll = "FindAll",
+	Create                  = "Create",
+	Update              = "Update",
+	Delete              = "Delete",
+    FindOne             = "FindOne",
 }
 
 export interface FindAllByKeywordWithPageLimitProps {
     entity:         string,
-    operation?:     ApiOperationNames | ApiOperationNames.FindAllByKeywordWithPageLimit,
+    operation?:     ApiOperationNames | ApiOperationNames.FindAll,
     keyword?:       string | '',
     limit?:         string | '10', //string due to searchParams
     page?:          string | '1',           
@@ -17,18 +17,18 @@ export interface FindAllByKeywordWithPageLimitProps {
 
 export interface FindOneForDeleteProps {
     entity:         string,
-    operation?:     ApiOperationNames | ApiOperationNames.FindOneForDelete,
+    operation?:     ApiOperationNames | ApiOperationNames.Delete,
     id:             string,        
 }
 
 export interface FindOneForUpdateProps {
     entity:         string,
-    operation?:     ApiOperationNames | ApiOperationNames.FindOneForUpdate,
+    operation?:     ApiOperationNames | ApiOperationNames.Update,
     id:             string,        
 }
 
 export interface FindOneForDisplayProps {
     entity:         string,
-    operation?:     ApiOperationNames | ApiOperationNames.FindOneForDisplay,
+    operation?:     ApiOperationNames | ApiOperationNames.FindOne,
     searchFor:      object,      
 }

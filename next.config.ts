@@ -5,28 +5,8 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["developers.google.com", 
       "lh3.googleusercontent.com",
-    ],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**.google.com',
-        port: '',
-        search: '',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.googleusercontent.com',
-        port: '',
-        search: '',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.ceburrito.ph',
-        port: '',
-        search: '',
-      },
-    ],
-  },
+    ]
+  }
 };
 
 export default nextConfig;

@@ -19,14 +19,15 @@ export default async function Page(
   
     const apiProps : FindAllByKeywordWithPageLimitProps = {
       entity: 'product',
-      operation: ApiOperationNames.FindAllByKeywordWithPageLimit,
+      operation: ApiOperationNames.FindAll,
       keyword: keyword,
       page: page.toString(),
       limit: limit.toString(),
     }
     
     try {
-      const results = await apiClientDq<IProduct[], FindAllByKeywordWithPageLimitProps>(ApiOperationNames.FindAllByKeywordWithPageLimit, 
+      
+      const results = await apiClientDq<IProduct[], FindAllByKeywordWithPageLimitProps>('product', ApiOperationNames.FindAll, "", 
           { method: 'POST',
             body: apiProps,
           });

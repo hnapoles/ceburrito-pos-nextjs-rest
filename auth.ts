@@ -58,7 +58,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
 
+      try {
         const accessToken = await generateAccessToken(session.user.email, session.user.email, token.provider )   
+        console.log(accessToken)
   
         const response = await fetch(`${appApiServerUrl}/auth/login/jwt`, {
           method: "POST",
@@ -68,6 +70,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
         });
         if (!response.ok) {
+          //console.log(response)
           throw new Error("Failed to get server data");
         }
         const data = await response.json();
@@ -82,6 +85,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 provider: token.provider,
             }
         }
+
+      } catch (error) {
+
+        console.error('error session jwt ', error)
+        /*
+        return  {
+          ...session,
+        }
+          */
+         throw new Error
+
+      }
+        
     }, 
     async redirect({ url, baseUrl }) {
         // Allows relative callback URLs
