@@ -1,46 +1,47 @@
 import { apiClientDq } from "@/lib/fetch-helper"
 
-import { IProduct } from "@/app/model/products-model"
-import { ApiOperationNames, FindAllByKeywordWithPageLimitProps } from "@/app/model/api-model"
+import { IProduct, IGetProductsResults } from "@/app/model/products-model"
+import { ApiOperationNames, FindAll } from "@/app/model/api-model"
 
 import ProductsMainPage from "@/app/modules/products/products-main-page";
 
 export default async function Page(
   props: {
-    searchParams: Promise<{ keyword: string, page: number, limit: number }>;
+    searchParams: Promise<{ keyword: string, page: string, limit: string }>;
 }) {
 
     const searchParams = await props.searchParams;
-    const keyword = searchParams.keyword ?? ''
+    const keyword = searchParams.keyword ?? null
     const limit = searchParams.limit ?? '10'
     const page = searchParams.page ?? '1'
           
     let products : IProduct[] = []
+    let totalProducts = 0;
   
-    const apiProps : FindAllByKeywordWithPageLimitProps = {
+    const apiProps : FindAll = {
       entity: 'product',
-      operation: ApiOperationNames.FindAll,
       keyword: keyword,
-      page: page.toString(),
-      limit: limit.toString(),
+      searchKeywordFields: ["name", "description"],
+      page: parseInt(page),
+      limit: parseInt(limit),
     }
-    
+
     try {
       
-      const results = await apiClientDq<IProduct[], FindAllByKeywordWithPageLimitProps>('product', ApiOperationNames.FindAll, "", 
+      const results = await apiClientDq<IGetProductsResults, FindAll>('product', ApiOperationNames.FindAll, "", 
           { method: 'POST',
             body: apiProps,
           });
-      products = results
+      totalProducts = results.count
+      products = results.data
     } catch(error) {
       console.log('error calling api ', error)
     }
 
-    const totalProducts = 10;
-
+  
     if (products) {      
       return (
-        <ProductsMainPage products={products} limit={limit} page={page} totalDataCount={totalProducts} />
+        <ProductsMainPage products={products} limit={parseInt(limit)} page={parseInt(page)} totalDataCount={totalProducts} />
       )
     }
     

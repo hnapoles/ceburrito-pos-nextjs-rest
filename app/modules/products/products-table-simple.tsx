@@ -86,7 +86,7 @@ export default function ProductsTableSimple({
             <div className="text-xs text-muted-foreground">
               Showing{' '}
               <strong>
-                {Math.max(0, Math.min(limit - rowsPerPage, totalDataCount) + 1)}-{limit}
+                {Math.max(1, Math.min(limit - rowsPerPage, totalDataCount) + 1)}-{Math.min(limit, totalDataCount)}
               </strong>{' '}
               of <strong>{totalDataCount}</strong> users
             </div>

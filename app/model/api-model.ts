@@ -7,12 +7,15 @@ export enum ApiOperationNames {
     FindOne             = "FindOne",
 }
 
-export interface FindAllByKeywordWithPageLimitProps {
+export interface FindAll {
     entity:         string,
     operation?:     ApiOperationNames | ApiOperationNames.FindAll,
-    keyword?:       string | '',
-    limit?:         string | '10', //string due to searchParams
-    page?:          string | '1',           
+    keyword?:       string | null,
+    searchKeywordFields?: string[],
+    limit?:         number | 10, //string due to searchParams
+    page?:          number | 1,  
+    andFilter?:       object,
+    orFilter?:       object,         
 }
 
 export interface FindOneForDeleteProps {

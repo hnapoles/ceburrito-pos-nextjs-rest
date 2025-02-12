@@ -11,6 +11,11 @@ export interface IProduct {
     updatedBy: string,
 }
 
+export interface IGetProductsResults {
+  count: number,
+  data: IProduct[] 
+}
+
 export interface IProductListProps {
     products: IProduct[],
     limit: number | 10,
