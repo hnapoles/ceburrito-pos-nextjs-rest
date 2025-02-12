@@ -1,4 +1,4 @@
-import ProductCreateForm from "@/app/modules/products/products-create-form";
+import ProductCreateForm from "@/app/modules/products/create/products-create-form";
 
 import { apiClientDq } from "@/lib/fetch-helper";
 

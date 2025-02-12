@@ -1,7 +1,7 @@
 
 export enum ApiOperationNames {
-    FindAll = "FindAll",
-	Create                  = "Create",
+    FindAll             = "FindAll",
+	Create              = "Create",
 	Update              = "Update",
 	Delete              = "Delete",
     FindOne             = "FindOne",

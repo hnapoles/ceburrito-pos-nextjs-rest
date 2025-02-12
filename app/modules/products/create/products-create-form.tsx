@@ -37,16 +37,12 @@ import {
     CardTitle
 } from '@/components/ui/card';
 
-import { revalidateAndRedirectUrl } from "@/app/service/revalidate-path";
+import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 
 import { ZodSchemaProduct, ProductData } from "@/app/model/products-model";
-import { Lookup, LookupQueryResults } from "@/app/model/lookups-model";
+import { Lookup } from "@/app/model/lookups-model";
 
-import { apiClientDq } from "@/lib/fetch-helper";
-import { IGetProductsResults, ProductCategoryFilter, ProductTypeFilter } from "@/app/model/products-model";
-import { FindAll, ApiOperationNames } from "@/app/model/api-model";
-
-import { getProductCategories } from "./create/getProductCategories";
+import { CreateProductService } from "./createProductService";
 
 const defaultValues: ProductData = {
     name: "",
@@ -86,13 +82,13 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
     async function onSubmit(data: ProductData) {
         console.log('create form data');
         console.log(data);
-        //const userCreate = await createUserService(data);
+        const productCreated = await CreateProductService(data);
         
         toast({
             title: "Data saved for user",
             description: (
                 <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                    <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+                    <code className="text-white">{JSON.stringify(productCreated, null, 2)}</code>
                 </pre>
             ),
         });

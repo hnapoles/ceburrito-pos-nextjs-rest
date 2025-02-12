@@ -93,7 +93,6 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
   }
 
   export async function apiClientDq<TResponse, TBody = unknown>(
-    //url: string,
     entity: string,
     operation: ApiOperationNames,
     id?: string,
@@ -114,36 +113,56 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
     }
 
     const base = process.env.APP_API_SERVER_DQ_URL || "http://172.104.117.139:3000/v1/dq"
-    let url = "";
-    let defaultMethod = 'GET'
+    
+    //let url = "";
+    //let dqMethod = 'GET'
+    /*
     switch (operation) {
-      case "FindAll":
-        defaultMethod = 'POST'
+      case ApiOperationNames.Create:
+        dqMethod = 'POST'
+        url = `${base}/entities/${apiKey}/${entity}/${operation}`;
+        break;
+      case ApiOperationNames.FindAll:
+        dqMethod = 'POST'
         url = `${base}/entities/${apiKey}/${entity}/${operation}/find`;
-      case "FindOne":
-        defaultMethod = 'GET'
+        break;
+      case ApiOperationNames.FindOne:
+        dqMethod = 'GET'
         url = `${base}/entities/${apiKey}/${entity}/${operation}/${id}`;
-      case "Delete":
-        defaultMethod = 'DELETE'
+        break;
+      case ApiOperationNames.Delete:
+        dqMethod = 'DELETE'
         url = `${base}/entities/${apiKey}/${entity}/${operation}/${id}`;
-      case "Update":
-        defaultMethod = 'PUT'
+        break;
+      case ApiOperationNames.Update:
+        dqMethod = 'PUT'
         url = `${base}/entities/${apiKey}/${entity}/${operation}/${id}`;
+        break;
       default:
-        defaultMethod = 'POST'
+        dqMethod = 'POST'
         url = `${base}/entities/${apiKey}/${entity}/${operation}/find`;
-  }
+        break;
+    }
+    */
+
+    const operationConfig: Record<ApiOperationNames, { dqMethod: string; url: string }> = {
+      [ApiOperationNames.Create]: { dqMethod: "POST", url: `${base}/entities/${apiKey}/${entity}/Create` },
+      [ApiOperationNames.FindAll]: { dqMethod: "POST", url: `${base}/entities/${apiKey}/${entity}/FindAll/find` },
+      [ApiOperationNames.FindOne]: { dqMethod: "GET", url: `${base}/entities/${apiKey}/${entity}/FindOne/${id}` },
+      [ApiOperationNames.Delete]: { dqMethod: "DELETE", url: `${base}/entities/${apiKey}/${entity}/Delete/${id}` },
+      [ApiOperationNames.Update]: { dqMethod: "PUT", url: `${base}/entities/${apiKey}/${entity}/Update/${id}` },
+    };
+    
+    // Fallback to default if operation is not found
+    const { dqMethod, url } = operationConfig[operation] || {
+      dqMethod: "POST",
+      url: `${base}/entities/${apiKey}/${entity}/${operation}/find`,
+    };
+    
   
-    //const base = process.env.APP_API_SERVER_DQ_URL || "http://172.104.117.139:3000/v1/dq"
-    //const url = `${base}/entities/${apiKey}/${entity}/${operation}/find`
-
-    //const defaultMethod = 'POST'
-
-    //console.log(url)
-
     try {
       const response = await fetch(url, {
-        method: defaultMethod,
+        method: dqMethod,
         headers: {
           'Content-Type': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
