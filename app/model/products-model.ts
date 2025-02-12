@@ -16,6 +16,7 @@ export interface IGetProductsResults {
   data: IProduct[] 
 }
 
+
 export interface IProductListProps {
     products: IProduct[],
     limit: number | 10,
@@ -23,7 +24,7 @@ export interface IProductListProps {
     totalDataCount: number | 1
 }
 
-export const ZodSchemaNewProduct = z.object({
+export const ZodSchemaProduct = z.object({
     name: z
       .string()
       .min(6, {
@@ -40,9 +41,50 @@ export const ZodSchemaNewProduct = z.object({
       .max(60, {
         message: "Description must not be longer than 60 characters.",
       }),
+    type: z.string({
+        required_error: "Please select a product type",
+    }),
     category: z.string({
-        required_error: "Please select a category.",
+        required_error: "Please select a product category.",
     }),
 });
   
-export type NewProductData = z.infer<typeof ZodSchemaNewProduct>;
+export type ProductData = z.infer<typeof ZodSchemaProduct>;
+
+export const ProductCategoryFilter = {
+  "andFilter": {
+    "lookupGroup": "product",
+    "lookupCode" : "category"
+  },
+  "limit": 999,
+  "page": 1,
+  "sortOptions": [
+    {
+      "sortField": "lookupCode",
+      "sortOrder": 1
+    },
+    {
+      "sortField": "lookupValue",
+      "sortOrder": 1
+    }
+  ]
+}
+
+export const ProductTypeFilter = {
+  "andFilter": {
+    "lookupGroup": "product",
+    "lookupCode" : "type"
+  },
+  "limit": 999,
+  "page": 1,
+  "sortOptions": [
+    {
+      "sortField": "lookupCode",
+      "sortOrder": 1
+    },
+    {
+      "sortField": "lookupValue",
+      "sortOrder": 1
+    }
+  ]
+}

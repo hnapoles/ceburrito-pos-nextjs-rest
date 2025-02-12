@@ -1,11 +1,11 @@
 "use client"
 
 import React, { useEffect, useState, useRef } from "react";
+import { usePathname } from 'next/navigation';
 
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 
 import { toast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
@@ -39,20 +39,29 @@ import {
 
 import { revalidateAndRedirectUrl } from "@/app/service/revalidate-path";
 
-import { ZodSchemaNewProduct, NewProductData } from "@/app/model/products-model";
+import { ZodSchemaProduct, ProductData } from "@/app/model/products-model";
+import { Lookup, LookupQueryResults } from "@/app/model/lookups-model";
 
-const defaultValues: NewProductData = {
+import { apiClientDq } from "@/lib/fetch-helper";
+import { IGetProductsResults, ProductCategoryFilter, ProductTypeFilter } from "@/app/model/products-model";
+import { FindAll, ApiOperationNames } from "@/app/model/api-model";
+
+import { getProductCategories } from "./create/getProductCategories";
+
+const defaultValues: ProductData = {
     name: "",
     description: "",
+    type: "",
     category: ""
 }
 
 
-export default function UserCreateForm() {
+export default function ProductCreateForm({types, categories}:{types:Lookup[], categories:Lookup[]}) {
     
+    //const pathname = usePathname();
 
-    const form = useForm<NewProductData>({
-        resolver: zodResolver(ZodSchemaNewProduct),
+    const form = useForm<ProductData>({
+        resolver: zodResolver(ZodSchemaProduct),
         defaultValues: defaultValues,
         mode: "onBlur",
     })
@@ -74,7 +83,7 @@ export default function UserCreateForm() {
         
     };
 
-    async function onSubmit(data: NewProductData) {
+    async function onSubmit(data: ProductData) {
         console.log('create form data');
         console.log(data);
         //const userCreate = await createUserService(data);
@@ -87,23 +96,12 @@ export default function UserCreateForm() {
                 </pre>
             ),
         });
-        //revalidateAndRedirectUrl('/dashboard/products');
+        revalidateAndRedirectUrl('/dashboard/products');
     }
 
-    const [categories, setCategories] = useState<string[]>([]);
-
-    useEffect(() => {
-        const fetchCategories = async () => {
-                const data = ["food", "drinks", "dessert"]
-                setCategories(data);
-            
-        };
-        fetchCategories();
-
-    }, []);
 
     return (
-        <Card>
+        <Card className="w-full lg:w-1/2">
             <CardHeader>
                 <CardTitle>User</CardTitle>
                 <CardDescription>
@@ -142,7 +140,33 @@ export default function UserCreateForm() {
                                         placeholder=""
                                         {...field} />
                                     <FormDescription>
-                                        This is a secret password{" "}.
+                                        This describes about the product.{" "}.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="type"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Type</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue="">
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select product type" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {types.map((l) => (
+                                                <SelectItem key={l.lookupValue} value={l.lookupValue}>{l.lookupDescription}</SelectItem>
+                                            ))}
+
+                                        </SelectContent>
+                                    </Select>
+                                    <FormDescription>
+                                        This is the product type.{" "}
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
@@ -161,14 +185,14 @@ export default function UserCreateForm() {
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            {categories.map((c) => (
-                                                <SelectItem key={c} value={c}>{c}</SelectItem>
+                                            {categories.map((l) => (
+                                                <SelectItem key={l.lookupValue} value={l.lookupValue}>{l.lookupDescription} </SelectItem>
                                             ))}
 
                                         </SelectContent>
                                     </Select>
                                     <FormDescription>
-                                        This is defines product category{" "}
+                                        This is the product category.{" "}
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
@@ -176,7 +200,7 @@ export default function UserCreateForm() {
                         />
                         <div className="mt-6 flex justify-end gap-4">
                             <Link
-                                href="/pos/settings/users2"
+                                href="/dashboard/products/create"
                                 className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
                             >
                                 Cancel

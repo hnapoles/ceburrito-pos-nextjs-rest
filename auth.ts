@@ -60,7 +60,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       try {
         const accessToken = await generateAccessToken(session.user.email, session.user.email, token.provider )   
-        console.log(accessToken)
+        //console.log(accessToken)
   
         const response = await fetch(`${appApiServerUrl}/auth/login/jwt`, {
           method: "POST",

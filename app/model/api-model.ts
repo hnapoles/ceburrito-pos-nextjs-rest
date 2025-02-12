@@ -8,7 +8,7 @@ export enum ApiOperationNames {
 }
 
 export interface FindAll {
-    entity:         string,
+    entity?:         string,
     operation?:     ApiOperationNames | ApiOperationNames.FindAll,
     keyword?:       string | null,
     searchKeywordFields?: string[],
