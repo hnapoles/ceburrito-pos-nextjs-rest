@@ -4,6 +4,7 @@ export interface IProduct {
     _id: string,
     name: string,
     description: string,
+    price: number,
     imageUrl?: string | null
     createdAt: Date,
     updatedAt: Date,
@@ -41,7 +42,7 @@ export const ZodSchemaProduct = z.object({
       .max(60, {
         message: "Description must not be longer than 60 characters.",
       }),
-      price: z
+    price: z
       .coerce
       .number()
       .min(0.01, "Price must be at least 0.01")
@@ -55,6 +56,46 @@ export const ZodSchemaProduct = z.object({
     }),
 });
   
+
+export const ZodSchemaEditProduct = z.object({
+  name: z
+    .string()
+    .min(6, {
+      message: "Name must be at least 6 characters.",
+    })
+    .max(30, {
+      message: "Name must not be longer than 30 characters.",
+    }),
+  description: z
+    .string()
+    .min(6, {
+      message: "Description must be at least 6 characters.",
+    })
+    .max(60, {
+      message: "Description must not be longer than 60 characters.",
+    }),
+  imageUrl: z
+    .string()
+    .min(6, {
+      message: "Image Url must be at least 6 characters.",
+    })
+    .max(60, {
+      message: "Image Url must not be longer than 60 characters.",
+    }),
+  price: z
+    .coerce
+    .number()
+    .min(0.01, "Price must be at least 0.01")
+    .max(1000000, "Price cannot exceed 1,000,000")
+    .multipleOf(0.01, "Price must be a valid decimal with two places"),
+  type: z.string({
+      required_error: "Please select a product type",
+  }),
+  category: z.string({
+      required_error: "Please select a product category.",
+  }),
+});
+
 export type ProductData = z.infer<typeof ZodSchemaProduct>;
 
 export const ProductCategoryFilter = {

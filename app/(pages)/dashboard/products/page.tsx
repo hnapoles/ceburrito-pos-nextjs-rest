@@ -3,7 +3,7 @@ import { apiClientDq } from "@/lib/fetch-helper"
 import { IProduct, IGetProductsResults } from "@/app/model/products-model"
 import { ApiOperationNames, FindAll } from "@/app/model/api-model"
 
-import ProductsMainPage from "@/app/modules/products/products-main-page";
+import ProductsMainPage from "@/app/modules/products/list/products-main-page";
 
 export default async function Page(
   props: {

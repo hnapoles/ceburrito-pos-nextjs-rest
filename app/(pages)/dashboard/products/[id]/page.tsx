@@ -1,24 +1,28 @@
-import { notFound } from 'next/navigation';
-import { IProduct } from '@/app/model/products-model';
+import ProductEditForm from "@/app/modules/products/create/products-create-form";
+
+import { apiClientDq } from "@/lib/fetch-helper";
+
+import { LookupQueryResults } from "@/app/model/lookups-model";
+import { ProductCategoryFilter, ProductTypeFilter } from "@/app/model/products-model";
+import { FindAll, ApiOperationNames } from "@/app/model/api-model";
 
 
-export default async function Page({ params }: {
-  params: Promise<{ id: string }>
-} ) {
+export default async function ProductEditPage() {
 
-    const id = (await params).id
+    const lookup1 = await apiClientDq<LookupQueryResults, FindAll>('lookup', ApiOperationNames.FindAll, "", 
+        { method: 'POST',
+        body: ProductTypeFilter,});
 
-    
+    const types = lookup1.data;
 
-      if (!true) {
-        notFound();
-      }
+    const lookup2 = await apiClientDq<LookupQueryResults, FindAll>('lookup', ApiOperationNames.FindAll, "", 
+        { method: 'POST',
+        body: ProductCategoryFilter,});
+
+    const categories = lookup2.data; 
 
     return (
-            <div>
-                <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                   
-                </div>
-            </div>
-        )
+        <ProductEditForm types={types} categories={categories} />
+    )
+
 }

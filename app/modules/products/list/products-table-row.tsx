@@ -22,7 +22,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 
 import { IProduct } from '@/app/model/products-model'; 
 
-import { DeleteProductByIdService } from "./delete/deleteProductService";
+import { DeleteProductByIdService } from "../delete/deleteProductService";
 
 import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 

@@ -43,18 +43,19 @@ import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 import { ZodSchemaProduct, ProductData } from "@/app/model/products-model";
 import { Lookup } from "@/app/model/lookups-model";
 
-import { CreateProductService } from "./createProductService";
+import { DeleteProductService } from "./deleteProductService";
 
 const defaultValues: ProductData = {
     name: "",
     description: "",
     price: 0.00,
     type: "",
-    category: ""
+    category: "",
+    imageUrl: "",
 }
 
 
-export default function ProductCreateForm({types, categories}:{types:Lookup[], categories:Lookup[]}) {
+export default function ProductEditForm({types, categories}:{types:Lookup[], categories:Lookup[]}) {
     
     //const pathname = usePathname();
 
@@ -80,11 +81,31 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
         formState: { errors, isSubmitting },
     } = form;
 
+    // Watch file input changes
+    //const selectedFile = watch("file") as FileList | undefined;;
+
+    // Generate image preview
+    /*
+    const handleFileChange = () => {
+        const files = getValues("file"); // Correctly retrieves FileList
+
+        if (files && files.length > 0) {
+          const file = files[0]; // This is now properly recognized as a File
+          setPreview(URL.createObjectURL(file));
+        }
+    };
+    */
+
+    //const validateEmailOnBlur = async (email: string) => {    
+    //};
+
     async function onSubmit(data: ProductData) {
-        const productCreated = await CreateProductService(data);
+        console.log('create form data');
+        console.log(data);
+        const productCreated = await DeleteProductService(data);
         
         toast({
-            title: "Data saved",
+            title: "Data saved for user",
             description: (
                 <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
                     <code className="text-white">{JSON.stringify(productCreated, null, 2)}</code>
@@ -96,8 +117,8 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
 
 
     return (
- 
-        <Card className="w-full lg:w-1/2">
+        <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+        <Card className="w-full">
             <CardHeader>
                 <CardTitle>User</CardTitle>
                 <CardDescription>
@@ -138,6 +159,41 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
                                         {...field} />
                                     <FormDescription>
                                         This describes about the product.{" "}.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <Input
+                                        type="text"
+                                        placeholder=""
+                                        {...field} />
+                                    <FormDescription>
+                                        This describes about the product.{" "}.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="imageUrl"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Image Url</FormLabel>
+                                    <Input
+                                        type="file"
+                                        placeholder=""
+                                        accept="image/*"
+                                        {...field} />
+                                    <FormDescription>
+                                        This is the product image.{" "}.
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
@@ -227,8 +283,19 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
                 </Form>
 
             </CardContent>
+             {/* Right Side - Image Preview */}
+           
+            <div className="flex justify-center items-center border-2 border-dashed rounded-lg h-48">
+                            {preview ? (
+                            <Image src={preview} alt="Preview" width={200} height={200} className="rounded-lg object-cover" />
+                            ) : (
+                            <span className="text-gray-500">No image selected</span>
+                            )}
+            </div>
+           
+           
         </Card>
-  
+        </div>
         
 
     )
