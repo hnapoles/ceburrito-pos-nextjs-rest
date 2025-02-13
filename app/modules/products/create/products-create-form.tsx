@@ -47,6 +47,7 @@ import { CreateProductService } from "./createProductService";
 const defaultValues: ProductData = {
     name: "",
     description: "",
+    price: 0.00,
     type: "",
     category: ""
 }
@@ -137,6 +138,22 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
                                         {...field} />
                                     <FormDescription>
                                         This describes about the product.{" "}.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="price"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Price</FormLabel>
+                                    <Input
+                                        type="number"
+                                        {...field} />
+                                    <FormDescription>
+                                        Thi is the selling price.{" "}.
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>

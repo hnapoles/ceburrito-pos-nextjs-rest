@@ -41,6 +41,12 @@ export const ZodSchemaProduct = z.object({
       .max(60, {
         message: "Description must not be longer than 60 characters.",
       }),
+      price: z
+      .coerce
+      .number()
+      .min(0.01, "Price must be at least 0.01")
+      .max(1000000, "Price cannot exceed 1,000,000")
+      .multipleOf(0.01, "Price must be a valid decimal with two places"),
     type: z.string({
         required_error: "Please select a product type",
     }),
