@@ -58,6 +58,7 @@ export const ZodSchemaNewProduct = z.object({
   
 
 export const ZodSchemaEditProduct = z.object({
+  _id: z.string(),
   name: z
     .string()
     .min(6, {

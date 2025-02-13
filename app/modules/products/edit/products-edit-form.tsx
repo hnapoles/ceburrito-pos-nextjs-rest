@@ -53,6 +53,7 @@ export default function ProductEditForm({product, types, categories}:{product: E
     //const pathname = usePathname();
 
     const defaultValues: EditProductData = {
+        _id: product._id,
         name: product.name,
         description: product.description,
         price: product.price,
@@ -131,6 +132,23 @@ export default function ProductEditForm({product, types, categories}:{product: E
             <CardContent>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+
+                        <FormField
+                            control={form.control}
+                            name="_id"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Id</FormLabel>
+                                    <Input
+                                        placeholder=""
+                                        readOnly {...field} />
+                                    <FormDescription>
+                                        This is a system generated id{" "}.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         
                         <FormField
                             control={form.control}
@@ -190,9 +208,8 @@ export default function ProductEditForm({product, types, categories}:{product: E
                                 <FormItem>
                                     <FormLabel>Image Url</FormLabel>
                                     <Input
-                                        type="file"
+                                        type="text"
                                         placeholder=""
-                                        accept="image/*"
                                         {...field} />
                                     <FormDescription>
                                         This is the product image.{" "}.
