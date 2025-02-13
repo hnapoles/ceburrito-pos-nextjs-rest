@@ -40,30 +40,32 @@ import {
 
 import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 
-import { ZodSchemaProduct, ProductData } from "@/app/model/products-model";
+import { ZodSchemaEditProduct, EditProductData } from "@/app/model/products-model";
 import { Lookup } from "@/app/model/lookups-model";
 
 import { DeleteProductService } from "./deleteProductService";
 
-const defaultValues: ProductData = {
-    name: "",
-    description: "",
-    price: 0.00,
-    type: "",
-    category: "",
-    imageUrl: "",
-}
 
 
-export default function ProductEditForm({types, categories}:{types:Lookup[], categories:Lookup[]}) {
+
+export default function ProductEditForm({product, types, categories}:{product: EditProductData, types:Lookup[], categories:Lookup[]}) {
     
     //const pathname = usePathname();
+
+    const defaultValues: EditProductData = {
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        type: product.type,
+        category: product.category,
+        imageUrl: product.imageUrl,
+    }
 
     const [preview, setPreview] = useState<string | null>(null);
 
 
-    const form = useForm<ProductData>({
-        resolver: zodResolver(ZodSchemaProduct),
+    const form = useForm<EditProductData>({
+        resolver: zodResolver(ZodSchemaEditProduct),
         defaultValues: defaultValues,
         mode: "onBlur",
     })
@@ -99,7 +101,7 @@ export default function ProductEditForm({types, categories}:{types:Lookup[], cat
     //const validateEmailOnBlur = async (email: string) => {    
     //};
 
-    async function onSubmit(data: ProductData) {
+    async function onSubmit(data: EditProductData) {
         console.log('create form data');
         console.log(data);
         const productCreated = await DeleteProductService(data);

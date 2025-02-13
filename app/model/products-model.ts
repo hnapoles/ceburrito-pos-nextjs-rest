@@ -25,7 +25,7 @@ export interface IProductListProps {
     totalDataCount: number | 1
 }
 
-export const ZodSchemaProduct = z.object({
+export const ZodSchemaNewProduct = z.object({
     name: z
       .string()
       .min(6, {
@@ -96,7 +96,8 @@ export const ZodSchemaEditProduct = z.object({
   }),
 });
 
-export type ProductData = z.infer<typeof ZodSchemaProduct>;
+export type NewProductData = z.infer<typeof ZodSchemaNewProduct>;
+export type EditProductData = z.infer<typeof ZodSchemaEditProduct>;
 
 export const ProductCategoryFilter = {
   "andFilter": {

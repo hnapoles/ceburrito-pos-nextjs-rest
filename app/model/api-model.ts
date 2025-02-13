@@ -18,6 +18,11 @@ export interface FindAll {
     orFilter?:       object,         
 }
 
+export interface FindOne {
+    entity?:         string,
+    operation?:     ApiOperationNames | ApiOperationNames.FindAll,   
+}
+
 export interface FindOneForDeleteProps {
     entity:         string,
     operation?:     ApiOperationNames | ApiOperationNames.Delete,
