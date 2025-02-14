@@ -49,3 +49,31 @@ export const ourFileRouter = {
 } satisfies FileRouter
 
 export type OurFileRouter = typeof ourFileRouter
+
+/*
+// Define a custom upload route
+export const fileRouter = {
+  imageUpload: f({ image: { maxFileSize: "4MB" } })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("File uploaded to UploadThing:", file.url);
+
+      // Send the file to your own API server
+      const response = await fetch("https://your-api-server.com/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fileUrl: file.url }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload file to custom storage");
+      }
+
+      const data = await response.json();
+      return { url: data.storedUrl }; // Return the custom stored URL
+    }),
+} satisfies FileRouter;
+
+export type OurFileRouter = typeof fileRouter;
+*/
