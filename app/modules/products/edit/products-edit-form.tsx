@@ -51,6 +51,7 @@ import { Lookup } from "@/app/model/lookups-model";
 import { DeleteProductService } from "./deleteProductService";
 
 import InputFile from "./products-upload-form";
+import { ReactHookFormDemo } from "./files-upload-react-hook-form";
 
 const images = [{
     "_id": {
@@ -347,6 +348,7 @@ export default function ProductEditForm({product, types, categories}:{product: E
                     </div>
                     <TabsContent value="images">
                         
+                        <ReactHookFormDemo/>
                         <InputFile/>
                         <div className="mt-6 space-y-1">
                             <h2 className="text-2xl font-semibold tracking-tight">

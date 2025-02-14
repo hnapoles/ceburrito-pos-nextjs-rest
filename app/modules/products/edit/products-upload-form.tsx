@@ -8,6 +8,22 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from "@/components/ui/button";
 
+import { cn } from "@/lib/utils"
+
+import { UploadedFileData } from 'uploadthing/types';
+import { UploadedFilesCard } from './files-uploaded-card';
+
+
+const uploadedFiles = [{
+    "key": "67ae73a32b9617d42ff520dd",
+    "customId": "product",
+    "name": "104821ed-cfe4-43ff-8efa-9fc8a8826dbc.png",
+    "url": "https://posapi-dev.ceburrito.ph/public/104821ed-cfe4-43ff-8efa-9fc8a8826dbc.png",
+  },
+
+  ]
+
+
 
 interface InputFileProps {
   // You can add any additional props needed
@@ -62,14 +78,20 @@ export default function InputFile() {
     }
   };
 
+  /*
+   <div className="flex border-2 border-dashed rounded-lg h-48" > 
+  */
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-                                <div className="flex  border-2 border-dashed rounded-lg h-48" >
-        
+       
+
+                                <div className="flex border-2 border-dashed rounded-lg h-48" >
+                            
                                         {selectedFile ? (
-                                            <div className="mt-2 relative">
-                                                    <Image src={selectedFile} alt="Preview" width={200} height={200} className="rounded-lg object-cover" />
+                                            <div className="relative space-x-4 pb-4">
+                                                    <Image src={selectedFile} alt="Preview" width={100} height={130} 
+                                                    className="h-auto w-auto object-cover transition-all hover:scale-105 aspect-square" />
                                                     <button
                                                     onClick={handleRemoveClick}
                                                     className="absolute top-0 right-0 bg-red-500 text-white py-1 px-2"
@@ -89,11 +111,12 @@ export default function InputFile() {
                                     Selected File: {watchFile.name}
                                     </p>
                                 )}*/}
-                                <Button className="w-full" type="button" onClick={handleButtonClick}>
+                                <Button  type="button" variant="outline" onClick={handleButtonClick} 
+                                   className={cn("w-full", selectedFile ? "hidden" : "block")}>
                                     Browse Images for Upload
                                 </Button>
-                                <Button className="w-full" type="submit">
-                                    Upload Selected Image
+                                <Button type="submit"  className={cn("w-full", selectedFile ? "block" : "hidden")}>
+                                    Upload Selected Image to Library
                                 </Button>
       
     </form>
