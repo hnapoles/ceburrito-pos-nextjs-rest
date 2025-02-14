@@ -4,6 +4,8 @@ import React, { useEffect, useState, useRef } from "react";
 //import { usePathname } from 'next/navigation';
 import Image from "next/image";
 
+import { cn } from "@/lib/utils"
+
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -38,6 +40,9 @@ import {
     CardTitle
 } from '@/components/ui/card';
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from "@/components/ui/separator"
+
 import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 
 import { ZodSchemaEditProduct, EditProductData } from "@/app/model/products-model";
@@ -45,7 +50,30 @@ import { Lookup } from "@/app/model/lookups-model";
 
 import { DeleteProductService } from "./deleteProductService";
 
-
+const images = [{
+    "_id": {
+      "$oid": "67ae73a32b9617d42ff520dd"
+    },
+    "group": "product",
+    "description": "heart",
+    "fileName": "https://posapi-dev.ceburrito.ph/public/104821ed-cfe4-43ff-8efa-9fc8a8826dbc.png"
+  },
+  {
+    "_id": {
+      "$oid": "67ae75962b9617d42ff520e1"
+    },
+    "group": "product",
+    "description": "heart",
+    "fileName": "https://posapi-dev.ceburrito.ph/public/10358cc7-b729-4339-857d-d908bd5be67d.png"
+  },
+  {
+    "_id": {
+      "$oid": "https://posapi-dev.ceburrito.ph/public/67ae75c32b9617d42ff520e3"
+    },
+    "group": "product",
+    "description": "heart",
+    "fileName": "https://posapi-dev.ceburrito.ph/public/3f148182-1b86-4df9-9e43-938cc74324fc.png"
+  }]
 
 
 export default function ProductEditForm({product, types, categories}:{product: EditProductData, types:Lookup[], categories:Lookup[]}) {
@@ -56,10 +84,10 @@ export default function ProductEditForm({product, types, categories}:{product: E
         _id: product._id,
         name: product.name,
         description: product.description,
-        price: product.price,
+        price: product.price | 0.00,
         type: product.type,
         category: product.category,
-        imageUrl: product.imageUrl,
+        imageUrl: product?.imageUrl ?? "",
     }
 
     const [preview, setPreview] = useState<string | null>(null);
@@ -121,199 +149,241 @@ export default function ProductEditForm({product, types, categories}:{product: E
 
     return (
         <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-        <Card className="w-full">
-            <CardHeader>
-                <CardTitle>User</CardTitle>
-                <CardDescription>
-                    Edit user.
-                </CardDescription>
-            </CardHeader>
-           
-            <CardContent>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+            <div>        
+                <Card className="w-full">
+                    <CardHeader>
+                        <CardTitle>Product</CardTitle>
+                        <CardDescription>
+                            Edit product.
+                        </CardDescription>
+                    </CardHeader>
+                
+                    <CardContent>
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full md:space-y-3 space-y-1">
 
-                        <FormField
-                            control={form.control}
-                            name="_id"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Id</FormLabel>
-                                    <Input
-                                        placeholder=""
-                                        readOnly {...field} />
-                                    <FormDescription>
-                                        This is a system generated id{" "}.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Product Name</FormLabel>
-                                    <Input
-                                        type="text"
-                                        placeholder=""
-                                        {...field} />
-                                    <FormDescription>
-                                        This is a unique name{" "}.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Description</FormLabel>
-                                    <Input
-                                        type="text"
-                                        placeholder=""
-                                        {...field} />
-                                    <FormDescription>
-                                        This describes about the product.{" "}.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="description"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Description</FormLabel>
-                                    <Input
-                                        type="text"
-                                        placeholder=""
-                                        {...field} />
-                                    <FormDescription>
-                                        This describes about the product.{" "}.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="imageUrl"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Image Url</FormLabel>
-                                    <Input
-                                        type="text"
-                                        placeholder=""
-                                        {...field} />
-                                    <FormDescription>
-                                        This is the product image.{" "}.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="price"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Price</FormLabel>
-                                    <Input
-                                        type="number"
-                                        {...field} />
-                                    <FormDescription>
-                                        Thi is the selling price.{" "}.
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="type"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Type</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue="">
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select product type" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {types.map((l) => (
-                                                <SelectItem key={l.lookupValue} value={l.lookupValue}>{l.lookupDescription}</SelectItem>
-                                            ))}
+                                <FormField
+                                    control={form.control}
+                                    name="_id"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Id</FormLabel>
+                                            <Input
+                                                placeholder=""
+                                                readOnly {...field} />
+                                            <FormDescription>
+                                                This is a system generated id{" "}.
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Product Name</FormLabel>
+                                            <Input
+                                                type="text"
+                                                placeholder=""
+                                                {...field} />
+                                            
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Description</FormLabel>
+                                            <Input
+                                                type="text"
+                                                placeholder=""
+                                                {...field} />
+                                            
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Description</FormLabel>
+                                            <Input
+                                                type="text"
+                                                placeholder=""
+                                                {...field} />
+                                            
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="imageUrl"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Image Url</FormLabel>
+                                            <Input
+                                                type="text"
+                                                placeholder=""
+                                                {...field} />
+                                            
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="price"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Price</FormLabel>
+                                            <Input
+                                                type="number"
+                                                placeholder="0"
+                                                {...field} />
+                                            
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="type"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Type</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue="">
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select product type" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {types.map((l) => (
+                                                        <SelectItem key={l.lookupValue} value={l.lookupValue}>{l.lookupDescription}</SelectItem>
+                                                    ))}
 
-                                        </SelectContent>
-                                    </Select>
-                                    <FormDescription>
-                                        This is the product type.{" "}
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="category"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Category</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue="">
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select product category" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {categories.map((l) => (
-                                                <SelectItem key={l.lookupValue} value={l.lookupValue}>{l.lookupDescription} </SelectItem>
-                                            ))}
+                                                </SelectContent>
+                                            </Select>
+                                            
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="category"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Category</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue="">
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select product category" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    {categories.map((l) => (
+                                                        <SelectItem key={l.lookupValue} value={l.lookupValue}>{l.lookupDescription} </SelectItem>
+                                                    ))}
 
-                                        </SelectContent>
-                                    </Select>
-                                    <FormDescription>
-                                        This is the product category.{" "}
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div className="mt-6 flex justify-end gap-4">
-                            <Link
-                                href="/dashboard/products/create"
-                                className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
-                            >
-                                Cancel
-                            </Link>
-                            <Button type="submit" disabled={isSubmitting}>
-                                {isSubmitting ? "Submitting..." : "Submit"}
-                            </Button>
-                        </div>
-                       
-                    </form>
-                </Form>
+                                                </SelectContent>
+                                            </Select>
+                                            
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <div className="mt-6 flex justify-end gap-4">
+                                    <Link
+                                        href="/dashboard/products/create"
+                                        className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+                                    >
+                                        Cancel
+                                    </Link>
+                                    <Button type="submit" disabled={isSubmitting}>
+                                        {isSubmitting ? "Submitting..." : "Submit"}
+                                    </Button>
+                                </div>
+                            
+                            </form>
+                        </Form>
 
-            </CardContent>
-             {/* Right Side - Image Preview */}
-           
-            <div className="flex justify-center items-center border-2 border-dashed rounded-lg h-48">
-                            {preview ? (
-                            <Image src={preview} alt="Preview" width={200} height={200} className="rounded-lg object-cover" />
-                            ) : (
-                            <span className="text-gray-500">No image selected</span>
-                            )}
+                    </CardContent>
+                    
+                
+                
+                </Card>
             </div>
-           
-           
-        </Card>
+        
+            
+              
+            {/* Right Side */}   
+            <div>
+
+                <Tabs defaultValue="images">
+                    <div className="flex items-center">
+                        <TabsList>
+                            <TabsTrigger value="images">Images</TabsTrigger>
+                            <TabsTrigger value="active">Attributes</TabsTrigger>
+                            <TabsTrigger value="draft">Sales</TabsTrigger>
+                            
+                        </TabsList>
+                        
+                    
+                    </div>
+                    <TabsContent value="images">
+                        Click Image to assign to selected product.
+                        <div className="flex justify-center items-center border-2 border-dashed rounded-lg h-48">
+
+                                {preview ? (
+                                <Image src={preview} alt="Preview" width={200} height={200} className="rounded-lg object-cover" />
+                                ) : (
+                                <span className="text-gray-500">No image selected</span>
+                                )}
+                        </div>
+                        <div className="mt-6 space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                                Saved Images
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                            Click image to assign to the product.
+                            </p>
+                        </div>
+                        <Separator className="my-4" />
+                        <div className="relative">
+                          
+                            <div className="flex space-x-4 pb-4">
+                                {images.map((image) => (
+                                    <Image
+                                    key={image.fileName}
+                                    src={image.fileName}
+                                    alt={image.description}
+                                    width={100}
+                                    height={130}
+                                    className={cn(
+                                      "h-auto w-auto object-cover transition-all hover:scale-105",
+                                      "portrait" === "portrait" ? "aspect-[3/4]" : "aspect-square"
+                                    )}
+                                    />
+                                ))}
+                            </div>
+                            
+                        </div>
+                    </TabsContent>
+                </Tabs>
+                
+                
+
+            </div>
         </div>
         
 
