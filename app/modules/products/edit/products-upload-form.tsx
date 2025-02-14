@@ -11,21 +11,25 @@ import { Button } from "@/components/ui/button";
 
 interface InputFileProps {
   // You can add any additional props needed
-  file: FileList | null;
+  file: File | null;
 }
 
 export default function InputFile() {
 
-  const { register, setValue, handleSubmit, watch, reset } = useForm<InputFileProps>();
+  const { register, setValue, handleSubmit, 
+    //watch, 
+    reset } = useForm<InputFileProps>();
 
-  const watchFile = watch("file");
+  //const watchFile = watch("file");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0] || null;
+
+    setValue("file", file);
 
     if (file) {
       const reader = new FileReader();
@@ -39,7 +43,7 @@ export default function InputFile() {
   const handleRemoveClick = () => {
     setValue("file", null); // Clear the form value
     setSelectedFile(null);
-    reset(); 
+    reset({ file: null }); // Ensure form state resets
     if (fileInputRef.current) {
         fileInputRef.current.value = ""; // Reset file input field
     }
@@ -51,8 +55,8 @@ export default function InputFile() {
   };
 
   const onSubmit = (data: InputFileProps) => {
-    if (data.file && data.file.length > 0) {
-      console.log("File uploaded:", data.file[0]);
+    if (data.file) {
+      console.log("File uploaded:", data.file);
     } else {
       console.log("No file selected");
     }
@@ -60,7 +64,7 @@ export default function InputFile() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        Click Image to assign to selected product.
+
                                 <div className="flex  border-2 border-dashed rounded-lg h-48" >
         
                                         {selectedFile ? (
@@ -78,31 +82,20 @@ export default function InputFile() {
                                         <span className="text-gray-500 justify-center items-center">No image selected</span>
                                         )}
                                 </div>
-    <div className="grid w-full max-w-sm items-center gap-1.5">
-      {/*<Label htmlFor="picture">Picture</Label>*/}
-      <Input id="picture" className="xhidden" type="file"  {...register("file")} onChange={handleFileChange} ref={fileInputRef}  />
-      {/* Button to Trigger File Selection */}
-      <Button type="button" onClick={handleButtonClick}>
-        Select File
-      </Button>
-      {selectedFile && (
-        <div className="mt-2 relative">
-          <Image
-            src={selectedFile}
-            alt="Preview"
-            width={200}
-            height={200}
-          />
-          <button
-            onClick={handleRemoveClick}
-            className="absolute top-0 right-0 bg-red-500 text-white py-1 px-2"
-            aria-label="Remove image"
-          >
-            X
-          </button>
-        </div>
-      )}
-    </div>
+                                <Input id="file" className="hidden" type="file"  {...register("file")}  ref={fileInputRef} onChange={handleFileChange} />
+                                {/*
+                                {watchFile && (
+                                    <p className="text-sm text-gray-500 text-center mt-2">
+                                    Selected File: {watchFile.name}
+                                    </p>
+                                )}*/}
+                                <Button className="w-full" type="button" onClick={handleButtonClick}>
+                                    Browse Images for Upload
+                                </Button>
+                                <Button className="w-full" type="submit">
+                                    Upload Selected Image
+                                </Button>
+      
     </form>
   );
 }
