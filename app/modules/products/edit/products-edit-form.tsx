@@ -50,13 +50,16 @@ import { Lookup } from "@/app/model/lookups-model";
 
 import { DeleteProductService } from "./deleteProductService";
 
+import InputFile from "./products-upload-form";
+
 const images = [{
     "_id": {
       "$oid": "67ae73a32b9617d42ff520dd"
     },
     "group": "product",
     "description": "heart",
-    "fileName": "https://posapi-dev.ceburrito.ph/public/104821ed-cfe4-43ff-8efa-9fc8a8826dbc.png"
+    "fileName": "https://posapi-dev.ceburrito.ph/public/104821ed-cfe4-43ff-8efa-9fc8a8826dbc.png",
+    aspectRatio : "square",
   },
   {
     "_id": {
@@ -64,15 +67,17 @@ const images = [{
     },
     "group": "product",
     "description": "heart",
-    "fileName": "https://posapi-dev.ceburrito.ph/public/10358cc7-b729-4339-857d-d908bd5be67d.png"
-  },
+    "fileName": "https://posapi-dev.ceburrito.ph/public/10358cc7-b729-4339-857d-d908bd5be67d.png",
+    aspectRatio : "square",
+},
   {
     "_id": {
       "$oid": "https://posapi-dev.ceburrito.ph/public/67ae75c32b9617d42ff520e3"
     },
     "group": "product",
     "description": "heart",
-    "fileName": "https://posapi-dev.ceburrito.ph/public/3f148182-1b86-4df9-9e43-938cc74324fc.png"
+    "fileName": "https://posapi-dev.ceburrito.ph/public/3f148182-1b86-4df9-9e43-938cc74324fc.png",
+    aspectRatio : "square",
   }]
 
 
@@ -341,18 +346,11 @@ export default function ProductEditForm({product, types, categories}:{product: E
                     
                     </div>
                     <TabsContent value="images">
-                        Click Image to assign to selected product.
-                        <div className="flex justify-center items-center border-2 border-dashed rounded-lg h-48">
-
-                                {preview ? (
-                                <Image src={preview} alt="Preview" width={200} height={200} className="rounded-lg object-cover" />
-                                ) : (
-                                <span className="text-gray-500">No image selected</span>
-                                )}
-                        </div>
+                        
+                        <InputFile/>
                         <div className="mt-6 space-y-1">
                             <h2 className="text-2xl font-semibold tracking-tight">
-                                Saved Images
+                                Image Library
                             </h2>
                             <p className="text-sm text-muted-foreground">
                             Click image to assign to the product.
@@ -368,10 +366,10 @@ export default function ProductEditForm({product, types, categories}:{product: E
                                     src={image.fileName}
                                     alt={image.description}
                                     width={100}
-                                    height={130}
+                                    height={100}
                                     className={cn(
                                       "h-auto w-auto object-cover transition-all hover:scale-105",
-                                      "portrait" === "portrait" ? "aspect-[3/4]" : "aspect-square"
+                                      image.aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
                                     )}
                                     />
                                 ))}
