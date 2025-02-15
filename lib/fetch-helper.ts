@@ -159,8 +159,7 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
       dqMethod: "POST",
       url: `${base}/entities/${apiKey}/${entity}/${operation}/find`,
     };
-    
-  
+
     try {
       const response = await fetch(url, {
         method: dqMethod,

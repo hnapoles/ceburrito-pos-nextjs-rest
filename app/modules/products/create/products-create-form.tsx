@@ -83,6 +83,7 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
     } = form;
 
     async function onSubmit(data: ProductData) {
+        delete data._id;
         const productCreated = await CreateProductService(data);
         
         toast({

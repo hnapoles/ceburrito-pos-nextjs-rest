@@ -12,3 +12,7 @@ export interface FileUploadResponse {
     fileName: string,
     message: string
 }
+
+export interface FileUploadData {
+    file?: File | null;
+}
