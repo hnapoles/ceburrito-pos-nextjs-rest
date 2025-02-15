@@ -16,7 +16,20 @@ import { InputFileProps } from '@/app/model/file-uploads-model';
 import { UploadFileSingle } from './uploadFileSingle';
 import { toast } from "@/hooks/use-toast";
 
-export default function ProductUpdateFormImage() {
+interface ComponentAProps {
+    setImageUrl: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+// Define the correct type for setImageUrl
+interface ComponentAProps {
+    setImageUrl: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+interface ComponentBProps {
+    imageUrl: string | null;
+  }
+
+export default function ProductUpdateFormImage({imageUrl, setImageUrl}:{imageUrl: string | null; setImageUrl: React.Dispatch<React.SetStateAction<string | null>>}) {
     const {
         register,
         setValue,
@@ -62,22 +75,10 @@ export default function ProductUpdateFormImage() {
             const formData = new FormData();
             formData.append("file", data.file);
             
-            
             const uploaded = await UploadFileSingle(formData, entity);
-            console.log(uploaded);
-            console.log("File uploaded:", data.file);
-            
-            
-        
-            /*
-            const response = await fetch("/api/fileupload", {
-                method: "POST",
-                body: formData,
-            });
-    
-            const uploaded = await response.json();
-            console.log("Upload response:", uploaded);
-            */
+            //console.log(uploaded);
+            //console.log("File uploaded:", data.file);
+            setImageUrl(uploaded.fileName);
 
             toast({
                 title: "Data saved",

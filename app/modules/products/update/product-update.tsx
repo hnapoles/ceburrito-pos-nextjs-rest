@@ -9,6 +9,7 @@ import ProductUpdateTabs from "./product-update-tabs";
 
 export default function ProductUpdate({ product, types, categories }: { product: ProductData, types: Lookup[], categories: Lookup[] }) {
 
+    
     return (
         <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
             {/* Left Side - Product Image and Details */}
