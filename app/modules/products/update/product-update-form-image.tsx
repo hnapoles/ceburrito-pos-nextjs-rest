@@ -61,25 +61,29 @@ export default function ProductUpdateFormImage() {
 
             const formData = new FormData();
             formData.append("file", data.file);
-            /*
+            
+            
             const uploaded = await UploadFileSingle(formData, entity);
             console.log(uploaded);
             console.log("File uploaded:", data.file);
-            */
-
+            
+            
+        
+            /*
             const response = await fetch("/api/fileupload", {
                 method: "POST",
                 body: formData,
             });
     
-            const result = await response.json();
-            console.log("Upload response:", result);
+            const uploaded = await response.json();
+            console.log("Upload response:", uploaded);
+            */
 
             toast({
                 title: "Data saved",
                 description: (
                     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">{JSON.stringify(result, null, 2)}</code>
+                        <code className="text-white">{JSON.stringify(uploaded, null, 2)}</code>
                     </pre>
                 ),
             });
