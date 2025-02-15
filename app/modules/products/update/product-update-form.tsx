@@ -18,7 +18,8 @@ import {
 
 export default function ProductUpdateForm({ product, types, categories }: { product: ProductData, types: Lookup[], categories: Lookup[] }) {
 
-    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const thisImageUrl = product.imageUrl ?? null
+    const [imageUrl, setImageUrl] = useState<string | null>(thisImageUrl);
 
     return (
         <Card>
