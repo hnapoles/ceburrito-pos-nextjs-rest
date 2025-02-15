@@ -32,6 +32,7 @@ export default async function ProductEditPage({ params }: {
     const categories = lookup2.data; 
 
     console.log(product)
+    console.log(categories)
 
     /*
     return (

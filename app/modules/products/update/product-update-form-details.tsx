@@ -164,7 +164,7 @@ export default function ProductUpdateFormDetails({ product, types, categories, i
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Type</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue="">
+                                            <Select onValueChange={field.onChange} {...field} value={field.value || ''}>
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Select product type" />
@@ -188,7 +188,7 @@ export default function ProductUpdateFormDetails({ product, types, categories, i
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Category</FormLabel>
-                                            <Select onValueChange={field.onChange}>
+                                            <Select onValueChange={field.onChange} {...field} value={field.value || ''}>
                                                 <FormControl>
                                                     <SelectTrigger>
                                                         <SelectValue placeholder="Select product category" />
