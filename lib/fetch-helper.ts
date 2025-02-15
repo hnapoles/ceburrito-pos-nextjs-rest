@@ -151,6 +151,7 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
       [ApiOperationNames.FindOne]: { dqMethod: "GET", url: `${base}/entities/${apiKey}/${entity}/FindOne/${id}` },
       [ApiOperationNames.Delete]: { dqMethod: "DELETE", url: `${base}/entities/${apiKey}/${entity}/Delete/${id}` },
       [ApiOperationNames.Update]: { dqMethod: "PUT", url: `${base}/entities/${apiKey}/${entity}/Update/${id}` },
+      [ApiOperationNames.FileUpload]: { dqMethod: "POST", url: `${base}/files/upload/${apiKey}/${entity}` },
     };
     
     // Fallback to default if operation is not found

@@ -5,6 +5,7 @@ export enum ApiOperationNames {
 	Update              = "Update",
 	Delete              = "Delete",
     FindOne             = "FindOne",
+    FileUpload          = "FileUpload",
 }
 
 export interface FindAll {

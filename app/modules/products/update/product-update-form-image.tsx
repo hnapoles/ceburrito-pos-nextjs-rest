@@ -12,9 +12,9 @@ import { cn } from "@/lib/utils"
 
 const entity = 'product';
 
-interface InputFileProps {
-    file: File | null;
-}
+import { InputFileProps } from '@/app/model/file-uploads-model';
+import { UploadFileSingle } from './uploadFileSingle';
+import { toast } from "@/hooks/use-toast";
 
 export default function ProductUpdateFormImage() {
     const {
@@ -56,9 +56,19 @@ export default function ProductUpdateFormImage() {
         fileInputRef.current?.click();
     };
 
-    const onSubmit = (data: InputFileProps) => {
+    const onSubmit = async (data: InputFileProps) => {
         if (data.file) {
+            const uploaded = await UploadFileSingle(data, entity);
+            console.log(uploaded);
             console.log("File uploaded:", data.file);
+            toast({
+                title: "Data saved",
+                description: (
+                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                        <code className="text-white">{JSON.stringify(uploaded, null, 2)}</code>
+                    </pre>
+                ),
+            });
         } else {
             console.log("No file selected");
         }
