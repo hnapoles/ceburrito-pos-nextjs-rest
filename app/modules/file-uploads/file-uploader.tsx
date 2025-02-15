@@ -165,6 +165,7 @@ export function FileUploader(props: FileUploaderProps) {
     [files, maxFileCount, multiple, onUpload, setFiles]
   )
 
+  
   function onRemove(index: number) {
     if (!files) return
     const newFiles = files.filter((_, i) => i !== index)

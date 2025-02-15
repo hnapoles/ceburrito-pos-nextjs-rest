@@ -40,17 +40,19 @@ import {
 
 import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 
-import { ZodSchemaNewProduct, NewProductData } from "@/app/model/products-model";
+import { ZodSchemaProduct, ProductData } from "@/app/model/products-model";
 import { Lookup } from "@/app/model/lookups-model";
 
 import { CreateProductService } from "./createProductService";
 
-const defaultValues: NewProductData = {
+const defaultValues: ProductData = {
+    _id: "",
     name: "",
     description: "",
     price: 0.00,
     type: "",
-    category: ""
+    category: "",
+    imageUrl: ""
 }
 
 
@@ -61,8 +63,8 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
     const [preview, setPreview] = useState<string | null>(null);
 
 
-    const form = useForm<NewProductData>({
-        resolver: zodResolver(ZodSchemaNewProduct),
+    const form = useForm<ProductData>({
+        resolver: zodResolver(ZodSchemaProduct),
         defaultValues: defaultValues,
         mode: "onBlur",
     })
@@ -80,7 +82,7 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
         formState: { errors, isSubmitting },
     } = form;
 
-    async function onSubmit(data: NewProductData) {
+    async function onSubmit(data: ProductData) {
         const productCreated = await CreateProductService(data);
         
         toast({

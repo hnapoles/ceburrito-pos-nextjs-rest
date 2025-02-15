@@ -57,7 +57,7 @@ export const ZodSchemaNewProduct = z.object({
 });
   
 
-export const ZodSchemaEditProduct = z.object({
+export const ZodSchemaProduct = z.object({
   _id: z.string(),
   name: z
     .string()
@@ -76,13 +76,7 @@ export const ZodSchemaEditProduct = z.object({
       message: "Description must not be longer than 60 characters.",
     }),
   imageUrl: z
-    .string()
-    .min(6, {
-      message: "Image Url must be at least 6 characters.",
-    })
-    .max(60, {
-      message: "Image Url must not be longer than 60 characters.",
-    }),
+    .string().optional(),
   price: z
     .coerce
     .number()
@@ -98,7 +92,7 @@ export const ZodSchemaEditProduct = z.object({
 });
 
 export type NewProductData = z.infer<typeof ZodSchemaNewProduct>;
-export type EditProductData = z.infer<typeof ZodSchemaEditProduct>;
+export type ProductData = z.infer<typeof ZodSchemaProduct>;
 
 export const ProductCategoryFilter = {
   "andFilter": {
