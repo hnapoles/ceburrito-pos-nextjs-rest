@@ -5,6 +5,7 @@ import { ProductData } from "@/app/model/products-model";
 import { Lookup } from "@/app/model/lookups-model";
 
 import ProductUpdateFormImage from "./product-update-form-image";
+import ProductUpdateFormDetails from "./product-update-form-details";
 
 import {
     Card,
@@ -28,7 +29,6 @@ export default function ProductUpdateForm({ product, types, categories }: { prod
                 <CardDescription>
                     Edit product.
                 </CardDescription>
-                Url here = {imageUrl}
             </CardHeader>
 
             <CardContent>
@@ -36,6 +36,7 @@ export default function ProductUpdateForm({ product, types, categories }: { prod
                 <ProductUpdateFormImage imageUrl={imageUrl} setImageUrl={setImageUrl}/>
 
                 {/* Edit Details */}
+                <ProductUpdateFormDetails product={product} types={types} categories={categories} imageUrl={imageUrl} />
 
 
             </CardContent>

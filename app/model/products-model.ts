@@ -25,6 +25,7 @@ export interface IProductListProps {
     totalDataCount: number | 1
 }
 
+/*
 export const ZodSchemaNewProduct = z.object({
     name: z
       .string()
@@ -55,7 +56,7 @@ export const ZodSchemaNewProduct = z.object({
         required_error: "Please select a product category.",
     }),
 });
-  
+*/
 
 export const ZodSchemaProduct = z.object({
   _id: z.string().optional(),
@@ -91,7 +92,7 @@ export const ZodSchemaProduct = z.object({
   }),
 });
 
-export type NewProductData = z.infer<typeof ZodSchemaNewProduct>;
+//export type NewProductData = z.infer<typeof ZodSchemaNewProduct>;
 export type ProductData = z.infer<typeof ZodSchemaProduct>;
 
 export const ProductCategoryFilter = {
