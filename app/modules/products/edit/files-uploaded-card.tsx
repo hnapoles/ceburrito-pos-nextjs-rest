@@ -1,5 +1,5 @@
 import Image from "next/image"
-import type { UploadedFile } from "./files-upload-types"
+import type { UploadedFile } from "../../../model/file-uploads-model"
 
 import {
   Card,
@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { EmptyCard } from "./files-empty-card"
+import { EmptyCard } from "../../files-empty-card"
 
 interface UploadedFilesCardProps {
   uploadedFiles: UploadedFile[]

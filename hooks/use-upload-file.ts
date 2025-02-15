@@ -1,5 +1,5 @@
 import * as React from "react"
-import type { UploadedFile } from "@/app/modules/products/edit/files-upload-types"
+import type { UploadedFile } from "@/app/model/file-uploads-model"
 import { toast } from "sonner"
 import type { AnyFileRoute, UploadFilesOptions } from "uploadthing/types"
 

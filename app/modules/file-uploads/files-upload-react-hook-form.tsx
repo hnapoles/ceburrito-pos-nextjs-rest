@@ -24,10 +24,11 @@ import { UploadedFilesCard } from "./uploaded-files-card"
 const schema = z.object({
   images: z.array(z.instanceof(File)),
 })
-
 type Schema = z.infer<typeof schema>
 
-export function ReactHookFormDemo() {
+//begin function
+export function FileUploadReactHookForm({entity} : {entity: string}) {
+
   const [loading, setLoading] = React.useState(false)
   const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
     "imageUploader",
@@ -41,6 +42,9 @@ export function ReactHookFormDemo() {
   })
 
   function onSubmit(input: Schema) {
+
+    console.log(entity)
+
     setLoading(true)
 
     toast.promise(onUpload(input.images), {

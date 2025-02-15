@@ -51,7 +51,7 @@ import { Lookup } from "@/app/model/lookups-model";
 import { DeleteProductService } from "./deleteProductService";
 
 import InputFile from "./products-upload-form";
-import { ReactHookFormDemo } from "./files-upload-react-hook-form";
+import { FileUploadReactHookForm } from "../../file-uploads/files-upload-react-hook-form";
 
 const images = [{
     "_id": {
@@ -81,6 +81,7 @@ const images = [{
     aspectRatio : "square",
   }]
 
+const entity = 'product';
 
 export default function ProductEditForm({product, types, categories}:{product: EditProductData, types:Lookup[], categories:Lookup[]}) {
     
@@ -348,7 +349,7 @@ export default function ProductEditForm({product, types, categories}:{product: E
                     </div>
                     <TabsContent value="images">
                         
-                        <ReactHookFormDemo/>
+                        <FileUploadReactHookForm entity={entity}/>
                         <InputFile/>
                         <div className="mt-6 space-y-1">
                             <h2 className="text-2xl font-semibold tracking-tight">
