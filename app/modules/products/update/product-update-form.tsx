@@ -26,8 +26,8 @@ export default function ProductUpdateForm({ product, types, categories }: { prod
                 <CardTitle>Product</CardTitle>
                 <CardDescription>
                     Edit product.
-                    Url here = {imageUrl}
                 </CardDescription>
+                Url here = {imageUrl}
             </CardHeader>
 
             <CardContent>

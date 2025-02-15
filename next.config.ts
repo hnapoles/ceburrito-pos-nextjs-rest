@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
       "lh3.googleusercontent.com",
       "posapi-dev.ceburrito.ph",
       "posapi-test.ceburrito.ph",
-      "posapi.ceburrito.ph"
+      "posapi.ceburrito.ph",
 
 
     ]

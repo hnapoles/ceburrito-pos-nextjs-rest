@@ -27,9 +27,11 @@ interface ComponentAProps {
 
 interface ComponentBProps {
     imageUrl: string | null;
-  }
+}
 
-export default function ProductUpdateFormImage({imageUrl, setImageUrl}:{imageUrl: string | null; setImageUrl: React.Dispatch<React.SetStateAction<string | null>>}) {
+const base = process.env.APP_API_SERVER_URL || "https://posapi-dev.ceburrito.ph"
+
+export default function ProductUpdateFormImage({ imageUrl, setImageUrl }: { imageUrl: string | null; setImageUrl: React.Dispatch<React.SetStateAction<string | null>> }) {
     const {
         register,
         setValue,
@@ -74,11 +76,12 @@ export default function ProductUpdateFormImage({imageUrl, setImageUrl}:{imageUrl
 
             const formData = new FormData();
             formData.append("file", data.file);
-            
+
             const uploaded = await UploadFileSingle(formData, entity);
             //console.log(uploaded);
             //console.log("File uploaded:", data.file);
-            setImageUrl(uploaded.fileName);
+            const newImageUrl = `${base}/public/${uploaded.fileName}`
+            setImageUrl(newImageUrl);
 
             toast({
                 title: "Data saved",
@@ -93,6 +96,33 @@ export default function ProductUpdateFormImage({imageUrl, setImageUrl}:{imageUrl
         }
     };
 
+    if (imageUrl) {
+        //const newImageUrl = `${base}/public/${imageUrl}`
+        //console.log(newImageUrl)
+        //const aspectRatio = "square";
+        return (
+
+            <div className="relative">
+
+                <div className="flex space-x-4 pb-4">
+
+                    <Image
+
+                        src={imageUrl}
+                        alt="product.image"
+                        width={100}
+                        height={100}
+                        className={cn(
+                            "h-auto w-auto object-cover transition-all hover:scale-105",
+                            "aspect-square"
+                        )}
+                    />
+
+                </div>
+            </div>
+
+        )
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
