@@ -47,7 +47,7 @@ export default function ProductsTableSimple({
   
     function nextPage() {
       //router.push(`/?offset=${offset}`, { scroll: false });
-      router.push(`${pathname}?pageNumber=${page+1}&offset=${limit}`, { scroll: false });
+      router.push(`${pathname}?page=${page+1}&limit=${limit}`, { scroll: false });
     }
   
     return (
@@ -106,7 +106,7 @@ export default function ProductsTableSimple({
                 variant="ghost"
                 size="sm"
                 type="submit"
-                disabled={limit + rowsPerPage > totalDataCount}
+                disabled={limit > totalDataCount}
               >
                 Next
                 <ChevronRight className="ml-2 h-4 w-4" />

@@ -44,6 +44,9 @@ export async function UploadFileSingle(data: any, entity: string) {
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
+            if (errorData.error) {
+                throw new Error(errorData.message || `HTTP Error: ${response.status} ${errorData.error} method=${method} url=${url}`);
+            }
             throw new Error(errorData.message || `HTTP Error: ${response.status} method=${method} url=${url}`);
         }
 

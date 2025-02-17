@@ -95,9 +95,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
       } catch (error) {
-
         console.error('error session jwt ', error)
-        throw new Error
+        throw error
 
       }
         
