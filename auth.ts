@@ -61,9 +61,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       try {
         const accessToken = await generateAccessToken(session.user.email, session.user.email, token.provider )   
         //console.log(accessToken)
+
+        const method = 'POST';
+        const url = `${appApiServerUrl}/auth/login/jwt`
   
-        const response = await fetch(`${appApiServerUrl}/auth/login/jwt`, {
-          method: "POST",
+        const response = await fetch(url, {
+          method: method,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`, // Example header
@@ -71,7 +74,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         });
         if (!response.ok) {
           //console.log(response)
-          throw new Error("Failed to get server data");
+          const errorData = await response.json().catch(() => ({}));
+          if (errorData.error) {
+            throw new Error(errorData.message || `HTTP Error: ${response.status} ${errorData.error} method=${method} url=${url}`);
+          }
+          throw new Error(errorData.message || `HTTP Error: ${response.status} method=${method} url=${url}`);
+          //throw new Error("Failed to get server data");
         }
         const data = await response.json();
        
@@ -89,12 +97,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       } catch (error) {
 
         console.error('error session jwt ', error)
-        /*
-        return  {
-          ...session,
-        }
-          */
-         throw new Error
+        throw new Error
 
       }
         
