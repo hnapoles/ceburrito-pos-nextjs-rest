@@ -34,7 +34,7 @@ import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 
 import { ZodSchemaProduct, ProductData } from "@/app/model/products-model";
 import { Lookup } from "@/app/model/lookups-model";
-import { UpdateProductService } from "./updateProductService";
+import { UpdateProduct } from "@/app/action/server/products-actions";
 
 export default function ProductUpdateFormDetails({ product, types, categories, imageUrl }: { product: ProductData, types: Lookup[], categories: Lookup[],  imageUrl: string | null }) {
 
@@ -77,13 +77,13 @@ export default function ProductUpdateFormDetails({ product, types, categories, i
                     ...data,
                     imageUrl: imageUrl ?? ""
                 }
-                const productCreated = await UpdateProductService(data);
+                const productUpdated = await UpdateProduct(data);
         
                 toast({
                     title: "Data saved for user",
                     description: (
                         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                            <code className="text-white">{JSON.stringify(productCreated, null, 2)}</code>
+                            <code className="text-white">{JSON.stringify(productUpdated, null, 2)}</code>
                         </pre>
                     ),
                 });

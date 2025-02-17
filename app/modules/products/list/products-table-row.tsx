@@ -22,7 +22,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 
 import { IProduct } from '@/app/model/products-model'; 
 
-import { DeleteProductByIdService } from "../delete/deleteProductService";
+import { DeleteProductById } from "@/app/action/server/products-actions";
 
 import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 
@@ -49,7 +49,7 @@ export default function ProductsTableRow({ product }: { product: IProduct}) {
   const handleConfirmDelete = async (id: string) => {
     console.log("Deleting product:", dialogData.productId);
     setDialogOpen(false);
-    await DeleteProductByIdService(id);
+    await DeleteProductById(id);
     revalidateAndRedirectUrl(pathname);
   };
 

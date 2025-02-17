@@ -41,7 +41,7 @@ import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 import { ZodSchemaProduct, ProductData } from "@/app/model/products-model";
 import { Lookup } from "@/app/model/lookups-model";
 
-import { CreateProductService } from "./createProductService";
+import { CreateProduct } from "@/app/action/server/products-actions";
 
 const defaultValues: ProductData = {
     _id: "",
@@ -82,7 +82,7 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
 
     async function onSubmit(data: ProductData) {
         delete data._id;
-        const productCreated = await CreateProductService(data);
+        const productCreated = await CreateProduct(data);
         
         toast({
             title: "Data saved",
