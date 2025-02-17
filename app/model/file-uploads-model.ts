@@ -1,6 +1,8 @@
 import { type ClientUploadedFileData } from "uploadthing/types"
 
-export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
+export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {
+    thisFilePath?: string | null
+}
 
 
 export interface InputFileProps {

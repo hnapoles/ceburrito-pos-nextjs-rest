@@ -1,17 +1,17 @@
 'use server'
 import { apiClientDq } from "@/lib/fetch-helper";
 
-import { NewProductData } from "@/app/model/products-model";
+import { ProductData } from "@/app/model/products-model";
 import { ApiOperationNames } from "@/app/model/api-model";
  
-export async function CreateProductService(data: NewProductData) {
+export async function CreateProductService(data: ProductData) {
 
     const entity = 'product';
     const operation = ApiOperationNames.Create;
     const id = "";
     const method = 'POST';
 
-    const result = await apiClientDq<NewProductData,NewProductData>(entity, operation, id, 
+    const result = await apiClientDq<ProductData,ProductData>(entity, operation, id, 
         { method: method,
         body: data,});
 

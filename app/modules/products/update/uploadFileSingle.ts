@@ -1,21 +1,14 @@
 'use server'
-import { apiClientDq } from "@/lib/fetch-helper";
-
-import { FileUploadResponse } from "@/app/model/file-uploads-model";
-import { ApiOperationNames } from "@/app/model/api-model";
-
-import { FileUploadData } from "@/app/model/file-uploads-model";
+//import { apiClientDq } from "@/lib/fetch-helper";
+//import { FileUploadResponse } from "@/app/model/file-uploads-model";
+//import { FileUploadData } from "@/app/model/file-uploads-model";
+//import { ApiOperationNames } from "@/app/model/api-model";
 
 import { auth } from "@/auth";
 
 const base = process.env.APP_API_SERVER_DQ_URL || "http://172.104.117.139:3000/v1/dq"
 
-
-export async function UploadFileSingle(data: any, entity: string) {
-
-    const operation = ApiOperationNames.FileUpload;
-    const id = "";
-
+export async function UploadFileSingle(data: FormData, entity: string) {
 
     let token, apiKey
     const session = await auth();
@@ -60,19 +53,5 @@ export async function UploadFileSingle(data: any, entity: string) {
         }
         throw error;
     }
-
-
-    /*
-    try {
-        const result = await apiClientDq<FileUploadResponse, any>(entity, operation, id, 
-            { method: method,
-            body: data,});
-            return result;
-    } catch (error) {
-        console.log(error)
-    }
-    */
-
-
 
 }

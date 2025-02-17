@@ -16,19 +16,6 @@ import { InputFileProps } from '@/app/model/file-uploads-model';
 import { UploadFileSingle } from './uploadFileSingle';
 import { toast } from "@/hooks/use-toast";
 
-interface ComponentAProps {
-    setImageUrl: React.Dispatch<React.SetStateAction<string | null>>;
-}
-
-// Define the correct type for setImageUrl
-interface ComponentAProps {
-    setImageUrl: React.Dispatch<React.SetStateAction<string | null>>;
-}
-
-interface ComponentBProps {
-    imageUrl: string | null;
-}
-
 const base = process.env.APP_API_SERVER_URL || "https://posapi-dev.ceburrito.ph"
 
 export default function ProductUpdateFormImage({ imageUrl, setImageUrl }: { imageUrl: string | null; setImageUrl: React.Dispatch<React.SetStateAction<string | null>> }) {

@@ -1,8 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, useRef } from "react";
-//import { usePathname } from 'next/navigation';
-import Image from "next/image";
+import React from "react";
 
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -59,9 +57,7 @@ const defaultValues: ProductData = {
 export default function ProductCreateForm({types, categories}:{types:Lookup[], categories:Lookup[]}) {
     
     //const pathname = usePathname();
-
-    const [preview, setPreview] = useState<string | null>(null);
-
+    //const [preview, setPreview] = useState<string | null>(null);
 
     const form = useForm<ProductData>({
         resolver: zodResolver(ZodSchemaProduct),
@@ -71,15 +67,17 @@ export default function ProductCreateForm({types, categories}:{types:Lookup[], c
 
 
     const {
-        register,
+        //register,
         //handleSubmit,
-        setError,
-        clearErrors,
-        trigger, // For triggering validation onBlur
-        getValues,
-        setFocus,
-        watch,
-        formState: { errors, isSubmitting },
+        //setError,
+        //clearErrors,
+        //trigger, // For triggering validation onBlur
+        //getValues,
+        //setFocus,
+        //watch,
+        formState: { 
+            //errors, 
+            isSubmitting },
     } = form;
 
     async function onSubmit(data: ProductData) {

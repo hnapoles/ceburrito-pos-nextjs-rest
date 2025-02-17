@@ -1,5 +1,9 @@
 'use client'
-import React, { useEffect, useState, useRef, ChangeEvent } from "react";
+import React, { useState, 
+    //useEffect,
+    //useRef, 
+    //ChangeEvent 
+} from "react";
 
 import { ProductData } from "@/app/model/products-model";
 import { Lookup } from "@/app/model/lookups-model";

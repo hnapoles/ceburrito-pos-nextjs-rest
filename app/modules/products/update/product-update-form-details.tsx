@@ -1,9 +1,8 @@
 'use client'
-import React, { useEffect, useState, useRef, ChangeEvent } from "react";
+import React from "react";
 
-import Image from "next/image";
-
-import { cn } from "@/lib/utils"
+//import Image from "next/image";
+//import { cn } from "@/lib/utils"
 
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -56,17 +55,19 @@ export default function ProductUpdateFormDetails({ product, types, categories, i
         })
 
         const {
-            register,
+            //register,
             //handleSubmit,
-            setError,
-            clearErrors,
-            trigger, // For triggering validation onBlur
-            getValues,
-            setFocus,
-            watch,
-            setValue,
-            reset,
-            formState: { errors, isSubmitting },
+            //setError,
+            //clearErrors,
+            //trigger, // For triggering validation onBlur
+            //getValues,
+            //setFocus,
+            //watch,
+            //setValue,
+            //reset,
+            formState: { 
+                //errors, 
+                isSubmitting },
         } = form;
 
         async function onSubmit(data: ProductData) {

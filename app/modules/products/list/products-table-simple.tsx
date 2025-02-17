@@ -37,9 +37,9 @@ export default function ProductsTableSimple({
     page: number;
     totalDataCount: number;
   }) {
-    let router = useRouter();
-    let pathname = usePathname();
-    let rowsPerPage = 10;
+    const router = useRouter();
+    const pathname = usePathname();
+    const rowsPerPage = 10;
   
     function prevPage() {
       router.back();

@@ -4,7 +4,7 @@ import { useTransition } from 'react';
 
 
 import { useSearchParams, usePathname, useRouter  } from 'next/navigation';
-import { useDebouncedCallback } from 'use-debounce';
+//import { useDebouncedCallback } from 'use-debounce';
 
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/app/nav/icons';
@@ -20,14 +20,15 @@ export function ProductSearchInput() {
   const [isPending, startTransition] = useTransition();
 
   function searchAction(formData: FormData) {
-    let value = formData.get('keyword') as string;
-    let params = new URLSearchParams({ keyword: value });
+    const value = formData.get('keyword') as string;
+    const params = new URLSearchParams({ keyword: value });
     startTransition(() => {
       //router.replace(`/dashboard/settings/users?${params.toString()}`);
       router.replace(`${pathname}?${params.toString()}`);
     });
   }
 
+  /*
   const handleSearch = useDebouncedCallback((term) => {
     console.log(`Searching... ${term}`);
    
@@ -40,6 +41,7 @@ export function ProductSearchInput() {
     }
     router.replace(`${pathname}?${params.toString()}`);
   }, 3000);
+  */
 
   
 

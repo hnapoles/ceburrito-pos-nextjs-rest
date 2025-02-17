@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         }
 
         // ✅ Store file in custom storage (replace with actual upload logic)
-        const buffer = await file.arrayBuffer();
+        //const buffer = await file.arrayBuffer();
         console.log("Received file:", file);
 
         // Prepare a new FormData object to forward to the external API
@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({ message: "File uploaded successfully" });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: "Upload failed" }, { status: 500 });
     }
 }
