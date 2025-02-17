@@ -80,7 +80,10 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
   
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP Error: ${response.status}`);
+        if (errorData.error) {
+          throw new Error(errorData.message || `HTTP Error: ${response.status} ${errorData.error} method=${method} url=${url}`);
+        }
+        throw new Error(errorData.message || `HTTP Error: ${response.status} method=${method} url=${url}`);
       }
   
       return (await response.json()) as TResponse;
@@ -176,7 +179,11 @@ export async function apiClientWithSession<TResponse, TBody = unknown>(
   
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        if (errorData.error) {
+          throw new Error(errorData.message || `HTTP Error: ${response.status} ${errorData.error} method=${method} url=${url}`);
+        }
         throw new Error(errorData.message || `HTTP Error: ${response.status} method=${method} url=${url}`);
+        
       }
   
       return (await response.json()) as TResponse;
