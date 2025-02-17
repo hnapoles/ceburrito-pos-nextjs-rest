@@ -88,7 +88,7 @@ export default function ProductsTableSimple({
               <strong>
                 {Math.max(1, Math.min(limit - rowsPerPage, totalDataCount) + 1)}-{Math.min(limit, totalDataCount)}
               </strong>{' '}
-              of <strong>{totalDataCount}</strong> users
+              of <strong>{totalDataCount}</strong> products
             </div>
             <div className="flex">
               <Button

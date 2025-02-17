@@ -4,6 +4,7 @@ import { IProduct, IGetProductsResults } from "@/app/model/products-model"
 import { ApiOperationNames, FindAll } from "@/app/model/api-model"
 
 import ProductsMainPage from "@/app/modules/products/list/products-main-page";
+import NotFound from "./not-found";
 
 export default async function Page(
   props: {
@@ -37,14 +38,19 @@ export default async function Page(
     } catch(error) {
       console.log('error calling api ', error)
     }
-
   
     if (products) {      
       return (
         <ProductsMainPage products={products} limit={parseInt(limit)} page={parseInt(page)} totalDataCount={totalProducts} />
       )
     }
-    
+     
+    if (!products) {
+      return (
+        <NotFound/>
+      )
+    }
+
 
     
 } 

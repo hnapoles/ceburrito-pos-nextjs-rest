@@ -11,6 +11,8 @@ import ProductsTableSimple from "./products-table-simple";
 
 import { IProductListProps } from "@/app/model/products-model";
 
+import { ProductSearchInput } from "./product-search-input.";
+
 const ProductsMainPage: React.FC<IProductListProps> = ({ products, limit, page, totalDataCount }) => {
 
     const pathname = usePathname();
@@ -28,7 +30,7 @@ const ProductsMainPage: React.FC<IProductListProps> = ({ products, limit, page, 
                     </TabsTrigger>
                 </TabsList>
                 <div className="ml-auto flex items-center gap-2">
-                    SearchInput/
+                    <ProductSearchInput/>
                     <Button size="sm" variant="outline" className="h-8 gap-1">
                         <File className="h-3.5 w-3.5" />
                         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
