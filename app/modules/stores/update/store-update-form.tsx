@@ -5,11 +5,11 @@ import React, { useState,
     //ChangeEvent 
 } from "react";
 
-import { ProductData } from "@/app/model/products-model";
+import { StoreData } from "@/app/model/stores-model";
 import { Lookup } from "@/app/model/lookups-model";
 
-import ProductUpdateFormImage from "./product-update-form-image";
-import ProductUpdateFormDetails from "./product-update-form-details";
+import StoreUpdateFormImage from "./store-update-form-image";
+import StoreUpdateFormDetails from "./store-update-form-details";
 
 import {
     Card,
@@ -21,26 +21,26 @@ import {
 } from '@/components/ui/card';
 
 
-export default function ProductUpdateForm({ product, types, categories }: { product: ProductData, types: Lookup[], categories: Lookup[] }) {
+export default function StoreUpdateForm({ store }: { store: StoreData }) {
 
-    const thisImageUrl = product.imageUrl ?? null
+    const thisImageUrl = store.imageUrl ?? null
     const [imageUrl, setImageUrl] = useState<string | null>(thisImageUrl);
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Product</CardTitle>
+                <CardTitle>Store</CardTitle>
                 <CardDescription>
-                    Edit product.
+                    Edit store.
                 </CardDescription>
             </CardHeader>
 
             <CardContent>
                 {/* Image Upload */}
-                <ProductUpdateFormImage imageUrl={imageUrl} setImageUrl={setImageUrl}/>
+                <StoreUpdateFormImage imageUrl={imageUrl} setImageUrl={setImageUrl}/>
 
                 {/* Edit Details */}
-                <ProductUpdateFormDetails product={product} types={types} categories={categories} imageUrl={imageUrl} />
+                <StoreUpdateFormDetails entity={store} imageUrl={imageUrl} />
 
 
             </CardContent>

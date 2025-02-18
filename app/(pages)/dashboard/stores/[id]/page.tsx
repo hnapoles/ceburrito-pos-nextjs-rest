@@ -1,4 +1,4 @@
-import ProductUpdate from "@/app/modules/products/update/product-update";
+import StoreUpdate from "@/app/modules/stores/update/store-update";
 
 import { apiClientDq } from "@/lib/fetch-helper";
 
@@ -20,15 +20,10 @@ export default async function StoreUpdatePage({ params }: {
       { method: method});
 
 
+   
     return (
-        <div>
-            {JSON.stringify(store)}
-        </div>
+      <StoreUpdate store={store} />
     )
-    /*
-    return (
-      <ProductUpdate product={product} types={types} categories={categories} />
-    )
-      */
+      
 
 }

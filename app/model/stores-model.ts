@@ -25,6 +25,14 @@ export const ZodSchemaStore = z.object({
     }),
   imageUrl: z
     .string().optional(),
+  createdBy: z
+    .string().optional(),
+  createdAt: z
+    .date().optional(),
+  updatedBy: z
+    .string().optional(),
+  updatedAt: z
+    .date().optional(),
 });
 
 export type StoreData = z.infer<typeof ZodSchemaStore>;

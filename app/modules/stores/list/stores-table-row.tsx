@@ -69,6 +69,9 @@ export default function StoresTableRow({ store }: { store: StoreData}) {
       <TableCell className="font-medium">{store.name}</TableCell>
       
       <TableCell className="hidden md:table-cell">{store._id}</TableCell>
+      <TableCell className="hidden md:table-cell">
+        {store.createdAt?.toLocaleString('en-US', { timeZone: 'America/Chicago' })}
+      </TableCell>
      
       <TableCell>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
