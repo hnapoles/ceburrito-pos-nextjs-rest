@@ -19,7 +19,7 @@ export default function StoreUpdate({ store }: { store: StoreData }) {
             
             {/* Right Side - Store Tabs */}
             <div>
-                <StoreUpdateTabs/>
+                <StoreUpdateTabs store={store}/>
             </div>
 
         </div>

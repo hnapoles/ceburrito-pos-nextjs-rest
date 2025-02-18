@@ -42,6 +42,7 @@ export default function StoreUpdateFormDetails({ entity, imageUrl }: { entity: S
             _id: entity._id,
             name: entity.name,
             imageUrl: entity?.imageUrl ?? "",
+            storeAddress: entity?.storeAddress ?? "",
     }
 
     const form = useForm<StoreData>({
@@ -83,7 +84,7 @@ export default function StoreUpdateFormDetails({ entity, imageUrl }: { entity: S
                         </pre>
                     ),
                 });
-                revalidateAndRedirectUrl('/dashboard/products');
+                revalidateAndRedirectUrl('/dashboard/stores');
             }
 
 
@@ -116,6 +117,22 @@ export default function StoreUpdateFormDetails({ entity, imageUrl }: { entity: S
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Store Name</FormLabel>
+                                            <Input
+                                                type="text"
+                                                placeholder=""
+                                                {...field} />
+
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="storeAddress"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Address</FormLabel>
                                             <Input
                                                 type="text"
                                                 placeholder=""

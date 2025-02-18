@@ -25,6 +25,8 @@ export const ZodSchemaStore = z.object({
     }),
   imageUrl: z
     .string().optional(),
+  storeAddress: z
+    .string().optional(),
   createdBy: z
     .string().optional(),
   createdAt: z
