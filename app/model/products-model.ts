@@ -17,7 +17,6 @@ export interface IGetProductsResults {
   data: IProduct[] 
 }
 
-
 export interface IProductListProps {
     products: IProduct[],
     limit: number | 10,
