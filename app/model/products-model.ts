@@ -104,3 +104,41 @@ export const ProductTypeFilter = {
     }
   ]
 }
+
+
+export const ZodSchemaProductSellingPrices = z.object({
+  _id: z.string().optional(),
+  productId: z
+    .string()
+    .min(6, {
+      message: "Product id must be at least 6 characters.",
+    })
+    .max(30, {
+      message: "Product id not be longer than 30 characters.",
+    }),
+  orderType: z
+    .string()
+    .min(6, {
+      message: "Order type must be at least 6 characters.",
+    })
+    .max(60, {
+      message: "Order type must not be longer than 60 characters.",
+    }),
+  storeId: z
+    .string().optional(),
+  sellingPrice: z
+    .coerce
+    .number()
+    .min(0.01, "Selling Price must be at least 0.01")
+    .max(1000000, "Selling Price cannot exceed 1,000,000")
+    .multipleOf(0.01, "Selling Price must be a valid decimal with two places"),
+  createdBy: z
+    .string().optional(),
+  createdAt: z
+    .date().optional(),
+  updatedBy: z
+    .string().optional(),
+  updatedAt: z
+    .date().optional(),
+});
+export type ProductSellingPricesData = z.infer<typeof ZodSchemaProductSellingPrices>;

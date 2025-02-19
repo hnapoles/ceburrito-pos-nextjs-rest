@@ -1,12 +1,16 @@
 'use client'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from "@/components/ui/separator"
+import { Tabs, 
+    //TabsContent, 
+    TabsList, TabsTrigger } from '@/components/ui/tabs';
+//import { Separator } from "@/components/ui/separator"
 
 import { ProductData } from '@/app/model/products-model';
 
 import { WhoTabContent } from '@/app/nav/who-tab-content';
 import { IUserWho } from '@/app/model/users-model';
+
+import { TabProductPricesContent } from './tabs/tab-product-prices-content';
 
 
 export default function ProductUpdateTabs({ product }: { product: ProductData }) {
@@ -32,6 +36,7 @@ export default function ProductUpdateTabs({ product }: { product: ProductData })
 
                     </div>
                     <WhoTabContent who={who} />
+                    <TabProductPricesContent productId={product?._id ||null} />
                 </Tabs>
 
 

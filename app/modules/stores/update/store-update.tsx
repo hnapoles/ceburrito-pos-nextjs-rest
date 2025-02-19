@@ -1,7 +1,7 @@
 'use client'
 
 import { StoreData } from "@/app/model/stores-model";
-import { Lookup } from "@/app/model/lookups-model";
+//import { Lookup } from "@/app/model/lookups-model";
 
 import StoreUpdateForm from "./store-update-form";
 import StoreUpdateTabs from "./store-update-tabs";
