@@ -1,12 +1,24 @@
 'use client'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from "@/components/ui/separator"
+import { Tabs, 
+    //TabsContent, 
+    TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { StoreData } from '@/app/model/stores-model';
 
+import { WhoTabContent } from '@/app/nav/who-tab-content';
+import { IUserWho } from '@/app/model/users-model';
+
+
+
 
 export default function ProductUpdateTabs({ store }: { store: StoreData }) {
+    const who : IUserWho = {
+        createdBy  : store?.createdBy,
+        createdAt  : store?.createdAt,
+        updatedBy  : store?.updatedBy,
+        updatedAt  : store?.updatedAt,
+    }
     return (
         <Tabs defaultValue="who">
                     <div className="flex items-center">
@@ -19,25 +31,7 @@ export default function ProductUpdateTabs({ store }: { store: StoreData }) {
 
 
                     </div>
-                    <TabsContent value="who" className="px-10">
-
-                         Row Who?
-                        <Separator className="my-4" />
-                        <div className="relative space-between-10">
-                            <div>
-                                Created by: {store?.createdBy}
-                            </div>
-                            <div>
-                                Created At: {store.createdAt?.toLocaleString('en-US', { timeZone: 'America/Chicago' })}
-                            </div>
-                            <div>
-                                Updated by: {store?.updatedBy}
-                            </div>
-                            <div>
-                                Updated At: {store.updatedAt?.toLocaleString('en-US', { timeZone: 'America/Chicago' })}
-                            </div>
-                        </div>
-                    </TabsContent>
+                    <WhoTabContent who={who} />
                 </Tabs>
 
 

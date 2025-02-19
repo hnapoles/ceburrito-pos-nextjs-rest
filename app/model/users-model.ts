@@ -44,4 +44,11 @@ export const NewUserZodSchema = z.object({
         required_error: "Please select a primary role.",
     }),
 });
-  
+
+export interface IUserWho {
+  createdAt?: Date,
+  updatedAt?: Date,
+  createdBy?: string,
+  updatedBy?: string,
+}
+

@@ -19,7 +19,7 @@ export default function ProductUpdate({ product, types, categories }: { product:
             
             {/* Right Side - Product Tabs */}
             <div>
-                <ProductUpdateTabs/>
+                <ProductUpdateTabs product={product} />
             </div>
 
         </div>
