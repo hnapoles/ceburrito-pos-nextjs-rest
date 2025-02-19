@@ -142,3 +142,17 @@ export const ZodSchemaProductSellingPrices = z.object({
     .date().optional(),
 });
 export type ProductSellingPricesData = z.infer<typeof ZodSchemaProductSellingPrices>;
+
+import { StoreData } from "./stores-model";
+import { CustomerData } from "./customers-model";
+
+export interface IProductPrices {
+  _id: string,
+  productId: string,
+  storeId?: string,
+  storeDetails?: StoreData,
+  customerId?: string,
+  customerDetails?: CustomerData,
+  sellingPrice: number,
+  createdAt?: Date,
+}
