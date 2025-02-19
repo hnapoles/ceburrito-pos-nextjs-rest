@@ -144,6 +144,7 @@ export default function ProductUpdateFormDetails({ product, types, categories, i
                                         </FormItem>
                                     )}
                                 />
+                                {/*
                                 <FormField
                                     control={form.control}
                                     name="price"
@@ -159,6 +160,36 @@ export default function ProductUpdateFormDetails({ product, types, categories, i
                                         </FormItem>
                                     )}
                                 />
+                                */}
+                                <FormField
+                                    control={form.control}
+                                    name="price"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                        <FormLabel>Price</FormLabel>
+                                        <Input
+                                            type="number"
+                                            step="0.01" // Allows decimals
+                                            placeholder="0.00"
+                                            value={field.value ? Number(field.value).toFixed(2) : ""}
+                                            onChange={(e) => {
+                                            const value = e.target.value; // Always a string from input
+                                            const numericValue = parseFloat(value);
+
+                                            // Ensure valid numeric input
+                                            if (!isNaN(numericValue)) {
+                                                field.onChange(numericValue.toFixed(2)); // Pass as string
+                                            } else {
+                                                field.onChange(""); // Handle empty input
+                                            }
+                                            }}
+                                        />
+                                        <FormMessage />
+                                        </FormItem>
+                                    )}
+                                    />
+
+
                                 <FormField
                                     control={form.control}
                                     name="type"

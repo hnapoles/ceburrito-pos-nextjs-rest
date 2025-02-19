@@ -64,7 +64,7 @@ export default function ProductPricesContentTableRow({ productPrices }: { produc
           {productPrices.customerDetails?.name || 'n/a'}
        
       </TableCell>
-      <TableCell className="hidden md:table-cell">{productPrices.sellingPrice}</TableCell>
+      <TableCell className="hidden md:table-cell">{productPrices.sellingPrice.toFixed(2)}</TableCell>
       <TableCell className="hidden md:table-cell">
         {productPrices.createdAt?.toLocaleString('en-US', { timeZone: 'America/Chicago' })}
       </TableCell>
