@@ -69,6 +69,7 @@ export default function StoreUpdateFormImage({ imageUrl, setImageUrl }: { imageU
             //console.log("File uploaded:", data.file);
             const newImageUrl = `${base}/public/${uploaded.fileName}`
             setImageUrl(newImageUrl);
+            setSelectedFile(null);
 
             toast({
                 title: "Data saved",
@@ -89,24 +90,55 @@ export default function StoreUpdateFormImage({ imageUrl, setImageUrl }: { imageU
         //const aspectRatio = "square";
         return (
 
-            <div className="relative">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                {!selectedFile && 
+                <div className="relative">
+                    <div className="flex space-x-4 pb-4"  onClick={handleButtonClick} >
 
-                <div className="flex space-x-4 pb-4">
+                        <Image
+                            src={imageUrl}
+                            alt="image"
+                            width={100}
+                            height={100}
+                            className={cn(
+                                "h-auto w-auto object-cover transition-all hover:scale-105",
+                                "aspect-square"
+                            )}
+                        
+                        />
 
-                    <Image
-
-                        src={imageUrl}
-                        alt="product.image"
-                        width={100}
-                        height={100}
-                        className={cn(
-                            "h-auto w-auto object-cover transition-all hover:scale-105",
-                            "aspect-square"
-                        )}
-                    />
-
+                    </div>
                 </div>
-            </div>
+                }
+                {selectedFile && (
+                 
+                     <div className="relative space-x-4 pb-4">
+                            <Image src={selectedFile} alt="Preview" width={100} height={130}
+                                className="h-auto w-auto object-cover transition-all hover:scale-105 aspect-square" />
+                            <button
+                                onClick={handleRemoveClick}
+                                className="absolute top-0 right-0 bg-red-500 text-white py-1 px-2"
+                                aria-label="Remove image"
+                            >X</button>
+                            {/* Center the button */}
+                            <div className="flex justify-center w-full">
+                                <Button
+                                    type="submit"
+                                    className={cn("w-1/2", selectedFile ? "block" : "hidden")}
+                                >
+                                    Upload
+                                </Button>
+                            </div>
+                    </div>
+
+                
+
+               
+                  )}
+                <div>
+                    <Input id="file" className="hidden" type="file"  {...register("file")} ref={fileInputRef} onChange={handleFileChange} />
+                </div>
+            </form>
 
         )
     }
@@ -138,6 +170,7 @@ export default function StoreUpdateFormImage({ imageUrl, setImageUrl }: { imageU
 
 
                     ) : (
+                       
                         <div className="items-center flex flex-row" onClick={handleButtonClick}>
 
                             <div className="rounded-full border border-dashed p-3">
@@ -153,13 +186,13 @@ export default function StoreUpdateFormImage({ imageUrl, setImageUrl }: { imageU
                                 </p>
                             </div>
                         </div>
+                        
                     )}
 
                 </div>
 
                 <div>
                     <Input id="file" className="hidden" type="file"  {...register("file")} ref={fileInputRef} onChange={handleFileChange} />
-
                 </div>
             </div>
         </form>
