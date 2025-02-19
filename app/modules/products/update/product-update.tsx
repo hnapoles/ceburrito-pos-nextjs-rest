@@ -6,8 +6,10 @@ import { Lookup } from "@/app/model/lookups-model";
 import ProductUpdateForm from "./product-update-form";
 import ProductUpdateTabs from "./product-update-tabs";
 
+import { IProductPrices } from "@/app/model/products-model";
 
-export default function ProductUpdate({ product, types, categories }: { product: ProductData, types: Lookup[], categories: Lookup[] }) {
+export default function ProductUpdate({ product, types, categories, productPrices }: 
+    { product: ProductData, types: Lookup[], categories: Lookup[], productPrices: IProductPrices[] }) {
 
     
     return (
@@ -19,7 +21,7 @@ export default function ProductUpdate({ product, types, categories }: { product:
             
             {/* Right Side - Product Tabs */}
             <div>
-                <ProductUpdateTabs product={product} />
+                <ProductUpdateTabs product={product} productPrices={productPrices} />
             </div>
 
         </div>

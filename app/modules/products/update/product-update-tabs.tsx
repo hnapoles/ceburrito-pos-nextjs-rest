@@ -12,8 +12,10 @@ import { IUserWho } from '@/app/model/users-model';
 
 import { TabProductPricesContent } from './tabs/tab-product-prices-content';
 
+import { IProductPrices } from "@/app/model/products-model";
 
-export default function ProductUpdateTabs({ product }: { product: ProductData }) {
+
+export default function ProductUpdateTabs({ product, productPrices }: { product: ProductData, productPrices: IProductPrices[]}) {
 
     const who : IUserWho = {
         createdBy  : product?.createdBy,
@@ -36,7 +38,7 @@ export default function ProductUpdateTabs({ product }: { product: ProductData })
 
                     </div>
                     <WhoTabContent who={who} />
-                    <TabProductPricesContent productId={product?._id ||null} />
+                    <TabProductPricesContent productPrices={productPrices} />
                 </Tabs>
 
 

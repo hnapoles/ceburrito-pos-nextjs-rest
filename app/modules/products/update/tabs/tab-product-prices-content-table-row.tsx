@@ -58,11 +58,11 @@ export default function ProductPricesContentTableRow({ productPrices }: { produc
   return (
     <TableRow>
       
-      <TableCell className="font-medium">{productPrices.storeDetails?.name}</TableCell>
+      <TableCell className="font-medium">{productPrices.storeDetails?.name|| 'n/a'}</TableCell>
       <TableCell>
-        <Badge variant="outline">
-          {productPrices.customerDetails?.name}
-        </Badge>
+        
+          {productPrices.customerDetails?.name || 'n/a'}
+       
       </TableCell>
       <TableCell className="hidden md:table-cell">{productPrices.sellingPrice}</TableCell>
       <TableCell className="hidden md:table-cell">
