@@ -1,7 +1,10 @@
 'use client';
 import { useEffect } from 'react';
 
-import { ProductData } from '@/app/model/products-model';
+import {
+  ProductData,
+  ProductSellingPricesData,
+} from '@/app/model/products-model';
 import { Lookup } from '@/app/model/lookups-model';
 
 import ProductUpdateForm from './product-update-form';
@@ -20,12 +23,16 @@ export default function ProductUpdate({
   product: ProductData;
   types: Lookup[];
   categories: Lookup[];
-  productPrices: IProductPrices[];
+  productPrices: ProductSellingPricesData[];
 }) {
   const setProduct = useGlobalStore((state) => state.setProduct);
+  const setProductSellingPrices = useGlobalStore(
+    (state) => state.setProductSellingPrices,
+  );
 
   useEffect(() => {
     setProduct(product);
+    setProductSellingPrices(productPrices);
   }, []);
 
   return (
@@ -37,7 +44,7 @@ export default function ProductUpdate({
 
       {/* Right Side - Product Tabs */}
       <div>
-        <ProductUpdateTabs productPrices={productPrices} />
+        <ProductUpdateTabs />
       </div>
     </div>
   );

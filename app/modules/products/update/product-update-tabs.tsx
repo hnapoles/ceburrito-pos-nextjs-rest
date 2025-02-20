@@ -19,11 +19,7 @@ import { IProductPrices } from '@/app/model/products-model';
 
 import { useGlobalStore } from '@/app/provider/zustand-provider';
 
-export default function ProductUpdateTabs({
-  productPrices,
-}: {
-  productPrices: IProductPrices[];
-}) {
+export default function ProductUpdateTabs() {
   const product = useGlobalStore((state) => state.product);
 
   const who: IUserWho = {
@@ -44,7 +40,7 @@ export default function ProductUpdateTabs({
         </TabsList>
       </div>
       <WhoTabContent who={who} />
-      <TabProductPricesContent productPrices={productPrices} />
+      <TabProductPricesContent />
     </Tabs>
   );
 }

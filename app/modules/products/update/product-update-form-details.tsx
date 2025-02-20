@@ -46,9 +46,8 @@ export default function ProductUpdateFormDetails({
   imageUrl: string | null;
 }) {
   const product = useGlobalStore((state) => state.product);
-  console.log('product from store ', product);
 
-  var defaultValues: ProductData = {
+  const defaultValues: ProductData = {
     _id: product?._id || '',
     name: product?.name ?? '',
     description: product?.description ?? '',
@@ -57,6 +56,7 @@ export default function ProductUpdateFormDetails({
     category: product?.category ?? '',
     imageUrl: product?.imageUrl ?? '',
   };
+  /*
   if (product) {
     defaultValues = {
       _id: product?._id || '',
@@ -68,6 +68,7 @@ export default function ProductUpdateFormDetails({
       imageUrl: product?.imageUrl ?? '',
     };
   }
+  */
 
   const form = useForm<ProductData>({
     resolver: zodResolver(ZodSchemaProduct),
@@ -157,23 +158,7 @@ export default function ProductUpdateFormDetails({
             </FormItem>
           )}
         />
-        {/*
-                                <FormField
-                                    control={form.control}
-                                    name="price"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Price</FormLabel>
-                                            <Input
-                                                type="number"
-                                                placeholder="0"
-                                                {...field} />
 
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                */}
         <FormField
           control={form.control}
           name="price"

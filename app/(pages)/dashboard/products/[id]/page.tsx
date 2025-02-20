@@ -7,13 +7,11 @@ import {
   ProductCategoryFilter,
   ProductTypeFilter,
   ProductData,
+  ProductSellingPricesData,
 } from '@/app/model/products-model';
 import { FindAll, ApiOperationNames, FindOne } from '@/app/model/api-model';
 
-import { IProductPrices } from '@/app/model/products-model';
 import { apiComplexDq } from '@/lib/fetch-helper';
-
-import { useGlobalStore } from '@/app/provider/zustand-provider';
 
 //start of function
 export default async function ProductUpdatePage({
@@ -54,14 +52,10 @@ export default async function ProductUpdatePage({
   const operation = ApiOperationNames.FindAll;
   const queryName = 'getProductSellingPrices';
 
-  const productPrices = await apiComplexDq<IProductPrices[], IProductPrices>(
-    entity,
-    queryName,
-    operation,
-    product._id,
-    { method: method },
-  );
-  console.log(product);
+  const productPrices = await apiComplexDq<
+    ProductSellingPricesData[],
+    ProductSellingPricesData
+  >(entity, queryName, operation, product._id, { method: method });
 
   return (
     <ProductUpdate
