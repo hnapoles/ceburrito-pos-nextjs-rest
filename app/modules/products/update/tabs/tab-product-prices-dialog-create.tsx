@@ -59,19 +59,26 @@ const defaultValues: ProductSellingPricesData = {
   sellingPrice: 0.0,
 };
 
-import { GetLookupsOrderType } from '@/app/action/server/lookups-actions';
+import {
+  GetLookupCustomers,
+  GetLookupsOrderTypes,
+} from '@/app/action/server/lookups-actions';
 import { Lookup } from '@/app/model/lookups-model';
+import { CustomerData } from '@/app/model/customers-model';
 
 export default function TabProductPricesDialogCreate() {
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
+  const [customers, setCustomers] = useState<CustomerData[]>([]);
 
-  const fetchOrderTypes = useCallback(async () => {
-    const results = await GetLookupsOrderType();
-    setOrderTypes(results.data);
+  const fetchData = useCallback(async () => {
+    const res1 = await GetLookupsOrderTypes();
+    setOrderTypes(res1.data);
+    const res2 = await GetLookupCustomers('', '1', '99999');
+    setCustomers(res2.data);
   }, []); // ✅ No dependencies
 
   useEffect(() => {
-    fetchOrderTypes();
+    fetchData();
   }, []);
 
   const form = useForm<ProductSellingPricesData>({
@@ -136,7 +143,7 @@ export default function TabProductPricesDialogCreate() {
                   <Select onValueChange={field.onChange} defaultValue="">
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select product type" />
+                        <SelectValue placeholder="Select order type" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -147,7 +154,31 @@ export default function TabProductPricesDialogCreate() {
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormDescription>This is the order type. </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="customerName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Customer Name</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue="">
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select customer name" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {customers.map((c) => (
+                        <SelectItem key={c._id} value={c.name}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

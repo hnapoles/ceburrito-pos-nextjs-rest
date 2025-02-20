@@ -7,6 +7,11 @@ import { ApiOperationNames, FindAll } from '@/app/model/api-model';
 
 import { LookupQueryResults } from '@/app/model/lookups-model';
 
+import {
+  CustomerData,
+  IGetCustomersResults,
+} from '@/app/model/customers-model';
+
 const OrderTypeFilter = {
   andFilter: {
     lookupGroup: 'order',
@@ -26,7 +31,7 @@ const OrderTypeFilter = {
   ],
 };
 
-export async function GetLookupsOrderType() {
+export async function GetLookupsOrderTypes() {
   const lookups = await apiClientDq<LookupQueryResults, FindAll>(
     'lookup',
     ApiOperationNames.FindAll,
@@ -34,4 +39,31 @@ export async function GetLookupsOrderType() {
     { method: 'POST', body: OrderTypeFilter },
   );
   return lookups;
+}
+
+export async function GetLookupCustomers(
+  keyword: string | '',
+  page: string | '1',
+  limit: string | '99999',
+) {
+  const apiProps: FindAll = {
+    entity: 'customer',
+    keyword: keyword,
+    searchKeywordFields: ['name'],
+    page: parseInt(page),
+    limit: parseInt(limit),
+  };
+
+  try {
+    const results = await apiClientDq<IGetCustomersResults, FindAll>(
+      'customer',
+      ApiOperationNames.FindAll,
+      '',
+      { method: 'POST', body: apiProps },
+    );
+    return results;
+  } catch (error) {
+    console.log('error calling api ', error);
+    throw error;
+  }
 }
