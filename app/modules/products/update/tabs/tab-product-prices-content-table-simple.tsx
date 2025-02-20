@@ -29,6 +29,12 @@ import TabProductPricesDialogCreate from './tab-product-prices-dialog-create';
 
 import { useGlobalStore } from '@/app/provider/zustand-provider';
 
+import {
+  TooltipContent,
+  Tooltip,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
 export default function TabProductPricesContentTableSimple({
   limit,
   page,
@@ -63,15 +69,22 @@ export default function TabProductPricesContentTableSimple({
         <CardHeader>
           <CardTitle>
             Product Prices{' '}
-            <Button
-              size="sm"
-              className="h-6 gap-1 px-2"
-              onClick={() => {
-                openCreateDialog();
-              }}
-            >
-              <PlusCircle className="h-3.5 w-3.5" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger>
+                <Button
+                  size="sm"
+                  className="h-6 gap-1 px-2"
+                  onClick={() => {
+                    openCreateDialog();
+                  }}
+                >
+                  <PlusCircle className="h-3.5 w-3.5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-gray-100 text-purple border">
+                Add New Selling Prices
+              </TooltipContent>
+            </Tooltip>
           </CardTitle>
           <CardDescription>Manage product prices.</CardDescription>
         </CardHeader>

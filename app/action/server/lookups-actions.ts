@@ -11,6 +11,7 @@ import {
   CustomerData,
   IGetCustomersResults,
 } from '@/app/model/customers-model';
+import { IGetStoresResults } from '@/app/model/stores-model';
 
 const OrderTypeFilter = {
   andFilter: {
@@ -57,6 +58,33 @@ export async function GetLookupCustomers(
   try {
     const results = await apiClientDq<IGetCustomersResults, FindAll>(
       'customer',
+      ApiOperationNames.FindAll,
+      '',
+      { method: 'POST', body: apiProps },
+    );
+    return results;
+  } catch (error) {
+    console.log('error calling api ', error);
+    throw error;
+  }
+}
+
+export async function GetLookupStores(
+  keyword: string | '',
+  page: string | '1',
+  limit: string | '99999',
+) {
+  const apiProps: FindAll = {
+    entity: 'store',
+    keyword: keyword,
+    searchKeywordFields: ['name'],
+    page: parseInt(page),
+    limit: parseInt(limit),
+  };
+
+  try {
+    const results = await apiClientDq<IGetStoresResults, FindAll>(
+      'store',
       ApiOperationNames.FindAll,
       '',
       { method: 'POST', body: apiProps },

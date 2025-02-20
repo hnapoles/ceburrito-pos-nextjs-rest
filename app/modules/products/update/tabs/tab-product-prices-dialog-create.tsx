@@ -62,19 +62,24 @@ const defaultValues: ProductSellingPricesData = {
 import {
   GetLookupCustomers,
   GetLookupsOrderTypes,
+  GetLookupStores,
 } from '@/app/action/server/lookups-actions';
 import { Lookup } from '@/app/model/lookups-model';
 import { CustomerData } from '@/app/model/customers-model';
+import { StoreData } from '@/app/model/stores-model';
 
 export default function TabProductPricesDialogCreate() {
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
   const [customers, setCustomers] = useState<CustomerData[]>([]);
+  const [stores, setStores] = useState<StoreData[]>([]);
 
   const fetchData = useCallback(async () => {
     const res1 = await GetLookupsOrderTypes();
     setOrderTypes(res1.data);
     const res2 = await GetLookupCustomers('', '1', '99999');
     setCustomers(res2.data);
+    const res3 = await GetLookupStores('', '1', '99999');
+    setStores(res3.data);
   }, []); // ✅ No dependencies
 
   useEffect(() => {
@@ -175,6 +180,31 @@ export default function TabProductPricesDialogCreate() {
                       {customers.map((c) => (
                         <SelectItem key={c._id} value={c.name}>
                           {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="storeName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Store Name</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue="">
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select store name" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {customers.map((s) => (
+                        <SelectItem key={s._id} value={s.name}>
+                          {s.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
