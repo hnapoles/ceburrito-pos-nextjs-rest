@@ -8,14 +8,10 @@ import {
 } from '@/components/ui/tabs';
 //import { Separator } from "@/components/ui/separator"
 
-import { ProductData } from '@/app/model/products-model';
-
 import { WhoTabContent } from '@/app/nav/who-tab-content';
 import { IUserWho } from '@/app/model/users-model';
 
 import { TabProductPricesContent } from './tabs/tab-product-prices-content';
-
-import { IProductPrices } from '@/app/model/products-model';
 
 import { useGlobalStore } from '@/app/provider/zustand-provider';
 

@@ -27,7 +27,7 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-import { IProduct, ProductData } from '@/app/model/products-model';
+import { ProductData } from '@/app/model/products-model';
 
 import { DeleteProductById } from '@/app/action/server/products-actions';
 

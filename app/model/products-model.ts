@@ -1,17 +1,5 @@
 import { z } from 'zod';
 
-export interface IProduct {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  createdBy: string;
-  updatedBy: string;
-}
-
 export interface IGetProductsResults {
   count: number;
   data: ProductData[];
@@ -131,21 +119,7 @@ export const ZodSchemaProductSellingPrices = z.object({
   updatedBy: z.string().optional(),
   updatedAt: z.date().optional(),
 });
+
 export type ProductSellingPricesData = z.infer<
   typeof ZodSchemaProductSellingPrices
 >;
-
-import { StoreData } from './stores-model';
-import { CustomerData } from './customers-model';
-
-export interface IProductPrices {
-  _id: string;
-  productId: string;
-  orderType?: string;
-  storeId?: string;
-  storeDetails?: StoreData;
-  customerId?: string;
-  customerDetails?: CustomerData;
-  sellingPrice: number;
-  createdAt?: Date;
-}

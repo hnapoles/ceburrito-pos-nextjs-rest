@@ -6,7 +6,6 @@ import React, {
   //ChangeEvent
 } from 'react';
 
-import { ProductData } from '@/app/model/products-model';
 import { Lookup } from '@/app/model/lookups-model';
 
 import ProductUpdateFormImage from './product-update-form-image';

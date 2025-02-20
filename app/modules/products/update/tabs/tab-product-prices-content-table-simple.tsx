@@ -23,9 +23,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { PlusCircle } from 'lucide-react';
-
-import { IProductPrices } from '@/app/model/products-model';
-
 import { useDialogStore } from '@/app/provider/zustand-provider';
 
 import TabProductPricesDialogCreate from './tab-product-prices-dialog-create';
@@ -43,7 +40,7 @@ export default function TabProductPricesContentTableSimple({
 }) {
   const data = useGlobalStore((state) => state.productSellingPrices);
 
-  const { isCreateDialogOpen, openCreateDialog } = useDialogStore();
+  const { openCreateDialog } = useDialogStore();
 
   const router = useRouter();
   const pathname = usePathname();

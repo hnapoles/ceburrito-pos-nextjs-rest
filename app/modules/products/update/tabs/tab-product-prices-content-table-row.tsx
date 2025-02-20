@@ -5,8 +5,6 @@ import Link from 'next/link';
 
 import { usePathname } from 'next/navigation';
 
-//import Image from 'next/image';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -27,26 +25,21 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-import {
-  IProductPrices,
-  ProductSellingPricesData,
-} from '@/app/model/products-model';
+import { ProductSellingPricesData } from '@/app/model/products-model';
 
 import { DeleteProductById } from '@/app/action/server/products-actions';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 //import { ConfirmDialog } from "@/app/nav/confirm-dialog";
-import { useDialogStore } from '@/app/provider/zustand-provider';
-
-import { useGlobalStore } from '@/app/provider/zustand-provider';
+//import { useDialogStore } from '@/app/provider/zustand-provider';
 
 export default function ProductPricesContentTableRow({
   productPrices,
 }: {
   productPrices: ProductSellingPricesData;
 }) {
-  const { isCreateDialogOpen, closeCreateDialog } = useDialogStore();
+  //const { isCreateDialogOpen, closeCreateDialog } = useDialogStore();
 
   const pathname = usePathname();
 
@@ -56,6 +49,8 @@ export default function ProductPricesContentTableRow({
     description: '',
     productId: '',
   });
+
+  console.log(dialogOpen);
 
   const handleOpenDialog = (productId: string) => {
     setDialogData({

@@ -57,9 +57,6 @@ export async function GetProducts(
   page: string,
   limit: string,
 ) {
-  let products: ProductData[] = [];
-  let totalProducts = 0;
-
   const apiProps: FindAll = {
     entity: 'product',
     keyword: keyword,
