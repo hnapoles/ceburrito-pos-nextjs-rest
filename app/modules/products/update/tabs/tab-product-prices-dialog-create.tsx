@@ -1,3 +1,5 @@
+import { useEffect, useState, useCallback } from 'react';
+
 import { useDialogStore } from '@/app/provider/zustand-provider';
 
 import {
@@ -42,8 +44,9 @@ import {
   ZodSchemaProduct,
   ProductData,
   ProductSellingPricesData,
+  ZodSchemaProductSellingPrices,
 } from '@/app/model/products-model';
-import { Lookup } from '@/app/model/lookups-model';
+
 import { UpdateProduct } from '@/app/action/server/products-actions';
 
 import { useGlobalStore } from '@/app/provider/zustand-provider';
@@ -56,33 +59,52 @@ const defaultValues: ProductSellingPricesData = {
   sellingPrice: 0.0,
 };
 
+import { GetLookupsOrderType } from '@/app/action/server/lookups-actions';
+import { Lookup } from '@/app/model/lookups-model';
+
 export default function TabProductPricesDialogCreate() {
-  const form = useForm<ProductData>({
-    resolver: zodResolver(ZodSchemaProduct),
+  const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
+
+  const fetchOrderTypes = useCallback(async () => {
+    const results = await GetLookupsOrderType();
+    setOrderTypes(results.data);
+  }, []); // ✅ No dependencies
+
+  useEffect(() => {
+    fetchOrderTypes();
+  }, []);
+
+  const form = useForm<ProductSellingPricesData>({
+    resolver: zodResolver(ZodSchemaProductSellingPrices),
     defaultValues: defaultValues,
     mode: 'onBlur',
   });
 
   const {
+    handleSubmit,
     formState: {
       //errors,
       isSubmitting,
     },
   } = form;
 
-  async function onSubmit(data: ProductData) {
-    delete data._id;
+  async function onSubmit(data: ProductSellingPricesData) {
+    //delete data._id;
     //const productCreated = await CreateProduct(data);
+    console.log('Submitting...');
 
     toast({
       title: 'Data saved',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{}</code>
+          <code className="text-white">{data.orderType}</code>
         </pre>
       ),
     });
-    revalidateAndRedirectUrl('/dashboard/products');
+
+    toggleCreateDialog();
+
+    //revalidateAndRedirectUrl('/dashboard/products');
   }
 
   const product = useGlobalStore((state) => state.product);
@@ -104,13 +126,36 @@ export default function TabProductPricesDialogCreate() {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-6"
-          >
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
             <FormField
               control={form.control}
-              name="price"
+              name="orderType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Order Type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue="">
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select product type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {orderTypes.map((l) => (
+                        <SelectItem key={l.lookupValue} value={l.lookupValue}>
+                          {l.lookupDescription}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>This is the order type. </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="sellingPrice"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Price</FormLabel>
@@ -136,12 +181,13 @@ export default function TabProductPricesDialogCreate() {
               )}
             />
             <div className="mt-6 flex justify-end gap-4">
-              <Link
-                href="/dashboard/products/create"
-                className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+              <Button
+                variant="outline"
+                disabled={isSubmitting}
+                onClick={toggleCreateDialog}
               >
-                Cancel
-              </Link>
+                {isSubmitting ? 'Submitting...' : 'Cancel'}
+              </Button>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Submitting...' : 'Submit'}
               </Button>

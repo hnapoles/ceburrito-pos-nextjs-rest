@@ -50,8 +50,6 @@ export default function ProductPricesContentTableRow({
     productId: '',
   });
 
-  console.log(dialogOpen);
-
   const handleOpenDialog = (productId: string) => {
     setDialogData({
       title: 'Delete Product',

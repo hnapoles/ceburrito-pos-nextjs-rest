@@ -89,14 +89,7 @@ export const ProductTypeFilter = {
 
 export const ZodSchemaProductSellingPrices = z.object({
   _id: z.string().optional(),
-  productId: z
-    .string()
-    .min(6, {
-      message: 'Product id must be at least 6 characters.',
-    })
-    .max(30, {
-      message: 'Product id not be longer than 30 characters.',
-    }),
+  productId: z.string().optional(),
   orderType: z
     .string()
     .min(3, {
