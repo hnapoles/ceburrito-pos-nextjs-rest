@@ -21,11 +21,29 @@ import {
   import { useRouter, usePathname } from 'next/navigation';
   import { ChevronLeft, ChevronRight } from 'lucide-react';
   import { Button } from '@/components/ui/button';
-  
+
+import { PlusCircle } from 'lucide-react';
 
 import { IProductPrices } from '@/app/model/products-model';
 
-  
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+import { useDialogStore } from '@/app/provider/zustand-provider';
+import { open } from 'node:inspector/promises';
+
+
+
 export default function TabProductPricesContentTableSimple({
     data,
     limit,
@@ -37,6 +55,11 @@ export default function TabProductPricesContentTableSimple({
     page: number;
     totalDataCount: number;
   }) {
+
+    
+
+    const { isCreateDialogOpen, closeCreateDialog, openCreateDialog, toggleCreateDialog } = useDialogStore();
+
     const router = useRouter();
     const pathname = usePathname();
     const rowsPerPage = 10;
@@ -49,20 +72,31 @@ export default function TabProductPricesContentTableSimple({
       //router.push(`/?offset=${offset}`, { scroll: false });
       router.push(`${pathname}?page=${page+1}&limit=${limit}`, { scroll: false });
     }
-  
+
     return (
+      <div>
+         
       <Card>
         <CardHeader>
-          <CardTitle>Product Prices</CardTitle>
+          <CardTitle>
+            Product Prices {" "}
+            <Button size="sm" className="h-6 gap-1 px-2" onClick={() => {
+                          openCreateDialog()
+                        }}>
+                        <PlusCircle className="h-3.5 w-3.5" 
+                        />
+            </Button>
+          </CardTitle>
           <CardDescription>
             Manage product prices.
           </CardDescription>
         </CardHeader>
         <CardContent>
+          
           <Table>
             <TableHeader>
               <TableRow>
-                
+                <TableHead>Order Type</TableHead>
                 <TableHead>Store Name</TableHead>
                 <TableHead>Customer Name</TableHead>
                 <TableHead className="hidden md:table-cell">Selling Price</TableHead>
@@ -72,11 +106,18 @@ export default function TabProductPricesContentTableSimple({
                 </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {data.map((row) => (
-                <ProductPricesContentTableRow key={row._id} productPrices={row} />
-              ))}
-            </TableBody>
+            
+            {data && data.length>0 &&
+                <TableBody>
+                
+                {data.map((row) => (
+                    <ProductPricesContentTableRow key={row._id} productPrices={row} />
+                ))}
+                 
+                  
+              </TableBody>
+            }
+            
           </Table>
         </CardContent>
         <CardFooter>
@@ -113,6 +154,42 @@ export default function TabProductPricesContentTableSimple({
           </form>
         </CardFooter>
       </Card>
+     
+     <Dialog open={isCreateDialogOpen} onOpenChange={toggleCreateDialog}>
+     {/*<DialogTrigger asChild>
+       <Button variant="outline">Edit Profile</Button>
+     </DialogTrigger>
+     */}
+     <DialogContent className="sm:max-w-[425px]" >
+       <DialogHeader>
+         <DialogTitle>Edit profile</DialogTitle>
+         <DialogDescription>
+           Make changes to your profile here. Click save when you're done.
+         </DialogDescription>
+       </DialogHeader>
+       <div className="grid gap-4 py-4">
+         <div className="grid grid-cols-4 items-center gap-4">
+           <Label htmlFor="name" className="text-right">
+             Name
+           </Label>
+           <Input id="name" value="Pedro Duarte" className="col-span-3" onChange={(e) => console.log(e)}  />
+         </div>
+         <div className="grid grid-cols-4 items-center gap-4">
+           <Label htmlFor="username" className="text-right">
+             Username
+           </Label>
+           <Input id="username" value="@peduarte" className="col-span-3"  onChange={(e) => console.log(e)} />
+         </div>
+       </div>
+       <DialogFooter>
+         <Button onClick={closeCreateDialog}>Cancel</Button>
+       </DialogFooter>
+       <DialogFooter>
+         <Button type="submit">Save changes</Button>
+       </DialogFooter>
+     </DialogContent>
+   </Dialog>
+   </div>
     );
   }
   

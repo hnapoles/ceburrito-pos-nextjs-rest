@@ -118,13 +118,15 @@ export const ZodSchemaProductSellingPrices = z.object({
     }),
   orderType: z
     .string()
-    .min(6, {
-      message: "Order type must be at least 6 characters.",
+    .min(3, {
+      message: "Order type must be at least 3 characters.",
     })
-    .max(60, {
-      message: "Order type must not be longer than 60 characters.",
+    .max(24, {
+      message: "Order type must not be longer than 24 characters.",
     }),
   storeId: z
+    .string().optional(),
+  customerId: z
     .string().optional(),
   sellingPrice: z
     .coerce
@@ -149,6 +151,7 @@ import { CustomerData } from "./customers-model";
 export interface IProductPrices {
   _id: string,
   productId: string,
+  orderType?: string,
   storeId?: string,
   storeDetails?: StoreData,
   customerId?: string,

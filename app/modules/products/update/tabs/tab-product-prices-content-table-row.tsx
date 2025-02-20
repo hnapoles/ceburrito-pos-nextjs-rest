@@ -27,8 +27,13 @@ import { DeleteProductById } from "@/app/action/server/products-actions";
 import { revalidateAndRedirectUrl } from "@/lib/revalidate-path";
 
 //import { ConfirmDialog } from "@/app/nav/confirm-dialog";
+import { useDialogStore } from "@/app/provider/zustand-provider";
+
+
 
 export default function ProductPricesContentTableRow({ productPrices }: { productPrices: IProductPrices}) {
+
+    const { isCreateDialogOpen, closeCreateDialog } = useDialogStore();
 
   const pathname = usePathname();
 
@@ -58,6 +63,7 @@ export default function ProductPricesContentTableRow({ productPrices }: { produc
   return (
     <TableRow>
       
+      <TableCell className="font-medium">{productPrices.orderType|| 'n/a'}</TableCell>
       <TableCell className="font-medium">{productPrices.storeDetails?.name|| 'n/a'}</TableCell>
       <TableCell>
         
@@ -69,7 +75,7 @@ export default function ProductPricesContentTableRow({ productPrices }: { produc
         {productPrices.createdAt?.toLocaleString('en-US', { timeZone: 'America/Chicago' })}
       </TableCell>
       <TableCell>
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <Dialog >
         {/* Dropdown Menu Inside the Dialog */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -93,7 +99,7 @@ export default function ProductPricesContentTableRow({ productPrices }: { produc
         </DropdownMenu>
 
         {/* Dialog Content */}
-        <DialogContent>
+        <DialogContent  >
             <DialogHeader>
             <DialogTitle>Delete Product</DialogTitle>
             <DialogDescription>
