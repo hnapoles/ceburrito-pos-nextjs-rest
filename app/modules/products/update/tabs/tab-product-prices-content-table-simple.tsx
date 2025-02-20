@@ -25,7 +25,7 @@ import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
 import { useDialogStore } from '@/app/provider/zustand-provider';
 
-import TabProductPricesDialogCreate from './tab-product-prices-dialog-create';
+import TabProductPricesDialogCreate from './tab-product-prices-content-dialog-create';
 
 import { useGlobalStore } from '@/app/provider/zustand-provider';
 

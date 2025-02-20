@@ -70,7 +70,24 @@ import { StoreData } from '@/app/model/stores-model';
 
 export default function TabProductPricesDialogCreate() {
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
+
   const [customers, setCustomers] = useState<CustomerData[]>([]);
+  const [customerId, setCustomerId] = useState<string>('');
+  const [selectedCustomerName, setSelectedCustomerName] = useState<string>('');
+
+  // Handle change in customer selection
+  const handleCustomerChange = (selectedName: string) => {
+    setSelectedCustomerName(selectedName);
+
+    // Find the corresponding customerId based on the selected customerName
+    const selectedCustomer = customers.find(
+      (customer) => customer.name === selectedName,
+    );
+    if (selectedCustomer && selectedCustomer._id) {
+      setCustomerId(selectedCustomer._id);
+    }
+  };
+
   const [stores, setStores] = useState<StoreData[]>([]);
 
   const fetchData = useCallback(async () => {
@@ -104,12 +121,16 @@ export default function TabProductPricesDialogCreate() {
     //delete data._id;
     //const productCreated = await CreateProduct(data);
     console.log('Submitting...');
+    data = {
+      ...data,
+      customerId: customerId,
+    };
 
     toast({
       title: 'Data saved',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{data.orderType}</code>
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
     });
@@ -170,7 +191,10 @@ export default function TabProductPricesDialogCreate() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Customer Name</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue="">
+                  <Select
+                    value={selectedCustomerName}
+                    onValueChange={handleCustomerChange}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select customer name" />
@@ -202,7 +226,7 @@ export default function TabProductPricesDialogCreate() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {customers.map((s) => (
+                      {stores.map((s) => (
                         <SelectItem key={s._id} value={s.name}>
                           {s.name}
                         </SelectItem>
