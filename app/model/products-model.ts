@@ -14,11 +14,11 @@ export interface IProduct {
 
 export interface IGetProductsResults {
   count: number;
-  data: IProduct[];
+  data: ProductData[];
 }
 
 export interface IProductListProps {
-  products: IProduct[];
+  products: ProductData[];
   limit: number | 10;
   page: number | 1;
   totalDataCount: number | 1;
