@@ -64,7 +64,7 @@ import {
   GetProductSellingPricesByOwnId,
 } from '@/app/action/server/product-selling-prices-actions';
 
-export default function TabProductPricesDialogUpdate({
+export default function TabProductPricesFormUpdate({
   setRefresh,
   dialogId,
 }: {
@@ -112,6 +112,7 @@ export default function TabProductPricesDialogUpdate({
 
   const [prices, setPrices] = useState<ProductSellingPricesData>();
 
+  /*
   const fetchData = useCallback(async () => {
     const res1 = await GetLookupsOrderTypes();
     setOrderTypes(res1.data);
@@ -122,10 +123,31 @@ export default function TabProductPricesDialogUpdate({
     const prices = await GetProductSellingPricesByOwnId(dialogId);
     setPrices(prices);
   }, []); // ✅ No dependencies
+  */
+  if (!dialogId) {
+    return <div>Loading...</div>;
+  }
+  const fetchData = useCallback(async () => {
+    try {
+      const [res1, res2, res3, priceRes] = await Promise.all([
+        GetLookupsOrderTypes(),
+        GetLookupCustomers('', '1', '99999'),
+        GetLookupStores('', '1', '99999'),
+        GetProductSellingPricesByOwnId(dialogId),
+      ]);
+
+      setOrderTypes(res1.data);
+      setCustomers(res2.data);
+      setStores(res3.data);
+      setPrices(priceRes); // Avoid unnecessary re-renders
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }, [dialogId]); // ✅ Add `dialogId` as a dependency
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [dialogId]);
 
   console.log('p ', prices);
 
@@ -195,116 +217,104 @@ export default function TabProductPricesDialogUpdate({
     useDialogStore();
 
   return (
-    <Dialog open={isUpdateDialogOpen} onOpenChange={toggleUpdateDialog}>
-      {/*<DialogTrigger asChild>
-                <Button variant="outline">Edit Profile</Button>
-            </DialogTrigger>
-            */}
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Update Product Price</DialogTitle>
-          <DialogDescription>
-            {`Update product prices for product id[${product?._id}], name[${product?.name}]`}
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
-            <FormField
-              control={form.control}
-              name="_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Id</FormLabel>
+    <Form {...form}>
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+        <FormField
+          control={form.control}
+          name="_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Id</FormLabel>
 
-                  {/*<Input placeholder="" readOnly {...field} />
+              {/*<Input placeholder="" readOnly {...field} />
                   <FormDescription>
                     This is a system generated id .
                   </FormDescription>
                   <FormMessage />
                   */}
-                </FormItem>
-              )}
-            />
-            <FormLabel>{dialogId}</FormLabel>
-            <FormField
-              control={form.control}
-              name="orderType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Order Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue="">
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select order type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {orderTypes.map((l) => (
-                        <SelectItem key={l.lookupValue} value={l.lookupValue}>
-                          {l.lookupDescription}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            </FormItem>
+          )}
+        />
+        <FormLabel>{dialogId}</FormLabel>
+        <FormField
+          control={form.control}
+          name="orderType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Order Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue="">
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select order type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {orderTypes.map((l) => (
+                    <SelectItem key={l.lookupValue} value={l.lookupValue}>
+                      {l.lookupDescription}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              control={form.control}
-              name="storeName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Store Name</FormLabel>
-                  <Select onValueChange={handleStoreChange}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select store name" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {stores.map((s) => (
-                        <SelectItem key={s._id} value={s.name}>
-                          {s.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <FormField
+          control={form.control}
+          name="storeName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Store Name</FormLabel>
+              <Select onValueChange={handleStoreChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select store name" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {stores.map((s) => (
+                    <SelectItem key={s._id} value={s.name}>
+                      {s.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <FormField
-              control={form.control}
-              name="customerName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Customer Name</FormLabel>
-                  <Select
-                    value={selectedCustomerName}
-                    onValueChange={handleCustomerChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select customer name" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {customers.map((c) => (
-                        <SelectItem key={c._id} value={c.name}>
-                          {c.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        <FormField
+          control={form.control}
+          name="customerName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Customer Name</FormLabel>
+              <Select
+                value={selectedCustomerName}
+                onValueChange={handleCustomerChange}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select customer name" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {customers.map((c) => (
+                    <SelectItem key={c._id} value={c.name}>
+                      {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            {/*
+        {/*
             <FormField
               control={form.control}
               name="sellingPrice"
@@ -333,61 +343,57 @@ export default function TabProductPricesDialogUpdate({
               )}
             />
             */}
-            <FormField
-              control={form.control}
-              name="sellingPrice"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <Input
-                    type="number"
-                    step="0.01" // Allows decimals
-                    placeholder=""
-                    value={field.value ?? ''} // Ensures the input field shows empty when undefined
-                    onChange={(e) => {
-                      const value = e.target.value;
+        <FormField
+          control={form.control}
+          name="sellingPrice"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Price</FormLabel>
+              <Input
+                type="number"
+                step="0.01" // Allows decimals
+                placeholder=""
+                value={field.value ?? ''} // Ensures the input field shows empty when undefined
+                onChange={(e) => {
+                  const value = e.target.value;
 
-                      // Allow empty input (user deletes the value)
-                      if (value === '') {
-                        field.onChange(undefined); // Pass undefined instead of an empty string
-                        return;
-                      }
+                  // Allow empty input (user deletes the value)
+                  if (value === '') {
+                    field.onChange(undefined); // Pass undefined instead of an empty string
+                    return;
+                  }
 
-                      // Convert input to a valid number
-                      const numericValue = parseFloat(value);
+                  // Convert input to a valid number
+                  const numericValue = parseFloat(value);
 
-                      if (!isNaN(numericValue)) {
-                        field.onChange(numericValue); // Ensure a number is passed
-                      }
-                    }}
-                    onBlur={() => {
-                      if (field.value !== undefined && !isNaN(field.value)) {
-                        field.onChange(parseFloat(field.value.toFixed(2))); // Maintain numeric type
-                      }
-                    }}
-                  />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  if (!isNaN(numericValue)) {
+                    field.onChange(numericValue); // Ensure a number is passed
+                  }
+                }}
+                onBlur={() => {
+                  if (field.value !== undefined && !isNaN(field.value)) {
+                    field.onChange(parseFloat(field.value.toFixed(2))); // Maintain numeric type
+                  }
+                }}
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <div className="mt-6 flex justify-end gap-4">
-              <Button
-                variant="outline"
-                disabled={isSubmitting}
-                onClick={toggleUpdateDialog}
-              >
-                {isSubmitting ? 'Submitting...' : 'Cancel'}
-              </Button>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Submitting...' : 'Submit'}
-              </Button>
-            </div>
-          </form>
-        </Form>
-
-        <DialogFooter></DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <div className="mt-6 flex justify-end gap-4">
+          <Button
+            variant="outline"
+            disabled={isSubmitting}
+            onClick={toggleUpdateDialog}
+          >
+            {isSubmitting ? 'Submitting...' : 'Cancel'}
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting...' : 'Submit'}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

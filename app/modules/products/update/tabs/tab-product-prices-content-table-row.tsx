@@ -34,13 +34,18 @@ import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 //import { ConfirmDialog } from "@/app/nav/confirm-dialog";
 import { useDialogStore } from '@/app/provider/zustand-provider';
 import TabProductPricesDialogUpdate from './tab-product-prices-content-dialog-update';
+import { useGlobalStore } from '@/app/provider/zustand-provider';
+
+import { GetProductSellingPricesByOwnId } from '@/app/action/server/product-selling-prices-actions';
 
 export default function ProductPricesContentTableRow({
   productPrices,
   setRefresh,
+  setDialogId,
 }: {
   productPrices: ProductSellingPricesData;
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+  setDialogId: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const { openUpdateDialog, setUpdateDialogId } = useDialogStore();
 
@@ -73,9 +78,28 @@ export default function ProductPricesContentTableRow({
 
   //const editLink = `${pathname}/${productPrices?._id || ''}`;
 
+  const setProductSellingPrices = useGlobalStore(
+    (state) => state.setProductSellingPrices,
+  );
+
   const handleEditClick = async () => {
-    setUpdateDialogId(productPrices?._id || '');
-    openUpdateDialog();
+    //setUpdateDialogId(productPrices?._id || '');
+    if (productPrices && productPrices._id) {
+      setDialogId(productPrices._id);
+      const prices = await GetProductSellingPricesByOwnId(productPrices._id);
+
+      /*
+      const setProductSellingPrices = useGlobalStore(
+        (state) => state.setProductSellingPrices,
+      );
+      */
+
+      if (productPrices) {
+        setProductSellingPrices(productPrices);
+      }
+
+      openUpdateDialog();
+    }
   };
 
   return (

@@ -7,14 +7,14 @@ import {
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { FindAll } from '@/app/model/api-model';
+import { FindAll, FindOne } from '@/app/model/api-model';
 
 //const base =
 //  process.env.APP_API_SERVER_DQ_URL || 'http://172.104.117.139:3000/v1/dq';
 
 //import { apiComplexDq } from '@/lib/fetch-helper';
 
-export async function GetProductSellingPricesById(id: string) {
+export async function GetProductSellingPricesByProductId(id: string) {
   const ProductSellingPricesFilter = {
     andFilter: {
       productId: id,
@@ -46,6 +46,31 @@ export async function GetProductSellingPricesById(id: string) {
     operation,
     id,
     { method: method, body: ProductSellingPricesFilter },
+  );
+
+  return result;
+}
+
+/*
+const product = await apiClientDq<ProductData, FindOne>(
+    'product',
+    ApiOperationNames.FindOne,
+    id,
+    { method: method },
+  );
+*/
+export async function GetProductSellingPricesByOwnId(id: string) {
+  const entity = 'product_selling_price';
+  const operation = ApiOperationNames.FindOne;
+  const method = 'POST';
+
+  console.log('id in api call ', id);
+
+  const result = await apiClientDq<ProductSellingPricesData, FindOne>(
+    entity,
+    ApiOperationNames.FindOne,
+    id,
+    { method: method },
   );
 
   return result;

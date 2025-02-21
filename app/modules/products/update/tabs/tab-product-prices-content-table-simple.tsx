@@ -22,6 +22,7 @@ import {
 import ProductPricesContentTableRow from './tab-product-prices-content-table-row';
 import TabProductPricesDialogCreate from './tab-product-prices-content-dialog-create';
 import TabProductPricesDialogUpdate from './tab-product-prices-content-dialog-update';
+import TabProductPricesFormUpdate from './tab-product-price-content-form-create';
 import { useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -37,7 +38,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { ProductSellingPricesData } from '@/app/model/products-model';
-import { GetProductSellingPricesById } from '@/app/action/server/product-selling-prices-actions';
+import { GetProductSellingPricesByProductId } from '@/app/action/server/product-selling-prices-actions';
+import { TestComponent } from './test-component';
 
 export default function TabProductPricesContentTableSimple({
   limit,
@@ -48,15 +50,17 @@ export default function TabProductPricesContentTableSimple({
   page: number;
   totalDataCount: number;
 }) {
-  //const data = useGlobalStore((state) => state.productSellingPrices);
+  const [dialogId, setDialogId] = useState<string>('');
+
   const product = useGlobalStore((state) => state.product);
+  //const productSellingPrices = useGlobalStore((state) => state.productSellingPrices);
 
   const [refresh, setRefresh] = useState<boolean>(false);
 
   const [prices, setPrices] = useState<ProductSellingPricesData[]>([]);
 
   const fetchData = useCallback(async () => {
-    const res1 = await GetProductSellingPricesById(product?._id || '');
+    const res1 = await GetProductSellingPricesByProductId(product?._id || '');
     setPrices(res1.data);
   }, []); // ✅ No dependencies
 
@@ -144,6 +148,7 @@ export default function TabProductPricesContentTableSimple({
                     key={row._id}
                     productPrices={row}
                     setRefresh={setRefresh}
+                    setDialogId={setDialogId}
                   />
                 ))}
               </TableBody>
@@ -186,7 +191,20 @@ export default function TabProductPricesContentTableSimple({
         </CardFooter>
       </Card>
       <TabProductPricesDialogCreate setRefresh={setRefresh} />
-      <TabProductPricesDialogUpdate setRefresh={setRefresh} />
+      {/*<TabProductPricesDialogUpdate
+        setRefresh={setRefresh}
+        dialogId={dialogId}
+      />
+      */}
+      {dialogId && (
+        <div>
+          id here: {dialogId}
+          <div>
+            {' '}
+            <TestComponent />{' '}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

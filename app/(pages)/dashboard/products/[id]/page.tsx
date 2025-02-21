@@ -13,7 +13,7 @@ import { FindAll, ApiOperationNames, FindOne } from '@/app/model/api-model';
 
 //import { apiComplexDq } from '@/lib/fetch-helper';
 
-import { GetProductSellingPricesById } from '@/app/action/server/product-selling-prices-actions';
+import { GetProductSellingPricesByProductId } from '@/app/action/server/product-selling-prices-actions';
 
 //start of function
 export default async function ProductUpdatePage({
@@ -49,7 +49,7 @@ export default async function ProductUpdatePage({
 
   const categories = lookup2.data;
 
-  //const result = await GetProductSellingPricesById(id);
+  //const result = await GetProductSellingPricesByProductId(id);
   //const productPrices = result.data;
 
   return (

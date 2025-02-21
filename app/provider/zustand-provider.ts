@@ -50,11 +50,11 @@ export const createDataStore = <T>() =>
 type GlobalStore = {
   products: ProductData[] | null;
   product: ProductData | null;
-  productSellingPrices: ProductSellingPricesData[] | null;
+  productSellingPrices: ProductSellingPricesData | null;
   setProducts: (products: ProductData[]) => void;
   setProduct: (product: ProductData) => void;
   setProductSellingPrices: (
-    productSellingPrices: ProductSellingPricesData[],
+    productSellingPrices: ProductSellingPricesData,
   ) => void;
 };
 
