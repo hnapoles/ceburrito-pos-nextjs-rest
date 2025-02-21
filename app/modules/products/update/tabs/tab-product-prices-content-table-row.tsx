@@ -32,14 +32,17 @@ import { DeleteProductById } from '@/app/action/server/products-actions';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 //import { ConfirmDialog } from "@/app/nav/confirm-dialog";
-//import { useDialogStore } from '@/app/provider/zustand-provider';
+import { useDialogStore } from '@/app/provider/zustand-provider';
+import TabProductPricesDialogUpdate from './tab-product-prices-content-dialog-update';
 
 export default function ProductPricesContentTableRow({
   productPrices,
+  setRefresh,
 }: {
   productPrices: ProductSellingPricesData;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  //const { isCreateDialogOpen, closeCreateDialog } = useDialogStore();
+  const { openUpdateDialog, setUpdateDialogId } = useDialogStore();
 
   const pathname = usePathname();
 
@@ -68,7 +71,12 @@ export default function ProductPricesContentTableRow({
     revalidateAndRedirectUrl(pathname);
   };
 
-  const editLink = `${pathname}/${productPrices?._id || ''}`;
+  //const editLink = `${pathname}/${productPrices?._id || ''}`;
+
+  const handleEditClick = async () => {
+    setUpdateDialogId(productPrices?._id || '');
+    openUpdateDialog();
+  };
 
   return (
     <TableRow>
@@ -99,9 +107,23 @@ export default function ProductPricesContentTableRow({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+
+              {/*}
               <Link href={editLink}>
                 <DropdownMenuItem>Edit</DropdownMenuItem>
               </Link>
+              */}
+              <Link
+                href="#"
+                passHref
+                onClick={(e) => {
+                  e.preventDefault(); // Prevent default link behavior
+                  handleEditClick();
+                }}
+              >
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+              </Link>
+
               <DropdownMenuItem>
                 <button
                   onClick={() => handleOpenDialog(productPrices._id || '')}

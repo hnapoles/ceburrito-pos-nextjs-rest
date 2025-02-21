@@ -7,14 +7,31 @@ type DialogStore = {
   openCreateDialog: () => void;
   closeCreateDialog: () => void;
   toggleCreateDialog: () => void;
+  isUpdateDialogOpen: boolean;
+  openUpdateDialog: () => void;
+  closeUpdateDialog: () => void;
+  toggleUpdateDialog: () => void;
+  updateDialogId: string;
+  setUpdateDialogId: (currentId: string) => void;
 };
 
-export const useDialogStore = create<DialogStore>((set) => ({
+export const useDialogStore = create<DialogStore>((set, get) => ({
   isCreateDialogOpen: false,
   openCreateDialog: () => set({ isCreateDialogOpen: true }),
   closeCreateDialog: () => set({ isCreateDialogOpen: false }),
   toggleCreateDialog: () =>
     set((state) => ({ isCreateDialogOpen: !state.isCreateDialogOpen })),
+  isUpdateDialogOpen: false,
+  openUpdateDialog: () => set({ isUpdateDialogOpen: true }),
+  closeUpdateDialog: () => set({ isUpdateDialogOpen: false }),
+  toggleUpdateDialog: () =>
+    set((state) => ({ isUpdateDialogOpen: !state.isUpdateDialogOpen })),
+  updateDialogId: '',
+  //setUpdateDialogId: (currentId) => set({ updateDialogId: currentId }),
+  setUpdateDialogId: (currentId) => {
+    set({ updateDialogId: currentId });
+    get().updateDialogId;
+  },
 }));
 
 export type DataStore<T> = {

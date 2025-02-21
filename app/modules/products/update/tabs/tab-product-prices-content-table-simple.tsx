@@ -20,14 +20,14 @@ import {
 } from '@/components/ui/card';
 
 import ProductPricesContentTableRow from './tab-product-prices-content-table-row';
+import TabProductPricesDialogCreate from './tab-product-prices-content-dialog-create';
+import TabProductPricesDialogUpdate from './tab-product-prices-content-dialog-update';
 import { useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { PlusCircle } from 'lucide-react';
 import { useDialogStore } from '@/app/provider/zustand-provider';
-
-import TabProductPricesDialogCreate from './tab-product-prices-content-dialog-create';
 
 import { useGlobalStore } from '@/app/provider/zustand-provider';
 
@@ -143,6 +143,7 @@ export default function TabProductPricesContentTableSimple({
                   <ProductPricesContentTableRow
                     key={row._id}
                     productPrices={row}
+                    setRefresh={setRefresh}
                   />
                 ))}
               </TableBody>
@@ -185,6 +186,7 @@ export default function TabProductPricesContentTableSimple({
         </CardFooter>
       </Card>
       <TabProductPricesDialogCreate setRefresh={setRefresh} />
+      <TabProductPricesDialogUpdate setRefresh={setRefresh} />
     </div>
   );
 }
