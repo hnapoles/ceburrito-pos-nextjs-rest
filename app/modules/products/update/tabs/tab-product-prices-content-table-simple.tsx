@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {
   TableHead,
   TableRow,
@@ -45,6 +46,7 @@ export default function TabProductPricesContentTableSimple({
   totalDataCount: number;
 }) {
   const data = useGlobalStore((state) => state.productSellingPrices);
+  const product = useGlobalStore((state) => state.product);
 
   const { openCreateDialog } = useDialogStore();
 
@@ -71,15 +73,27 @@ export default function TabProductPricesContentTableSimple({
             Product Prices{' '}
             <Tooltip>
               <TooltipTrigger>
-                <Button
+                {/*<Button
                   size="sm"
                   className="h-6 gap-1 px-2"
                   onClick={() => {
                     openCreateDialog();
                   }}
                 >
+                
                   <PlusCircle className="h-3.5 w-3.5" />
-                </Button>
+                </Button>*/}
+                <Link
+                  href="#"
+                  passHref
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent default link behavior
+                    openCreateDialog();
+                  }}
+                  className="inline-flex items-center justify-center gap-1 px-2 h-6 bg-purple-500 text-white rounded"
+                >
+                  <PlusCircle className="h-3.5 w-3.5" />
+                </Link>
               </TooltipTrigger>
               <TooltipContent className="bg-gray-100 text-purple border">
                 Add New Selling Prices

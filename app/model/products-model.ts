@@ -90,6 +90,7 @@ export const ProductTypeFilter = {
 export const ZodSchemaProductSellingPrices = z.object({
   _id: z.string().optional(),
   productId: z.string().optional(),
+  productName: z.string().optional(),
   orderType: z
     .string()
     .min(3, {

@@ -2,6 +2,8 @@
 
 import { ProductSellingPricesData } from '@/app/model/products-model';
 
+import { apiClientDq } from '@/lib/fetch-helper';
+
 //const base =
 //  process.env.APP_API_SERVER_DQ_URL || 'http://172.104.117.139:3000/v1/dq';
 
@@ -31,4 +33,20 @@ export interface FetchOptions<T = unknown> {
   headers?: HeadersInit;
   token?: string;
   timeout?: number; // Timeout in milliseconds
+}
+
+export async function CreateProductSellingPrices(
+  data: ProductSellingPricesData,
+) {
+  const entity = 'product_selling_price';
+  const operation = ApiOperationNames.Create;
+  const id = '';
+  const method = 'POST';
+
+  const result = await apiClientDq<
+    ProductSellingPricesData,
+    ProductSellingPricesData
+  >(entity, operation, id, { method: method, body: data });
+
+  return result;
 }

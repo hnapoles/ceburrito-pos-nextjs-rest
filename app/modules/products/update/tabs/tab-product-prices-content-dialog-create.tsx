@@ -67,6 +67,7 @@ import {
 import { Lookup } from '@/app/model/lookups-model';
 import { CustomerData } from '@/app/model/customers-model';
 import { StoreData } from '@/app/model/stores-model';
+import { CreateProductSellingPrices } from '@/app/action/server/product-selling-prices-actions';
 
 export default function TabProductPricesDialogCreate() {
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
@@ -89,6 +90,18 @@ export default function TabProductPricesDialogCreate() {
   };
 
   const [stores, setStores] = useState<StoreData[]>([]);
+  const [storeId, setStoreId] = useState<string>('');
+  const [selectedStoreName, setSelectedStoreName] = useState<string>('');
+  // Handle change in store selection
+  const handleStoreChange = (selectedName: string) => {
+    setSelectedStoreName(selectedName);
+
+    // Find the corresponding customerId based on the selected customerName
+    const selectedStore = stores.find((store) => store.name === selectedName);
+    if (selectedStore && selectedStore._id) {
+      setStoreId(selectedStore._id);
+    }
+  };
 
   const fetchData = useCallback(async () => {
     const res1 = await GetLookupsOrderTypes();
@@ -121,16 +134,28 @@ export default function TabProductPricesDialogCreate() {
     //delete data._id;
     //const productCreated = await CreateProduct(data);
     console.log('Submitting...');
+    delete data._id;
     data = {
       ...data,
+      customerName: selectedCustomerName,
       customerId: customerId,
+      storeName: selectedCustomerName,
+      storeId: storeId,
+      productId: product?._id,
+      productName: product?.name,
     };
+
+    console.log(data);
+
+    const createdData = await CreateProductSellingPrices(data);
 
     toast({
       title: 'Data saved',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+          <code className="text-white">
+            {JSON.stringify(createdData, null, 2)}
+          </code>
         </pre>
       ),
     });
@@ -187,6 +212,31 @@ export default function TabProductPricesDialogCreate() {
 
             <FormField
               control={form.control}
+              name="storeName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Store Name</FormLabel>
+                  <Select onValueChange={handleStoreChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select store name" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {stores.map((s) => (
+                        <SelectItem key={s._id} value={s.name}>
+                          {s.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="customerName"
               render={({ field }) => (
                 <FormItem>
@@ -204,31 +254,6 @@ export default function TabProductPricesDialogCreate() {
                       {customers.map((c) => (
                         <SelectItem key={c._id} value={c.name}>
                           {c.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="storeName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Store Name</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue="">
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select store name" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {stores.map((s) => (
-                        <SelectItem key={s._id} value={s.name}>
-                          {s.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
