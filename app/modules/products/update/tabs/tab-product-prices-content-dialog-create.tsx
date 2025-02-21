@@ -56,7 +56,7 @@ const defaultValues: ProductSellingPricesData = {
   productId: '',
   orderType: '',
   storeName: '',
-  sellingPrice: 0.0,
+  sellingPrice: undefined,
 };
 
 import {
@@ -268,6 +268,7 @@ export default function TabProductPricesDialogCreate({
               )}
             />
 
+            {/*
             <FormField
               control={form.control}
               name="sellingPrice"
@@ -295,6 +296,45 @@ export default function TabProductPricesDialogCreate({
                 </FormItem>
               )}
             />
+            */}
+            <FormField
+              control={form.control}
+              name="sellingPrice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <Input
+                    type="number"
+                    step="0.01" // Allows decimals
+                    placeholder=""
+                    value={field.value ?? ''} // Ensures the input field shows empty when undefined
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      // Allow empty input (user deletes the value)
+                      if (value === '') {
+                        field.onChange(undefined); // Pass undefined instead of an empty string
+                        return;
+                      }
+
+                      // Convert input to a valid number
+                      const numericValue = parseFloat(value);
+
+                      if (!isNaN(numericValue)) {
+                        field.onChange(numericValue); // Ensure a number is passed
+                      }
+                    }}
+                    onBlur={() => {
+                      if (field.value !== undefined && !isNaN(field.value)) {
+                        field.onChange(parseFloat(field.value.toFixed(2))); // Maintain numeric type
+                      }
+                    }}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="mt-6 flex justify-end gap-4">
               <Button
                 variant="outline"

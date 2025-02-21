@@ -80,7 +80,7 @@ export default function ProductPricesContentTableRow({
       </TableCell>
       <TableCell>{productPrices.customerName || 'n/a'}</TableCell>
       <TableCell className="hidden md:table-cell">
-        {productPrices.sellingPrice.toFixed(2)}
+        {productPrices.sellingPrice?.toFixed(2)}
       </TableCell>
       <TableCell className="hidden md:table-cell">
         {productPrices.createdAt?.toLocaleString('en-US', {

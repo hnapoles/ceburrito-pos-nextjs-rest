@@ -107,7 +107,8 @@ export const ZodSchemaProductSellingPrices = z.object({
     .number()
     .min(0.01, 'Selling Price must be at least 0.01')
     .max(1000000, 'Selling Price cannot exceed 1,000,000')
-    .multipleOf(0.01, 'Selling Price must be a valid decimal with two places'),
+    .multipleOf(0.01, 'Selling Price must be a valid decimal with two places')
+    .optional(),
   createdBy: z.string().optional(),
   createdAt: z.date().optional(),
   updatedBy: z.string().optional(),
