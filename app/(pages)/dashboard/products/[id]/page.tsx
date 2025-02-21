@@ -11,7 +11,9 @@ import {
 } from '@/app/model/products-model';
 import { FindAll, ApiOperationNames, FindOne } from '@/app/model/api-model';
 
-import { apiComplexDq } from '@/lib/fetch-helper';
+//import { apiComplexDq } from '@/lib/fetch-helper';
+
+import { GetProductSellingPricesById } from '@/app/action/server/product-selling-prices-actions';
 
 //start of function
 export default async function ProductUpdatePage({
@@ -47,15 +49,9 @@ export default async function ProductUpdatePage({
 
   const categories = lookup2.data;
 
-  //const productPrices = GetProductSellingPricesById(productId);
-  const entity = 'product';
-  const operation = ApiOperationNames.FindAll;
-  const queryName = 'getProductSellingPrices';
-
-  const productPrices = await apiComplexDq<
-    ProductSellingPricesData[],
-    ProductSellingPricesData
-  >(entity, queryName, operation, product._id, { method: method });
+  const result = await GetProductSellingPricesById(id);
+  console.log(result);
+  const productPrices = result.data;
 
   return (
     <ProductUpdate

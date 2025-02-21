@@ -117,3 +117,8 @@ export const ZodSchemaProductSellingPrices = z.object({
 export type ProductSellingPricesData = z.infer<
   typeof ZodSchemaProductSellingPrices
 >;
+
+export interface IGetProductSellingPricesResults {
+  count: number;
+  data: ProductSellingPricesData[];
+}
