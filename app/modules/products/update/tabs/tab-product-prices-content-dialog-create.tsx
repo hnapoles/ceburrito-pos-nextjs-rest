@@ -139,7 +139,7 @@ export default function TabProductPricesDialogCreate() {
       ...data,
       customerName: selectedCustomerName,
       customerId: customerId,
-      storeName: selectedCustomerName,
+      storeName: selectedStoreName,
       storeId: storeId,
       productId: product?._id,
       productName: product?.name,
