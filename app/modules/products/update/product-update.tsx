@@ -16,25 +16,23 @@ export default function ProductUpdate({
   product,
   types,
   categories,
-  productPrices,
 }: {
   product: ProductData;
   types: Lookup[];
   categories: Lookup[];
-  productPrices: ProductSellingPricesData[];
 }) {
   const setProduct = useGlobalStore((state) => state.setProduct);
-  const setProductSellingPrices = useGlobalStore(
-    (state) => state.setProductSellingPrices,
-  );
+  //const setProductSellingPrices = useGlobalStore(
+  //  (state) => state.setProductSellingPrices,
+  //);
 
   useEffect(() => {
     if (product) {
       setProduct(product);
     }
 
-    setProductSellingPrices(productPrices);
-  }, [product, productPrices]);
+    //setProductSellingPrices(productPrices);
+  }, [product]);
 
   return (
     <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">

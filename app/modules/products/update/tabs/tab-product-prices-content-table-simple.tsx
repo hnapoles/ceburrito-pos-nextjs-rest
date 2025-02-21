@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import {
   TableHead,
@@ -35,6 +36,8 @@ import {
   Tooltip,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { ProductSellingPricesData } from '@/app/model/products-model';
+import { GetProductSellingPricesById } from '@/app/action/server/product-selling-prices-actions';
 
 export default function TabProductPricesContentTableSimple({
   limit,
@@ -45,8 +48,21 @@ export default function TabProductPricesContentTableSimple({
   page: number;
   totalDataCount: number;
 }) {
-  const data = useGlobalStore((state) => state.productSellingPrices);
+  //const data = useGlobalStore((state) => state.productSellingPrices);
   const product = useGlobalStore((state) => state.product);
+
+  const [refresh, setRefresh] = useState<boolean>(false);
+
+  const [prices, setPrices] = useState<ProductSellingPricesData[]>([]);
+
+  const fetchData = useCallback(async () => {
+    const res1 = await GetProductSellingPricesById(product?._id || '');
+    setPrices(res1.data);
+  }, []); // ✅ No dependencies
+
+  useEffect(() => {
+    fetchData();
+  }, [refresh]);
 
   const { openCreateDialog } = useDialogStore();
 
@@ -121,9 +137,9 @@ export default function TabProductPricesContentTableSimple({
               </TableRow>
             </TableHeader>
 
-            {data && data.length > 0 && (
+            {prices && prices.length > 0 && (
               <TableBody>
-                {data.map((row) => (
+                {prices.map((row) => (
                   <ProductPricesContentTableRow
                     key={row._id}
                     productPrices={row}
@@ -168,7 +184,7 @@ export default function TabProductPricesContentTableSimple({
           </form>
         </CardFooter>
       </Card>
-      <TabProductPricesDialogCreate />
+      <TabProductPricesDialogCreate setRefresh={setRefresh} />
     </div>
   );
 }

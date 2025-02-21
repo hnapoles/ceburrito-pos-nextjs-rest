@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import { useDialogStore } from '@/app/provider/zustand-provider';
 
@@ -69,7 +69,11 @@ import { CustomerData } from '@/app/model/customers-model';
 import { StoreData } from '@/app/model/stores-model';
 import { CreateProductSellingPrices } from '@/app/action/server/product-selling-prices-actions';
 
-export default function TabProductPricesDialogCreate() {
+export default function TabProductPricesDialogCreate({
+  setRefresh,
+}: {
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
 
   const [customers, setCustomers] = useState<CustomerData[]>([]);
@@ -160,6 +164,7 @@ export default function TabProductPricesDialogCreate() {
       ),
     });
 
+    setRefresh(true);
     toggleCreateDialog();
 
     //revalidateAndRedirectUrl('/dashboard/products');

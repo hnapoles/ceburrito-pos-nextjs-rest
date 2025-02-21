@@ -40,14 +40,6 @@ export async function GetProductSellingPricesById(id: string) {
   const entity = 'product_selling_price';
   const operation = ApiOperationNames.FindAll;
   const method = 'POST';
-  //const queryName = 'getProductSellingPrices';
-
-  /*
-  const result = await apiComplexDq<
-    ProductSellingPricesData,
-    ProductSellingPricesData
-  >(entity, queryName, operation, id, { method: method });
-  */
 
   const result = await apiClientDq<IGetProductSellingPricesResults, FindAll>(
     entity,

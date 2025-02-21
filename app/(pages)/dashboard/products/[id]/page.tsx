@@ -49,16 +49,10 @@ export default async function ProductUpdatePage({
 
   const categories = lookup2.data;
 
-  const result = await GetProductSellingPricesById(id);
-  console.log(result);
-  const productPrices = result.data;
+  //const result = await GetProductSellingPricesById(id);
+  //const productPrices = result.data;
 
   return (
-    <ProductUpdate
-      product={product}
-      types={types}
-      categories={categories}
-      productPrices={productPrices}
-    />
+    <ProductUpdate product={product} types={types} categories={categories} />
   );
 }
