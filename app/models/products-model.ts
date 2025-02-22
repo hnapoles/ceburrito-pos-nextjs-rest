@@ -1,17 +1,5 @@
 import { z } from 'zod';
 
-export interface IGetProductsResults {
-  count: number;
-  data: ProductData[];
-}
-
-export interface IProductListProps {
-  products: ProductData[];
-  limit: number | 10;
-  page: number | 1;
-  totalDataCount: number | 1;
-}
-
 export const ZodSchemaProduct = z.object({
   _id: z.string().optional(),
   name: z
@@ -36,9 +24,8 @@ export const ZodSchemaProduct = z.object({
     .min(0.01, 'Price must be at least 0.01')
     .max(1000000, 'Price cannot exceed 1,000,000')
     .multipleOf(0.01, 'Price must be a valid decimal with two places'),
-  type: z.string({
-    required_error: 'Please select a product type',
-  }),
+  type: z.string().optional(),
+  status: z.string().optional(),
   category: z.string({
     required_error: 'Please select a product category.',
   }),
@@ -48,6 +35,18 @@ export const ZodSchemaProduct = z.object({
   updatedAt: z.date().optional(),
 });
 export type ProductData = z.infer<typeof ZodSchemaProduct>;
+
+export interface IGetProductsResults {
+  count: number;
+  data: ProductData[];
+}
+
+export interface IProductListProps {
+  products: ProductData[];
+  limit: number | 10;
+  page: number | 1;
+  totalDataCount: number | 1;
+}
 
 export const ZodSchemaProductSellingPrices = z.object({
   _id: z.string().optional(),

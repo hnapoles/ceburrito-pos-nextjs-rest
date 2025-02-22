@@ -23,7 +23,6 @@ export default async function ProductUpdatePage({
   const product = await GetProductById(id);
   const lookups = await GetLookups('product', null);
 
-  //const categories = lookups.data.find((item) => item.lookupCode === 'category') || [];
   const categories = lookups.data.filter(
     (item) => item.lookupCode === 'category',
   );
