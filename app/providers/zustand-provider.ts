@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
 import {
-  ProductData,
-  ProductSellingPricesData,
+  ProductDataBase,
+  ProductSellingPriceDataBase,
 } from '../models/products-model';
 
 type DialogStore = {
@@ -51,13 +51,13 @@ export const createDataStore = <T>() =>
 
 // Define the structure of your global store
 type GlobalStore = {
-  products: ProductData[] | null;
-  product: ProductData | null;
-  productSellingPrices: ProductSellingPricesData | null;
-  setProducts: (products: ProductData[]) => void;
-  setProduct: (product: ProductData) => void;
+  products: ProductDataBase[] | null;
+  product: ProductDataBase | null;
+  productSellingPrices: ProductSellingPriceDataBase | null;
+  setProducts: (products: ProductDataBase[]) => void;
+  setProduct: (product: ProductDataBase) => void;
   setProductSellingPrices: (
-    productSellingPrices: ProductSellingPricesData,
+    productSellingPrices: ProductSellingPriceDataBase,
   ) => void;
 };
 

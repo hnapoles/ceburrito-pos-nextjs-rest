@@ -1,16 +1,10 @@
-import ProductUpdate from '@/app/features/products/update/product-update';
-
-import { apiClientDq } from '@/lib/fetch-helper';
-
-import { FindLookupOutput } from '@/app/models/lookups-model';
-import {
-  ProductData,
-  ProductSellingPricesData,
-} from '@/app/models/products-model';
-
 import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
 import { GetProductById } from '@/app/actions/server/products-actions';
-import { GetLookups } from '@/app/actions/server/lookups-actions';
+import {
+  GetLookupCustomers,
+  GetLookups,
+} from '@/app/actions/server/lookups-actions';
+import NotFound from '../not-found';
 
 //start of function
 export default async function ProductUpdatePage({
@@ -28,11 +22,25 @@ export default async function ProductUpdatePage({
   );
   const statuses = lookups.data.filter((item) => item.lookupCode === 'status');
 
-  return <div>Testing...</div>;
-
-  /*
-  return (
-    <ProductUpdate product={product} types={types} categories={categories} />
+  if (!product) {
+    return <NotFound />;
+  }
+  const productPrices = await GetProductSellingPricesByProductId(
+    product._id || '',
   );
-  */
+
+  const customersLookup = GetLookupCustomers();
+
+  //if-testing - set to true
+  if (true)
+    return (
+      <>
+        <div>Testing...</div>
+        <pre>product data: {JSON.stringify(product, null, 2)}</pre>
+        <pre>categories: {JSON.stringify(categories, null, 2)}</pre>
+        <pre>statuses: {JSON.stringify(statuses, null, 2)}</pre>
+        <pre>productPrices: {JSON.stringify(productPrices, null, 2)}</pre>
+        <pre>customersLookup: {JSON.stringify(customersLookup, null, 2)}</pre>
+      </>
+    );
 }

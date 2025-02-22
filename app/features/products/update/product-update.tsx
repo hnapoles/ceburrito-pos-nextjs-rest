@@ -2,8 +2,8 @@
 import { useEffect } from 'react';
 
 import {
-  ProductData,
-  ProductSellingPricesData,
+  ProductDataBase,
+  ProductSellingPriceDataBase,
 } from '@/app/models/products-model';
 import { Lookup } from '@/app/models/lookups-model';
 
@@ -17,7 +17,7 @@ export default function ProductUpdate({
   types,
   categories,
 }: {
-  product: ProductData;
+  product: ProductDataBase;
   types: Lookup[];
   categories: Lookup[];
 }) {

@@ -39,7 +39,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ProductSellingPricesData } from '@/app/models/products-model';
+import { ProductSellingPriceDataBase } from '@/app/models/products-model';
 import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
 
 import { Label } from '@/components/ui/label';
@@ -70,9 +70,9 @@ import { Input } from '@/components/ui/input';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 import {
-  ZodSchemaProduct,
-  ProductData,
-  ZodSchemaProductSellingPrices,
+  ProductZodSchema,
+  ProductDataBase,
+  ProductSellingPriceZodSchema,
 } from '@/app/models/products-model';
 
 import { UpdateProduct } from '@/app/actions/server/products-actions';
@@ -83,7 +83,7 @@ import {
   GetLookupStores,
 } from '@/app/actions/server/lookups-actions';
 import { Lookup } from '@/app/models/lookups-model';
-import { CustomerBase } from '@/app/models/customers-model';
+import { CustomerDataBase } from '@/app/models/customers-model';
 import { StoreData } from '@/app/models/stores-model';
 import {
   CreateProductSellingPrices,
@@ -110,11 +110,11 @@ export default function TabProductPriceContentTopCard({
   }, []);
   */
 
-  const [prices, setPrices] = useState<ProductSellingPricesData>();
+  const [prices, setPrices] = useState<ProductSellingPriceDataBase>();
 
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
 
-  const [customers, setCustomers] = useState<CustomerBase[]>([]);
+  const [customers, setCustomers] = useState<CustomerDataBase[]>([]);
   const [customerId, setCustomerId] = useState<string>('');
   const [selectedCustomerName, setSelectedCustomerName] = useState<string>('');
 
@@ -170,7 +170,7 @@ export default function TabProductPriceContentTopCard({
     return <div>Loading...</div>;
   }
 
-  async function onSubmit(data: ProductSellingPricesData) {
+  async function onSubmit(data: ProductSellingPriceDataBase) {
     //delete data._id;
     //const productCreated = await CreateProduct(data);
     console.log('Submitting...');
@@ -209,7 +209,7 @@ export default function TabProductPriceContentTopCard({
 
   /*
   const [prices, setPrices] = useState<
-    ProductSellingPricesData | null | undefined
+    ProductSellingPriceDataBase | null | undefined
   >(p);
 
   useEffect(() => {
@@ -228,7 +228,7 @@ export default function TabProductPriceContentTopCard({
   }
   */
 
-  const defaultValues: ProductSellingPricesData = {
+  const defaultValues: ProductSellingPriceDataBase = {
     _id: dialogId ?? undefined,
     productId: prices?.productId,
     orderType: prices?.orderType || '',
@@ -237,8 +237,8 @@ export default function TabProductPriceContentTopCard({
     sellingPrice: 0.0,
   };
 
-  const form = useForm<ProductSellingPricesData>({
-    resolver: zodResolver(ZodSchemaProductSellingPrices),
+  const form = useForm<ProductSellingPriceDataBase>({
+    resolver: zodResolver(ProductSellingPriceZodSchema),
     defaultValues: defaultValues,
     mode: 'onBlur',
   });

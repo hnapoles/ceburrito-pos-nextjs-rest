@@ -4,9 +4,12 @@ import { apiClientDq } from '@/lib/fetch-helper';
 
 import { ApiOperationNames, FindAllProps } from '@/app/models/api-model';
 
-import { FindLookupOutput, OrderTypeProps } from '@/app/models/lookups-model';
+import {
+  FindLookupOutput,
+  LookupOrderTypeProps,
+} from '@/app/models/lookups-model';
 
-import { FindCustomerOutput } from '@/app/models/customers-model';
+import { FindCustomersOutput } from '@/app/models/customers-model';
 import { IGetStoresResults } from '@/app/models/stores-model';
 
 export async function GetLookupsOrderTypes() {
@@ -14,26 +17,25 @@ export async function GetLookupsOrderTypes() {
     'lookup',
     ApiOperationNames.FindAll,
     '',
-    { method: 'POST', body: OrderTypeProps },
+    { method: 'POST', body: LookupOrderTypeProps },
   );
   return lookups;
 }
 
-export async function GetLookupCustomers(
-  keyword: string | '',
-  page: string | '1',
-  limit: string | '99999',
-) {
+export async function GetLookupCustomers() {
   const apiProps: FindAllProps = {
     entity: 'customer',
-    keyword: keyword,
-    searchKeywordFields: ['name'],
-    page: parseInt(page),
-    limit: parseInt(limit),
+    //keyword: keyword,
+    //searchKeywordFields: ['name'],
+    andFilter: {
+      staus: 'active',
+    },
+    page: 1,
+    limit: 99999,
   };
 
   try {
-    const results = await apiClientDq<FindCustomerOutput, FindAllProps>(
+    const results = await apiClientDq<FindCustomersOutput, FindAllProps>(
       'customer',
       ApiOperationNames.FindAll,
       '',
@@ -46,17 +48,16 @@ export async function GetLookupCustomers(
   }
 }
 
-export async function GetLookupStores(
-  keyword: string | '',
-  page: string | '1',
-  limit: string | '99999',
-) {
+export async function GetLookupStores() {
   const apiProps: FindAllProps = {
     entity: 'store',
-    keyword: keyword,
-    searchKeywordFields: ['name'],
-    page: parseInt(page),
-    limit: parseInt(limit),
+    //keyword: keyword,
+    //searchKeywordFields: ['name'],
+    andFilter: {
+      staus: 'active',
+    },
+    page: 1,
+    limit: 99999,
   };
 
   try {

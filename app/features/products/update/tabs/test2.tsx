@@ -41,10 +41,10 @@ import { Input } from '@/components/ui/input';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 import {
-  ZodSchemaProduct,
-  ProductData,
-  ProductSellingPricesData,
-  ZodSchemaProductSellingPrices,
+  ProductZodSchema,
+  ProductDataBase,
+  ProductSellingPriceDataBase,
+  ProductSellingPriceZodSchema,
 } from '@/app/models/products-model';
 
 import { UpdateProduct } from '@/app/actions/server/products-actions';
@@ -57,7 +57,7 @@ import {
   GetLookupStores,
 } from '@/app/actions/server/lookups-actions';
 import { Lookup } from '@/app/models/lookups-model';
-import { CustomerBase } from '@/app/models/customers-model';
+import { CustomerDataBase } from '@/app/models/customers-model';
 import { StoreData } from '@/app/models/stores-model';
 import {
   CreateProductSellingPrices,
@@ -79,7 +79,7 @@ export default function Test2({
 
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
 
-  const [customers, setCustomers] = useState<CustomerBase[]>([]);
+  const [customers, setCustomers] = useState<CustomerDataBase[]>([]);
   const [customerId, setCustomerId] = useState<string>('');
   const [selectedCustomerName, setSelectedCustomerName] = useState<string>('');
 
@@ -110,7 +110,7 @@ export default function Test2({
     }
   };
 
-  const [prices, setPrices] = useState<ProductSellingPricesData>();
+  const [prices, setPrices] = useState<ProductSellingPriceDataBase>();
 
   /*
   const fetchData = useCallback(async () => {
@@ -155,7 +155,7 @@ export default function Test2({
     return null;
   }
 
-  const defaultValues: ProductSellingPricesData = {
+  const defaultValues: ProductSellingPriceDataBase = {
     _id: p._id ?? undefined,
     productId: p?.productId,
     orderType: p?.orderType || '',
@@ -163,8 +163,8 @@ export default function Test2({
     sellingPrice: p?.sellingPrice || undefined,
   };
 
-  const form = useForm<ProductSellingPricesData>({
-    resolver: zodResolver(ZodSchemaProductSellingPrices),
+  const form = useForm<ProductSellingPriceDataBase>({
+    resolver: zodResolver(ProductSellingPriceZodSchema),
     defaultValues: defaultValues,
     mode: 'onBlur',
   });
@@ -179,7 +179,7 @@ export default function Test2({
     },
   } = form;
 
-  async function onSubmit(data: ProductSellingPricesData) {
+  async function onSubmit(data: ProductSellingPriceDataBase) {
     //delete data._id;
     //const productCreated = await CreateProduct(data);
     console.log('Submitting...');

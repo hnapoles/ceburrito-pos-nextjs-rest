@@ -2,7 +2,10 @@
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { ProductData, IGetProductsResults } from '@/app/models/products-model';
+import {
+  ProductDataBase,
+  FindProductsOutput,
+} from '@/app/models/products-model';
 import { ApiOperationNames, FindAll, FindOne } from '@/app/models/api-model';
 
 export async function DeleteProductById(id: string) {
@@ -10,7 +13,7 @@ export async function DeleteProductById(id: string) {
   const operation = ApiOperationNames.Delete;
   const method = 'POST';
 
-  const result = await apiClientDq<ProductData, ProductData>(
+  const result = await apiClientDq<ProductDataBase, ProductDataBase>(
     entity,
     operation,
     id,
@@ -20,13 +23,13 @@ export async function DeleteProductById(id: string) {
   return result;
 }
 
-export async function CreateProduct(data: ProductData) {
+export async function CreateProduct(data: ProductDataBase) {
   const entity = 'product';
   const operation = ApiOperationNames.Create;
   const id = '';
   const method = 'POST';
 
-  const result = await apiClientDq<ProductData, ProductData>(
+  const result = await apiClientDq<ProductDataBase, ProductDataBase>(
     entity,
     operation,
     id,
@@ -36,13 +39,13 @@ export async function CreateProduct(data: ProductData) {
   return result;
 }
 
-export async function UpdateProduct(data: ProductData) {
+export async function UpdateProduct(data: ProductDataBase) {
   const entity = 'product';
   const operation = ApiOperationNames.Update;
   const id = data._id;
   const method = 'POST';
 
-  const result = await apiClientDq<ProductData, ProductData>(
+  const result = await apiClientDq<ProductDataBase, ProductDataBase>(
     entity,
     operation,
     id,
@@ -66,7 +69,7 @@ export async function GetProducts(
   };
 
   try {
-    const results = await apiClientDq<IGetProductsResults, FindAll>(
+    const results = await apiClientDq<FindProductsOutput, FindAll>(
       'product',
       ApiOperationNames.FindAll,
       '',
@@ -82,7 +85,7 @@ export async function GetProducts(
 export async function GetProductById(id: string) {
   const method = 'POST';
 
-  const product = await apiClientDq<ProductData, FindOne>(
+  const product = await apiClientDq<ProductDataBase, FindOne>(
     'product',
     ApiOperationNames.FindOne,
     id,

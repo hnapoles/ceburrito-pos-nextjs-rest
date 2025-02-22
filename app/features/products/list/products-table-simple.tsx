@@ -22,7 +22,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import { ProductData } from '@/app/models/products-model';
+import { ProductDataBase } from '@/app/models/products-model';
 
 export default function ProductsTableSimple({
   data,
@@ -30,7 +30,7 @@ export default function ProductsTableSimple({
   page,
   totalDataCount,
 }: {
-  data: ProductData[];
+  data: ProductDataBase[];
   limit: number;
   page: number;
   totalDataCount: number;

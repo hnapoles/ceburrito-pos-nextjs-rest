@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const ZodSchemaProduct = z.object({
+export const ProductZodSchema = z.object({
   _id: z.string().optional(),
   name: z
     .string()
@@ -34,21 +34,21 @@ export const ZodSchemaProduct = z.object({
   updatedBy: z.string().optional(),
   updatedAt: z.date().optional(),
 });
-export type ProductData = z.infer<typeof ZodSchemaProduct>;
+export type ProductDataBase = z.infer<typeof ProductZodSchema>;
 
-export interface IGetProductsResults {
+export interface FindProductsOutput {
   count: number;
-  data: ProductData[];
+  data: ProductDataBase[];
 }
 
-export interface IProductListProps {
-  products: ProductData[];
+export interface ProductsListProps {
+  products: ProductDataBase[];
   limit: number | 10;
   page: number | 1;
   totalDataCount: number | 1;
 }
 
-export const ZodSchemaProductSellingPrices = z.object({
+export const ProductSellingPriceZodSchema = z.object({
   _id: z.string().optional(),
   productId: z.string().optional(),
   productName: z.string().optional(),
@@ -76,11 +76,11 @@ export const ZodSchemaProductSellingPrices = z.object({
   updatedAt: z.date().optional(),
 });
 
-export type ProductSellingPricesData = z.infer<
-  typeof ZodSchemaProductSellingPrices
+export type ProductSellingPriceDataBase = z.infer<
+  typeof ProductSellingPriceZodSchema
 >;
 
-export interface IGetProductSellingPricesResults {
+export interface FindProductSellingPricesOutput {
   count: number;
-  data: ProductSellingPricesData[];
+  data: ProductSellingPriceDataBase[];
 }

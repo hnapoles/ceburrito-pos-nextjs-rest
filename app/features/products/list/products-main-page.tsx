@@ -9,11 +9,11 @@ import { File } from 'lucide-react';
 
 import ProductsTableSimple from './products-table-simple';
 
-import { IProductListProps } from '@/app/models/products-model';
+import { ProductsListProps } from '@/app/models/products-model';
 
 import { ProductSearchInput } from './product-search-input.';
 
-const ProductsMainPage: React.FC<IProductListProps> = ({
+const ProductsMainPage: React.FC<ProductsListProps> = ({
   products,
   limit,
   page,

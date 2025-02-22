@@ -12,7 +12,7 @@ export interface FindLookupOutput {
   data: Lookup[];
 }
 
-export const ProductCategoryProps = {
+export const LookupProductCategoryProps = {
   andFilter: {
     lookupGroup: 'product',
     lookupCode: 'category',
@@ -31,7 +31,7 @@ export const ProductCategoryProps = {
   ],
 };
 
-export const ProductTypeProps = {
+export const LookupProductTypeProps = {
   andFilter: {
     lookupGroup: 'product',
     lookupCode: 'type',
@@ -50,7 +50,7 @@ export const ProductTypeProps = {
   ],
 };
 
-export const OrderTypeProps = {
+export const LookupOrderTypeProps = {
   andFilter: {
     lookupGroup: 'order',
     lookupCode: 'type',

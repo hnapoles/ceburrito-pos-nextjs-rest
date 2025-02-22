@@ -25,7 +25,7 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-import { ProductSellingPricesData } from '@/app/models/products-model';
+import { ProductSellingPriceDataBase } from '@/app/models/products-model';
 
 import { DeleteProductById } from '@/app/actions/server/products-actions';
 
@@ -43,7 +43,7 @@ export default function ProductPricesContentTableRow({
   setRefresh,
   setDialogId,
 }: {
-  productPrices: ProductSellingPricesData;
+  productPrices: ProductSellingPriceDataBase;
   setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogId: React.Dispatch<React.SetStateAction<string>>;
 }) {

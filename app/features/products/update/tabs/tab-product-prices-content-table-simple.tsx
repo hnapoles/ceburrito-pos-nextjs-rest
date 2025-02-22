@@ -37,7 +37,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ProductSellingPricesData } from '@/app/models/products-model';
+import { ProductSellingPriceDataBase } from '@/app/models/products-model';
 import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
 import { TestComponent } from './test-component';
 import Test2 from './test2';
@@ -60,7 +60,7 @@ export default function TabProductPricesContentTableSimple({
 
   const [refresh, setRefresh] = useState<boolean>(false);
 
-  const [prices, setPrices] = useState<ProductSellingPricesData[]>([]);
+  const [prices, setPrices] = useState<ProductSellingPriceDataBase[]>([]);
 
   const fetchData = useCallback(async () => {
     const res1 = await GetProductSellingPricesByProductId(product?._id || '');
