@@ -1,4 +1,4 @@
-import StoreUpdate from '@/app/modules/stores/update/store-update';
+import StoreUpdate from '@/app/features/stores/update/store-update';
 
 import { apiClientDq } from '@/lib/fetch-helper';
 

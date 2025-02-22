@@ -86,7 +86,7 @@ export default function ProductPricesContentTableRow({
     //setUpdateDialogId(productPrices?._id || '');
     if (productPrices && productPrices._id) {
       setDialogId(productPrices._id);
-      const prices = await GetProductSellingPricesByOwnId(productPrices._id);
+      //const prices = await GetProductSellingPricesByOwnId(productPrices._id);
 
       /*
       const setProductSellingPrices = useGlobalStore(
@@ -95,7 +95,7 @@ export default function ProductPricesContentTableRow({
       */
 
       if (productPrices) {
-        setProductSellingPrices(productPrices);
+        //setProductSellingPrices(productPrices);
       }
 
       openUpdateDialog();

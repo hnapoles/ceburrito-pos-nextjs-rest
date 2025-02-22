@@ -1,4 +1,4 @@
-import ProductUpdate from '@/app/modules/products/update/product-update';
+import ProductUpdate from '@/app/features/products/update/product-update';
 
 import { apiClientDq } from '@/lib/fetch-helper';
 

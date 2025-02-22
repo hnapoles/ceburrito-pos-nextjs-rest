@@ -5,6 +5,8 @@ export function TestComponent() {
     (state) => state.productSellingPrices,
   );
 
+  console.log('prices from test component... ', productSellingPrices);
+
   if (!productSellingPrices) {
     return null;
   }

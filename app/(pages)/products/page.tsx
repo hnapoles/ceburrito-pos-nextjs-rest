@@ -1,4 +1,4 @@
-import ProductsMainPage from '@/app/modules/products/list/products-main-page';
+import ProductsMainPage from '@/app/features/products/list/products-main-page';
 import NotFound from './not-found';
 import { GetProducts } from '@/app/action/server/products-actions';
 
