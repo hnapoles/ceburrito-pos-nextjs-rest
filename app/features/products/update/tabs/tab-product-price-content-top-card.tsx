@@ -30,17 +30,17 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { PlusCircle } from 'lucide-react';
-import { useDialogStore } from '@/app/provider/zustand-provider';
+import { useDialogStore } from '@/app/providers/zustand-provider';
 
-import { useGlobalStore } from '@/app/provider/zustand-provider';
+import { useGlobalStore } from '@/app/providers/zustand-provider';
 
 import {
   TooltipContent,
   Tooltip,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ProductSellingPricesData } from '@/app/model/products-model';
-import { GetProductSellingPricesByProductId } from '@/app/action/server/product-selling-prices-actions';
+import { ProductSellingPricesData } from '@/app/models/products-model';
+import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
 
 import { Label } from '@/components/ui/label';
 
@@ -73,22 +73,22 @@ import {
   ZodSchemaProduct,
   ProductData,
   ZodSchemaProductSellingPrices,
-} from '@/app/model/products-model';
+} from '@/app/models/products-model';
 
-import { UpdateProduct } from '@/app/action/server/products-actions';
+import { UpdateProduct } from '@/app/actions/server/products-actions';
 
 import {
   GetLookupCustomers,
   GetLookupsOrderTypes,
   GetLookupStores,
-} from '@/app/action/server/lookups-actions';
-import { Lookup } from '@/app/model/lookups-model';
-import { CustomerData } from '@/app/model/customers-model';
-import { StoreData } from '@/app/model/stores-model';
+} from '@/app/actions/server/lookups-actions';
+import { Lookup } from '@/app/models/lookups-model';
+import { CustomerBase } from '@/app/models/customers-model';
+import { StoreData } from '@/app/models/stores-model';
 import {
   CreateProductSellingPrices,
   GetProductSellingPricesByOwnId,
-} from '@/app/action/server/product-selling-prices-actions';
+} from '@/app/actions/server/product-selling-prices-actions';
 
 export default function TabProductPriceContentTopCard({
   setRefresh,
@@ -114,7 +114,7 @@ export default function TabProductPriceContentTopCard({
 
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
 
-  const [customers, setCustomers] = useState<CustomerData[]>([]);
+  const [customers, setCustomers] = useState<CustomerBase[]>([]);
   const [customerId, setCustomerId] = useState<string>('');
   const [selectedCustomerName, setSelectedCustomerName] = useState<string>('');
 

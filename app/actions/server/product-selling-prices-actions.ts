@@ -3,11 +3,11 @@
 import {
   IGetProductSellingPricesResults,
   ProductSellingPricesData,
-} from '@/app/model/products-model';
+} from '@/app/models/products-model';
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { FindAll, FindOne } from '@/app/model/api-model';
+import { FindAll, FindOne } from '@/app/models/api-model';
 
 //const base =
 //  process.env.APP_API_SERVER_DQ_URL || 'http://172.104.117.139:3000/v1/dq';
@@ -76,8 +76,8 @@ export async function GetProductSellingPricesByOwnId(id: string) {
   return result;
 }
 
-import { ApiOperationNames } from '@/app/model/api-model';
-import { IGetCustomersResults } from '@/app/model/customers-model';
+import { ApiOperationNames } from '@/app/models/api-model';
+import { FindCustomerOutput } from '@/app/models/customers-model';
 
 export type FetchMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 

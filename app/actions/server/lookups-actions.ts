@@ -2,19 +2,15 @@
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { ProductData, IGetProductsResults } from '@/app/model/products-model';
-import { ApiOperationNames, FindAll } from '@/app/model/api-model';
+import { ApiOperationNames, FindAllProps } from '@/app/models/api-model';
 
-import { FindLookupOutput, OrderTypeProps } from '@/app/model/lookups-model';
+import { FindLookupOutput, OrderTypeProps } from '@/app/models/lookups-model';
 
-import {
-  CustomerData,
-  IGetCustomersResults,
-} from '@/app/model/customers-model';
-import { IGetStoresResults } from '@/app/model/stores-model';
+import { FindCustomerOutput } from '@/app/models/customers-model';
+import { IGetStoresResults } from '@/app/models/stores-model';
 
 export async function GetLookupsOrderTypes() {
-  const lookups = await apiClientDq<FindLookupOutput, FindAll>(
+  const lookups = await apiClientDq<FindLookupOutput, FindAllProps>(
     'lookup',
     ApiOperationNames.FindAll,
     '',
@@ -28,7 +24,7 @@ export async function GetLookupCustomers(
   page: string | '1',
   limit: string | '99999',
 ) {
-  const apiProps: FindAll = {
+  const apiProps: FindAllProps = {
     entity: 'customer',
     keyword: keyword,
     searchKeywordFields: ['name'],
@@ -37,7 +33,7 @@ export async function GetLookupCustomers(
   };
 
   try {
-    const results = await apiClientDq<IGetCustomersResults, FindAll>(
+    const results = await apiClientDq<FindCustomerOutput, FindAllProps>(
       'customer',
       ApiOperationNames.FindAll,
       '',
@@ -55,7 +51,7 @@ export async function GetLookupStores(
   page: string | '1',
   limit: string | '99999',
 ) {
-  const apiProps: FindAll = {
+  const apiProps: FindAllProps = {
     entity: 'store',
     keyword: keyword,
     searchKeywordFields: ['name'],
@@ -64,7 +60,7 @@ export async function GetLookupStores(
   };
 
   try {
-    const results = await apiClientDq<IGetStoresResults, FindAll>(
+    const results = await apiClientDq<IGetStoresResults, FindAllProps>(
       'store',
       ApiOperationNames.FindAll,
       '',
@@ -114,7 +110,7 @@ export async function GetLookups(group: string | null, code: string | null) {
     ],
   };
 
-  const lookups = await apiClientDq<FindLookupOutput, FindAll>(
+  const lookups = await apiClientDq<FindLookupOutput, FindAllProps>(
     'lookup',
     ApiOperationNames.FindAll,
     '',

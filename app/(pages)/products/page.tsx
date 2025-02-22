@@ -1,6 +1,6 @@
 import ProductsMainPage from '@/app/features/products/list/products-main-page';
 import NotFound from './not-found';
-import { GetProducts } from '@/app/action/server/products-actions';
+import { GetProducts } from '@/app/actions/server/products-actions';
 
 export default async function Page(props: {
   searchParams: Promise<{ keyword: string; page: string; limit: string }>;

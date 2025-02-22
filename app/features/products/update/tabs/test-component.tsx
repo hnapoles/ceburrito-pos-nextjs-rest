@@ -1,4 +1,4 @@
-import { useGlobalStore } from '@/app/provider/zustand-provider';
+import { useGlobalStore } from '@/app/providers/zustand-provider';
 
 export function TestComponent() {
   const productSellingPrices = useGlobalStore(

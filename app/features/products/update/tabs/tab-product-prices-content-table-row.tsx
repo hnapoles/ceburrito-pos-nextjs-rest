@@ -25,18 +25,18 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-import { ProductSellingPricesData } from '@/app/model/products-model';
+import { ProductSellingPricesData } from '@/app/models/products-model';
 
-import { DeleteProductById } from '@/app/action/server/products-actions';
+import { DeleteProductById } from '@/app/actions/server/products-actions';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 //import { ConfirmDialog } from "@/app/nav/confirm-dialog";
-import { useDialogStore } from '@/app/provider/zustand-provider';
+import { useDialogStore } from '@/app/providers/zustand-provider';
 import TabProductPricesDialogUpdate from './tab-product-prices-content-dialog-update';
-import { useGlobalStore } from '@/app/provider/zustand-provider';
+import { useGlobalStore } from '@/app/providers/zustand-provider';
 
-import { GetProductSellingPricesByOwnId } from '@/app/action/server/product-selling-prices-actions';
+import { GetProductSellingPricesByOwnId } from '@/app/actions/server/product-selling-prices-actions';
 
 export default function ProductPricesContentTableRow({
   productPrices,

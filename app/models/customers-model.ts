@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const ZodSchemaCustomer = z.object({
+export const CustomerZodSchema = z.object({
   _id: z.string().optional(),
   name: z
     .string()
@@ -18,9 +18,9 @@ export const ZodSchemaCustomer = z.object({
   updatedAt: z.date().optional(),
 });
 
-export type CustomerData = z.infer<typeof ZodSchemaCustomer>;
+export type CustomerBase = z.infer<typeof CustomerZodSchema>;
 
-export interface IGetCustomersResults {
+export interface FindCustomerOutput {
   count: number;
-  data: CustomerData[];
+  data: CustomerBase[];
 }

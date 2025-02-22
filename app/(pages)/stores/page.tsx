@@ -1,7 +1,7 @@
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { StoreData, IGetStoresResults } from '@/app/model/stores-model';
-import { ApiOperationNames, FindAll } from '@/app/model/api-model';
+import { StoreData, IGetStoresResults } from '@/app/models/stores-model';
+import { ApiOperationNames, FindAll } from '@/app/models/api-model';
 
 import StoresMainPage from '@/app/features/stores/list/stores-main-page';
 import NotFound from './not-found';

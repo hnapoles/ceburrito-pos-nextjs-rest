@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
-import { useDialogStore } from '@/app/provider/zustand-provider';
+import { useDialogStore } from '@/app/providers/zustand-provider';
 
 import {
   Dialog,
@@ -45,24 +45,24 @@ import {
   ProductData,
   ProductSellingPricesData,
   ZodSchemaProductSellingPrices,
-} from '@/app/model/products-model';
+} from '@/app/models/products-model';
 
-import { UpdateProduct } from '@/app/action/server/products-actions';
+import { UpdateProduct } from '@/app/actions/server/products-actions';
 
-import { useGlobalStore } from '@/app/provider/zustand-provider';
+import { useGlobalStore } from '@/app/providers/zustand-provider';
 
 import {
   GetLookupCustomers,
   GetLookupsOrderTypes,
   GetLookupStores,
-} from '@/app/action/server/lookups-actions';
-import { Lookup } from '@/app/model/lookups-model';
-import { CustomerData } from '@/app/model/customers-model';
-import { StoreData } from '@/app/model/stores-model';
+} from '@/app/actions/server/lookups-actions';
+import { Lookup } from '@/app/models/lookups-model';
+import { CustomerBase } from '@/app/models/customers-model';
+import { StoreData } from '@/app/models/stores-model';
 import {
   CreateProductSellingPrices,
   GetProductSellingPricesByOwnId,
-} from '@/app/action/server/product-selling-prices-actions';
+} from '@/app/actions/server/product-selling-prices-actions';
 
 export default function Test2({
   setRefresh,
@@ -79,7 +79,7 @@ export default function Test2({
 
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
 
-  const [customers, setCustomers] = useState<CustomerData[]>([]);
+  const [customers, setCustomers] = useState<CustomerBase[]>([]);
   const [customerId, setCustomerId] = useState<string>('');
   const [selectedCustomerName, setSelectedCustomerName] = useState<string>('');
 

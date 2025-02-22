@@ -28,17 +28,17 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { PlusCircle } from 'lucide-react';
-import { useDialogStore } from '@/app/provider/zustand-provider';
+import { useDialogStore } from '@/app/providers/zustand-provider';
 
-import { useGlobalStore } from '@/app/provider/zustand-provider';
+import { useGlobalStore } from '@/app/providers/zustand-provider';
 
 import {
   TooltipContent,
   Tooltip,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ProductSellingPricesData } from '@/app/model/products-model';
-import { GetProductSellingPricesByProductId } from '@/app/action/server/product-selling-prices-actions';
+import { ProductSellingPricesData } from '@/app/models/products-model';
+import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
 import { TestComponent } from './test-component';
 import Test2 from './test2';
 

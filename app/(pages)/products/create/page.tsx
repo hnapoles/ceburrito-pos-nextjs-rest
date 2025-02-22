@@ -2,12 +2,12 @@ import ProductCreateForm from '@/app/features/products/create/products-create-fo
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { FindLookupOutput } from '@/app/model/lookups-model';
+import { FindLookupOutput } from '@/app/models/lookups-model';
 import {
   ProductCategoryFilter,
   ProductTypeFilter,
-} from '@/app/model/products-model';
-import { FindAll, ApiOperationNames } from '@/app/model/api-model';
+} from '@/app/models/products-model';
+import { FindAll, ApiOperationNames } from '@/app/models/api-model';
 
 export default async function ProductCreatePage() {
   const lookup1 = await apiClientDq<FindLookupOutput, FindAll>(

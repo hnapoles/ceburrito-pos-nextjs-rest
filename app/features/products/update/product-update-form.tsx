@@ -6,7 +6,7 @@ import React, {
   //ChangeEvent
 } from 'react';
 
-import { Lookup } from '@/app/model/lookups-model';
+import { Lookup } from '@/app/models/lookups-model';
 
 import ProductUpdateFormImage from './product-update-form-image';
 import ProductUpdateFormDetails from './product-update-form-details';
@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import { useGlobalStore } from '@/app/provider/zustand-provider';
+import { useGlobalStore } from '@/app/providers/zustand-provider';
 
 export default function ProductUpdateForm({
   types,

@@ -4,13 +4,13 @@ import { useEffect } from 'react';
 import {
   ProductData,
   ProductSellingPricesData,
-} from '@/app/model/products-model';
-import { Lookup } from '@/app/model/lookups-model';
+} from '@/app/models/products-model';
+import { Lookup } from '@/app/models/lookups-model';
 
 import ProductUpdateForm from './product-update-form';
 import ProductUpdateTabs from './product-update-tabs';
 
-import { useGlobalStore } from '@/app/provider/zustand-provider';
+import { useGlobalStore } from '@/app/providers/zustand-provider';
 
 export default function ProductUpdate({
   product,

@@ -30,11 +30,11 @@ import { Input } from '@/components/ui/input';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
-import { ZodSchemaProduct, ProductData } from '@/app/model/products-model';
-import { Lookup } from '@/app/model/lookups-model';
-import { UpdateProduct } from '@/app/action/server/products-actions';
+import { ZodSchemaProduct, ProductData } from '@/app/models/products-model';
+import { Lookup } from '@/app/models/lookups-model';
+import { UpdateProduct } from '@/app/actions/server/products-actions';
 
-import { useGlobalStore } from '@/app/provider/zustand-provider';
+import { useGlobalStore } from '@/app/providers/zustand-provider';
 
 export default function ProductUpdateFormDetails({
   types,

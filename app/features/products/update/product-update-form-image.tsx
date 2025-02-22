@@ -12,8 +12,8 @@ import { cn } from '@/lib/utils';
 
 const entity = 'product';
 
-import { InputFileProps } from '@/app/model/file-uploads-model';
-import { UploadFileSingle } from '@/app/action/server/files-actions';
+import { InputFileProps } from '@/app/models/file-uploads-model';
+import { UploadFileSingle } from '@/app/actions/server/files-actions';
 import { toast } from '@/hooks/use-toast';
 
 const base =

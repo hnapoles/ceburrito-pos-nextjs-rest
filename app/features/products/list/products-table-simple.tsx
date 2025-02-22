@@ -22,7 +22,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import { ProductData } from '@/app/model/products-model';
+import { ProductData } from '@/app/models/products-model';
 
 export default function ProductsTableSimple({
   data,

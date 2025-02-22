@@ -2,8 +2,8 @@ import StoreUpdate from '@/app/features/stores/update/store-update';
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { StoreData } from '@/app/model/stores-model';
-import { ApiOperationNames, FindOne } from '@/app/model/api-model';
+import { StoreData } from '@/app/models/stores-model';
+import { ApiOperationNames, FindOne } from '@/app/models/api-model';
 
 export default async function StoreUpdatePage({
   params,

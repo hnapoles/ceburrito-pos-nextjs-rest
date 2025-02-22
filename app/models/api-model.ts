@@ -7,7 +7,7 @@ export enum ApiOperationNames {
   FileUpload = 'FileUpload',
 }
 
-export interface FindAll {
+export interface FindAllProps {
   entity?: string;
   operation?: ApiOperationNames | ApiOperationNames.FindAll;
   keyword?: string | null;
@@ -18,7 +18,7 @@ export interface FindAll {
   orFilter?: object;
 }
 
-export interface FindOne {
+export interface FindOneProps {
   entity?: string;
   operation?: ApiOperationNames | ApiOperationNames.FindAll;
 }

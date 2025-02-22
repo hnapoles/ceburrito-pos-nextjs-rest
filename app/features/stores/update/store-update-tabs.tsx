@@ -1,39 +1,34 @@
-'use client'
+'use client';
 
-import { Tabs, 
-    //TabsContent, 
-    TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Tabs,
+  //TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/ui/tabs';
 
-import { StoreData } from '@/app/model/stores-model';
+import { StoreData } from '@/app/models/stores-model';
 
 import { WhoTabContent } from '@/app/nav/who-tab-content';
-import { IUserWho } from '@/app/model/users-model';
-
-
-
+import { IUserWho } from '@/app/models/users-model';
 
 export default function ProductUpdateTabs({ store }: { store: StoreData }) {
-    const who : IUserWho = {
-        createdBy  : store?.createdBy,
-        createdAt  : store?.createdAt,
-        updatedBy  : store?.updatedBy,
-        updatedAt  : store?.updatedAt,
-    }
-    return (
-        <Tabs defaultValue="who">
-                    <div className="flex items-center">
-                        <TabsList>
-                            <TabsTrigger value="who">Who</TabsTrigger>
-                            <TabsTrigger value="attributes">Attributes</TabsTrigger>
-                            <TabsTrigger value="sales">Sales</TabsTrigger>
-
-                        </TabsList>
-
-
-                    </div>
-                    <WhoTabContent who={who} />
-                </Tabs>
-
-
-    )
+  const who: IUserWho = {
+    createdBy: store?.createdBy,
+    createdAt: store?.createdAt,
+    updatedBy: store?.updatedBy,
+    updatedAt: store?.updatedAt,
+  };
+  return (
+    <Tabs defaultValue="who">
+      <div className="flex items-center">
+        <TabsList>
+          <TabsTrigger value="who">Who</TabsTrigger>
+          <TabsTrigger value="attributes">Attributes</TabsTrigger>
+          <TabsTrigger value="sales">Sales</TabsTrigger>
+        </TabsList>
+      </div>
+      <WhoTabContent who={who} />
+    </Tabs>
+  );
 }

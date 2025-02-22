@@ -1,19 +1,17 @@
 import Link from 'next/link';
 
 //import Image from 'next/image'
-import {
-  Settings,
-} from 'lucide-react';
+import { Settings } from 'lucide-react';
 
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger
+  TooltipTrigger,
 } from '@/components/ui/tooltip';
 
 import { NavItem } from './nav-item';
 
-import { listNavItems } from '@/app/model/nav-model';
+import { listNavItems } from '@/app/models/nav-model';
 
 const DesktopNav: React.FC = () => {
   return (
@@ -24,20 +22,15 @@ const DesktopNav: React.FC = () => {
           className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
         >
           {/*<VercelLogo className="h-3 w-3 transition-all group-hover:scale-110" />*/}
-          
+
           <span className="sr-only">Ceburrito.ph</span>
         </Link>
 
-        {listNavItems.map( (item) => (
-          
+        {listNavItems.map((item) => (
           <NavItem href={item.href} label={item.title} key={item.title}>
-            <item.iconName
-                className="h-5 w-5 text-black" />
+            <item.iconName className="h-5 w-5 text-black" />
           </NavItem>
-
         ))}
-
-
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
         <Tooltip>
@@ -55,6 +48,6 @@ const DesktopNav: React.FC = () => {
       </nav>
     </aside>
   );
-}
+};
 
-export default DesktopNav
+export default DesktopNav;

@@ -2,16 +2,15 @@ import ProductUpdate from '@/app/features/products/update/product-update';
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { FindLookupOutput } from '@/app/model/lookups-model';
+import { FindLookupOutput } from '@/app/models/lookups-model';
 import {
   ProductData,
   ProductSellingPricesData,
-} from '@/app/model/products-model';
-import { FindAll, ApiOperationNames, FindOne } from '@/app/model/api-model';
+} from '@/app/models/products-model';
 
-import { GetProductSellingPricesByProductId } from '@/app/action/server/product-selling-prices-actions';
-import { GetProductById } from '@/app/action/server/products-actions';
-import { GetLookups } from '@/app/action/server/lookups-actions';
+import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
+import { GetProductById } from '@/app/actions/server/products-actions';
+import { GetLookups } from '@/app/actions/server/lookups-actions';
 
 //start of function
 export default async function ProductUpdatePage({
@@ -29,10 +28,6 @@ export default async function ProductUpdatePage({
     (item) => item.lookupCode === 'category',
   );
   const statuses = lookups.data.filter((item) => item.lookupCode === 'status');
-
-  console.log(lookups);
-  console.log(categories);
-  console.log(statuses);
 
   return <div>Testing...</div>;
 

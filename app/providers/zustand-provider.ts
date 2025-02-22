@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 
-import { ProductData, ProductSellingPricesData } from '../model/products-model';
+import {
+  ProductData,
+  ProductSellingPricesData,
+} from '../models/products-model';
 
 type DialogStore = {
   isCreateDialogOpen: boolean;
