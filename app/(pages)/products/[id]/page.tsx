@@ -30,6 +30,9 @@ export default async function ProductUpdatePage({
   );
 
   const customersLookup = GetLookupCustomers();
+  //get ordertypes
+  //get stores
+  //get sizeOptions
 
   //if-testing - set to true
   if (true)
