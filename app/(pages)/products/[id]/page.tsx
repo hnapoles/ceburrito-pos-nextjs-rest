@@ -2,18 +2,16 @@ import ProductUpdate from '@/app/features/products/update/product-update';
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { LookupQueryResults } from '@/app/model/lookups-model';
+import { FindLookupOutput } from '@/app/model/lookups-model';
 import {
-  ProductCategoryFilter,
-  ProductTypeFilter,
   ProductData,
   ProductSellingPricesData,
 } from '@/app/model/products-model';
 import { FindAll, ApiOperationNames, FindOne } from '@/app/model/api-model';
 
-//import { apiComplexDq } from '@/lib/fetch-helper';
-
 import { GetProductSellingPricesByProductId } from '@/app/action/server/product-selling-prices-actions';
+import { GetProductById } from '@/app/action/server/products-actions';
+import { GetLookups } from '@/app/action/server/lookups-actions';
 
 //start of function
 export default async function ProductUpdatePage({
@@ -21,38 +19,26 @@ export default async function ProductUpdatePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const method = 'POST';
   const id = (await params).id;
 
-  const product = await apiClientDq<ProductData, FindOne>(
-    'product',
-    ApiOperationNames.FindOne,
-    id,
-    { method: method },
+  const product = await GetProductById(id);
+  const lookups = await GetLookups('product', null);
+
+  //const categories = lookups.data.find((item) => item.lookupCode === 'category') || [];
+  const categories = lookups.data.filter(
+    (item) => item.lookupCode === 'category',
   );
+  const statuses = lookups.data.filter((item) => item.lookupCode === 'status');
 
-  const lookup1 = await apiClientDq<LookupQueryResults, FindAll>(
-    'lookup',
-    ApiOperationNames.FindAll,
-    '',
-    { method: 'POST', body: ProductTypeFilter },
-  );
+  console.log(lookups);
+  console.log(categories);
+  console.log(statuses);
 
-  const types = lookup1.data;
+  return <div>Testing...</div>;
 
-  const lookup2 = await apiClientDq<LookupQueryResults, FindAll>(
-    'lookup',
-    ApiOperationNames.FindAll,
-    '',
-    { method: 'POST', body: ProductCategoryFilter },
-  );
-
-  const categories = lookup2.data;
-
-  //const result = await GetProductSellingPricesByProductId(id);
-  //const productPrices = result.data;
-
+  /*
   return (
     <ProductUpdate product={product} types={types} categories={categories} />
   );
+  */
 }

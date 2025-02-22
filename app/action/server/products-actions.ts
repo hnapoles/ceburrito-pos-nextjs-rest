@@ -3,7 +3,7 @@
 import { apiClientDq } from '@/lib/fetch-helper';
 
 import { ProductData, IGetProductsResults } from '@/app/model/products-model';
-import { ApiOperationNames, FindAll } from '@/app/model/api-model';
+import { ApiOperationNames, FindAll, FindOne } from '@/app/model/api-model';
 
 export async function DeleteProductById(id: string) {
   const entity = 'product';
@@ -77,4 +77,17 @@ export async function GetProducts(
     console.log('error calling api ', error);
     throw error;
   }
+}
+
+export async function GetProductById(id: string) {
+  const method = 'POST';
+
+  const product = await apiClientDq<ProductData, FindOne>(
+    'product',
+    ApiOperationNames.FindOne,
+    id,
+    { method: method },
+  );
+
+  return product;
 }

@@ -5,7 +5,7 @@ import { apiClientDq } from '@/lib/fetch-helper';
 import { ProductData, IGetProductsResults } from '@/app/model/products-model';
 import { ApiOperationNames, FindAll } from '@/app/model/api-model';
 
-import { LookupQueryResults } from '@/app/model/lookups-model';
+import { FindLookupOutput, OrderTypeProps } from '@/app/model/lookups-model';
 
 import {
   CustomerData,
@@ -13,31 +13,12 @@ import {
 } from '@/app/model/customers-model';
 import { IGetStoresResults } from '@/app/model/stores-model';
 
-const OrderTypeFilter = {
-  andFilter: {
-    lookupGroup: 'order',
-    lookupCode: 'type',
-  },
-  limit: 999,
-  page: 1,
-  sortOptions: [
-    {
-      sortField: 'lookupCode',
-      sortOrder: 1,
-    },
-    {
-      sortField: 'lookupValue',
-      sortOrder: 1,
-    },
-  ],
-};
-
 export async function GetLookupsOrderTypes() {
-  const lookups = await apiClientDq<LookupQueryResults, FindAll>(
+  const lookups = await apiClientDq<FindLookupOutput, FindAll>(
     'lookup',
     ApiOperationNames.FindAll,
     '',
-    { method: 'POST', body: OrderTypeFilter },
+    { method: 'POST', body: OrderTypeProps },
   );
   return lookups;
 }
@@ -94,4 +75,51 @@ export async function GetLookupStores(
     console.log('error calling api ', error);
     throw error;
   }
+}
+
+export async function GetLookups(group: string | null, code: string | null) {
+  let andFilter = {};
+  if (group && code) {
+    andFilter = {
+      lookupGroup: group,
+      lookupCode: code,
+    };
+  }
+
+  if (group && !code) {
+    andFilter = {
+      lookupGroup: group,
+    };
+  }
+
+  if (!group && code) {
+    andFilter = {
+      lookupCode: code,
+    };
+  }
+
+  const lookupProps = {
+    andFilter: andFilter,
+    limit: 999,
+    page: 1,
+    sortOptions: [
+      {
+        sortField: 'lookupCode',
+        sortOrder: 1,
+      },
+      {
+        sortField: 'lookupValue',
+        sortOrder: 1,
+      },
+    ],
+  };
+
+  const lookups = await apiClientDq<FindLookupOutput, FindAll>(
+    'lookup',
+    ApiOperationNames.FindAll,
+    '',
+    { method: 'POST', body: lookupProps },
+  );
+
+  return lookups;
 }

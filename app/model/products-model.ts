@@ -49,44 +49,6 @@ export const ZodSchemaProduct = z.object({
 });
 export type ProductData = z.infer<typeof ZodSchemaProduct>;
 
-export const ProductCategoryFilter = {
-  andFilter: {
-    lookupGroup: 'product',
-    lookupCode: 'category',
-  },
-  limit: 999,
-  page: 1,
-  sortOptions: [
-    {
-      sortField: 'lookupCode',
-      sortOrder: 1,
-    },
-    {
-      sortField: 'lookupValue',
-      sortOrder: 1,
-    },
-  ],
-};
-
-export const ProductTypeFilter = {
-  andFilter: {
-    lookupGroup: 'product',
-    lookupCode: 'type',
-  },
-  limit: 999,
-  page: 1,
-  sortOptions: [
-    {
-      sortField: 'lookupCode',
-      sortOrder: 1,
-    },
-    {
-      sortField: 'lookupValue',
-      sortOrder: 1,
-    },
-  ],
-};
-
 export const ZodSchemaProductSellingPrices = z.object({
   _id: z.string().optional(),
   productId: z.string().optional(),

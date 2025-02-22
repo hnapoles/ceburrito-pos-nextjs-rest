@@ -2,7 +2,7 @@ import ProductCreateForm from '@/app/features/products/create/products-create-fo
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { LookupQueryResults } from '@/app/model/lookups-model';
+import { FindLookupOutput } from '@/app/model/lookups-model';
 import {
   ProductCategoryFilter,
   ProductTypeFilter,
@@ -10,7 +10,7 @@ import {
 import { FindAll, ApiOperationNames } from '@/app/model/api-model';
 
 export default async function ProductCreatePage() {
-  const lookup1 = await apiClientDq<LookupQueryResults, FindAll>(
+  const lookup1 = await apiClientDq<FindLookupOutput, FindAll>(
     'lookup',
     ApiOperationNames.FindAll,
     '',
@@ -19,7 +19,7 @@ export default async function ProductCreatePage() {
 
   const types = lookup1.data;
 
-  const lookup2 = await apiClientDq<LookupQueryResults, FindAll>(
+  const lookup2 = await apiClientDq<FindLookupOutput, FindAll>(
     'lookup',
     ApiOperationNames.FindAll,
     '',
