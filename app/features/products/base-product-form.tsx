@@ -178,9 +178,11 @@ export default function BaseProductForm({
             )}
           </div>
 
+          {/*
           <div>
             <Separator />
             <Label>Order Options:</Label>
+            <Separator />
             <Label>Sizes</Label>
             <div className="flex flex-wrap gap-2">
               {sizeOptions.map((size) => (
@@ -203,28 +205,54 @@ export default function BaseProductForm({
               ))}
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <Checkbox {...register('orderOptions.sizeAffectPricing')} />
-            <Label>Size Affects Pricing</Label>
-          </div>
-
+          */}
           <div>
-            <Label>Spice Option</Label>
-            <select
-              {...register('orderOptions.spiceOption')}
-              defaultValue={watch('orderOptions.spiceOption')}
-              className="border rounded p-2 w-full"
-            >
-              <option value="mild">Mild</option>
-              <option value="regular">Regular</option>
-              <option value="super spicy">Super Spicy</option>
-            </select>
-          </div>
+            <Separator />
+            <Label>Order Options:</Label>
+            <div className="ml-4 mt-2">
+              <Label>Sizes</Label>
+              <div className="flex flex-wrap gap-2">
+                {sizeOptions.map((size) => (
+                  <label key={size} className="flex items-center gap-2">
+                    <Checkbox
+                      checked={watch('orderOptions.sizeOption').includes(size)}
+                      onCheckedChange={(checked) => {
+                        const currentSizes =
+                          watch('orderOptions.sizeOption') || [];
+                        setValue(
+                          'orderOptions.sizeOption',
+                          checked
+                            ? [...currentSizes, size]
+                            : currentSizes.filter((s: string) => s !== size),
+                        );
+                      }}
+                    />
+                    {size}
+                  </label>
+                ))}
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                <Checkbox {...register('orderOptions.sizeAffectPricing')} />
+                <Label>Size Affects Pricing</Label>
+              </div>
+              <div className="mt-4">
+                <Label>Spice Options</Label>
+                <select
+                  {...register('orderOptions.spiceOption')}
+                  defaultValue={watch('orderOptions.spiceOption')}
+                  className="border rounded p-2 w-full"
+                >
+                  <option value="mild">Mild</option>
+                  <option value="regular">Regular</option>
+                  <option value="super spicy">Super Spicy</option>
+                </select>
+              </div>
 
-          <div className="flex items-center gap-2">
-            <Checkbox {...register('orderOptions.spiceAffectPricing')} />
-            <Label>Spice Affects Pricing</Label>
+              <div className="flex items-center gap-2 mt-2">
+                <Checkbox {...register('orderOptions.spiceAffectPricing')} />
+                <Label>Spice Affects Pricing</Label>
+              </div>
+            </div>
           </div>
 
           <div className="flex justify-between">
