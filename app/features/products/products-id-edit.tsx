@@ -1,8 +1,18 @@
 'use client';
 
+import { ProductDataBase } from '@/app/models/products-model';
 import BaseProductForm from './base-product-form';
+import { Lookup } from '@/app/models/lookups-model';
 
-export default function ProductsByIdEdit() {
+interface ProductsByIdEditProps {
+  product: ProductDataBase;
+  categoryLookups: Lookup[];
+}
+
+export default function ProductsByIdEdit({
+  product,
+  categoryLookups,
+}: ProductsByIdEditProps) {
   const handleProductSubmit = async (data: any) => {
     console.log('New Product Data:', data);
 
@@ -30,17 +40,6 @@ export default function ProductsByIdEdit() {
   };
 
   return (
-    <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-      {/* Left Side - Product Image and Details */}
-      <div>
-        <BaseProductForm
-          initialData={mockProduct}
-          onSubmit={handleProductSubmit}
-        />
-      </div>
-
-      {/* Right Side - Product Tabs */}
-      <div>Right Side</div>
-    </div>
+    <BaseProductForm initialData={mockProduct} onSubmit={handleProductSubmit} />
   );
 }

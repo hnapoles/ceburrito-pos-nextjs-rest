@@ -8,8 +8,12 @@ import {
 import NotFound from '../not-found';
 import { DefaultSizeOptions } from '@/app/models/lookups-model';
 
-import BaseProductForm from '@/app/features/products/base-product-form';
 import ProductsByIdEdit from '@/app/features/products/products-id-edit';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { WhoTabContent } from '@/app/nav/who-tab-content';
+import { UserWhoProps } from '@/app/models/users-model';
 
 //start of function
 export default async function ProductUpdatePage({
@@ -60,5 +64,48 @@ export default async function ProductUpdatePage({
       </>
     );
 
-  return <ProductsByIdEdit />;
+  const who: UserWhoProps = {
+    createdBy: product?.createdBy,
+    createdAt: product?.createdAt,
+    updatedBy: product?.updatedBy,
+    updatedAt: product?.updatedAt,
+  };
+
+  return (
+    //grid cols=2 normal, cols1 for small
+    <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+      {/* Left Side - Product Image and Details */}
+      <div>
+        <ProductsByIdEdit
+          product={product}
+          categoryLookups={categoriesLookup}
+        />
+      </div>
+      {/* Right Side - Product Tabs */}
+      <div>
+        <Tabs defaultValue="who">
+          <div className="flex items-center">
+            <TabsList>
+              <TabsTrigger value="who">Who</TabsTrigger>
+              <TabsTrigger value="prices">Prices</TabsTrigger>
+              <TabsTrigger value="attributes">Attributes</TabsTrigger>
+              <TabsTrigger value="sales">Sales</TabsTrigger>
+            </TabsList>
+          </div>
+          <TabsContent value="who" className="px-0">
+            <WhoTabContent who={who} />
+          </TabsContent>
+          <TabsContent value="prices" className="px-0">
+            Prices here...
+          </TabsContent>
+          <TabsContent value="attributes" className="px-0">
+            [future] : attributes here...
+          </TabsContent>
+          <TabsContent value="sales" className="px-0">
+            [future] : sales here...
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
 }

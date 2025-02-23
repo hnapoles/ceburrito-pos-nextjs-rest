@@ -1,32 +1,59 @@
-import ProductCreateForm from '@/app/features/products/create/products-create-form';
-
-import { apiClientDq } from '@/lib/fetch-helper';
-
-import { FindLookupOutput } from '@/app/models/lookups-model';
+import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
+import { GetProductById } from '@/app/actions/server/products-actions';
 import {
-  ProductCategoryFilter,
-  ProductTypeFilter,
-} from '@/app/models/products-model';
-import { FindAll, ApiOperationNames } from '@/app/models/api-model';
+  GetLookupCustomers,
+  GetLookups,
+  GetLookupStores,
+} from '@/app/actions/server/lookups-actions';
+import NotFound from '../not-found';
+import { DefaultSizeOptions } from '@/app/models/lookups-model';
 
-export default async function ProductCreatePage() {
-  const lookup1 = await apiClientDq<FindLookupOutput, FindAll>(
-    'lookup',
-    ApiOperationNames.FindAll,
-    '',
-    { method: 'POST', body: ProductTypeFilter },
+import ProductsByIdEdit from '@/app/features/products/products-id-edit';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { WhoTabContent } from '@/app/nav/who-tab-content';
+import { UserWhoProps } from '@/app/models/users-model';
+import ProductsCreate from '@/app/features/products/products-create';
+
+//start of function
+export default async function ProductUpdatePage() {
+  const lookups = await GetLookups('product', null);
+
+  const categoriesLookup = lookups.data.filter(
+    (item) => item.lookupCode === 'category',
+  );
+  const statusesLookup = lookups.data.filter(
+    (item) => item.lookupCode === 'status',
   );
 
-  const types = lookup1.data;
+  let { data: sizeOptionsLookup } = await GetLookups('order', 'sizeOptions');
+  if (!sizeOptionsLookup) sizeOptionsLookup = DefaultSizeOptions;
 
-  const lookup2 = await apiClientDq<FindLookupOutput, FindAll>(
-    'lookup',
-    ApiOperationNames.FindAll,
-    '',
-    { method: 'POST', body: ProductCategoryFilter },
+  //if-testing - set to true
+  if (false)
+    return (
+      <>
+        <div>Testing...</div>
+
+        <pre>categories: {JSON.stringify(categoriesLookup, null, 2)}</pre>
+        <pre>statuses: {JSON.stringify(statusesLookup, null, 2)}</pre>
+
+        <pre>
+          sizeOptionsLookup: {JSON.stringify(sizeOptionsLookup, null, 2)}
+        </pre>
+      </>
+    );
+
+  return (
+    //grid cols=2 normal, cols1 for small
+    <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+      {/* Left Side - Product Image and Details */}
+      <div>
+        <ProductsCreate categoryLookups={categoriesLookup} />
+      </div>
+      {/* Right Side - Product Tabs */}
+      <div></div>
+    </div>
   );
-
-  const categories = lookup2.data;
-
-  return <ProductCreateForm types={types} categories={categories} />;
 }

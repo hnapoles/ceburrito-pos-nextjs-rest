@@ -9,7 +9,7 @@ import {
 //import { Separator } from "@/components/ui/separator"
 
 import { WhoTabContent } from '@/app/nav/who-tab-content';
-import { IUserWho } from '@/app/models/users-model';
+import { UserWhoProps } from '@/app/models/users-model';
 
 import { TabProductPricesContent } from './tabs/tab-product-prices-content';
 
@@ -18,7 +18,7 @@ import { useGlobalStore } from '@/app/providers/zustand-provider';
 export default function ProductUpdateTabs() {
   const product = useGlobalStore((state) => state.product);
 
-  const who: IUserWho = {
+  const who: UserWhoProps = {
     createdBy: product?.createdBy,
     createdAt: product?.createdAt,
     updatedBy: product?.updatedBy,

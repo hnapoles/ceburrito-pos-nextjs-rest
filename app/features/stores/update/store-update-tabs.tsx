@@ -10,10 +10,10 @@ import {
 import { StoreData } from '@/app/models/stores-model';
 
 import { WhoTabContent } from '@/app/nav/who-tab-content';
-import { IUserWho } from '@/app/models/users-model';
+import { UserWhoProps } from '@/app/models/users-model';
 
 export default function ProductUpdateTabs({ store }: { store: StoreData }) {
-  const who: IUserWho = {
+  const who: UserWhoProps = {
     createdBy: store?.createdBy,
     createdAt: store?.createdAt,
     updatedBy: store?.updatedBy,
