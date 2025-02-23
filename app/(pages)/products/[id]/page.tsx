@@ -8,6 +8,9 @@ import {
 import NotFound from '../not-found';
 import { DefaultSizeOptions } from '@/app/models/lookups-model';
 
+import BaseProductForm from '@/app/features/products/base-product-form';
+import ProductsByIdEdit from '@/app/features/products/products-id-edit';
+
 //start of function
 export default async function ProductUpdatePage({
   params,
@@ -40,7 +43,7 @@ export default async function ProductUpdatePage({
   if (!sizeOptionsLookup) sizeOptionsLookup = DefaultSizeOptions;
 
   //if-testing - set to true
-  if (true)
+  if (false)
     return (
       <>
         <div>Testing...</div>
@@ -56,4 +59,6 @@ export default async function ProductUpdatePage({
         </pre>
       </>
     );
+
+  return <ProductsByIdEdit />;
 }
