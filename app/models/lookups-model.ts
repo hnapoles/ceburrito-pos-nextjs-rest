@@ -7,6 +7,41 @@ export interface Lookup {
   sortSeq?: number;
 }
 
+export const DefaultSizeOptions: Lookup[] = [
+  {
+    _id: '1',
+    lookupCode: 'sizeOption',
+    lookupDescription: 'Small',
+    lookupGroup: 'order',
+    lookupValue: 'S',
+    sortSeq: 1,
+  },
+  {
+    _id: '2',
+    lookupCode: 'sizeOption',
+    lookupDescription: 'Medium',
+    lookupGroup: 'order',
+    lookupValue: 'M',
+    sortSeq: 2,
+  },
+  {
+    _id: '3',
+    lookupCode: 'sizeOption',
+    lookupDescription: 'Large',
+    lookupGroup: 'order',
+    lookupValue: 'L',
+    sortSeq: 3,
+  },
+  {
+    _id: '4',
+    lookupCode: 'sizeOption',
+    lookupDescription: 'Xtra Large',
+    lookupGroup: 'order',
+    lookupValue: 'XL',
+    sortSeq: 4,
+  },
+];
+
 export interface FindLookupOutput {
   count: number;
   data: Lookup[];

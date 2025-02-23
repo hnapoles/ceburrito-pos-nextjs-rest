@@ -6,6 +6,7 @@ import {
   GetLookupStores,
 } from '@/app/actions/server/lookups-actions';
 import NotFound from '../not-found';
+import { DefaultSizeOptions } from '@/app/models/lookups-model';
 
 //start of function
 export default async function ProductUpdatePage({
@@ -34,9 +35,9 @@ export default async function ProductUpdatePage({
 
   const customers = await GetLookupCustomers();
   const stores = await GetLookupStores();
-  const { data: orderTypesLookup } = await GetLookups('order', 'type'); //specific to order and type
-
-  //get sizeOptions
+  const { data: orderTypesLookup } = await GetLookups('order', 'type'); //specific to order and type - returns count and data
+  let { data: sizeOptionsLookup } = await GetLookups('order', 'sizeOptions');
+  if (!sizeOptionsLookup) sizeOptionsLookup = DefaultSizeOptions;
 
   //if-testing - set to true
   if (true)
@@ -50,6 +51,9 @@ export default async function ProductUpdatePage({
         <pre>customersLookup: {JSON.stringify(customers, null, 2)}</pre>
         <pre>storesLookup: {JSON.stringify(stores, null, 2)}</pre>
         <pre>orderTypesLookup: {JSON.stringify(orderTypesLookup, null, 2)}</pre>
+        <pre>
+          sizeOptionsLookup: {JSON.stringify(sizeOptionsLookup, null, 2)}
+        </pre>
       </>
     );
 }
