@@ -24,11 +24,8 @@ export async function GetLookupsOrderTypes() {
 
 export async function GetLookupCustomers() {
   const apiProps: FindAllProps = {
-    entity: 'customer',
-    //keyword: keyword,
-    //searchKeywordFields: ['name'],
     andFilter: {
-      staus: 'active',
+      status: 'active',
     },
     page: 1,
     limit: 99999,
@@ -41,7 +38,7 @@ export async function GetLookupCustomers() {
       '',
       { method: 'POST', body: apiProps },
     );
-    return results;
+    return results.data; //return data only - exclude count
   } catch (error) {
     console.log('error calling api ', error);
     throw error;
@@ -50,11 +47,8 @@ export async function GetLookupCustomers() {
 
 export async function GetLookupStores() {
   const apiProps: FindAllProps = {
-    entity: 'store',
-    //keyword: keyword,
-    //searchKeywordFields: ['name'],
     andFilter: {
-      staus: 'active',
+      status: 'active',
     },
     page: 1,
     limit: 99999,
@@ -67,7 +61,7 @@ export async function GetLookupStores() {
       '',
       { method: 'POST', body: apiProps },
     );
-    return results;
+    return results.data; //return data only - exclude count
   } catch (error) {
     console.log('error calling api ', error);
     throw error;
@@ -80,18 +74,21 @@ export async function GetLookups(group: string | null, code: string | null) {
     andFilter = {
       lookupGroup: group,
       lookupCode: code,
+      status: 'active',
     };
   }
 
   if (group && !code) {
     andFilter = {
       lookupGroup: group,
+      //status: 'active',
     };
   }
 
   if (!group && code) {
     andFilter = {
       lookupCode: code,
+      status: 'active',
     };
   }
 
@@ -118,5 +115,6 @@ export async function GetLookups(group: string | null, code: string | null) {
     { method: 'POST', body: lookupProps },
   );
 
-  return lookups;
+  if (lookups) return lookups;
+  return { count: 0, data: [] }; //catch all
 }
