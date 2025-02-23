@@ -17,7 +17,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-import { Separator } from '@radix-ui/react-dropdown-menu';
+import { Separator } from '@/components/ui/separator';
 
 interface BaseProductFormProps {
   initialData?: {
@@ -179,8 +179,8 @@ export default function BaseProductForm({
           </div>
 
           <div>
+            <Separator />
             <Label>Order Options:</Label>
-            <Separator className="my-4" />
             <Label>Sizes</Label>
             <div className="flex flex-wrap gap-2">
               {sizeOptions.map((size) => (

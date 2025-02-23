@@ -50,7 +50,10 @@ export default async function ProductUpdatePage() {
     <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
       {/* Left Side - Product Image and Details */}
       <div>
-        <ProductsCreate categoryLookups={categoriesLookup} />
+        <ProductsCreate
+          categoryLookups={categoriesLookup}
+          statusLookups={statusesLookup}
+        />
       </div>
       {/* Right Side - Product Tabs */}
       <div></div>

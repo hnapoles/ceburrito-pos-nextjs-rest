@@ -79,6 +79,7 @@ export default async function ProductUpdatePage({
         <ProductsByIdEdit
           product={product}
           categoryLookups={categoriesLookup}
+          statusLookups={statusesLookup}
         />
       </div>
       {/* Right Side - Product Tabs */}

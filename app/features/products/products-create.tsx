@@ -6,10 +6,12 @@ import { Lookup } from '@/app/models/lookups-model';
 
 interface ProductsByIdEditProps {
   categoryLookups: Lookup[];
+  statusLookups: Lookup[];
 }
 
 export default function ProductsCreate({
   categoryLookups,
+  statusLookups,
 }: ProductsByIdEditProps) {
   const handleProductSubmit = async (data: any) => {
     console.log('New Product Data:', data);
