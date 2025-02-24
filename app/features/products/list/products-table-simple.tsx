@@ -37,7 +37,7 @@ export default function ProductsTableSimple({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const rowsPerPage = 10;
+  const rowsPerPage = limit;
 
   function prevPage() {
     router.back();
@@ -66,7 +66,8 @@ export default function ProductsTableSimple({
               <TableHead>Name</TableHead>
               <TableHead>Description</TableHead>
               <TableHead className="hidden md:table-cell">ID</TableHead>
-              <TableHead className="hidden md:table-cell">Created at</TableHead>
+              <TableHead className="hidden md:table-cell">Updated At</TableHead>
+              <TableHead className="hidden md:table-cell">Updated By</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
               </TableHead>
@@ -79,7 +80,7 @@ export default function ProductsTableSimple({
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter>
+      {/*<CardFooter>
         <form className="flex items-center w-full justify-between">
           <div className="text-xs text-muted-foreground">
             Showing{' '}
@@ -106,6 +107,41 @@ export default function ProductsTableSimple({
               size="sm"
               type="submit"
               disabled={limit > totalDataCount}
+            >
+              Next
+              <ChevronRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </form>
+      </CardFooter>
+      */}
+      <CardFooter>
+        <form className="flex items-center w-full justify-between">
+          <div className="text-xs text-muted-foreground">
+            Showing{' '}
+            <strong>
+              {totalDataCount > 0 ? (page - 1) * rowsPerPage + 1 : 0}-
+              {Math.min(page * rowsPerPage, totalDataCount)}
+            </strong>{' '}
+            of <strong>{totalDataCount}</strong> products
+          </div>
+          <div className="flex">
+            <Button
+              formAction={prevPage}
+              variant="ghost"
+              size="sm"
+              type="submit"
+              disabled={page <= 1}
+            >
+              <ChevronLeft className="mr-2 h-4 w-4" />
+              Prev
+            </Button>
+            <Button
+              formAction={nextPage}
+              variant="ghost"
+              size="sm"
+              type="submit"
+              disabled={page * rowsPerPage >= totalDataCount}
             >
               Next
               <ChevronRight className="ml-2 h-4 w-4" />

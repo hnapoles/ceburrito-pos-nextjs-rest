@@ -89,34 +89,34 @@ export default function ProductsTableRow({
       </TableCell>
       <TableCell className="hidden md:table-cell">{product._id}</TableCell>
       <TableCell className="hidden md:table-cell">
-        {product.createdAt?.toLocaleString()}
+        {product.updatedAt?.toLocaleString()}
+      </TableCell>
+      <TableCell className="hidden md:table-cell">
+        {product.updatedBy}
       </TableCell>
       <TableCell>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button aria-haspopup="true" size="icon" variant="ghost">
+              <MoreHorizontal className="h-4 w-4" />
+              <span className="sr-only">Toggle menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <Link href={editLink}>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+            </Link>
+            <DropdownMenuItem
+              className={product.status === 'archived' ? 'block' : 'hidden'}
+            >
+              <button onClick={() => handleOpenDialog(product?._id || '')}>
+                Delete
+              </button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          {/* Dropdown Menu Inside the Dialog */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button aria-haspopup="true" size="icon" variant="ghost">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <Link href={editLink}>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem
-                className={product.status === 'archived' ? 'block' : 'hidden'}
-              >
-                <button onClick={() => handleOpenDialog(product?._id || '')}>
-                  Delete
-                </button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Dialog Content */}
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Delete Product</DialogTitle>
