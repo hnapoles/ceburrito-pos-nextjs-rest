@@ -39,7 +39,7 @@ import {
   Tooltip,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ProductSellingPriceDataBase } from '@/app/models/products-model';
+import { ProductSellingPriceBase } from '@/app/models/products-model';
 import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
 
 import { Label } from '@/components/ui/label';
@@ -71,7 +71,7 @@ import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 import {
   ProductZodSchema,
-  ProductDataBase,
+  ProductBase,
   ProductSellingPriceZodSchema,
 } from '@/app/models/products-model';
 
@@ -110,7 +110,7 @@ export default function TabProductPriceContentTopCard({
   }, []);
   */
 
-  const [prices, setPrices] = useState<ProductSellingPriceDataBase>();
+  const [prices, setPrices] = useState<ProductSellingPriceBase>();
 
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
 
@@ -170,7 +170,7 @@ export default function TabProductPriceContentTopCard({
     return <div>Loading...</div>;
   }
 
-  async function onSubmit(data: ProductSellingPriceDataBase) {
+  async function onSubmit(data: ProductSellingPriceBase) {
     //delete data._id;
     //const productCreated = await CreateProduct(data);
     console.log('Submitting...');
@@ -209,7 +209,7 @@ export default function TabProductPriceContentTopCard({
 
   /*
   const [prices, setPrices] = useState<
-    ProductSellingPriceDataBase | null | undefined
+    ProductSellingPriceBase | null | undefined
   >(p);
 
   useEffect(() => {
@@ -228,7 +228,7 @@ export default function TabProductPriceContentTopCard({
   }
   */
 
-  const defaultValues: ProductSellingPriceDataBase = {
+  const defaultValues: ProductSellingPriceBase = {
     _id: dialogId ?? undefined,
     productId: prices?.productId,
     orderType: prices?.orderType || '',
@@ -237,7 +237,7 @@ export default function TabProductPriceContentTopCard({
     sellingPrice: 0.0,
   };
 
-  const form = useForm<ProductSellingPriceDataBase>({
+  const form = useForm<ProductSellingPriceBase>({
     resolver: zodResolver(ProductSellingPriceZodSchema),
     defaultValues: defaultValues,
     mode: 'onBlur',

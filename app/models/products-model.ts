@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { Lookup } from './lookups-model';
 
 export const ProductZodSchema = z.object({
   _id: z.string().optional(), // MongoDB ObjectID (can be omitted)
@@ -26,6 +27,7 @@ export const ProductZodSchema = z.object({
     .max(32, 'Status must not exceed 32 characters'),
   activeAt: z.string().datetime().optional(), // ISO 8601 format expected
   disabledAt: z.string().datetime().optional(),
+  archivedAt: z.string().datetime().optional(),
   imageUrl: z.string().optional(),
   sizeOptions: z.array(z.string()).optional(),
   spiceOptions: z.array(z.string()).optional(),
@@ -35,18 +37,19 @@ export const ProductZodSchema = z.object({
   updatedBy: z.string().optional(),
 });
 
-export type ProductDataBase = z.infer<typeof ProductZodSchema>;
+export type ProductBase = z.infer<typeof ProductZodSchema>;
 
 export interface FindProductsOutput {
   count: number;
-  data: ProductDataBase[];
+  data: ProductBase[];
 }
 
 export interface ProductsListProps {
-  products: ProductDataBase[];
+  products: ProductBase[];
   limit: number | 10;
   page: number | 1;
   totalDataCount: number | 1;
+  statusesLookup: Lookup[];
 }
 
 export const ProductSellingPriceZodSchema = z.object({
@@ -78,11 +81,11 @@ export const ProductSellingPriceZodSchema = z.object({
   updatedBy: z.string().optional(),
 });
 
-export type ProductSellingPriceDataBase = z.infer<
+export type ProductSellingPriceBase = z.infer<
   typeof ProductSellingPriceZodSchema
 >;
 
 export interface FindProductSellingPricesOutput {
   count: number;
-  data: ProductSellingPriceDataBase[];
+  data: ProductSellingPriceBase[];
 }

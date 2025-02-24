@@ -74,21 +74,21 @@ export async function GetLookups(group: string | null, code: string | null) {
     andFilter = {
       lookupGroup: group,
       lookupCode: code,
-      status: 'active',
+      isActive: true,
     };
   }
 
   if (group && !code) {
     andFilter = {
       lookupGroup: group,
-      //status: 'active',
+      isActive: true,
     };
   }
 
   if (!group && code) {
     andFilter = {
       lookupCode: code,
-      status: 'active',
+      isActive: true,
     };
   }
 

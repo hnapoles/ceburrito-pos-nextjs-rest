@@ -18,6 +18,7 @@ const ProductsMainPage: React.FC<ProductsListProps> = ({
   limit,
   page,
   totalDataCount,
+  statusesLookup,
 }) => {
   const pathname = usePathname();
   const createLink = `${pathname}/create`;

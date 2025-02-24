@@ -66,9 +66,9 @@ export default async function ProductUpdatePage({
 
   const who: UserWhoProps = {
     createdBy: product?.createdBy,
-    createdAt: product?.createdAt,
+    createdAt: product?.createdAt ? new Date(product.createdAt) : undefined,
     updatedBy: product?.updatedBy,
-    updatedAt: product?.updatedAt,
+    updatedAt: product?.updatedAt ? new Date(product.updatedAt) : undefined,
   };
 
   return (

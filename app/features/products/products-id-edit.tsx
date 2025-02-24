@@ -1,11 +1,11 @@
 'use client';
 
-import { ProductDataBase } from '@/app/models/products-model';
+import { ProductBase } from '@/app/models/products-model';
 import BaseProductForm from './base-product-form';
 import { Lookup } from '@/app/models/lookups-model';
 
 interface ProductsByIdEditProps {
-  product: ProductDataBase;
+  product: ProductBase;
   categoryLookups: Lookup[];
   statusLookups: Lookup[];
 }

@@ -42,8 +42,8 @@ import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 import {
   ProductZodSchema,
-  ProductDataBase,
-  ProductSellingPriceDataBase,
+  ProductBase,
+  ProductSellingPriceBase,
   ProductSellingPriceZodSchema,
 } from '@/app/models/products-model';
 
@@ -110,7 +110,7 @@ export default function TabProductPricesFormUpdate({
     }
   };
 
-  const [prices, setPrices] = useState<ProductSellingPriceDataBase>();
+  const [prices, setPrices] = useState<ProductSellingPriceBase>();
 
   /*
   const fetchData = useCallback(async () => {
@@ -151,7 +151,7 @@ export default function TabProductPricesFormUpdate({
 
   console.log('p ', prices);
 
-  const defaultValues: ProductSellingPriceDataBase = {
+  const defaultValues: ProductSellingPriceBase = {
     _id: dialogId ?? undefined,
     productId: prices?.productId,
     orderType: prices?.orderType || '',
@@ -159,7 +159,7 @@ export default function TabProductPricesFormUpdate({
     sellingPrice: prices?.sellingPrice || undefined,
   };
 
-  const form = useForm<ProductSellingPriceDataBase>({
+  const form = useForm<ProductSellingPriceBase>({
     resolver: zodResolver(ProductSellingPriceZodSchema),
     defaultValues: defaultValues,
     mode: 'onBlur',
@@ -175,7 +175,7 @@ export default function TabProductPricesFormUpdate({
     },
   } = form;
 
-  async function onSubmit(data: ProductSellingPriceDataBase) {
+  async function onSubmit(data: ProductSellingPriceBase) {
     //delete data._id;
     //const productCreated = await CreateProduct(data);
     console.log('Submitting...');

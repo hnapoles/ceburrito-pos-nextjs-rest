@@ -2,7 +2,7 @@
 
 import {
   FindProductSellingPricesOutput,
-  ProductSellingPriceDataBase,
+  ProductSellingPriceBase,
 } from '@/app/models/products-model';
 
 import { apiClientDq } from '@/lib/fetch-helper';
@@ -50,7 +50,7 @@ export async function GetProductSellingPricesByProductId(id: string) {
 }
 
 /*
-const product = await apiClientDq<ProductDataBase, FindOne>(
+const product = await apiClientDq<ProductBase, FindOne>(
     'product',
     ApiOperationNames.FindOne,
     id,
@@ -64,7 +64,7 @@ export async function GetProductSellingPricesByOwnId(id: string) {
 
   console.log('id in api call ', id);
 
-  const result = await apiClientDq<ProductSellingPriceDataBase, FindOneProps>(
+  const result = await apiClientDq<ProductSellingPriceBase, FindOneProps>(
     entity,
     ApiOperationNames.FindOne,
     id,
@@ -88,7 +88,7 @@ export interface FetchOptions<T = unknown> {
 }
 
 export async function CreateProductSellingPrices(
-  data: ProductSellingPriceDataBase,
+  data: ProductSellingPriceBase,
 ) {
   const entity = 'product_selling_price';
   const operation = ApiOperationNames.Create;
@@ -96,8 +96,8 @@ export async function CreateProductSellingPrices(
   const method = 'POST';
 
   const result = await apiClientDq<
-    ProductSellingPriceDataBase,
-    ProductSellingPriceDataBase
+    ProductSellingPriceBase,
+    ProductSellingPriceBase
   >(entity, operation, id, { method: method, body: data });
 
   return result;

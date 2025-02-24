@@ -27,7 +27,7 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-import { ProductDataBase } from '@/app/models/products-model';
+import { ProductBase } from '@/app/models/products-model';
 
 import { DeleteProductById } from '@/app/actions/server/products-actions';
 
@@ -38,7 +38,7 @@ import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 export default function ProductsTableRow({
   product,
 }: {
-  product: ProductDataBase;
+  product: ProductBase;
 }) {
   const pathname = usePathname();
 

@@ -30,7 +30,7 @@ import { Input } from '@/components/ui/input';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
-import { ProductZodSchema, ProductDataBase } from '@/app/models/products-model';
+import { ProductZodSchema, ProductBase } from '@/app/models/products-model';
 import { Lookup } from '@/app/models/lookups-model';
 import { UpdateProduct } from '@/app/actions/server/products-actions';
 
@@ -47,7 +47,7 @@ export default function ProductUpdateFormDetails({
 }) {
   const product = useGlobalStore((state) => state.product);
 
-  let defaultValues: ProductDataBase = {
+  let defaultValues: ProductBase = {
     _id: product?._id || '',
     name: product?.name ?? '',
     description: product?.description ?? '',
@@ -69,7 +69,7 @@ export default function ProductUpdateFormDetails({
     };
   }
 
-  const form = useForm<ProductDataBase>({
+  const form = useForm<ProductBase>({
     resolver: zodResolver(ProductZodSchema),
     defaultValues: defaultValues,
     mode: 'onBlur',
@@ -92,7 +92,7 @@ export default function ProductUpdateFormDetails({
     },
   } = form;
 
-  async function onSubmit(data: ProductDataBase) {
+  async function onSubmit(data: ProductBase) {
     console.log('create form data');
     console.log(data);
     data = {

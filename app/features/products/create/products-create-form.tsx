@@ -36,12 +36,12 @@ import {
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
-import { ProductZodSchema, ProductDataBase } from '@/app/models/products-model';
+import { ProductZodSchema, ProductBase } from '@/app/models/products-model';
 import { Lookup } from '@/app/models/lookups-model';
 
 import { CreateProduct } from '@/app/actions/server/products-actions';
 
-const defaultValues: ProductDataBase = {
+const defaultValues: ProductBase = {
   _id: '',
   name: '',
   description: '',
@@ -61,7 +61,7 @@ export default function ProductCreateForm({
   //const pathname = usePathname();
   //const [preview, setPreview] = useState<string | null>(null);
 
-  const form = useForm<ProductDataBase>({
+  const form = useForm<ProductBase>({
     resolver: zodResolver(ProductZodSchema),
     defaultValues: defaultValues,
     mode: 'onBlur',
@@ -82,7 +82,7 @@ export default function ProductCreateForm({
     },
   } = form;
 
-  async function onSubmit(data: ProductDataBase) {
+  async function onSubmit(data: ProductBase) {
     delete data._id;
     const productCreated = await CreateProduct(data);
 
