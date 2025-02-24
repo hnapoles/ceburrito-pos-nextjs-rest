@@ -51,10 +51,11 @@ export default function ProductUpdateFormDetails({
     _id: product?._id || '',
     name: product?.name ?? '',
     description: product?.description ?? '',
-    price: product?.price ?? 0.0,
+    basePrice: product?.basePrice ?? 0.0,
     type: product?.type || '',
     category: product?.category ?? '',
     imageUrl: product?.imageUrl ?? '',
+    status: product?.status ?? 'draft',
   };
 
   if (product) {
@@ -62,10 +63,11 @@ export default function ProductUpdateFormDetails({
       _id: product?._id || '',
       name: product?.name ?? '',
       description: product?.description ?? '',
-      price: product?.price ?? 0.0,
+      basePrice: product?.basePrice ?? 0.0,
       type: product?.type || '',
       category: product?.category ?? '',
       imageUrl: product?.imageUrl ?? '',
+      status: product?.status ?? 'draft',
     };
   }
 
@@ -163,7 +165,7 @@ export default function ProductUpdateFormDetails({
 
           <FormField
             control={form.control}
-            name="price"
+            name="basePrice"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Price</FormLabel>

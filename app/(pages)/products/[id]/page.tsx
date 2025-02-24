@@ -8,7 +8,7 @@ import {
 import NotFound from '../not-found';
 import { DefaultSizeOptions } from '@/app/models/lookups-model';
 
-import ProductsByIdEdit from '@/app/features/products/products-id-edit';
+import ProductsByIdEdit from '@/app/features/products/edit/products-id-edit';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 

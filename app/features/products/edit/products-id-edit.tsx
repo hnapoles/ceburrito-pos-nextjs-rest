@@ -6,12 +6,13 @@ import { Lookup } from '@/app/models/lookups-model';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
-import { CreateProduct } from '@/app/actions/server/products-actions';
+import { UpdateProduct } from '@/app/actions/server/products-actions';
 import { UploadFileSingle } from '@/app/actions/server/files-actions';
 
 import { toast } from '@/hooks/use-toast';
 
 interface ProductsByIdEditProps {
+  product: ProductBase;
   categoryLookups: Lookup[];
   statusLookups: Lookup[];
 }
@@ -20,11 +21,11 @@ const entity = 'product';
 const base =
   process.env.APP_API_SERVER_URL || 'https://posapi-dev.ceburrito.ph';
 
-export default function ProductsCreate({
+export default function ProductsByIdEdit({
+  product,
   categoryLookups,
   statusLookups,
 }: ProductsByIdEditProps) {
-  //handleSubmit
   const handleProductSubmit = async (data: any) => {
     let newImageUrl = '';
     if (data.imageFile) {
@@ -35,17 +36,16 @@ export default function ProductsCreate({
       newImageUrl = `${base}/public/${uploaded.fileName}`;
     }
 
-    delete data._id;
     delete data.imageFile;
     data.imageUrl = newImageUrl;
-    const productCreated = await CreateProduct(data);
 
+    const productUpdated = await UpdateProduct(data);
     toast({
       title: 'Data saved',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">
-            {JSON.stringify(productCreated, null, 2)}
+            {JSON.stringify(productUpdated, null, 2)}
           </code>
         </pre>
       ),
@@ -55,6 +55,7 @@ export default function ProductsCreate({
 
   return (
     <BaseProductForm
+      initialData={product}
       onSubmit={handleProductSubmit}
       categories={categoryLookups}
       statuses={statusLookups}
