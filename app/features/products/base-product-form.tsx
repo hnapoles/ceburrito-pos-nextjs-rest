@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -17,51 +18,65 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-import { Separator } from '@/components/ui/separator';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 
-interface BaseProductFormProps {
-  initialData?: {
-    name: string;
-    description: string;
-    price: number;
-    status: string;
-    imageUrl?: string;
-    orderOptions: {
-      sizeOption: string[];
-      sizeAffectPricing: boolean;
-      spiceOption: 'mild' | 'regular' | 'super spicy';
-      spiceAffectPricing: boolean;
-    };
-  };
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+import { Separator } from '@/components/ui/separator';
+import { ProductBase, ProductZodSchema } from '@/app/models/products-model';
+import { Lookup } from '@/app/models/lookups-model';
+
+interface baseProductFormProps {
+  initialData?: ProductBase;
+  categories: Lookup[];
+  statuses: Lookup[];
   onSubmit: (data: any) => void;
 }
 
 export default function BaseProductForm({
   initialData,
+  categories,
+  statuses,
   onSubmit,
-}: BaseProductFormProps) {
+}: baseProductFormProps) {
   const router = useRouter();
+
+  const form = useForm<ProductBase>({
+    resolver: zodResolver(ProductZodSchema),
+    defaultValues: initialData || {
+      _id: '',
+      name: '',
+      description: '',
+      basePrice: undefined,
+      status: 'draft',
+      imageUrl: '',
+      sizeOptions: [],
+      spiceOptions: [],
+    },
+    mode: 'onBlur',
+  });
+
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-    formState: { isDirty },
-  } = useForm({
-    defaultValues: initialData || {
-      name: '',
-      description: '',
-      price: 0,
-      status: 'active',
-      imageUrl: '',
-      orderOptions: {
-        sizeOption: [],
-        sizeAffectPricing: false,
-        spiceOption: 'regular',
-        spiceAffectPricing: false,
-      },
-    },
-  });
+    formState: { isDirty, isSubmitting },
+  } = form;
 
   const [imagePreview, setImagePreview] = useState<string | null>(
     initialData?.imageUrl || null,
@@ -111,159 +126,177 @@ export default function BaseProductForm({
 
   const sizeOptions = ['S', 'M', 'L', 'XL'];
 
+  //
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{initialData ? 'Edit Product' : 'Insert Product'}</CardTitle>
+        <CardTitle>{initialData ? 'Edit Product' : 'New Product'}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label>Name</Label>
-            <Input
-              {...register('name')}
-              placeholder="Enter product name"
-              required
-            />
-          </div>
-
-          <div>
-            <Label>Description</Label>
-            <Textarea
-              {...register('description')}
-              placeholder="Enter product description"
-              required
-            />
-          </div>
-
-          <div>
-            <Label>Price</Label>
-            <Input
-              type="number"
-              step="0.01"
-              {...register('price')}
-              placeholder="Enter product price"
-              required
-            />
-          </div>
-
-          <div>
-            <Label>Status</Label>
-            <select
-              {...register('status')}
-              defaultValue={watch('status')}
-              className="border rounded p-2 w-full"
-            >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-          </div>
-
-          <div>
-            <Label>Image</Label>
-            {imagePreview ? (
-              <div className="relative w-full cursor-pointer">
-                <img
-                  src={imagePreview}
-                  alt="Product Image"
-                  className="mt-2 w-full h-auto rounded-lg"
-                  onClick={() => {
-                    setImagePreview(null);
-                    setValue('imageUrl', '');
-                  }}
-                />
-              </div>
-            ) : (
-              <Input type="file" accept="image/*" onChange={handleFileUpload} />
+        {/* form details */}
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full md:space-y-3 space-y-1"
+          >
+            {initialData && (
+              <FormField
+                control={form.control}
+                name="_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Id</FormLabel>
+                    <Input placeholder="" readOnly {...field} />
+                    <FormDescription>
+                      This is a system generated id .
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             )}
-          </div>
 
-          {/*
-          <div>
-            <Separator />
-            <Label>Order Options:</Label>
-            <Separator />
-            <Label>Sizes</Label>
-            <div className="flex flex-wrap gap-2">
-              {sizeOptions.map((size) => (
-                <label key={size} className="flex items-center gap-2">
-                  <Checkbox
-                    checked={watch('orderOptions.sizeOption').includes(size)}
-                    onCheckedChange={(checked) => {
-                      const currentSizes =
-                        watch('orderOptions.sizeOption') || [];
-                      setValue(
-                        'orderOptions.sizeOption',
-                        checked
-                          ? [...currentSizes, size]
-                          : currentSizes.filter((s: string) => s !== size),
-                      );
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Product Name</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Enter product name"
+                    {...field}
+                  />
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <Textarea
+                    placeholder="Enter product description"
+                    {...field}
+                  />
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    {...field}
+                    value={field.value || ''}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select product category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories.map((l) => (
+                        <SelectItem key={l.lookupValue} value={l.lookupValue}>
+                          {l.lookupDescription}{' '}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="basePrice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <Input
+                    type="number"
+                    step="0.01" // Allows decimals
+                    placeholder=""
+                    value={field.value ?? ''} // Ensures the input field shows empty when undefined
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      // Allow empty input (user deletes the value)
+                      if (value === '') {
+                        field.onChange(undefined); // Pass undefined instead of an empty string
+                        return;
+                      }
+
+                      // Convert input to a valid number
+                      const numericValue = parseFloat(value);
+
+                      if (!isNaN(numericValue)) {
+                        field.onChange(numericValue); // Ensure a number is passed
+                      }
+                    }}
+                    onBlur={() => {
+                      if (field.value !== undefined && !isNaN(field.value)) {
+                        field.onChange(parseFloat(field.value.toFixed(2))); // Maintain numeric type
+                      }
                     }}
                   />
-                  {size}
-                </label>
-              ))}
-            </div>
-          </div>
-          */}
-          <div>
-            <Separator />
-            <Label>Order Options:</Label>
-            <div className="ml-4 mt-2">
-              <Label>Sizes</Label>
-              <div className="flex flex-wrap gap-2">
-                {sizeOptions.map((size) => (
-                  <label key={size} className="flex items-center gap-2">
-                    <Checkbox
-                      checked={watch('orderOptions.sizeOption').includes(size)}
-                      onCheckedChange={(checked) => {
-                        const currentSizes =
-                          watch('orderOptions.sizeOption') || [];
-                        setValue(
-                          'orderOptions.sizeOption',
-                          checked
-                            ? [...currentSizes, size]
-                            : currentSizes.filter((s: string) => s !== size),
-                        );
-                      }}
-                    />
-                    {size}
-                  </label>
-                ))}
-              </div>
-              <div className="flex items-center gap-2 mt-2">
-                <Checkbox {...register('orderOptions.sizeAffectPricing')} />
-                <Label>Size Affects Pricing</Label>
-              </div>
-              <div className="mt-4">
-                <Label>Spice Options</Label>
-                <select
-                  {...register('orderOptions.spiceOption')}
-                  defaultValue={watch('orderOptions.spiceOption')}
-                  className="border rounded p-2 w-full"
-                >
-                  <option value="mild">Mild</option>
-                  <option value="regular">Regular</option>
-                  <option value="super spicy">Super Spicy</option>
-                </select>
-              </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <div className="flex items-center gap-2 mt-2">
-                <Checkbox {...register('orderOptions.spiceAffectPricing')} />
-                <Label>Spice Affects Pricing</Label>
-              </div>
-            </div>
-          </div>
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    {...field}
+                    value={field.value || ''}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select product status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {statuses.map((l) => (
+                        <SelectItem key={l.lookupValue} value={l.lookupValue}>
+                          {l.lookupDescription}{' '}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-          <div className="flex justify-between">
-            <Button type="button" variant="outline" onClick={handleCancel}>
-              Cancel
-            </Button>
-            <Button type="submit">
-              {initialData ? 'Update' : 'Insert'} Product
-            </Button>
-          </div>
-        </form>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-between">
+              <Button type="button" variant="outline" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting || !isDirty}>
+                {isSubmitting ? 'Submitting...' : 'Save'}
+              </Button>
+            </div>
+          </form>
+        </Form>
+        {/* end - form details */}
       </CardContent>
 
       {/* Discard Changes Confirmation Dialog */}

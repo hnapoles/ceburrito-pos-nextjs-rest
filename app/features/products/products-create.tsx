@@ -25,5 +25,11 @@ export default function ProductsCreate({
     */
   };
 
-  return <BaseProductForm onSubmit={handleProductSubmit} />;
+  return (
+    <BaseProductForm
+      onSubmit={handleProductSubmit}
+      categories={categoryLookups}
+      statuses={statusLookups}
+    />
+  );
 }
