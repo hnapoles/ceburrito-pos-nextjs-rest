@@ -1,39 +1,40 @@
 import { z } from 'zod';
 
 export const ProductZodSchema = z.object({
-  _id: z.string().optional(),
+  _id: z.string().optional(), // MongoDB ObjectID (can be omitted)
   name: z
     .string()
-    .min(6, {
-      message: 'Name must be at least 6 characters.',
-    })
-    .max(30, {
-      message: 'Name must not be longer than 30 characters.',
-    }),
+    .min(6, 'Name must be at least 6 characters')
+    .max(32, 'Name must not exceed 32 characters'),
   description: z
     .string()
-    .min(6, {
-      message: 'Description must be at least 6 characters.',
-    })
-    .max(60, {
-      message: 'Description must not be longer than 60 characters.',
-    }),
-  imageUrl: z.string().optional(),
-  price: z.coerce
+    .min(6, 'Description must be at least 6 characters')
+    .max(64, 'Description must not exceed 64 characters'),
+  type: z.string().optional(),
+  category: z
+    .string()
+    .min(3, 'Category must be at least 3 characters')
+    .max(32, 'Category must not exceed 32 characters'),
+  basePrice: z.coerce
     .number()
     .min(0.01, 'Price must be at least 0.01')
     .max(1000000, 'Price cannot exceed 1,000,000')
     .multipleOf(0.01, 'Price must be a valid decimal with two places'),
-  type: z.string().optional(),
-  status: z.string().optional(),
-  category: z.string({
-    required_error: 'Please select a product category.',
-  }),
+  status: z
+    .string()
+    .min(3, 'Status must be at least 3 characters')
+    .max(32, 'Status must not exceed 32 characters'),
+  activeAt: z.string().datetime().optional(), // ISO 8601 format expected
+  disabledAt: z.string().datetime().optional(),
+  imageUrl: z.string().optional(),
+  sizeOptions: z.array(z.string()).optional(),
+  spiceOptions: z.array(z.string()).optional(),
+  createdAt: z.string().datetime().optional(),
+  updatedAt: z.string().datetime().optional(),
   createdBy: z.string().optional(),
-  createdAt: z.date().optional(),
   updatedBy: z.string().optional(),
-  updatedAt: z.date().optional(),
 });
+
 export type ProductDataBase = z.infer<typeof ProductZodSchema>;
 
 export interface FindProductsOutput {
@@ -64,16 +65,17 @@ export const ProductSellingPriceZodSchema = z.object({
   storeName: z.string().optional(),
   customerId: z.string().optional(),
   customerName: z.string().optional(),
+  size: z.string().optional(),
   sellingPrice: z.coerce
     .number()
     .min(0.01, 'Selling Price must be at least 0.01')
     .max(1000000, 'Selling Price cannot exceed 1,000,000')
     .multipleOf(0.01, 'Selling Price must be a valid decimal with two places')
     .optional(),
+  createdAt: z.string().datetime().optional(),
+  updatedAt: z.string().datetime().optional(),
   createdBy: z.string().optional(),
-  createdAt: z.date().optional(),
   updatedBy: z.string().optional(),
-  updatedAt: z.date().optional(),
 });
 
 export type ProductSellingPriceDataBase = z.infer<
