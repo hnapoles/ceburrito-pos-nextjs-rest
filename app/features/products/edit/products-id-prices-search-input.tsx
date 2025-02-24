@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Spinner } from '@/app/nav/icons';
 import { Search } from 'lucide-react';
 
-export function ProductSearchInput() {
+export function ProductsByIdPricesSearchInput() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();

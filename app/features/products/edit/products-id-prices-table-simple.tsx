@@ -52,8 +52,8 @@ export default function ProductsByIdPricesTableSimple({
   }
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="border-none shadow-none">
+      <CardHeader className="hidden">
         <CardTitle>Product Selling Prices</CardTitle>
       </CardHeader>
       <CardContent>

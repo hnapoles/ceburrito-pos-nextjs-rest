@@ -28,6 +28,8 @@ import {
 } from '@/components/ui/card';
 import ProductsByIdPricesTableSimple from '@/app/features/products/edit/products-id-prices-table-simple';
 
+import { ProductsByIdPricesSearchInput } from '@/app/features/products/edit/products-id-prices-search-input';
+
 //start of function
 export default async function ProductUpdatePage({
   params,
