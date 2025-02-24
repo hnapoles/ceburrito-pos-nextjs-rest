@@ -1,7 +1,7 @@
 'use client';
 
 import { ProductBase } from '@/app/models/products-model';
-import BaseProductForm from '../base/base-product-form';
+import BaseProductForm from '../base/product-form';
 import { Lookup } from '@/app/models/lookups-model';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
@@ -19,7 +19,10 @@ interface ProductsByIdEditProps {
 
 const entity = 'product';
 const base =
-  process.env.APP_API_SERVER_URL || 'https://posapi-dev.ceburrito.ph';
+  process.env.NEXT_PUBLIC_APP_API_SERVER_URL ||
+  'https://posapi-dev.ceburrito.ph';
+
+const appInstance = process.env.NEXT_PUBLIC_APP_INSTANCE || 'dev';
 
 export default function ProductsByIdEdit({
   product,
@@ -40,16 +43,29 @@ export default function ProductsByIdEdit({
     data.imageUrl = newImageUrl;
 
     const productUpdated = await UpdateProduct(data);
-    toast({
-      title: 'Data saved',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">
-            {JSON.stringify(productUpdated, null, 2)}
-          </code>
-        </pre>
-      ),
-    });
+    if (appInstance === 'prod') {
+      toast({
+        title: 'Update success',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              {`Product name : ${productUpdated.name}`}
+            </code>
+          </pre>
+        ),
+      });
+    } else {
+      toast({
+        title: 'Update success',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              {JSON.stringify(productUpdated, null, 2)}
+            </code>
+          </pre>
+        ),
+      });
+    }
     revalidateAndRedirectUrl('/products');
   };
 

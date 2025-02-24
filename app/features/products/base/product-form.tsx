@@ -88,7 +88,7 @@ export default function BaseProductForm({
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || undefined;
 
-    setValue('imageFile', file);
+    setValue('imageFile', file, { shouldDirty: true });
 
     if (file) {
       const reader = new FileReader();
@@ -116,34 +116,6 @@ export default function BaseProductForm({
     initialData?.imageUrl || null,
   );
   const [showDialog, setShowDialog] = useState(false);
-
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    /*
-    const response = await fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (response.ok) {
-      const { imageUrl } = await response.json();
-      setValue('imageUrl', imageUrl);
-      setImagePreview(imageUrl);
-    }
-    */
-    if (true) {
-      const imageUrl = 'http://localhost:3000/images/products/heart.png';
-      setValue('imageUrl', imageUrl);
-      setImagePreview(imageUrl);
-    }
-  };
 
   const handleCancel = () => {
     if (isDirty) {
@@ -191,6 +163,11 @@ export default function BaseProductForm({
                     'h-auto w-auto object-cover transition-all hover:scale-105',
                     'aspect-square',
                   )}
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    objectFit: 'cover',
+                  }}
                 />
               </div>
             </div>
@@ -200,10 +177,10 @@ export default function BaseProductForm({
               name="imageFile"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Image File</FormLabel>
                   <FormControl>
                     <Input
                       type="file"
+                      className="hidden"
                       accept="image/png, image/jpeg, image/jpg"
                       ref={fileInputRef}
                       onChange={handleFileChange}

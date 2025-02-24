@@ -10,7 +10,7 @@ import { apiClientDq } from '@/lib/fetch-helper';
 import { FindAllProps, FindOneProps } from '@/app/models/api-model';
 
 //const base =
-//  process.env.APP_API_SERVER_DQ_URL || 'http://172.104.117.139:3000/v1/dq';
+//  process.env.NEXT_PUBLIC_APP_API_SERVER_DQ_URL || 'http://172.104.117.139:3000/v1/dq';
 
 //import { apiComplexDq } from '@/lib/fetch-helper';
 

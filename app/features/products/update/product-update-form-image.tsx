@@ -17,7 +17,8 @@ import { UploadFileSingle } from '@/app/actions/server/files-actions';
 import { toast } from '@/hooks/use-toast';
 
 const base =
-  process.env.APP_API_SERVER_URL || 'https://posapi-dev.ceburrito.ph';
+  process.env.NEXT_PUBLIC_APP_API_SERVER_URL ||
+  'https://posapi-dev.ceburrito.ph';
 
 export default function ProductUpdateFormImage({
   imageUrl,
@@ -100,7 +101,7 @@ export default function ProductUpdateFormImage({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {!selectedFile && (
           <div className="relative">
-            <div className="flex space-x-4 pb-4" onClick={handleButtonClick}>
+            <div className="space-x-4 pb-4" onClick={handleButtonClick}>
               <Image
                 src={imageUrl}
                 alt="image"

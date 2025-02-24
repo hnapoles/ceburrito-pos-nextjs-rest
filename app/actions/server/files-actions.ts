@@ -3,7 +3,8 @@
 import { auth } from '@/auth';
 
 const base =
-  process.env.APP_API_SERVER_DQ_URL || 'http://172.104.117.139:3000/v1/dq';
+  process.env.NEXT_PUBLIC_APP_API_SERVER_DQ_URL ||
+  'http://172.104.117.139:3000/v1/dq';
 
 export async function UploadFileSingle(data: FormData, entity: string) {
   let token, apiKey;

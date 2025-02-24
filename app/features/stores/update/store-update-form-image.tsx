@@ -17,7 +17,8 @@ import { UploadFileSingle } from '@/app/actions/server/files-actions';
 import { toast } from '@/hooks/use-toast';
 
 const base =
-  process.env.APP_API_SERVER_URL || 'https://posapi-dev.ceburrito.ph';
+  process.env.NEXT_PUBLIC_APP_API_SERVER_URL ||
+  'https://posapi-dev.ceburrito.ph';
 
 export default function StoreUpdateFormImage({
   imageUrl,

@@ -127,7 +127,8 @@ export async function apiClientDq<TResponse, TBody = unknown>(
   }
 
   const base =
-    process.env.APP_API_SERVER_DQ_URL || 'http://172.104.117.139:3000/v1/dq';
+    process.env.NEXT_PUBLIC_APP_API_SERVER_DQ_URL ||
+    'http://172.104.117.139:3000/v1/dq';
 
   //let url = "";
   //let dqMethod = 'GET'
@@ -256,7 +257,8 @@ export async function apiComplexDq<TResponse, TBody = unknown>(
   }
 
   const base =
-    process.env.APP_API_SERVER_DQ_URL || 'http://172.104.117.139:3000/v1/dq';
+    process.env.NEXT_PUBLIC_APP_API_SERVER_DQ_URL ||
+    'http://172.104.117.139:3000/v1/dq';
 
   const operationConfig: Record<
     ApiOperationNames,
