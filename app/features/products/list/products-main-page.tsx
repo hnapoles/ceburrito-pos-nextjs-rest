@@ -46,12 +46,20 @@ const ProductsMainPage: React.FC<productListProps> = ({
     <Tabs defaultValue="all" value={currentTab} onValueChange={handleTabChange}>
       <div className="flex items-center">
         <TabsList>
+          {/*
           <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="active">Active</TabsTrigger>
           <TabsTrigger value="draft">Disabled</TabsTrigger>
           <TabsTrigger value="archived" className="hidden sm:flex">
             Archived
           </TabsTrigger>
+          */}
+          <TabsTrigger value="all">All</TabsTrigger>
+          {statusesLookup.map((item) => (
+            <TabsTrigger key={item._id} value={item.lookupValue}>
+              {item.lookupDescription}
+            </TabsTrigger>
+          ))}
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
           <ProductSearchInput />

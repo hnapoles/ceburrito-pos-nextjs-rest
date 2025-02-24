@@ -102,6 +102,10 @@ export async function GetLookups(group: string | null, code: string | null) {
         sortOrder: 1,
       },
       {
+        sortField: 'sortSeq',
+        sortOrder: 1,
+      },
+      {
         sortField: 'lookupValue',
         sortOrder: 1,
       },
