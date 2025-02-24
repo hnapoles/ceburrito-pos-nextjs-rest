@@ -1,6 +1,8 @@
 'use client';
+import { useState, useRef, ChangeEvent } from 'react';
 
-import { useState } from 'react';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -75,8 +77,40 @@ export default function BaseProductForm({
     handleSubmit,
     setValue,
     watch,
-    formState: { isDirty, isSubmitting },
+    reset,
+    formState: { isDirty, isSubmitting, errors },
   } = form;
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || undefined;
+
+    setValue('imageFile', file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedFile(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveClick = () => {
+    setValue('imageFile', undefined); // Clear the form value
+    setSelectedFile(null);
+    reset({ imageFile: undefined }); // Ensure form state resets
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''; // Reset file input field
+    }
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
 
   const [imagePreview, setImagePreview] = useState<string | null>(
     initialData?.imageUrl || null,
@@ -126,12 +160,17 @@ export default function BaseProductForm({
 
   const sizeOptions = ['S', 'M', 'L', 'XL'];
 
+  const imageUrl = initialData?.imageUrl;
+
+  //  {/*onChange={(e) => field.onChange(e.target.files?.[0])} */}
+
   //
   return (
     <Card>
       <CardHeader>
         <CardTitle>{initialData ? 'Edit Product' : 'New Product'}</CardTitle>
       </CardHeader>
+
       <CardContent>
         {/* form details */}
         <Form {...form}>
@@ -139,6 +178,42 @@ export default function BaseProductForm({
             onSubmit={form.handleSubmit(onSubmit)}
             className="w-full md:space-y-3 space-y-1"
           >
+            <div className="relative">
+              <div className="flex space-x-4 pb-4" onClick={handleButtonClick}>
+                <Image
+                  src={
+                    selectedFile || imageUrl || '/images/products/no-image.jpg'
+                  }
+                  alt="image"
+                  width={100}
+                  height={100}
+                  className={cn(
+                    'h-auto w-auto object-cover transition-all hover:scale-105',
+                    'aspect-square',
+                  )}
+                />
+              </div>
+            </div>
+
+            <FormField
+              control={form.control}
+              name="imageFile"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image File</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/png, image/jpeg, image/jpg"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      onBlur={field.onBlur} // Use the onBlur to track blur event
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
             {initialData && (
               <FormField
                 control={form.control}
@@ -147,9 +222,9 @@ export default function BaseProductForm({
                   <FormItem>
                     <FormLabel>Id</FormLabel>
                     <Input placeholder="" readOnly {...field} />
-                    <FormDescription>
-                      This is a system generated id .
-                    </FormDescription>
+                    {/*<FormDescription>
+                      This is a system generated id
+                    </FormDescription>*/}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -223,7 +298,7 @@ export default function BaseProductForm({
               name="basePrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Base Price</FormLabel>
                   <Input
                     type="number"
                     step="0.01" // Allows decimals
@@ -251,6 +326,72 @@ export default function BaseProductForm({
                       }
                     }}
                   />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="sizeOptions"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Size Options</FormLabel>
+                  <div className="flex flex-wrap gap-2">
+                    {sizeOptions.map((size) => {
+                      const isChecked = field.value?.includes(size);
+                      return (
+                        <FormControl key={size}>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={isChecked}
+                              onCheckedChange={(checked) => {
+                                const newValue = checked
+                                  ? [...(field.value || []), size]
+                                  : field.value?.filter((s) => s !== size) ||
+                                    [];
+                                field.onChange(newValue);
+                              }}
+                            />
+                            <Label>{size}</Label>
+                          </div>
+                        </FormControl>
+                      );
+                    })}
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="spiceOptions"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Spice Options</FormLabel>
+                  <div className="flex flex-wrap gap-2">
+                    {['Mild', 'Medium', 'Spicy', 'Extra Spicy'].map((spice) => {
+                      const isChecked = field.value?.includes(spice);
+                      return (
+                        <FormControl key={spice}>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={isChecked}
+                              onCheckedChange={(checked) => {
+                                const newValue = checked
+                                  ? [...(field.value || []), spice]
+                                  : field.value?.filter((s) => s !== spice) ||
+                                    [];
+                                field.onChange(newValue);
+                              }}
+                            />
+                            <Label>{spice}</Label>
+                          </div>
+                        </FormControl>
+                      );
+                    })}
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
@@ -286,11 +427,16 @@ export default function BaseProductForm({
               )}
             />
 
-            <div className="flex justify-between">
+            <div className="flex justify-between pt-2 md:pt-4">
               <Button type="button" variant="outline" onClick={handleCancel}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting || !isDirty}>
+              <Button
+                type="submit"
+                disabled={
+                  isSubmitting || !isDirty || Object.keys(errors).length > 0
+                }
+              >
                 {isSubmitting ? 'Submitting...' : 'Save'}
               </Button>
             </div>

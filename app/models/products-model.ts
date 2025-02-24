@@ -35,6 +35,19 @@ export const ProductZodSchema = z.object({
   updatedAt: z.string().datetime().optional(),
   createdBy: z.string().optional(),
   updatedBy: z.string().optional(),
+  imageFile: z
+    .instanceof(File, { message: 'A valid file is required' })
+    .refine(
+      (file) => ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type),
+      {
+        message: 'Only PNG, JPG, and JPEG files are allowed',
+      },
+    )
+    .refine((file) => file.size < 5 * 1024 * 1024, {
+      // 5MB limit
+      message: 'File size must be less than 5MB',
+    })
+    .optional(),
 });
 
 export type ProductBase = z.infer<typeof ProductZodSchema>;

@@ -27,21 +27,12 @@ export default function ProductsByIdEdit({
     */
   };
 
-  const mockProduct = {
-    name: 'Sample Product',
-    description: 'This is a sample description.',
-    price: 99.99,
-    status: 'active',
-    imageUrl: 'https://example.com/sample.jpg',
-    orderOptions: {
-      sizeOption: ['S', 'M'], // ✅ Correct type (string[])
-      sizeAffectPricing: true,
-      spiceOption: 'regular' as 'mild' | 'regular' | 'super spicy', // ✅ Explicitly cast the value
-      spiceAffectPricing: false,
-    },
-  };
-
   return (
-    <BaseProductForm initialData={mockProduct} onSubmit={handleProductSubmit} />
+    <BaseProductForm
+      initialData={product}
+      onSubmit={handleProductSubmit}
+      categories={categoryLookups}
+      statuses={statusLookups}
+    />
   );
 }

@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { WhoTabContent } from '@/app/nav/who-tab-content';
 import { UserWhoProps } from '@/app/models/users-model';
-import ProductsCreate from '@/app/features/products/products-create';
+import ProductsCreate from '@/app/features/products/create/products-create';
 
 //start of function
 export default async function ProductUpdatePage() {
