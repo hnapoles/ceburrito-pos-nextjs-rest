@@ -31,6 +31,7 @@ export default async function Page(props: {
         page={parseInt(page)}
         totalDataCount={totalProducts}
         statusesLookup={statusesLookup}
+        currentTab={status}
       />
     );
   }

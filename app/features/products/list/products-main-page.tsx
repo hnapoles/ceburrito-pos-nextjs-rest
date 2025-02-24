@@ -1,30 +1,49 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { File } from 'lucide-react';
 
+import { ProductSearchInput } from './product-search-input.';
 import ProductsTableSimple from './products-table-simple';
 
-import { ProductsListProps } from '@/app/models/products-model';
+import { ProductBase } from '@/app/models/products-model';
+import { Lookup } from '@/app/models/lookups-model';
 
-import { ProductSearchInput } from './product-search-input.';
+interface productListProps {
+  products: ProductBase[];
+  limit: number | 10;
+  page: number | 1;
+  totalDataCount: number | 1;
+  statusesLookup: Lookup[];
+  currentTab: string;
+}
 
-const ProductsMainPage: React.FC<ProductsListProps> = ({
+const ProductsMainPage: React.FC<productListProps> = ({
   products,
   limit,
   page,
   totalDataCount,
   statusesLookup,
+  currentTab,
 }) => {
   const pathname = usePathname();
   const createLink = `${pathname}/create`;
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handleTabChange = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('status', value);
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
   return (
-    <Tabs defaultValue="all">
+    <Tabs defaultValue="all" value={currentTab} onValueChange={handleTabChange}>
       <div className="flex items-center">
         <TabsList>
           <TabsTrigger value="all">All</TabsTrigger>
@@ -58,7 +77,7 @@ const ProductsMainPage: React.FC<ProductsListProps> = ({
           </Link>
         </div>
       </div>
-      <TabsContent value="all">
+      <TabsContent value={currentTab}>
         <ProductsTableSimple
           data={products}
           limit={Number(limit)}
