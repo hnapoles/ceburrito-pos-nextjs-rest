@@ -40,7 +40,6 @@ import {
 import { ProductSellingPriceBase } from '@/app/models/products-model';
 import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
 import { TestComponent } from './test-component';
-import Test2 from './test2';
 
 import TabProductPriceContentTopCard from './tab-product-price-content-top-card';
 

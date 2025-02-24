@@ -11,9 +11,11 @@ import { UploadFileSingle } from '@/app/actions/server/files-actions';
 
 import { toast } from '@/hooks/use-toast';
 
-interface ProductsByIdEditProps {
-  categoryLookups: Lookup[];
-  statusLookups: Lookup[];
+interface productsCreateProps {
+  categoryLookup: Lookup[];
+  statusLookup: Lookup[];
+  sizeLookup: Lookup[];
+  spiceLookup: Lookup[];
 }
 
 const entity = 'product';
@@ -24,9 +26,11 @@ const base =
 const appInstance = process.env.NEXT_PUBLIC_APP_INSTANCE || 'dev';
 
 export default function ProductsCreate({
-  categoryLookups,
-  statusLookups,
-}: ProductsByIdEditProps) {
+  categoryLookup,
+  statusLookup,
+  sizeLookup,
+  spiceLookup,
+}: productsCreateProps) {
   //handleSubmit
   const handleProductSubmit = async (data: any) => {
     let newImageUrl = '';
@@ -73,8 +77,10 @@ export default function ProductsCreate({
   return (
     <BaseProductForm
       onSubmit={handleProductSubmit}
-      categories={categoryLookups}
-      statuses={statusLookups}
+      categories={categoryLookup}
+      statuses={statusLookup}
+      sizes={sizeLookup}
+      spices={spiceLookup}
     />
   );
 }

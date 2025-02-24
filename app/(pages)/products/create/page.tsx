@@ -6,7 +6,10 @@ import {
   GetLookupStores,
 } from '@/app/actions/server/lookups-actions';
 import NotFound from '../not-found';
-import { DefaultSizeOptions } from '@/app/models/lookups-model';
+import {
+  DefaultSizeOptions,
+  DefaultSpiceOptions,
+} from '@/app/models/lookups-model';
 
 import ProductsByIdEdit from '@/app/features/products/edit/products-id-edit';
 
@@ -30,6 +33,9 @@ export default async function ProductUpdatePage() {
   let { data: sizeOptionsLookup } = await GetLookups('order', 'sizeOptions');
   if (!sizeOptionsLookup) sizeOptionsLookup = DefaultSizeOptions;
 
+  let { data: spiceOptionsLookup } = await GetLookups('order', 'spiceOptions');
+  if (!spiceOptionsLookup) spiceOptionsLookup = DefaultSpiceOptions;
+
   //if-testing - set to true
   if (false)
     return (
@@ -51,8 +57,10 @@ export default async function ProductUpdatePage() {
       {/* Left Side - Product Image and Details */}
       <div>
         <ProductsCreate
-          categoryLookups={categoriesLookup}
-          statusLookups={statusesLookup}
+          categoryLookup={categoriesLookup}
+          statusLookup={statusesLookup}
+          sizeLookup={sizeOptionsLookup}
+          spiceLookup={spiceOptionsLookup}
         />
       </div>
       {/* Right Side - Product Tabs */}

@@ -42,6 +42,41 @@ export const DefaultSizeOptions: Lookup[] = [
   },
 ];
 
+export const DefaultSpiceOptions: Lookup[] = [
+  {
+    _id: '1',
+    lookupCode: 'spiceOption',
+    lookupDescription: 'Mild',
+    lookupGroup: 'order',
+    lookupValue: 'Mild',
+    sortSeq: 1,
+  },
+  {
+    _id: '2',
+    lookupCode: 'spiceOption',
+    lookupDescription: 'Medium',
+    lookupGroup: 'order',
+    lookupValue: 'Medium',
+    sortSeq: 2,
+  },
+  {
+    _id: '3',
+    lookupCode: 'spiceOption',
+    lookupDescription: 'Spicy',
+    lookupGroup: 'order',
+    lookupValue: 'Spicy',
+    sortSeq: 3,
+  },
+  {
+    _id: '4',
+    lookupCode: 'spiceOption',
+    lookupDescription: 'Extra Spicy',
+    lookupGroup: 'order',
+    lookupValue: 'Extrac Spicy',
+    sortSeq: 4,
+  },
+];
+
 export interface FindLookupOutput {
   count: number;
   data: Lookup[];

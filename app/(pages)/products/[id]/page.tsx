@@ -6,7 +6,10 @@ import {
   GetLookupStores,
 } from '@/app/actions/server/lookups-actions';
 import NotFound from '../not-found';
-import { DefaultSizeOptions } from '@/app/models/lookups-model';
+import {
+  DefaultSizeOptions,
+  DefaultSpiceOptions,
+} from '@/app/models/lookups-model';
 
 import ProductsByIdEdit from '@/app/features/products/edit/products-id-edit';
 
@@ -45,6 +48,8 @@ export default async function ProductUpdatePage({
   const { data: orderTypesLookup } = await GetLookups('order', 'type'); //specific to order and type - returns count and data
   let { data: sizeOptionsLookup } = await GetLookups('order', 'sizeOptions');
   if (!sizeOptionsLookup) sizeOptionsLookup = DefaultSizeOptions;
+  let { data: spiceOptionsLookup } = await GetLookups('order', 'spiceOptions');
+  if (!spiceOptionsLookup) spiceOptionsLookup = DefaultSpiceOptions;
 
   //if-testing - set to true
   if (false)
@@ -78,8 +83,10 @@ export default async function ProductUpdatePage({
       <div>
         <ProductsByIdEdit
           product={product}
-          categoryLookups={categoriesLookup}
-          statusLookups={statusesLookup}
+          categoryLookup={categoriesLookup}
+          statusLookup={statusesLookup}
+          sizeLookup={sizeOptionsLookup}
+          spiceLookup={spiceOptionsLookup}
         />
       </div>
       {/* Right Side - Product Tabs */}

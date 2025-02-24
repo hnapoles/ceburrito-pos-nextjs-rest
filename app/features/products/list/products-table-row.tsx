@@ -82,7 +82,9 @@ export default function ProductsTableRow({
           />
         ) : null}
       </TableCell>
-      <TableCell className="font-medium">{product.name}</TableCell>
+      <TableCell className="font-medium">
+        {product.name} <Badge variant="outline">{product.status}</Badge>{' '}
+      </TableCell>
       <TableCell>
         <Badge variant="outline">{product.category}</Badge>
         {product.description}

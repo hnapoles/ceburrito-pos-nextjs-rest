@@ -13,8 +13,10 @@ import { toast } from '@/hooks/use-toast';
 
 interface ProductsByIdEditProps {
   product: ProductBase;
-  categoryLookups: Lookup[];
-  statusLookups: Lookup[];
+  categoryLookup: Lookup[];
+  statusLookup: Lookup[];
+  sizeLookup: Lookup[];
+  spiceLookup: Lookup[];
 }
 
 const entity = 'product';
@@ -26,8 +28,10 @@ const appInstance = process.env.NEXT_PUBLIC_APP_INSTANCE || 'dev';
 
 export default function ProductsByIdEdit({
   product,
-  categoryLookups,
-  statusLookups,
+  categoryLookup,
+  statusLookup,
+  sizeLookup,
+  spiceLookup,
 }: ProductsByIdEditProps) {
   const handleProductSubmit = async (data: any) => {
     let newImageUrl = '';
@@ -73,8 +77,10 @@ export default function ProductsByIdEdit({
     <BaseProductForm
       initialData={product}
       onSubmit={handleProductSubmit}
-      categories={categoryLookups}
-      statuses={statusLookups}
+      categories={categoryLookup}
+      statuses={statusLookup}
+      sizes={sizeLookup}
+      spices={spiceLookup}
     />
   );
 }

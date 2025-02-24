@@ -46,6 +46,8 @@ interface baseProductFormProps {
   initialData?: ProductBase;
   categories: Lookup[];
   statuses: Lookup[];
+  sizes: Lookup[];
+  spices: Lookup[];
   onSubmit: (data: any) => void;
 }
 
@@ -53,6 +55,8 @@ export default function BaseProductForm({
   initialData,
   categories,
   statuses,
+  sizes,
+  spices,
   onSubmit,
 }: baseProductFormProps) {
   const router = useRouter();
@@ -73,10 +77,7 @@ export default function BaseProductForm({
   });
 
   const {
-    register,
-    handleSubmit,
     setValue,
-    watch,
     reset,
     formState: { isDirty, isSubmitting, errors },
   } = form;
@@ -130,11 +131,9 @@ export default function BaseProductForm({
     router.back();
   };
 
-  const sizeOptions = ['S', 'M', 'L', 'XL'];
-
+  const sizeOptions = sizes.map((option) => option.lookupValue);
+  const spiceOptions = spices.map((option) => option.lookupValue);
   const imageUrl = initialData?.imageUrl;
-
-  //  {/*onChange={(e) => field.onChange(e.target.files?.[0])} */}
 
   //
   return (
@@ -348,7 +347,7 @@ export default function BaseProductForm({
                 <FormItem>
                   <FormLabel>Spice Options</FormLabel>
                   <div className="flex flex-wrap gap-2">
-                    {['Mild', 'Medium', 'Spicy', 'Extra Spicy'].map((spice) => {
+                    {spiceOptions.map((spice) => {
                       const isChecked = field.value?.includes(spice);
                       return (
                         <FormControl key={spice}>
