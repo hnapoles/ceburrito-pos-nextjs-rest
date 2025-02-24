@@ -17,20 +17,21 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import ProductsTableRow from './products-table-row';
+//import ProductsTableRow from './products-table-row';
 import { useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import { ProductBase } from '@/app/models/products-model';
+import { ProductSellingPriceBase } from '@/app/models/products-model';
+import ProductsByIdPricesTableRow from './products-id-prices-table-row';
 
-export default function ProductsTableSimple({
+export default function ProductsByIdPricesTableSimple({
   data,
   limit,
   page,
   totalDataCount,
 }: {
-  data: ProductBase[];
+  data: ProductSellingPriceBase[];
   limit: number;
   page: number;
   totalDataCount: number;
@@ -53,21 +54,19 @@ export default function ProductsTableSimple({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Products</CardTitle>
-        <CardDescription>Manage your products.</CardDescription>
+        <CardTitle>Product Selling Prices</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden w-[100px] sm:table-cell">
-                <span className="sr-only">Image</span>
-              </TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead className="hidden md:table-cell">ID</TableHead>
-              <TableHead className="hidden md:table-cell">Updated At</TableHead>
-              <TableHead className="hidden md:table-cell">Updated By</TableHead>
+              <TableHead>Order Type</TableHead>
+              <TableHead>Store Name</TableHead>
+              <TableHead>Size</TableHead>
+              <TableHead>Customer Name</TableHead>
+              <TableHead className="md:table-cell">Selling Price</TableHead>
+              <TableHead className="hidden">Updated By</TableHead>
+              <TableHead className="hidden">Updated At</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
               </TableHead>
@@ -75,7 +74,7 @@ export default function ProductsTableSimple({
           </TableHeader>
           <TableBody>
             {data.map((row) => (
-              <ProductsTableRow key={row._id} product={row} />
+              <ProductsByIdPricesTableRow key={row._id} productPrice={row} />
             ))}
           </TableBody>
         </Table>
@@ -88,7 +87,7 @@ export default function ProductsTableSimple({
               {totalDataCount > 0 ? (page - 1) * rowsPerPage + 1 : 0}-
               {Math.min(page * rowsPerPage, totalDataCount)}
             </strong>{' '}
-            of <strong>{totalDataCount}</strong> products
+            of <strong>{totalDataCount}</strong> prices
           </div>
           <div className="flex">
             <Button

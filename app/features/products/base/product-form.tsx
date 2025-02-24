@@ -78,7 +78,6 @@ export default function BaseProductForm({
 
   const {
     setValue,
-    reset,
     formState: { isDirty, isSubmitting, errors },
   } = form;
 
@@ -100,16 +99,7 @@ export default function BaseProductForm({
     }
   };
 
-  const handleRemoveClick = () => {
-    setValue('imageFile', undefined); // Clear the form value
-    setSelectedFile(null);
-    reset({ imageFile: undefined }); // Ensure form state resets
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''; // Reset file input field
-    }
-  };
-
-  const handleButtonClick = () => {
+  const handleImageButtonClick = () => {
     fileInputRef.current?.click();
   };
 
@@ -131,6 +121,20 @@ export default function BaseProductForm({
     router.back();
   };
 
+  // Add the onChange handler to the `status` field
+  const handleStatusChange = (status: string) => {
+    // If the status is 'active', set activeAt to the current date
+    if (status === 'active') {
+      setValue('activeAt', new Date().toISOString()); // Store the current date
+    }
+    if (status === 'disabled') {
+      setValue('disabledAt', new Date().toISOString()); // Store the current date
+    }
+    if (status === 'archived') {
+      setValue('archivedAt', new Date().toISOString()); // Store the current date
+    }
+  };
+
   const sizeOptions = sizes.map((option) => option.lookupValue);
   const spiceOptions = spices.map((option) => option.lookupValue);
   const imageUrl = initialData?.imageUrl;
@@ -150,7 +154,10 @@ export default function BaseProductForm({
             className="w-full md:space-y-3 space-y-1"
           >
             <div className="relative">
-              <div className="flex space-x-4 pb-4" onClick={handleButtonClick}>
+              <div
+                className="flex space-x-4 pb-4"
+                onClick={handleImageButtonClick}
+              >
                 <Image
                   src={
                     selectedFile || imageUrl || '/images/products/no-image.jpg'
@@ -380,7 +387,10 @@ export default function BaseProductForm({
                 <FormItem>
                   <FormLabel>Status</FormLabel>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      handleStatusChange(value); // Call the onChange handler
+                    }}
                     {...field}
                     value={field.value || ''}
                   >

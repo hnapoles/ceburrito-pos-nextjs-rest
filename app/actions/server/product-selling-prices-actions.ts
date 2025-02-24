@@ -6,13 +6,9 @@ import {
 } from '@/app/models/products-model';
 
 import { apiClientDq } from '@/lib/fetch-helper';
-
 import { FindAllProps, FindOneProps } from '@/app/models/api-model';
 
-//const base =
-//  process.env.NEXT_PUBLIC_APP_API_SERVER_DQ_URL || 'http://172.104.117.139:3000/v1/dq';
-
-//import { apiComplexDq } from '@/lib/fetch-helper';
+import { ApiOperationNames } from '@/app/models/api-model';
 
 export async function GetProductSellingPricesByProductId(id: string) {
   const productSellingPricesProps = {
@@ -49,14 +45,6 @@ export async function GetProductSellingPricesByProductId(id: string) {
   return result;
 }
 
-/*
-const product = await apiClientDq<ProductBase, FindOne>(
-    'product',
-    ApiOperationNames.FindOne,
-    id,
-    { method: method },
-  );
-*/
 export async function GetProductSellingPricesByOwnId(id: string) {
   const entity = 'product_selling_price';
   const operation = ApiOperationNames.FindOne;
@@ -74,19 +62,6 @@ export async function GetProductSellingPricesByOwnId(id: string) {
   return result;
 }
 
-import { ApiOperationNames } from '@/app/models/api-model';
-import { FindCustomersOutput } from '@/app/models/customers-model';
-
-export type FetchMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
-
-export interface FetchOptions<T = unknown> {
-  method?: FetchMethod;
-  body?: T;
-  headers?: HeadersInit;
-  token?: string;
-  timeout?: number; // Timeout in milliseconds
-}
-
 export async function CreateProductSellingPrices(
   data: ProductSellingPriceBase,
 ) {
@@ -99,6 +74,19 @@ export async function CreateProductSellingPrices(
     ProductSellingPriceBase,
     ProductSellingPriceBase
   >(entity, operation, id, { method: method, body: data });
+
+  return result;
+}
+
+export async function DeleteProductSellingPriceById(id: string) {
+  const entity = 'product_selling_price';
+  const operation = ApiOperationNames.Delete;
+  const method = 'POST';
+
+  const result = await apiClientDq<
+    ProductSellingPriceBase,
+    ProductSellingPriceBase
+  >(entity, operation, id, { method: method });
 
   return result;
 }

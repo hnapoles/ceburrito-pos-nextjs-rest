@@ -115,9 +115,7 @@ export default function ProductPricesContentTableRow({
         {productPrices.sellingPrice?.toFixed(2)}
       </TableCell>
       <TableCell className="hidden md:table-cell">
-        {productPrices.createdAt?.toLocaleString('en-US', {
-          timeZone: 'America/Chicago',
-        })}
+        {productPrices.createdAt?.toLocaleString()}
       </TableCell>
       <TableCell>
         <Dialog>

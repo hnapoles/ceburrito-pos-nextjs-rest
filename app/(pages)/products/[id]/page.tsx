@@ -18,6 +18,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { WhoTabContent } from '@/app/nav/who-tab-content';
 import { UserWhoProps } from '@/app/models/users-model';
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  //CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import ProductsByIdPricesTableSimple from '@/app/features/products/edit/products-id-prices-table-simple';
+
 //start of function
 export default async function ProductUpdatePage({
   params,
@@ -104,7 +114,21 @@ export default async function ProductUpdatePage({
             <WhoTabContent who={who} />
           </TabsContent>
           <TabsContent value="prices" className="px-0">
-            Prices here...
+            {/* Prices Content */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Product Selling Prices</CardTitle>
+                <CardDescription>{product.name}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ProductsByIdPricesTableSimple
+                  data={productPrices.data}
+                  limit={100}
+                  page={1}
+                  totalDataCount={productPrices.count}
+                />
+              </CardContent>
+            </Card>
           </TabsContent>
           <TabsContent value="attributes" className="px-0">
             [future] : attributes here...

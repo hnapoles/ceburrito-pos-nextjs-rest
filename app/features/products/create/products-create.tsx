@@ -32,7 +32,7 @@ export default function ProductsCreate({
   spiceLookup,
 }: productsCreateProps) {
   //handleSubmit
-  const handleProductSubmit = async (data: any) => {
+  const handleProductSubmit = async (data: ProductBase) => {
     let newImageUrl = '';
     if (data.imageFile) {
       const formData = new FormData();
