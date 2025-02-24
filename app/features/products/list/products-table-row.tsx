@@ -84,13 +84,12 @@ export default function ProductsTableRow({
       </TableCell>
       <TableCell className="font-medium">{product.name}</TableCell>
       <TableCell>
-        <Badge variant="outline">{product.description}</Badge>
+        <Badge variant="outline">{product.category}</Badge>
+        {product.description}
       </TableCell>
       <TableCell className="hidden md:table-cell">{product._id}</TableCell>
       <TableCell className="hidden md:table-cell">
-        {product.createdAt?.toLocaleString('en-US', {
-          timeZone: 'America/Chicago',
-        })}
+        {product.createdAt?.toLocaleString()}
       </TableCell>
       <TableCell>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -107,7 +106,9 @@ export default function ProductsTableRow({
               <Link href={editLink}>
                 <DropdownMenuItem>Edit</DropdownMenuItem>
               </Link>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                className={product.status === 'archived' ? 'block' : 'hidden'}
+              >
                 <button onClick={() => handleOpenDialog(product?._id || '')}>
                   Delete
                 </button>
