@@ -1,22 +1,9 @@
-import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
-import { GetProductById } from '@/app/actions/server/products-actions';
-import {
-  GetLookupCustomers,
-  GetLookups,
-  GetLookupStores,
-} from '@/app/actions/server/lookups-actions';
-import NotFound from '../not-found';
+import { GetLookups } from '@/app/actions/server/lookups-actions';
 import {
   DefaultSizeOptions,
   DefaultSpiceOptions,
 } from '@/app/models/lookups-model';
 
-import ProductsByIdEdit from '@/app/features/products/id/products-id-edit';
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-import { WhoTabContent } from '@/app/nav/who-tab-content';
-import { UserWhoProps } from '@/app/models/users-model';
 import ProductsCreate from '@/app/features/products/create/products-create';
 
 //start of function

@@ -1,24 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { usePathname } from 'next/navigation';
 import { Loader2 } from 'lucide-react'; // Import a loading spinner icon
-import { useRouter } from 'next/navigation';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  //CardTrigger,
-} from '@/components/ui/card';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { usePathname } from 'next/navigation';
+
+import { TableCell, TableRow, TableBody, Table } from '@/components/ui/table';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -46,13 +31,15 @@ import { Input } from '@/components/ui/input';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 import {
-  ProductBase,
   //ProductZodSchema,
   //ProductBase,
   ProductSellingPriceBase,
   ProductSellingPriceZodSchema,
 } from '@/app/models/products-model';
 
+import { UpdateProduct } from '@/app/actions/server/products-actions';
+
+import { useGlobalStore } from '@/app/providers/zustand-provider';
 import { GetLookups } from '@/app/actions/server/lookups-actions';
 import { DefaultSizeOptions } from '@/app/models/lookups-model';
 
@@ -64,21 +51,22 @@ import {
 import { Lookup } from '@/app/models/lookups-model';
 import { CustomerDataBase } from '@/app/models/customers-model';
 import { StoreData } from '@/app/models/stores-model';
-import {
-  CreateProductSellingPrices,
-  UpdateProductSellingPriceById,
-} from '@/app/actions/server/product-selling-prices-actions';
+import { UpdateProductSellingPriceById } from '@/app/actions/server/product-selling-prices-actions';
 
-export default function ProductsByIdPricesFormBase({
-  product,
+export default function ProductsByIdPricesFormEditRow({
+  productName,
+  productId,
+  toggleEditDialog,
+  setToggleEditDialog,
   initialData,
 }: {
-  product: ProductBase;
+  productName: string;
+  productId: string;
+  toggleEditDialog: boolean;
+  setToggleEditDialog: React.Dispatch<React.SetStateAction<boolean>>;
   initialData?: ProductSellingPriceBase;
 }) {
-  //const pathname = usePathname();
-  const router = useRouter();
-
+  const pathname = usePathname();
   const [loading, setLoading] = useState<boolean>(true); // Loader for data fetching
 
   const defaultValues = initialData || {
@@ -125,16 +113,23 @@ export default function ProductsByIdPricesFormBase({
 
   const fetchData = useCallback(async () => {
     setLoading(true); // Start loading
-    const orderTypes = await GetLookupsOrderTypes();
-    setOrderTypes(orderTypes);
-    const customers = await GetLookupCustomers();
-    setCustomers(customers);
-    const stores = await GetLookupStores();
-    setStores(stores);
-    let { data: sizeOptionsLookup } = await GetLookups('order', 'sizeOptions');
-    if (!sizeOptionsLookup || sizeOptionsLookup.length <= 0)
-      sizeOptionsLookup = DefaultSizeOptions;
-    setSizeOptions(sizeOptionsLookup);
+    try {
+      const orderTypes = await GetLookupsOrderTypes();
+      setOrderTypes(orderTypes);
+      const customers = await GetLookupCustomers();
+      setCustomers(customers);
+      const stores = await GetLookupStores();
+      setStores(stores);
+      let { data: sizeOptionsLookup } = await GetLookups(
+        'order',
+        'sizeOptions',
+      );
+      setSizeOptions(
+        sizeOptionsLookup.length ? sizeOptionsLookup : DefaultSizeOptions,
+      );
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
     setLoading(false); // Stop loading
   }, []); // ✅ No dependencies
 
@@ -150,39 +145,13 @@ export default function ProductsByIdPricesFormBase({
 
   const {
     handleSubmit,
-    formState: { errors, isSubmitting, isDirty },
+    formState: {
+      //errors,
+      isSubmitting,
+    },
   } = form;
 
-  async function handleCreateRecord(data: ProductSellingPriceBase) {
-    delete data._id;
-    data = {
-      ...data,
-      customerName: selectedCustomerName,
-      customerId: customerId,
-      storeName: selectedStoreName,
-      storeId: storeId,
-      productId: product?._id,
-      productName: product?.name,
-    };
-
-    console.log(data);
-
-    const createdData = await CreateProductSellingPrices(data);
-
-    toast({
-      title: 'Data saved',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">
-            {JSON.stringify(createdData, null, 2)}
-          </code>
-        </pre>
-      ),
-    });
-    await revalidateAndRedirectUrl(`/products/${product._id}`);
-  }
-
-  async function handleUpdateRecord(data: ProductSellingPriceBase) {
+  async function onSubmit(data: ProductSellingPriceBase) {
     const id = data._id || '';
     delete data._id;
     data = {
@@ -191,8 +160,8 @@ export default function ProductsByIdPricesFormBase({
       customerId: customerId,
       storeName: selectedStoreName,
       storeId: storeId,
-      productId: product._id,
-      productName: product.name,
+      productId: productId,
+      productName: productName,
     };
 
     console.log(data);
@@ -209,49 +178,26 @@ export default function ProductsByIdPricesFormBase({
         </pre>
       ),
     });
-    await revalidateAndRedirectUrl(`/products/${product._id}`);
+
+    //setRefresh(true);
+    setToggleEditDialog(false);
+    await revalidateAndRedirectUrl(pathname);
+    //revalidateAndRedirectUrl('/dashboard/products');
   }
 
-  async function onSubmit(data: ProductSellingPriceBase) {
-    if (initialData) {
-      handleUpdateRecord(data);
-    } else {
-      handleCreateRecord(data);
-    }
-  }
+  const product = useGlobalStore((state) => state.product);
 
-  const [showDialog, setShowDialog] = useState(false);
-
-  const handleCancel = () => {
-    if (isDirty) {
-      setShowDialog(true); // Show confirmation modal if form is dirty
-    } else {
-      router.back(); // If no changes, navigate back
-    }
-  };
-
-  const discardChanges = () => {
-    setShowDialog(false);
-    router.back();
-  };
+  // const { isCreateDialogOpen, closeCreateDialog, toggleCreateDialog } =
+  //   useDialogStore();
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          {initialData ? 'Edit Product Prices' : 'New Product Prices'}
-        </CardTitle>
-        <CardDescription>
-          {`product name `}
-          <strong>{product?.name}</strong>
-        </CardDescription>
-      </CardHeader>
-      {loading ? (
-        <div className="flex justify-center items-center py-4">
-          <Loader2 className="w-6 h-6 animate-spin" />
-        </div>
-      ) : (
-        <CardContent>
+    <TableRow>
+      <TableCell colSpan={6}>
+        {loading ? (
+          <div className="flex justify-center items-center py-4">
+            <Loader2 className="w-6 h-6 animate-spin" />
+          </div>
+        ) : (
           <Form {...form}>
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -373,7 +319,6 @@ export default function ProductsByIdPricesFormBase({
                 )}
               />
 
-              {/* 
               <FormField
                 control={form.control}
                 name="sellingPrice"
@@ -411,63 +356,17 @@ export default function ProductsByIdPricesFormBase({
                   </FormItem>
                 )}
               />
-              */}
+              <Button variant="outline" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Cancel'}
+              </Button>
 
-              <FormField
-                control={form.control}
-                name="sellingPrice"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      placeholder=""
-                      {...field}
-                      value={field.value || ''}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="mt-6 flex justify-end gap-4">
-                <Button type="button" variant="outline" onClick={handleCancel}>
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={
-                    isSubmitting || !isDirty || Object.keys(errors).length > 0
-                  }
-                >
-                  {isSubmitting ? 'Submitting...' : 'Save'}
-                </Button>
-              </div>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Submitting...' : 'Submit'}
+              </Button>
             </form>
           </Form>
-        </CardContent>
-      )}
-
-      <CardFooter></CardFooter>
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Discard Changes?</DialogTitle>
-          </DialogHeader>
-          <p>
-            You have unsaved changes. Are you sure you want to discard them?
-          </p>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDialog(false)}>
-              No, Keep Editing
-            </Button>
-            <Button variant="destructive" onClick={discardChanges}>
-              Yes, Discard
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </Card>
+        )}
+      </TableCell>
+    </TableRow>
   );
 }

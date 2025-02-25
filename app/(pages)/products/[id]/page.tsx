@@ -103,7 +103,7 @@ export default async function ProductUpdatePage({
       </div>
       {/* Right Side - Product Tabs */}
       <div>
-        <Tabs defaultValue="who">
+        <Tabs defaultValue="prices">
           <div className="flex items-center">
             <TabsList>
               <TabsTrigger value="who">Who</TabsTrigger>

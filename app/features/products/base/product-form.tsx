@@ -23,7 +23,7 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
+  //FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -38,7 +38,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { Separator } from '@/components/ui/separator';
 import { ProductBase, ProductZodSchema } from '@/app/models/products-model';
 import { Lookup } from '@/app/models/lookups-model';
 
@@ -276,6 +275,7 @@ export default function BaseProductForm({
               )}
             />
 
+            {/*
             <FormField
               control={form.control}
               name="basePrice"
@@ -288,7 +288,7 @@ export default function BaseProductForm({
                     placeholder=""
                     value={field.value ?? ''} // Ensures the input field shows empty when undefined
                     onChange={(e) => {
-                      const value = e.target.value;
+                      const value = e.target.value.trim();
 
                       // Allow empty input (user deletes the value)
                       if (value === '') {
@@ -303,12 +303,30 @@ export default function BaseProductForm({
                         field.onChange(numericValue); // Ensure a number is passed
                       }
                     }}
+                    onFocus={(e) => {
+                      // Manually set the cursor position to the end of the input value
+                      const value = e.target.value;
+                      e.target.value = ''; // This clears the input field
+                      e.target.value = value; // This restores the input field value and sets the cursor to the end
+                    }}
                     onBlur={() => {
                       if (field.value !== undefined && !isNaN(field.value)) {
                         field.onChange(parseFloat(field.value.toFixed(2))); // Maintain numeric type
                       }
                     }}
                   />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            */}
+            <FormField
+              control={form.control}
+              name="basePrice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Base Price</FormLabel>
+                  <Input type="number" step="0.01" placeholder="" {...field} />
                   <FormMessage />
                 </FormItem>
               )}
