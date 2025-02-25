@@ -72,7 +72,7 @@ export const DefaultSpiceOptions: Lookup[] = [
     lookupCode: 'spiceOption',
     lookupDescription: 'Extra Spicy',
     lookupGroup: 'order',
-    lookupValue: 'Extrac Spicy',
+    lookupValue: 'Extra Spicy',
     sortSeq: 4,
   },
 ];

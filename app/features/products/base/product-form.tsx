@@ -38,6 +38,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+import { Switch } from '@/components/ui/switch';
+
 import { ProductBase, ProductZodSchema } from '@/app/models/products-model';
 import { Lookup } from '@/app/models/lookups-model';
 
@@ -394,6 +396,34 @@ export default function BaseProductForm({
                     })}
                   </div>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isSellable"
+              render={({ field }) => (
+                <FormItem className="flex items-center space-x-2">
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                  <FormLabel>Sellable?</FormLabel>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="isOutOfStock"
+              render={({ field }) => (
+                <FormItem className="flex items-center space-x-2">
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                  <FormLabel>Out of Stock?</FormLabel>
                 </FormItem>
               )}
             />
