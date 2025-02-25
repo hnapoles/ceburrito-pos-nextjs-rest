@@ -28,10 +28,7 @@ import { Button } from '@/components/ui/button';
 import { ProductSellingPriceBase } from '@/app/models/products-model';
 import ProductsByIdPricesTableRow from './products-id-prices-table-row';
 
-import Link from 'next/link';
 import { ProductsByIdPricesSearchInput } from './products-id-prices-search-input';
-import ProductsByIdPricesFormCreate from './products-id-prices-form-create-dialog';
-import NotFound from '@/app/nav/not-found';
 
 export default function ProductsByIdPricesTableSimple({
   productName,
@@ -186,12 +183,6 @@ export default function ProductsByIdPricesTableSimple({
           </form>
         </CardFooter>
       </Card>
-      <ProductsByIdPricesFormCreate
-        toggleCreateDialog={toggleCreateDialog}
-        setToggleCreateDialog={setToggleCreateDialog}
-        productName={productName}
-        productId={productId}
-      />
     </>
   );
 }

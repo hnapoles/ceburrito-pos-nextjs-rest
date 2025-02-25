@@ -1,12 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { Loader2 } from 'lucide-react'; // Icon for the spinner
 import { useRouter, usePathname } from 'next/navigation';
 
-import Image from 'next/image';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -27,18 +24,11 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-import {
-  ProductBase,
-  ProductSellingPriceBase,
-} from '@/app/models/products-model';
+import { ProductSellingPriceBase } from '@/app/models/products-model';
 
 import { DeleteProductSellingPriceById } from '@/app/actions/server/product-selling-prices-actions';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
-
-import ProductsByIdPricesFormEditRow from './products-id-prices-form-edit-row';
-
-//import { ConfirmDialog } from "@/app/nav/confirm-dialog";
 
 export default function ProductsByIdPricesTableRow({
   productPrice,
@@ -116,85 +106,68 @@ export default function ProductsByIdPricesTableRow({
           <Loader2 className="animate-spin h-10 w-10 text-primary" />
         </DialogContent>
       </Dialog>
-      {toggleEditDialog && (
-        <ProductsByIdPricesFormEditRow
-          toggleEditDialog={toggleEditDialog}
-          setToggleEditDialog={setToggleEditDialog}
-          productName={productName}
-          productId={productId}
-          initialData={productPrice}
-        />
-      )}
-      {!toggleEditDialog && (
-        <TableRow>
-          <TableCell className="font-medium">
-            {productPrice.orderType}
-          </TableCell>
-          <TableCell className="font-medium">
-            {productPrice.storeName}
-          </TableCell>
-          <TableCell className="font-medium">{productPrice.size}</TableCell>
-          <TableCell className="font-medium">
-            {productPrice.customerName}
-          </TableCell>
-          <TableCell className="font-medium">
-            {' '}
-            {productPrice.sellingPrice?.toFixed(2)}{' '}
-          </TableCell>
 
-          <TableCell className="hidden">{productPrice.updatedBy}</TableCell>
-          <TableCell className="hidden">{productPrice.updatedAt}</TableCell>
-          <TableCell>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button aria-haspopup="true" size="icon" variant="ghost">
-                  <MoreHorizontal className="h-4 w-4" />
-                  <span className="sr-only">Toggle menu</span>
+      <TableRow>
+        <TableCell className="font-medium">{productPrice.orderType}</TableCell>
+        <TableCell className="font-medium">{productPrice.storeName}</TableCell>
+        <TableCell className="font-medium">{productPrice.size}</TableCell>
+        <TableCell className="font-medium">
+          {productPrice.customerName}
+        </TableCell>
+        <TableCell className="font-medium">
+          {' '}
+          {productPrice.sellingPrice?.toFixed(2)}{' '}
+        </TableCell>
+
+        <TableCell className="hidden">{productPrice.updatedBy}</TableCell>
+        <TableCell className="hidden">{productPrice.updatedAt}</TableCell>
+        <TableCell>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button aria-haspopup="true" size="icon" variant="ghost">
+                <MoreHorizontal className="h-4 w-4" />
+                <span className="sr-only">Toggle menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem onClick={handleEditClick}>
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <button
+                  onClick={() => handleOpenDialog(productPrice._id || '')}
+                >
+                  Delete
+                </button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete Price</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to delete product price{' '}
+                  <strong>{productPrice.orderType}</strong> with _id{' '}
+                  <strong>{productPrice._id}</strong>?
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                  Cancel
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={handleEditClick}>
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <button
-                    onClick={() => handleOpenDialog(productPrice._id || '')}
-                  >
-                    Delete
-                  </button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Delete Price</DialogTitle>
-                  <DialogDescription>
-                    Are you sure you want to delete product price{' '}
-                    <strong>{productPrice.orderType}</strong> with _id{' '}
-                    <strong>{productPrice._id}</strong>?
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button
-                    variant="outline"
-                    onClick={() => setDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    onClick={() => handleConfirmDelete(productPrice._id || '')}
-                  >
-                    Confirm
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </TableCell>
-        </TableRow>
-      )}
+                <Button
+                  variant="destructive"
+                  onClick={() => handleConfirmDelete(productPrice._id || '')}
+                >
+                  Confirm
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </TableCell>
+      </TableRow>
     </>
   );
 }
