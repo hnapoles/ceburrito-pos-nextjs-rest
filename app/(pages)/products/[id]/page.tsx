@@ -11,7 +11,7 @@ import {
   DefaultSpiceOptions,
 } from '@/app/models/lookups-model';
 
-import ProductsByIdEdit from '@/app/features/products/edit/products-id-edit';
+import ProductsByIdEdit from '@/app/features/products/id/products-id-edit';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -26,9 +26,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import ProductsByIdPricesTableSimple from '@/app/features/products/edit/products-id-prices-table-simple';
+import ProductsByIdPricesTableSimple from '@/app/features/products/id/products-id-prices-table-simple';
 
-import { ProductsByIdPricesSearchInput } from '@/app/features/products/edit/products-id-prices-search-input';
+import { ProductsByIdPricesSearchInput } from '@/app/features/products/id/products-id-prices-search-input';
 
 //start of function
 export default async function ProductUpdatePage({

@@ -66,6 +66,10 @@ export default function ProductsByIdPricesTableSimple({
 
   const [toggleEditForm, setToggleEditForm] = useState<boolean>(false);
 
+  const handleClickAddButton = () => {
+    router.push(`${pathname}/prices/create`);
+  };
+
   return (
     <>
       <Card className="border-none shadow-none">
@@ -77,7 +81,7 @@ export default function ProductsByIdPricesTableSimple({
                 <ProductsByIdPricesSearchInput />
                 <Button
                   variant="outline"
-                  onClick={() => setToggleCreateDialog(true)}
+                  onClick={() => handleClickAddButton()}
                 >
                   Add
                 </Button>

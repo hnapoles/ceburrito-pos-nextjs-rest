@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react'; // Icon for the spinner
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
@@ -49,6 +49,7 @@ export default function ProductsByIdPricesTableRow({
   productName: string | '';
   productId: string | '';
 }) {
+  const router = useRouter();
   const pathname = usePathname();
 
   const [toggleEditDialog, setToggleEditDialog] = useState(false);
@@ -74,9 +75,12 @@ export default function ProductsByIdPricesTableRow({
   };
 
   const handleEditClick = () => {
+    /*
     console.log('current value of toggled ', toggleEditDialog);
     setToggleEditDialog((prev) => !prev); // Use functional state update
     console.log('new value of toggled ', toggleEditDialog);
+    */
+    router.push(`${pathname}/prices/${productPrice._id}`);
   };
 
   /*

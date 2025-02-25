@@ -50,8 +50,6 @@ export async function GetProductSellingPricesByOwnId(id: string) {
   const operation = ApiOperationNames.FindOne;
   const method = 'POST';
 
-  console.log('id in api call ', id);
-
   const result = await apiClientDq<ProductSellingPriceBase, FindOneProps>(
     entity,
     ApiOperationNames.FindOne,
