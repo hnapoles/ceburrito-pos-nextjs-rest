@@ -12,5 +12,9 @@ export default async function ProductsByIdPricesCreatePage({
   const product = await GetProductById(id);
   const lookups = await GetLookups('product', null);
 
-  return <ProductsIdPricesCreate product={product} />;
+  return (
+    <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+      <ProductsIdPricesCreate product={product} />;
+    </div>
+  );
 }

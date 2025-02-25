@@ -94,7 +94,7 @@ export async function UpdateProductSellingPriceById(
   data: ProductSellingPriceBase,
 ) {
   const entity = 'product_selling_price';
-  const operation = ApiOperationNames.Delete;
+  const operation = ApiOperationNames.Update;
   const method = 'POST';
 
   const result = await apiClientDq<

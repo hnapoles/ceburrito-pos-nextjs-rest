@@ -18,6 +18,11 @@ export default async function ProductsByIdPricesEditPage({
   console.log(productPrice);
 
   return (
-    <ProductsIdPricesPriceIdEdit product={product} initialData={productPrice} />
+    <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+      <ProductsIdPricesPriceIdEdit
+        product={product}
+        initialData={productPrice}
+      />
+    </div>
   );
 }

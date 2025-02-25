@@ -55,7 +55,10 @@ import {
 import { Lookup } from '@/app/models/lookups-model';
 import { CustomerDataBase } from '@/app/models/customers-model';
 import { StoreData } from '@/app/models/stores-model';
-import { UpdateProductSellingPriceById } from '@/app/actions/server/product-selling-prices-actions';
+import {
+  CreateProductSellingPrices,
+  UpdateProductSellingPriceById,
+} from '@/app/actions/server/product-selling-prices-actions';
 
 export default function ProductsByIdPricesFormBase({
   product,
@@ -143,7 +146,36 @@ export default function ProductsByIdPricesFormBase({
     },
   } = form;
 
-  async function onSubmit(data: ProductSellingPriceBase) {
+  async function handleCreateRecord(data: ProductSellingPriceBase) {
+    delete data._id;
+    data = {
+      ...data,
+      customerName: selectedCustomerName,
+      customerId: customerId,
+      storeName: selectedStoreName,
+      storeId: storeId,
+      productId: product?._id,
+      productName: product?.name,
+    };
+
+    console.log(data);
+
+    const createdData = await CreateProductSellingPrices(data);
+
+    toast({
+      title: 'Data saved',
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">
+            {JSON.stringify(createdData, null, 2)}
+          </code>
+        </pre>
+      ),
+    });
+    await revalidateAndRedirectUrl(`/products/${product._id}`);
+  }
+
+  async function handleUpdateRecord(data: ProductSellingPriceBase) {
     const id = data._id || '';
     delete data._id;
     data = {
@@ -170,30 +202,33 @@ export default function ProductsByIdPricesFormBase({
         </pre>
       ),
     });
-
-    //setRefresh(true);
-
-    await revalidateAndRedirectUrl(pathname);
-    //revalidateAndRedirectUrl('/dashboard/products');
+    await revalidateAndRedirectUrl(`/products/${product._id}`);
   }
 
-  // const { isCreateCardOpen, closeCreateCard, toggleCreateCard } =
-  //   useCardStore();
+  async function onSubmit(data: ProductSellingPriceBase) {
+    if (initialData) {
+      handleUpdateRecord(data);
+    } else {
+      handleCreateRecord(data);
+    }
+  }
 
   return (
     <Card>
-      <CardContent className="sm:max-w-[425px]">
-        <CardHeader>
-          <CardTitle>Edit Product Prices</CardTitle>
-          <CardDescription>
-            {`product id[${product?._id}], name[${product?.name}]`}
-          </CardDescription>
-        </CardHeader>
-        {loading ? (
-          <div className="flex justify-center items-center py-4">
-            <Loader2 className="w-6 h-6 animate-spin" />
-          </div>
-        ) : (
+      <CardHeader>
+        <CardTitle>
+          {initialData ? 'Edit Product Prices' : 'New Product Prices'}
+        </CardTitle>
+        <CardDescription>
+          {`product id [${product?._id}], name [${product?.name}]`}
+        </CardDescription>
+      </CardHeader>
+      {loading ? (
+        <div className="flex justify-center items-center py-4">
+          <Loader2 className="w-6 h-6 animate-spin" />
+        </div>
+      ) : (
+        <CardContent>
           <Form {...form}>
             <form
               onSubmit={handleSubmit(onSubmit)}
@@ -363,10 +398,10 @@ export default function ProductsByIdPricesFormBase({
               </div>
             </form>
           </Form>
-        )}
+        </CardContent>
+      )}
 
-        <CardFooter></CardFooter>
-      </CardContent>
+      <CardFooter></CardFooter>
     </Card>
   );
 }

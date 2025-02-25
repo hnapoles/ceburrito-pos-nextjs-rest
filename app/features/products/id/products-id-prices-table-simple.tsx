@@ -31,6 +31,7 @@ import ProductsByIdPricesTableRow from './products-id-prices-table-row';
 import Link from 'next/link';
 import { ProductsByIdPricesSearchInput } from './products-id-prices-search-input';
 import ProductsByIdPricesFormCreate from './products-id-prices-form-create-dialog';
+import NotFound from '@/app/nav/not-found';
 
 export default function ProductsByIdPricesTableSimple({
   productName,
@@ -69,6 +70,31 @@ export default function ProductsByIdPricesTableSimple({
   const handleClickAddButton = () => {
     router.push(`${pathname}/prices/create`);
   };
+
+  if (!data || data.length <= 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+              <div>Product Selling Prices</div>
+              <div className="flex">
+                <ProductsByIdPricesSearchInput />
+                <Button
+                  variant="outline"
+                  onClick={() => handleClickAddButton()}
+                >
+                  Add
+                </Button>
+              </div>
+            </div>
+          </CardTitle>
+          <CardDescription>{productName}</CardDescription>
+        </CardHeader>
+        <CardContent>No price records found...</CardContent>
+      </Card>
+    );
+  }
 
   return (
     <>
