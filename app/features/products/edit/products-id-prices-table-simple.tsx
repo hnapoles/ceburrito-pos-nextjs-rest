@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableBody,
   Table,
+  TableCell,
 } from '@/components/ui/table';
 
 import {
@@ -29,7 +30,7 @@ import ProductsByIdPricesTableRow from './products-id-prices-table-row';
 
 import Link from 'next/link';
 import { ProductsByIdPricesSearchInput } from './products-id-prices-search-input';
-import ProductsByIdPricesFormDialog from './products-id-prices-form-dialog';
+import ProductsByIdPricesFormCreate from './products-id-prices-form-create-dialog';
 
 export default function ProductsByIdPricesTableSimple({
   productName,
@@ -62,6 +63,8 @@ export default function ProductsByIdPricesTableSimple({
   }
 
   const [toggleCreateDialog, setToggleCreateDialog] = useState<boolean>(false);
+
+  const [toggleEditForm, setToggleEditForm] = useState<boolean>(false);
 
   return (
     <>
@@ -104,10 +107,17 @@ export default function ProductsByIdPricesTableSimple({
                 <ProductsByIdPricesTableRow
                   key={row._id}
                   productPrice={row}
-                  toggleCreateDialog={toggleCreateDialog}
-                  setToggleCreateDialog={setToggleCreateDialog}
+                  productName={productName}
+                  productId={productId}
                 />
               ))}
+            </TableBody>
+            <TableBody>
+              {toggleEditForm && (
+                <TableRow>
+                  <TableCell>123</TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
@@ -146,7 +156,7 @@ export default function ProductsByIdPricesTableSimple({
           </form>
         </CardFooter>
       </Card>
-      <ProductsByIdPricesFormDialog
+      <ProductsByIdPricesFormCreate
         toggleCreateDialog={toggleCreateDialog}
         setToggleCreateDialog={setToggleCreateDialog}
         productName={productName}

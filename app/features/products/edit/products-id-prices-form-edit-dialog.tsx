@@ -57,19 +57,19 @@ import {
 import { Lookup } from '@/app/models/lookups-model';
 import { CustomerDataBase } from '@/app/models/customers-model';
 import { StoreData } from '@/app/models/stores-model';
-import { CreateProductSellingPrices } from '@/app/actions/server/product-selling-prices-actions';
+import { UpdateProductSellingPriceById } from '@/app/actions/server/product-selling-prices-actions';
 
-export default function ProductsByIdPricesFormDialog({
+export default function ProductsByIdPricesFormEdit({
   productName,
   productId,
-  toggleCreateDialog,
-  setToggleCreateDialog,
+  toggleEditDialog,
+  setToggleEditDialog,
   initialData,
 }: {
   productName: string;
   productId: string;
-  toggleCreateDialog: boolean;
-  setToggleCreateDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleEditDialog: boolean;
+  setToggleEditDialog: React.Dispatch<React.SetStateAction<boolean>>;
   initialData?: ProductSellingPriceBase;
 }) {
   const pathname = usePathname();
@@ -149,9 +149,7 @@ export default function ProductsByIdPricesFormDialog({
   } = form;
 
   async function onSubmit(data: ProductSellingPriceBase) {
-    //delete data._id;
-    //const productCreated = await CreateProduct(data);
-    console.log('Submitting...');
+    const id = data._id || '';
     delete data._id;
     data = {
       ...data,
@@ -165,21 +163,21 @@ export default function ProductsByIdPricesFormDialog({
 
     console.log(data);
 
-    const createdData = await CreateProductSellingPrices(data);
+    const updatedData = await UpdateProductSellingPriceById(id, data);
 
     toast({
       title: 'Data saved',
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">
-            {JSON.stringify(createdData, null, 2)}
+            {JSON.stringify(updatedData, null, 2)}
           </code>
         </pre>
       ),
     });
 
     //setRefresh(true);
-    setToggleCreateDialog(false);
+    setToggleEditDialog(false);
     await revalidateAndRedirectUrl(pathname);
     //revalidateAndRedirectUrl('/dashboard/products');
   }
@@ -190,14 +188,14 @@ export default function ProductsByIdPricesFormDialog({
   //   useDialogStore();
 
   return (
-    <Dialog open={toggleCreateDialog} onOpenChange={setToggleCreateDialog}>
+    <Dialog open={toggleEditDialog} onOpenChange={setToggleEditDialog}>
       {/*<DialogTrigger asChild>
                 <Button variant="outline">Edit Profile</Button>
             </DialogTrigger>
             */}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Product Prices</DialogTitle>
+          <DialogTitle>Edit Product Prices</DialogTitle>
           <DialogDescription>
             {`Add product prices for product id[${product?._id}], name[${product?.name}]`}
           </DialogDescription>

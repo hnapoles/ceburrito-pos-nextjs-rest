@@ -90,3 +90,19 @@ export async function DeleteProductSellingPriceById(id: string) {
 
   return result;
 }
+
+export async function UpdateProductSellingPriceById(
+  id: string,
+  data: ProductSellingPriceBase,
+) {
+  const entity = 'product_selling_price';
+  const operation = ApiOperationNames.Delete;
+  const method = 'POST';
+
+  const result = await apiClientDq<
+    ProductSellingPriceBase,
+    ProductSellingPriceBase
+  >(entity, operation, id, { method: method, body: data });
+
+  return result;
+}

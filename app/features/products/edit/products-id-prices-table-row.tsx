@@ -27,24 +27,31 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-import { ProductSellingPriceBase } from '@/app/models/products-model';
+import {
+  ProductBase,
+  ProductSellingPriceBase,
+} from '@/app/models/products-model';
 
 import { DeleteProductSellingPriceById } from '@/app/actions/server/product-selling-prices-actions';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
+import ProductsByIdPricesFormEditRow from './products-id-prices-form-edit-row';
+
 //import { ConfirmDialog } from "@/app/nav/confirm-dialog";
 
 export default function ProductsByIdPricesTableRow({
   productPrice,
-  toggleCreateDialog,
-  setToggleCreateDialog,
+  productName,
+  productId,
 }: {
   productPrice: ProductSellingPriceBase;
-  toggleCreateDialog: boolean;
-  setToggleCreateDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  productName: string | '';
+  productId: string | '';
 }) {
   const pathname = usePathname();
+
+  const [toggleEditDialog, setToggleEditDialog] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogData, setDialogData] = useState({
@@ -64,6 +71,12 @@ export default function ProductsByIdPricesTableRow({
     setDialogOpen(true);
     // Ensure the dropdown closes before opening the dialog
     //setTimeout(() => setDialogOpen(true), 100);
+  };
+
+  const handleEditClick = () => {
+    console.log('current value of toggled ', toggleEditDialog);
+    setToggleEditDialog((prev) => !prev); // Use functional state update
+    console.log('new value of toggled ', toggleEditDialog);
   };
 
   /*
@@ -99,69 +112,95 @@ export default function ProductsByIdPricesTableRow({
           <Loader2 className="animate-spin h-10 w-10 text-primary" />
         </DialogContent>
       </Dialog>
-      <TableRow>
-        <TableCell className="font-medium">{productPrice.orderType}</TableCell>
-        <TableCell className="font-medium">{productPrice.storeName}</TableCell>
-        <TableCell className="font-medium">{productPrice.size}</TableCell>
-        <TableCell className="font-medium">
-          {productPrice.customerName}
-        </TableCell>
-        <TableCell className="font-medium">
-          {' '}
-          {productPrice.sellingPrice?.toFixed(2)}{' '}
-        </TableCell>
+      {!toggleEditDialog && (
+        <TableRow>
+          <TableCell className="font-medium">
+            {productPrice.orderType}
+          </TableCell>
+          <TableCell className="font-medium">
+            {productPrice.storeName}
+          </TableCell>
+          <TableCell className="font-medium">{productPrice.size}</TableCell>
+          <TableCell className="font-medium">
+            {productPrice.customerName}
+          </TableCell>
+          <TableCell className="font-medium">
+            {' '}
+            {productPrice.sellingPrice?.toFixed(2)}{' '}
+          </TableCell>
 
-        <TableCell className="hidden">{productPrice.updatedBy}</TableCell>
-        <TableCell className="hidden">{productPrice.updatedAt}</TableCell>
-        <TableCell>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button aria-haspopup="true" size="icon" variant="ghost">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>
-                <button onClick={() => setToggleCreateDialog(true)}>
+          <TableCell className="hidden">{productPrice.updatedBy}</TableCell>
+          <TableCell className="hidden">{productPrice.updatedAt}</TableCell>
+          <TableCell>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button aria-haspopup="true" size="icon" variant="ghost">
+                  <MoreHorizontal className="h-4 w-4" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem onClick={handleEditClick}>
                   Edit
-                </button>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <button
-                  onClick={() => handleOpenDialog(productPrice._id || '')}
-                >
-                  Delete
-                </button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Delete Price</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to delete product price{' '}
-                  <strong>{productPrice.orderType}</strong> with _id{' '}
-                  <strong>{productPrice._id}</strong>?
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => handleConfirmDelete(productPrice._id || '')}
-                >
-                  Confirm
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </TableCell>
-      </TableRow>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <button
+                    onClick={() => handleOpenDialog(productPrice._id || '')}
+                  >
+                    Delete
+                  </button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Delete Price</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to delete product price{' '}
+                    <strong>{productPrice.orderType}</strong> with _id{' '}
+                    <strong>{productPrice._id}</strong>?
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setDialogOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => handleConfirmDelete(productPrice._id || '')}
+                  >
+                    Confirm
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
+            {/*
+          <ProductsByIdPricesFormEdit
+            toggleEditDialog={toggleEditDialog}
+            setToggleEditDialog={setToggleEditDialog}
+            productName={productName}
+            productId={productId}
+            initialData={productPrice}
+          />
+          */}
+          </TableCell>
+        </TableRow>
+      )}
+      {toggleEditDialog && (
+        <ProductsByIdPricesFormEditRow
+          toggleEditDialog={toggleEditDialog}
+          setToggleEditDialog={setToggleEditDialog}
+          productName={productName}
+          productId={productId}
+          initialData={productPrice}
+        />
+      )}
     </>
   );
 }
