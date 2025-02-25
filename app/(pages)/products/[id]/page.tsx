@@ -117,20 +117,14 @@ export default async function ProductUpdatePage({
           </TabsContent>
           <TabsContent value="prices" className="px-0">
             {/* Prices Content */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Product Selling Prices</CardTitle>
-                <CardDescription>{product.name}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ProductsByIdPricesTableSimple
-                  data={productPrices.data}
-                  limit={100}
-                  page={1}
-                  totalDataCount={productPrices.count}
-                />
-              </CardContent>
-            </Card>
+            <ProductsByIdPricesTableSimple
+              productName={product.name}
+              productId={product._id || ''}
+              data={productPrices.data}
+              limit={100}
+              page={1}
+              totalDataCount={productPrices.count}
+            />
           </TabsContent>
           <TabsContent value="attributes" className="px-0">
             [future] : attributes here...

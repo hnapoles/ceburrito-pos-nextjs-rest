@@ -19,7 +19,7 @@ export async function GetLookupsOrderTypes() {
     '',
     { method: 'POST', body: LookupOrderTypeProps },
   );
-  return lookups;
+  return lookups.data;
 }
 
 export async function GetLookupCustomers() {

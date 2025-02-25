@@ -37,8 +37,12 @@ import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 export default function ProductsByIdPricesTableRow({
   productPrice,
+  toggleCreateDialog,
+  setToggleCreateDialog,
 }: {
   productPrice: ProductSellingPriceBase;
+  toggleCreateDialog: boolean;
+  setToggleCreateDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const pathname = usePathname();
 
@@ -119,9 +123,11 @@ export default function ProductsByIdPricesTableRow({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <Link href={editLink}>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem>
+                <button onClick={() => setToggleCreateDialog(true)}>
+                  Edit
+                </button>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <button
                   onClick={() => handleOpenDialog(productPrice._id || '')}
