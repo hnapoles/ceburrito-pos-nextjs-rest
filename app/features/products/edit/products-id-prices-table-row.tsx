@@ -112,6 +112,15 @@ export default function ProductsByIdPricesTableRow({
           <Loader2 className="animate-spin h-10 w-10 text-primary" />
         </DialogContent>
       </Dialog>
+      {toggleEditDialog && (
+        <ProductsByIdPricesFormEditRow
+          toggleEditDialog={toggleEditDialog}
+          setToggleEditDialog={setToggleEditDialog}
+          productName={productName}
+          productId={productId}
+          initialData={productPrice}
+        />
+      )}
       {!toggleEditDialog && (
         <TableRow>
           <TableCell className="font-medium">
@@ -179,27 +188,8 @@ export default function ProductsByIdPricesTableRow({
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-
-            {/*
-          <ProductsByIdPricesFormEdit
-            toggleEditDialog={toggleEditDialog}
-            setToggleEditDialog={setToggleEditDialog}
-            productName={productName}
-            productId={productId}
-            initialData={productPrice}
-          />
-          */}
           </TableCell>
         </TableRow>
-      )}
-      {toggleEditDialog && (
-        <ProductsByIdPricesFormEditRow
-          toggleEditDialog={toggleEditDialog}
-          setToggleEditDialog={setToggleEditDialog}
-          productName={productName}
-          productId={productId}
-          initialData={productPrice}
-        />
       )}
     </>
   );
