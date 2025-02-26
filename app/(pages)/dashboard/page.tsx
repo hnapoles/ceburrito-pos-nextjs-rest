@@ -19,7 +19,7 @@ import TeamSwitcher from '@/app/features/dashboard/team-switcher';
 //import { UserNav } from '@/app/features/dashboard/user-nav';
 
 import { formatPeso } from '@/app/actions/client/peso';
-import { PesoSvg, UtinsilsSvg } from '@/app/styles/icons';
+import { PhilippinePesoSvg, UtinsilsSvg } from '@/app/styles/icons';
 import Link from 'next/link';
 
 /*
@@ -87,7 +87,7 @@ export default function DashboardPage() {
                     <CardTitle className="text-sm font-medium">
                       Sales Today
                     </CardTitle>
-                    <PesoSvg />
+                    <PhilippinePesoSvg />
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">

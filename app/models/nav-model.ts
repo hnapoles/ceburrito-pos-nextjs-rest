@@ -2,13 +2,17 @@ import { LucideIcon } from 'lucide-react';
 
 import {
   Home,
-  LineChart,
-  Package,
+  //LineChart,
+  //Package,
   //Package2,
   //PanelLeft,
   //Settings,
-  ShoppingCart,
+  //ShoppingCart,
   Users2,
+  PhilippinePeso,
+  Utensils,
+  Building,
+  Shapes,
 } from 'lucide-react';
 
 export interface NavItems {
@@ -30,12 +34,17 @@ export const listNavItems = [
   {
     title: 'Orders',
     href: '/orders',
-    iconName: ShoppingCart,
+    iconName: Utensils,
   },
   {
     title: 'Products',
     href: '/products',
-    iconName: Package,
+    iconName: Shapes,
+  },
+  {
+    title: 'Stores',
+    href: '/stores',
+    iconName: Building,
   },
   {
     title: 'Customers',
@@ -43,13 +52,8 @@ export const listNavItems = [
     iconName: Users2,
   },
   {
-    title: 'Stores',
-    href: '/stores',
-    iconName: Users2,
-  },
-  {
     title: 'Analytics',
     href: '/analytics',
-    iconName: LineChart,
+    iconName: PhilippinePeso,
   },
 ];

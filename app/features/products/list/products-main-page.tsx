@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { File } from 'lucide-react';
+import { File, PlusCircle } from 'lucide-react';
 
 import { ProductSearchInput } from './product-search-input.';
 import ProductsTableSimple from './products-table-simple';
@@ -61,20 +61,26 @@ const ProductsMainPage: React.FC<productListProps> = ({
               Export
             </span>
           </Button>
-          {/* 
-                    <Button size="sm" className="h-8 gap-1">
-                        <PlusCircle className="h-3.5 w-3.5" />
-                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                            Add User
-                        </span>
-                    </Button>
-                    */}
+
+          <Button
+            size="sm"
+            className="h-8 gap-1"
+            onClick={() => (window.location.href = createLink)}
+          >
+            <PlusCircle className="h-3.5 w-3.5" />
+            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+              Add Product
+            </span>
+          </Button>
+
+          {/*
           <Link
             href={createLink}
-            className="ml-5 px-2 h-8 lg:flex rounded-md bg-purple-500 px-4 py-2 text-sm text-white transition-colors hover:bg-purple-400"
+            className="px-2 h-8 lg:flex rounded-md bg-purple-500 px-4 py-2 text-sm text-white transition-colors hover:bg-purple-400"
           >
             Add New
           </Link>
+          */}
         </div>
       </div>
       <TabsContent value={currentTab}>
@@ -90,3 +96,10 @@ const ProductsMainPage: React.FC<productListProps> = ({
 };
 
 export default ProductsMainPage;
+
+/*
+<div className="flex items-center space-x-2">
+              <CalendarDateRangePicker />
+              <Button>Download</Button>
+            </div>
+*/

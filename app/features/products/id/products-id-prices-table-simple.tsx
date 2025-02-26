@@ -24,7 +24,7 @@ import { Input } from '@/components/ui/input';
 
 //import ProductsTableRow from './products-table-row';
 import { useRouter, usePathname } from 'next/navigation';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { ProductSellingPriceBase } from '@/app/models/products-model';
@@ -118,13 +118,26 @@ export default function ProductsByIdPricesTableSimple({
                   placeholder="Search..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="mr-2 mb-4"
+                  className="mr-2 mb-4 h-8"
                 />
+                {/*
                 <Button
                   variant="outline"
                   onClick={() => handleClickAddButton()}
                 >
                   Add
+                </Button>
+                */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 gap-1"
+                  onClick={() => handleClickAddButton()}
+                >
+                  <PlusCircle className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Add Prices
+                  </span>
                 </Button>
               </div>
             </div>

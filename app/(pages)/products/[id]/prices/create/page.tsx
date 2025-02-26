@@ -1,6 +1,6 @@
 import { GetProductById } from '@/app/actions/server/products-actions';
 
-import ProductsIdPricesCreate from '@/app/features/products/id/prices/create/products-id-prices-create';
+import ProductsIdPricesCreate from '@/app/features/products/prices/create/products-id-prices-create';
 
 import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
 
