@@ -400,6 +400,7 @@ export default function BaseProductForm({
               )}
             />
 
+            <div className="flex items-center space-x-2"></div>
             <FormField
               control={form.control}
               name="isSellable"

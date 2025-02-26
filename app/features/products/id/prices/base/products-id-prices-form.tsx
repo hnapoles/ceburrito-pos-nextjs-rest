@@ -100,6 +100,8 @@ export default function ProductsByIdPricesFormBase({
   const handleCustomerChange = (selectedName: string) => {
     setSelectedCustomerName(selectedName);
 
+    form.setValue('customerName', selectedName);
+
     // Find the corresponding customerId based on the selected customerName
     const selectedCustomer = customers.find(
       (customer) => customer.name === selectedName,
@@ -115,6 +117,7 @@ export default function ProductsByIdPricesFormBase({
   // Handle change in store selection
   const handleStoreChange = (selectedName: string) => {
     setSelectedStoreName(selectedName);
+    form.setValue('storeName', selectedName);
 
     // Find the corresponding customerId based on the selected customerName
     const selectedStore = stores.find((store) => store.name === selectedName);

@@ -20,6 +20,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+import { Input } from '@/components/ui/input';
+
 //import ProductsTableRow from './products-table-row';
 import { useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -93,6 +95,16 @@ export default function ProductsByIdPricesTableSimple({
     );
   }
 
+  const [search, setSearch] = useState('');
+
+  const filteredData = data.filter((item) =>
+    Object.values(item)
+      .filter((value) => typeof value === 'string')
+      .some((value) =>
+        (value as string).toLowerCase().includes(search.toLowerCase()),
+      ),
+  );
+
   return (
     <>
       <Card className="border-none shadow-none">
@@ -101,7 +113,13 @@ export default function ProductsByIdPricesTableSimple({
             <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
               <div>Product Selling Prices</div>
               <div className="flex">
-                <ProductsByIdPricesSearchInput />
+                {/*<ProductsByIdPricesSearchInput />*/}
+                <Input
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="mr-2 mb-4"
+                />
                 <Button
                   variant="outline"
                   onClick={() => handleClickAddButton()}
@@ -130,7 +148,7 @@ export default function ProductsByIdPricesTableSimple({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((row) => (
+              {filteredData.map((row) => (
                 <ProductsByIdPricesTableRow
                   key={row._id}
                   productPrice={row}
