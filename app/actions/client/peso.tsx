@@ -6,7 +6,16 @@ export const formatPesoNoDecimals = (amount: number) => {
   }).format(amount);
 };
 
-console.log(formatPesoNoDecimals(1000)); // ₱1,000
+export const formatPeso = (amount: number) => {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+};
+
+//console.log(formatPesoNoDecimals(1000)); // ₱1,000
 
 /*
 import { useMemo } from "react";

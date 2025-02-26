@@ -3,7 +3,7 @@
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import { Spinner } from './icons';
+import { Spinner } from '../styles/icons';
 import { Search } from 'lucide-react';
 
 export function SearchInput() {

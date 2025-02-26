@@ -40,7 +40,7 @@ import {
 } from '@/components/ui/select';
 
 const groups = [
-  {
+  /*{
     label: 'Personal Account',
     teams: [
       {
@@ -49,16 +49,17 @@ const groups = [
       },
     ],
   },
+  */
   {
     label: 'Teams',
     teams: [
       {
-        label: 'Acme Inc.',
-        value: 'acme-inc',
+        label: 'Barracks',
+        value: 'barracks',
       },
       {
-        label: 'Monsters Inc.',
-        value: 'monsters',
+        label: 'Mandaue Main',
+        value: 'mandaue-main',
       },
     ],
   },

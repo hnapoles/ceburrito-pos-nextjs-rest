@@ -1,6 +1,6 @@
-import Link from "next/link"
+import Link from 'next/link';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
 export function MainNav({
   className,
@@ -8,33 +8,39 @@ export function MainNav({
 }: React.HTMLAttributes<HTMLElement>) {
   return (
     <nav
-      className={cn("flex items-center space-x-4 lg:space-x-6", className)}
+      className={cn('flex items-center space-x-4 lg:space-x-6', className)}
       {...props}
     >
       <Link
-        href="/examples/dashboard"
+        href="/dashboard"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
         Overview
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/orders"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        Customers
+        Orders
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/products"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Products
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/stores"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Stores
+      </Link>
+      <Link
+        href="/settings"
         className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Settings
       </Link>
     </nav>
-  )
+  );
 }
