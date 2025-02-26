@@ -5,7 +5,7 @@ import {
   GetLookups,
   GetLookupStores,
 } from '@/app/actions/server/lookups-actions';
-import NotFound from '../not-found';
+import NotFoundGlobal from '@/app/nav/not-found-global';
 import {
   DefaultSizeOptions,
   DefaultSpiceOptions,
@@ -49,7 +49,9 @@ export default async function ProductUpdatePage({
   );
 
   if (!product) {
-    return <NotFound />;
+    return (
+      <NotFoundGlobal display={'Product data not found'} backUrl={'/product'} />
+    );
   }
   const productPrices = await GetProductSellingPricesByProductId(
     product._id || '',

@@ -1,5 +1,5 @@
 import ProductsMainPage from '@/app/features/products/list/products-main-page';
-import NotFound from './not-found';
+import NotFoundGlobal from '@/app/nav/not-found-global';
 import { GetProducts } from '@/app/actions/server/products-actions';
 import { GetLookups } from '@/app/actions/server/lookups-actions';
 
@@ -37,6 +37,6 @@ export default async function Page(props: {
   }
 
   if (!products) {
-    return <NotFound />;
+    <NotFoundGlobal display={'Product data not found'} backUrl={'/product'} />;
   }
 }

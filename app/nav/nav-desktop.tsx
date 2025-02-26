@@ -58,8 +58,8 @@ const DesktopNav: React.FC = () => {
           href="/dashboard"
           className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
         >
-          <VercelLogo className="h-3 w-3 transition-all group-hover:scale-110" />
-
+          {/*<VercelLogo className="h-3 w-3 transition-all group-hover:scale-110" />*/}
+          CB
           <span className="sr-only">Ceburrito.ph</span>
         </Link>
 

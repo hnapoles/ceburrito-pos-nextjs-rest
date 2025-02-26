@@ -54,8 +54,8 @@ const groups = [
     label: 'Teams',
     teams: [
       {
-        label: 'Barracks',
-        value: 'barracks',
+        label: 'Carbon Barracks',
+        value: 'carbon-barracks',
       },
       {
         label: 'Mandaue Main',

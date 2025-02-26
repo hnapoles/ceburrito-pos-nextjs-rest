@@ -98,7 +98,7 @@ export default function DashboardPage() {
                     </p>
                   </CardContent>
                 </Card>
-                <Link href="/orders" className="card-link">
+                <Link href="/orders?status=open" className="card-link">
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
