@@ -156,7 +156,7 @@ export default function BaseProductForm({
           >
             <div className="relative">
               <div
-                className="flex space-x-4 pb-4"
+                className="flex space-x-4 pb-4 hover:pointer-cursor"
                 onClick={handleImageButtonClick}
               >
                 <Image

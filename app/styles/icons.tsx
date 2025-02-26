@@ -149,14 +149,35 @@ export function PesoSvg() {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       className="h-4 w-4 text-muted-foreground"
     >
-      <text x="4" y="20" font-family="Arial, sans-serif" font-size="20">
+      <text x="4" y="20" fontFamily="Arial, sans-serif" fontSize="20">
         ₱
       </text>
+    </svg>
+  );
+}
+
+export function UtinsilsSvg() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="lucide lucide-utensils  h-4 w-4 text-muted-foreground"
+    >
+      <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
+      <path d="M7 2v20" />
+      <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
     </svg>
   );
 }

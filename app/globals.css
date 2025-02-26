@@ -123,3 +123,8 @@ input[type='search']::-ms-clear {
     @apply bg-background text-foreground;
   }
 }
+
+/* added for mouse over - do not remove */
+.hover\:pointer-cursor:hover {
+  cursor: pointer;
+}
