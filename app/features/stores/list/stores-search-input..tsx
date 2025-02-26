@@ -2,15 +2,12 @@
 
 import { useTransition } from 'react';
 
-
-import { useSearchParams, usePathname, useRouter  } from 'next/navigation';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 //import { useDebouncedCallback } from 'use-debounce';
 
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/app/nav/icons';
 import { Search } from 'lucide-react';
-
-
 
 export function SearchInput() {
   const pathname = usePathname();
@@ -42,8 +39,6 @@ export function SearchInput() {
     router.replace(`${pathname}?${params.toString()}`);
   }, 3000);
   */
-
-  
 
   return (
     <form action={searchAction} className="relative ml-auto flex-1 md:grow-0">
