@@ -22,6 +22,7 @@ export const OrderZodSchema = z.object({
     .min(3, 'Status must be at least 3 characters')
     .max(32, 'Status must not exceed 32 characters'),
   orderedAt: z.string().datetime().optional(), // ISO 8601 format expected
+  closedAt: z.string().datetime().optional(),
   canceledAt: z.string().datetime().optional(),
   archivedAt: z.string().datetime().optional(),
   createdAt: z.string().datetime().optional(),

@@ -36,7 +36,9 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{order._id?.slice(-4)}</div>
+              <div className="text-2xl font-bold">
+                {order._id?.slice(-4).toUpperCase()}
+              </div>
               <p className="text-xs text-muted-foreground">
                 {order._id?.slice(0, 4)}-{order._id?.slice(4, -4)}-
                 {order._id?.slice(-4)}

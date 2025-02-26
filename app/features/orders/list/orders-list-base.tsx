@@ -92,7 +92,6 @@ const OrdersListBase: React.FC<orderListProps> = ({
           totalDataCount={totalDataCount}
         />*/}
         <OrdersListViewGrid orders={orders} />
-        <GridPage />
       </TabsContent>
     </Tabs>
   );
