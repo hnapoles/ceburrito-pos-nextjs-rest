@@ -17,13 +17,11 @@ export const OrderZodSchema = z.object({
     .max(1000000, 'Amount cannot exceed 1,000,000')
     .multipleOf(0.01, 'Amount must be a valid decimal with two places')
     .optional(), // Allows undefined
-  isSellable: z.boolean().optional(),
-  isOutOfStock: z.boolean().optional(),
   status: z
     .string()
     .min(3, 'Status must be at least 3 characters')
     .max(32, 'Status must not exceed 32 characters'),
-  orderAt: z.string().datetime().optional(), // ISO 8601 format expected
+  orderedAt: z.string().datetime().optional(), // ISO 8601 format expected
   canceledAt: z.string().datetime().optional(),
   archivedAt: z.string().datetime().optional(),
   createdAt: z.string().datetime().optional(),

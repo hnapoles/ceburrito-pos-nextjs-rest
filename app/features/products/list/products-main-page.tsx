@@ -1,13 +1,13 @@
 'use client';
 
-import Link from 'next/link';
+//import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { File, PlusCircle } from 'lucide-react';
 
-import { ProductSearchInput } from './product-search-input.';
+import { ProductsSearchInput } from './products-search-input.';
 import ProductsTableSimple from './products-table-simple';
 
 import { ProductBase } from '@/app/models/products-model';
@@ -54,7 +54,7 @@ const ProductsMainPage: React.FC<productListProps> = ({
           ))}
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
-          <ProductSearchInput />
+          <ProductsSearchInput />
           <Button size="sm" variant="outline" className="h-8 gap-1">
             <File className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">

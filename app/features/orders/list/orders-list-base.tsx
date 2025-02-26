@@ -12,6 +12,10 @@ import { File, PlusCircle } from 'lucide-react';
 
 import { OrderBase } from '@/app/models/orders-model';
 import { Lookup } from '@/app/models/lookups-model';
+import GridPage from './grid';
+import { OrdersSearchInput } from './orders-list-search-input';
+import OrderListViewSwitcher from './orders-list-view-switcher';
+import OrdersListViewGrid from './orders-list-view-grid';
 
 interface orderListProps {
   orders: OrderBase[];
@@ -22,7 +26,7 @@ interface orderListProps {
   currentTab: string;
 }
 
-const OrdersListPage: React.FC<orderListProps> = ({
+const OrdersListBase: React.FC<orderListProps> = ({
   orders,
   limit,
   page,
@@ -44,7 +48,7 @@ const OrdersListPage: React.FC<orderListProps> = ({
 
   return (
     <Tabs
-      defaultValue="open"
+      defaultValue={currentTab}
       value={currentTab}
       onValueChange={handleTabChange}
     >
@@ -58,7 +62,8 @@ const OrdersListPage: React.FC<orderListProps> = ({
           <TabsTrigger value="all">All</TabsTrigger>
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
-          {/*<ProductSearchInput />*/}
+          <OrderListViewSwitcher />
+          <OrdersSearchInput />
           <Button size="sm" variant="outline" className="h-8 gap-1">
             <File className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
@@ -76,18 +81,9 @@ const OrdersListPage: React.FC<orderListProps> = ({
               Add Order
             </span>
           </Button>
-
-          {/*
-          <Link
-            href={createLink}
-            className="px-2 h-8 lg:flex rounded-md bg-purple-500 px-4 py-2 text-sm text-white transition-colors hover:bg-purple-400"
-          >
-            Add New
-          </Link>
-          */}
         </div>
       </div>
-      <TabsContent value={currentTab}>
+      <TabsContent value="open">
         {/*
         <ProductsTableSimple
           data={orders}
@@ -95,12 +91,14 @@ const OrdersListPage: React.FC<orderListProps> = ({
           page={Number(page)}
           totalDataCount={totalDataCount}
         />*/}
+        <OrdersListViewGrid orders={orders} />
+        <GridPage />
       </TabsContent>
     </Tabs>
   );
 };
 
-export default OrdersListPage;
+export default OrdersListBase;
 
 /*
 <div className="flex items-center space-x-2">

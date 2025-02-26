@@ -1,4 +1,4 @@
-import OrdersListPage from '@/app/features/orders/list/orders-list-page';
+import OrdersListBase from '@/app/features/orders/list/orders-list-base';
 import NotFoundGlobal from '@/app/nav/not-found-global';
 import { GetOrders } from '@/app/actions/server/orders-actions';
 import { GetLookups } from '@/app/actions/server/lookups-actions';
@@ -15,7 +15,7 @@ export default async function OrdersPage(props: {
   const keyword = searchParams.keyword ?? null;
   const limit = searchParams.limit ?? '10';
   const page = searchParams.page ?? '1';
-  const status = searchParams.status ?? 'all';
+  const status = searchParams.status ?? 'open';
 
   const results = await GetOrders(keyword, page, limit, status);
   const orders = results.data;
@@ -23,9 +23,11 @@ export default async function OrdersPage(props: {
 
   const { data: statusesLookup } = await GetLookups('order', 'status');
 
+  console.log(orders);
+
   if (orders) {
     return (
-      <OrdersListPage
+      <OrdersListBase
         orders={orders}
         limit={parseInt(limit)}
         page={parseInt(page)}
