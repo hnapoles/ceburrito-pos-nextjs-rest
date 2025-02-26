@@ -10,13 +10,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { CalendarDateRangePicker } from '@/app/features/dashboard/date-range-picker';
-import { MainNav } from '@/app/features/dashboard/main-nav';
-import { Overview } from '@/app/features/dashboard/overview';
-import { RecentSales } from '@/app/features/dashboard/recent-sales';
-//import { Search } from '@/app/features/dashboard/search';
-import TeamSwitcher from '@/app/features/dashboard/team-switcher';
-//import { UserNav } from '@/app/features/dashboard/user-nav';
+import { CalendarDateRangePicker } from '@/app/features/overview/date-range-picker';
+import { MainNav } from '@/app/features/overview/main-nav';
+import { Overview } from '@/app/features/overview/overview';
+import { RecentSales } from '@/app/features/overview/recent-sales';
+//import { Search } from '@/app/features/overview/search';
+import TeamSwitcher from '@/app/features/overview/team-switcher';
+//import { UserNav } from '@/app/features/overview/user-nav';
 
 import { formatPeso } from '@/app/actions/client/peso';
 import { PesoSvg, UtinsilsSvg } from '@/app/styles/icons';
