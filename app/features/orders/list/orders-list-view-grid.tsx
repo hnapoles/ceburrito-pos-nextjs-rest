@@ -1,6 +1,7 @@
-// pages/grid.tsx
+'use client';
 import React from 'react';
-//import Image from 'next/image';
+
+import { useRouter } from 'next/navigation';
 
 import { OrderBase } from '@/app/models/orders-model';
 import { Lookup } from '@/app/models/lookups-model';
@@ -17,6 +18,14 @@ import { formatPeso } from '@/app/actions/client/peso';
 import { Button } from '@/components/ui/button';
 import { RotateCw } from 'lucide-react';
 import Link from 'next/link';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface orderGridViewProps {
   orders: OrderBase[];
@@ -28,6 +37,12 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
   if (!orders) {
     return <div>No orders found...</div>;
   }
+
+  const [selectedOrder, setSelectedOrder] = React.useState<OrderBase | null>(
+    null,
+  );
+
+  const router = useRouter();
 
   return (
     <div className="container mx-auto lg:p-4 md:p-2 p-1">
@@ -58,7 +73,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
                   onClick={(e) => {
                     e.preventDefault(); // Prevents navigation
                     e.stopPropagation(); // Stops Card click
-                    console.log('Button clicked');
+                    setSelectedOrder(order);
                   }}
                 >
                   <RotateCw className="h-3.5 w-3.5" />
@@ -71,6 +86,34 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
           </Link>
         ))}
       </div>
+      {/* Dialog outside the loop */}
+      <Dialog
+        open={!!selectedOrder}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) setSelectedOrder(null);
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Close Order</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to close order{' '}
+              <strong>{selectedOrder?._id?.slice(-4).toUpperCase()}</strong> for{' '}
+              <strong>{selectedOrder?.customerName}</strong>?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSelectedOrder(null)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => router.push(`/orders/${selectedOrder?._id}`)}
+            >
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
