@@ -1,10 +1,17 @@
 import { GetProductById } from '@/app/actions/server/products-actions';
-import { GetLookups } from '@/app/actions/server/lookups-actions';
 import ProductsIdPricesPriceIdEdit from '@/app/features/products/id/prices/priceId/products-id-prices-priceId-edit';
 import { GetProductSellingPricesByOwnId } from '@/app/actions/server/product-selling-prices-actions';
 import ProductsByIdPricesTableSimple from '@/app/features/products/id/products-id-prices-table-simple';
 
 import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
+
+import {
+  GetLookupCustomers,
+  GetLookups,
+  GetLookupStores,
+} from '@/app/actions/server/lookups-actions';
+
+import { DefaultSizeOptions } from '@/app/models/lookups-model';
 
 export default async function ProductsByIdPricesEditPage({
   params,
@@ -20,7 +27,14 @@ export default async function ProductsByIdPricesEditPage({
   );
 
   const productPrice = await GetProductSellingPricesByOwnId(priceId);
-  console.log(productPrice);
+
+  //use server fetch - not client
+  //this is faster
+  const customers = await GetLookupCustomers();
+  const stores = await GetLookupStores();
+  const { data: orderTypesLookup } = await GetLookups('order', 'type'); //specific to order and type - returns count and data
+  let { data: sizeOptionsLookup } = await GetLookups('order', 'sizeOptions');
+  if (!sizeOptionsLookup) sizeOptionsLookup = DefaultSizeOptions;
 
   return (
     <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
@@ -28,6 +42,10 @@ export default async function ProductsByIdPricesEditPage({
         <ProductsIdPricesPriceIdEdit
           product={product}
           initialData={productPrice}
+          customers={customers}
+          stores={stores}
+          orderTypes={orderTypesLookup}
+          sizeOptions={sizeOptionsLookup}
         />
       </div>
       {/* Right Side - Product Tabs */}

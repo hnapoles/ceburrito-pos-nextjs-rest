@@ -70,7 +70,7 @@ export default function ProductsByIdPricesTableRow({
     setToggleEditDialog((prev) => !prev); // Use functional state update
     console.log('new value of toggled ', toggleEditDialog);
     */
-    router.push(`${pathname}/prices/${productPrice._id}`);
+    router.push(`/products/${productId}/prices/${productPrice._id}`);
   };
 
   /*

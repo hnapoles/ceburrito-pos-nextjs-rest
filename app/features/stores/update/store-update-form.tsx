@@ -6,7 +6,7 @@ import React, {
   //ChangeEvent
 } from 'react';
 
-import { StoreData } from '@/app/models/stores-model';
+import { StoreBase } from '@/app/models/stores-model';
 //import { Lookup } from "@/app/model/lookups-model";
 
 import StoreUpdateFormImage from './store-update-form-image';
@@ -21,7 +21,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-export default function StoreUpdateForm({ store }: { store: StoreData }) {
+export default function StoreUpdateForm({ store }: { store: StoreBase }) {
   const thisImageUrl = store.imageUrl ?? null;
   const [imageUrl, setImageUrl] = useState<string | null>(thisImageUrl);
 

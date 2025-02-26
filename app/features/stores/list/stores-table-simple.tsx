@@ -21,7 +21,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-import { StoreData } from '@/app/models/stores-model';
+import { StoreBase } from '@/app/models/stores-model';
 
 import StoresTableRow from './stores-table-row';
 
@@ -31,7 +31,7 @@ export default function StoresTableSimple({
   page,
   totalDataCount,
 }: {
-  data: StoreData[];
+  data: StoreBase[];
   limit: number;
   page: number;
   totalDataCount: number;

@@ -2,7 +2,7 @@
 
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { StoreData } from '@/app/models/stores-model';
+import { StoreBase } from '@/app/models/stores-model';
 import { ApiOperationNames } from '@/app/models/api-model';
 
 export async function DeleteStoreById(id: string) {
@@ -10,7 +10,7 @@ export async function DeleteStoreById(id: string) {
   const operation = ApiOperationNames.Delete;
   const method = 'POST';
 
-  const result = await apiClientDq<StoreData, StoreData>(
+  const result = await apiClientDq<StoreBase, StoreBase>(
     entity,
     operation,
     id,
@@ -20,13 +20,13 @@ export async function DeleteStoreById(id: string) {
   return result;
 }
 
-export async function CreateStore(data: StoreData) {
+export async function CreateStore(data: StoreBase) {
   const entity = 'store';
   const operation = ApiOperationNames.Create;
   const id = '';
   const method = 'POST';
 
-  const result = await apiClientDq<StoreData, StoreData>(
+  const result = await apiClientDq<StoreBase, StoreBase>(
     entity,
     operation,
     id,
@@ -36,13 +36,13 @@ export async function CreateStore(data: StoreData) {
   return result;
 }
 
-export async function UpdateStore(data: StoreData) {
+export async function UpdateStore(data: StoreBase) {
   const entity = 'store';
   const operation = ApiOperationNames.Update;
   const id = data._id;
   const method = 'POST';
 
-  const result = await apiClientDq<StoreData, StoreData>(
+  const result = await apiClientDq<StoreBase, StoreBase>(
     entity,
     operation,
     id,

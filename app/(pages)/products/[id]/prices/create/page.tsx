@@ -27,6 +27,8 @@ export default async function ProductsByIdPricesCreatePage({
     product._id || '',
   );
 
+  //use server fetch - not client
+  //this is faster
   const customers = await GetLookupCustomers();
   const stores = await GetLookupStores();
   const { data: orderTypesLookup } = await GetLookups('order', 'type'); //specific to order and type - returns count and data
@@ -36,7 +38,13 @@ export default async function ProductsByIdPricesCreatePage({
   return (
     <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
       <div>
-        <ProductsIdPricesCreate product={product} />
+        <ProductsIdPricesCreate
+          product={product}
+          customers={customers}
+          stores={stores}
+          orderTypes={orderTypesLookup}
+          sizeOptions={sizeOptionsLookup}
+        />
       </div>
       {/* Right Side - Product Tabs */}
       <div>

@@ -1,6 +1,6 @@
 import { apiClientDq } from '@/lib/fetch-helper';
 
-import { StoreData, IGetStoresResults } from '@/app/models/stores-model';
+import { StoreBase, IGetStoresResults } from '@/app/models/stores-model';
 import { ApiOperationNames, FindAll } from '@/app/models/api-model';
 
 import StoresMainPage from '@/app/features/stores/list/stores-main-page';
@@ -14,7 +14,7 @@ export default async function Page(props: {
   const limit = searchParams.limit ?? '10';
   const page = searchParams.page ?? '1';
 
-  let stores: StoreData[] = [];
+  let stores: StoreBase[] = [];
   let totalStores = 0;
 
   const apiProps: FindAll = {

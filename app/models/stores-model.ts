@@ -2,17 +2,17 @@ import { z } from 'zod';
 
 export interface IGetStoresResults {
   count: number;
-  data: StoreData[];
+  data: StoreBase[];
 }
 
 export interface IStoreListProps {
-  stores: StoreData[];
+  stores: StoreBase[];
   limit: number | 10;
   page: number | 1;
   totalDataCount: number | 1;
 }
 
-export const ZodSchemaStore = z.object({
+export const StoreZodSchema = z.object({
   _id: z.string().optional(),
   name: z
     .string()
@@ -30,7 +30,7 @@ export const ZodSchemaStore = z.object({
   updatedAt: z.date().optional(),
 });
 
-export type StoreData = z.infer<typeof ZodSchemaStore>;
+export type StoreBase = z.infer<typeof StoreZodSchema>;
 
 export const ProductCategoryFilter = {
   andFilter: {

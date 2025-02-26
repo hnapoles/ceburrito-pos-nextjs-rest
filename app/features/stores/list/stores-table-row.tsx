@@ -27,7 +27,7 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { TableCell, TableRow } from '@/components/ui/table';
 
-import { StoreData } from '@/app/models/stores-model';
+import { StoreBase } from '@/app/models/stores-model';
 
 import { DeleteProductById } from '@/app/actions/server/products-actions';
 
@@ -35,7 +35,7 @@ import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 //import { ConfirmDialog } from "@/app/nav/confirm-dialog";
 
-export default function StoresTableRow({ store }: { store: StoreData }) {
+export default function StoresTableRow({ store }: { store: StoreBase }) {
   const pathname = usePathname();
 
   const [dialogOpen, setDialogOpen] = useState(false);

@@ -1,6 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { usePathname } from 'next/navigation';
-import { Loader2 } from 'lucide-react'; // Import a loading spinner icon
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Card,
@@ -53,17 +51,9 @@ import {
   ProductSellingPriceZodSchema,
 } from '@/app/models/products-model';
 
-import { GetLookups } from '@/app/actions/server/lookups-actions';
-import { DefaultSizeOptions } from '@/app/models/lookups-model';
-
-import {
-  GetLookupCustomers,
-  GetLookupsOrderTypes,
-  GetLookupStores,
-} from '@/app/actions/server/lookups-actions';
 import { Lookup } from '@/app/models/lookups-model';
-import { CustomerDataBase } from '@/app/models/customers-model';
-import { StoreData } from '@/app/models/stores-model';
+import { CustomerBase } from '@/app/models/customers-model';
+import { StoreBase } from '@/app/models/stores-model';
 import {
   CreateProductSellingPrices,
   UpdateProductSellingPriceById,
@@ -72,14 +62,20 @@ import {
 export default function ProductsByIdPricesFormBase({
   product,
   initialData,
+  orderTypes,
+  sizeOptions,
+  customers,
+  stores,
 }: {
   product: ProductBase;
   initialData?: ProductSellingPriceBase;
+  orderTypes: Lookup[];
+  sizeOptions: Lookup[];
+  customers: CustomerBase[];
+  stores: StoreBase[];
 }) {
   //const pathname = usePathname();
   const router = useRouter();
-
-  const [loading, setLoading] = useState<boolean>(true); // Loader for data fetching
 
   const defaultValues = initialData || {
     _id: '',
@@ -89,43 +85,13 @@ export default function ProductsByIdPricesFormBase({
     sellingPrice: undefined,
   };
 
+  //slow fetching in client - need to transfer this to server side for faster response time
+  /*
+  const [loading, setLoading] = useState<boolean>(true); 
   const [orderTypes, setOrderTypes] = useState<Lookup[]>([]);
   const [sizeOptions, setSizeOptions] = useState<Lookup[]>([]);
-
-  const [customers, setCustomers] = useState<CustomerDataBase[]>([]);
-  const [customerId, setCustomerId] = useState<string>('');
-  const [selectedCustomerName, setSelectedCustomerName] = useState<string>('');
-
-  // Handle change in customer selection
-  const handleCustomerChange = (selectedName: string) => {
-    setSelectedCustomerName(selectedName);
-
-    form.setValue('customerName', selectedName);
-
-    // Find the corresponding customerId based on the selected customerName
-    const selectedCustomer = customers.find(
-      (customer) => customer.name === selectedName,
-    );
-    if (selectedCustomer && selectedCustomer._id) {
-      setCustomerId(selectedCustomer._id);
-    }
-  };
-
-  const [stores, setStores] = useState<StoreData[]>([]);
-  const [storeId, setStoreId] = useState<string>('');
-  const [selectedStoreName, setSelectedStoreName] = useState<string>('');
-  // Handle change in store selection
-  const handleStoreChange = (selectedName: string) => {
-    setSelectedStoreName(selectedName);
-    form.setValue('storeName', selectedName);
-
-    // Find the corresponding customerId based on the selected customerName
-    const selectedStore = stores.find((store) => store.name === selectedName);
-    if (selectedStore && selectedStore._id) {
-      setStoreId(selectedStore._id);
-    }
-  };
-
+  const [customers, setCustomers] = useState<CustomerBase[]>([]);
+  const [stores, setStores] = useState<StoreBase[]>([]);
   const fetchData = useCallback(async () => {
     setLoading(true); // Start loading
     const orderTypes = await GetLookupsOrderTypes();
@@ -144,6 +110,39 @@ export default function ProductsByIdPricesFormBase({
   useEffect(() => {
     fetchData();
   }, []);
+  */
+
+  const [customerId, setCustomerId] = useState<string>('');
+  const [selectedCustomerName, setSelectedCustomerName] = useState<string>('');
+
+  // Handle change in customer selection
+  const handleCustomerChange = (selectedName: string) => {
+    setSelectedCustomerName(selectedName);
+
+    form.setValue('customerName', selectedName);
+
+    // Find the corresponding customerId based on the selected customerName
+    const selectedCustomer = customers.find(
+      (customer) => customer.name === selectedName,
+    );
+    if (selectedCustomer && selectedCustomer._id) {
+      setCustomerId(selectedCustomer._id);
+    }
+  };
+
+  const [storeId, setStoreId] = useState<string>('');
+  const [selectedStoreName, setSelectedStoreName] = useState<string>('');
+  // Handle change in store selection
+  const handleStoreChange = (selectedName: string) => {
+    setSelectedStoreName(selectedName);
+    form.setValue('storeName', selectedName);
+
+    // Find the corresponding customerId based on the selected customerName
+    const selectedStore = stores.find((store) => store.name === selectedName);
+    if (selectedStore && selectedStore._id) {
+      setStoreId(selectedStore._id);
+    }
+  };
 
   const form = useForm<ProductSellingPriceBase>({
     resolver: zodResolver(ProductSellingPriceZodSchema),
@@ -249,134 +248,127 @@ export default function ProductsByIdPricesFormBase({
           <strong>{product?.name}</strong>
         </CardDescription>
       </CardHeader>
-      {loading ? (
-        <div className="flex justify-center items-center py-4">
-          <Loader2 className="w-6 h-6 animate-spin" />
-        </div>
-      ) : (
-        <CardContent>
-          <Form {...form}>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="w-full space-y-6"
-            >
-              <FormField
-                control={form.control}
-                name="orderType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Order Type</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      {...field}
-                      value={field.value || ''}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select order type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {orderTypes.map((l) => (
-                          <SelectItem key={l.lookupValue} value={l.lookupValue}>
-                            {l.lookupDescription}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
-              <FormField
-                control={form.control}
-                name="size"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Size</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      {...field}
-                      value={field.value || ''}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select size" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {sizeOptions.map((l) => (
-                          <SelectItem key={l.lookupValue} value={l.lookupValue}>
-                            {l.lookupDescription}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+            <FormField
+              control={form.control}
+              name="orderType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Order Type</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    {...field}
+                    value={field.value || ''}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select order type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {orderTypes.map((l) => (
+                        <SelectItem key={l.lookupValue} value={l.lookupValue}>
+                          {l.lookupDescription}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="storeName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Store Name</FormLabel>
-                    <Select
-                      onValueChange={handleStoreChange}
-                      {...field}
-                      value={field.value || ''}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select store name" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {stores.map((s) => (
-                          <SelectItem key={s._id} value={s.name}>
-                            {s.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="size"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Size</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    {...field}
+                    value={field.value || ''}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select size" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {sizeOptions.map((l) => (
+                        <SelectItem key={l.lookupValue} value={l.lookupValue}>
+                          {l.lookupDescription}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="customerName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Customer Name</FormLabel>
-                    <Select
-                      onValueChange={handleCustomerChange}
-                      {...field}
-                      value={field.value || ''}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select customer name" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {customers.map((c) => (
-                          <SelectItem key={c._id} value={c.name}>
-                            {c.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="storeName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Store Name</FormLabel>
+                  <Select
+                    onValueChange={handleStoreChange}
+                    {...field}
+                    value={field.value || ''}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select store name" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {stores.map((s) => (
+                        <SelectItem key={s._id} value={s.name}>
+                          {s.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              {/* 
+            <FormField
+              control={form.control}
+              name="customerName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Customer Name</FormLabel>
+                  <Select
+                    onValueChange={handleCustomerChange}
+                    {...field}
+                    value={field.value || ''}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select customer name" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {customers.map((c) => (
+                        <SelectItem key={c._id} value={c.name}>
+                          {c.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* 
               <FormField
                 control={form.control}
                 name="sellingPrice"
@@ -416,41 +408,40 @@ export default function ProductsByIdPricesFormBase({
               />
               */}
 
-              <FormField
-                control={form.control}
-                name="sellingPrice"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Price</FormLabel>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      placeholder=""
-                      {...field}
-                      value={field.value || ''}
-                    />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="sellingPrice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    placeholder=""
+                    {...field}
+                    value={field.value || ''}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <div className="mt-6 flex justify-end gap-4">
-                <Button type="button" variant="outline" onClick={handleCancel}>
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={
-                    isSubmitting || !isDirty || Object.keys(errors).length > 0
-                  }
-                >
-                  {isSubmitting ? 'Submitting...' : 'Save'}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      )}
+            <div className="mt-6 flex justify-end gap-4">
+              <Button type="button" variant="outline" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={
+                  isSubmitting || !isDirty || Object.keys(errors).length > 0
+                }
+              >
+                {isSubmitting ? 'Submitting...' : 'Save'}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
 
       <CardFooter></CardFooter>
       <Dialog open={showDialog} onOpenChange={setShowDialog}>

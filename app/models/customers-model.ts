@@ -18,9 +18,9 @@ export const CustomerZodSchema = z.object({
   updatedAt: z.date().optional(),
 });
 
-export type CustomerDataBase = z.infer<typeof CustomerZodSchema>;
+export type CustomerBase = z.infer<typeof CustomerZodSchema>;
 
 export interface FindCustomersOutput {
   count: number;
-  data: CustomerDataBase[];
+  data: CustomerBase[];
 }

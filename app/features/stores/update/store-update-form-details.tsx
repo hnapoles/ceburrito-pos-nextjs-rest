@@ -32,7 +32,7 @@ import { Input } from '@/components/ui/input';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
-import { ZodSchemaStore, StoreData } from '@/app/models/stores-model';
+import { StoreZodSchema, StoreBase } from '@/app/models/stores-model';
 //import { Lookup } from "@/app/model/lookups-model";
 import { UpdateStore } from '@/app/actions/server/stores-actions';
 
@@ -40,18 +40,18 @@ export default function StoreUpdateFormDetails({
   entity,
   imageUrl,
 }: {
-  entity: StoreData;
+  entity: StoreBase;
   imageUrl: string | null;
 }) {
-  const defaultValues: StoreData = {
+  const defaultValues: StoreBase = {
     _id: entity._id,
     name: entity.name,
     imageUrl: entity?.imageUrl ?? '',
     storeAddress: entity?.storeAddress ?? '',
   };
 
-  const form = useForm<StoreData>({
-    resolver: zodResolver(ZodSchemaStore),
+  const form = useForm<StoreBase>({
+    resolver: zodResolver(StoreZodSchema),
     defaultValues: defaultValues,
     mode: 'onBlur',
   });
@@ -73,7 +73,7 @@ export default function StoreUpdateFormDetails({
     },
   } = form;
 
-  async function onSubmit(data: StoreData) {
+  async function onSubmit(data: StoreBase) {
     console.log('create form data');
     console.log(data);
     data = {

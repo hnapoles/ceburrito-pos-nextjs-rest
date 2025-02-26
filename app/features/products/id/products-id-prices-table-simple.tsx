@@ -67,7 +67,7 @@ export default function ProductsByIdPricesTableSimple({
   const [toggleEditForm, setToggleEditForm] = useState<boolean>(false);
 
   const handleClickAddButton = () => {
-    router.push(`${pathname}/prices/create`);
+    router.push(`/products/${productId}/prices/create`);
   };
 
   if (!data || data.length <= 0) {
