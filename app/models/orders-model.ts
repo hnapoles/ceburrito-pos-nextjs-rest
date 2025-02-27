@@ -1,5 +1,14 @@
 import { z } from 'zod';
 
+export const OrderLineZodSchema = z.object({
+  productId: z.string().min(3, 'Product ID is required'),
+  productName: z.string().min(3, 'Product name is required'),
+  quantity: z.number().min(1, 'Quantity must be at least 1'),
+  unitPrice: z.number().min(1, 'Price must be at least 1'),
+});
+
+export type OrderLineBase = z.infer<typeof OrderLineZodSchema>;
+
 export const OrderZodSchema = z.object({
   _id: z.string().optional(), // MongoDB ObjectID (can be omitted)
   type: z
@@ -27,6 +36,7 @@ export const OrderZodSchema = z.object({
   closedAt: z.string().datetime().optional(),
   canceledAt: z.string().datetime().optional(),
   archivedAt: z.string().datetime().optional(),
+  orderLines: z.array(OrderLineZodSchema).optional(),
   createdAt: z.string().datetime().optional(),
   updatedAt: z.string().datetime().optional(),
   createdBy: z.string().optional(),
@@ -39,3 +49,12 @@ export interface FindOrdersOutput {
   count: number;
   data: OrderBase[];
 }
+
+/*
+type OrderLine struct {
+	ProductId   primitive.ObjectID `bson:"productId" json:"productId" validate:"required"`
+	ProductName string             `bson:"productName" json:"productName" validate:"required,min=6,max=32"`
+	Quantity    float64            `bson:"quantity" json:"quantity" validate:"required,gt=0"`
+	UnitCost    float64            `json:"unitCost" bson:"unitCost" validate:"required,gt=0"`
+}
+*/
