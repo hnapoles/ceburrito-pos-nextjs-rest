@@ -5,6 +5,7 @@ export const OrderLineZodSchema = z.object({
   productName: z.string().min(3, 'Product name is required'),
   quantity: z.number().min(1, 'Quantity must be at least 1'),
   unitPrice: z.number().min(1, 'Price must be at least 1'),
+  amount: z.number().min(1, 'Price must be at least 1'),
 });
 
 export type OrderLineBase = z.infer<typeof OrderLineZodSchema>;
@@ -32,6 +33,11 @@ export const OrderZodSchema = z.object({
     .string()
     .min(3, 'Status must be at least 3 characters')
     .max(32, 'Status must not exceed 32 characters'),
+  mode: z
+    .string()
+    .min(3, 'Mode must be at least 3 characters')
+    .max(32, 'Mode must not exceed 32 characters')
+    .optional(), //dine-in, takeout, store-pickup, delivery
   orderedAt: z.string().datetime().optional(), // ISO 8601 format expected
   closedAt: z.string().datetime().optional(),
   canceledAt: z.string().datetime().optional(),

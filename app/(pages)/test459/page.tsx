@@ -78,7 +78,7 @@ export default function OrderForm({
   });
 
   const orderLines = watch('orderLines');
-  const totalAmount = orderLines.reduce(
+  const totalAmount = orderLines?.reduce(
     (sum, line) => sum + (line.quantity * line.unitPrice || 0),
     0,
   );
@@ -249,7 +249,7 @@ export default function OrderForm({
             <CardTitle>Total Amount</CardTitle>
           </CardHeader>
           <CardContent>
-            <span className="text-lg font-bold">{totalAmount.toFixed(2)}</span>
+            <span className="text-lg font-bold">{totalAmount?.toFixed(2)}</span>
           </CardContent>
         </Card>
 

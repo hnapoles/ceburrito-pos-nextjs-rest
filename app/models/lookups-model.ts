@@ -4,6 +4,7 @@ export interface Lookup {
   lookupDescription: string;
   lookupGroup: string;
   lookupValue: string;
+  lookupVariable?: string;
   sortSeq?: number;
 }
 

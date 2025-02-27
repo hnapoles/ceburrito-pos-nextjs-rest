@@ -30,6 +30,7 @@ import { UpdateOrder } from '@/app/actions/server/orders-actions';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 interface orderGridViewProps {
   orders: OrderBase[];
@@ -73,26 +74,36 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
 
   return (
     <div className="container mx-auto lg:p-4 md:p-2 p-1">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1">
         {orders.map((order) => (
           <Link href={`/orders/${order._id}`} key={order._id}>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  {order.customerName || '******'}
+                  <div>
+                    {order.customerName || '******'}
+                    <Badge
+                      variant="outline"
+                      className="ml-2 text-xs text-muted-foreground"
+                    >
+                      {order.mode}
+                    </Badge>
+                  </div>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
                   {order._id?.slice(-4).toUpperCase()}
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <div className="text-xs text-muted-foreground">
                   {order._id?.slice(0, 4)}-{order._id?.slice(4, -4)}-
                   {order._id?.slice(-4)}
-                </p>
+                </div>
+
                 <div className="text-2xl font-bold">
                   {formatPeso(order.totalAmount || 0.0)}
                 </div>
+                <Badge variant="secondary">{order.type}</Badge>
               </CardContent>
               <CardFooter>
                 <Button

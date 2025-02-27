@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { CreditCard, Handshake, LucideIcon } from 'lucide-react';
 
 import {
   Home,
@@ -7,7 +7,7 @@ import {
   //Package2,
   //PanelLeft,
   //Settings,
-  //ShoppingCart,
+  ShoppingCart,
   Users2,
   PhilippinePeso,
   Utensils,
@@ -55,5 +55,20 @@ export const listNavItems = [
     title: 'Analytics',
     href: '/analytics',
     iconName: PhilippinePeso,
+  },
+  {
+    title: 'POS',
+    href: '/orders/create/pos',
+    iconName: ShoppingCart,
+  },
+  {
+    title: 'BTB',
+    href: '/orders/create/btb',
+    iconName: Handshake,
+  },
+  {
+    title: 'BTC',
+    href: '/orders/create/btc',
+    iconName: CreditCard,
   },
 ];
