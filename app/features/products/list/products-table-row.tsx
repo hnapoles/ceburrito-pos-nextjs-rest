@@ -43,6 +43,8 @@ export default function ProductsTableRow({
   const pathname = usePathname();
   const router = useRouter();
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogData, setDialogData] = useState({
     title: '',
@@ -51,6 +53,9 @@ export default function ProductsTableRow({
   });
 
   const handleOpenDialog = (productId: string) => {
+    // Close the dropdown before opening the dialog
+    setIsDropdownOpen(false);
+
     setDialogData({
       title: 'Delete Product',
       description: `Are you sure you want to delete product ID ${productId}? This action cannot be undone.`,
@@ -101,7 +106,7 @@ export default function ProductsTableRow({
         {product.updatedBy}
       </TableCell>
       <TableCell>
-        <DropdownMenu>
+        <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <Button aria-haspopup="true" size="icon" variant="ghost">
               <MoreHorizontal className="h-4 w-4" />
