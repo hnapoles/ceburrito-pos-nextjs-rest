@@ -26,6 +26,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { UpdateOrder } from '@/app/actions/server/orders-actions';
+import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
+import { toast } from '@/hooks/use-toast';
 
 interface orderGridViewProps {
   orders: OrderBase[];
@@ -43,6 +46,29 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
   );
 
   const router = useRouter();
+
+  async function markOrderAsClosed() {
+    if (selectedOrder) {
+      let newData: OrderBase = {
+        ...selectedOrder,
+        status: 'closed',
+      };
+      const updatedData = await UpdateOrder(newData);
+
+      toast({
+        title: 'Update success',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              {JSON.stringify(updatedData, null, 2)}
+            </code>
+          </pre>
+        ),
+      });
+      setSelectedOrder(null);
+      revalidateAndRedirectUrl('/orders');
+    }
+  }
 
   return (
     <div className="container mx-auto lg:p-4 md:p-2 p-1">
@@ -106,11 +132,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
             <Button variant="outline" onClick={() => setSelectedOrder(null)}>
               Cancel
             </Button>
-            <Button
-              onClick={() => router.push(`/orders/${selectedOrder?._id}`)}
-            >
-              Confirm
-            </Button>
+            <Button onClick={() => markOrderAsClosed()}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

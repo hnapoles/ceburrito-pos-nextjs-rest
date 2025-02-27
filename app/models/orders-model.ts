@@ -5,11 +5,13 @@ export const OrderZodSchema = z.object({
   type: z
     .string()
     .min(3, 'Category must be at least 3 characters')
-    .max(32, 'Category must not exceed 32 characters'),
+    .max(32, 'Category must not exceed 32 characters')
+    .optional(),
   customerName: z
     .string()
     .min(6, 'Name must be at least 6 characters')
-    .max(64, 'Name must not exceed 64 characters'),
+    .max(64, 'Name must not exceed 64 characters')
+    .optional(),
   description: z.string().optional(),
   totalAmount: z.coerce
     .number()
