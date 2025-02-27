@@ -29,6 +29,7 @@ import {
 import { UpdateOrder } from '@/app/actions/server/orders-actions';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 import { toast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 interface orderGridViewProps {
   orders: OrderBase[];
@@ -38,7 +39,7 @@ interface orderGridViewProps {
 
 const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
   if (!orders) {
-    return <div>No orders found...</div>;
+    return <div className="ml-4 text-red-500">No orders found !</div>;
   }
 
   const [selectedOrder, setSelectedOrder] = React.useState<OrderBase | null>(
@@ -95,12 +96,16 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
               </CardContent>
               <CardFooter>
                 <Button
-                  className="w-full gap-1 flex"
+                  className={cn(
+                    'w-full gap-1',
+                    order.status === 'xclosed' ? 'hidden' : 'flex',
+                  )}
                   onClick={(e) => {
                     e.preventDefault(); // Prevents navigation
                     e.stopPropagation(); // Stops Card click
                     setSelectedOrder(order);
                   }}
+                  disabled={order.status === 'closed'}
                 >
                   <RotateCw className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">

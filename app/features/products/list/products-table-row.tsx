@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
@@ -41,6 +41,7 @@ export default function ProductsTableRow({
   product: ProductBase;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogData, setDialogData] = useState({
@@ -70,7 +71,10 @@ export default function ProductsTableRow({
   const editLink = `${pathname}/${product._id}`;
 
   return (
-    <TableRow>
+    <TableRow
+      className="hover:pointer-cursor"
+      onClick={() => router.push(editLink)}
+    >
       <TableCell className="hidden sm:table-cell">
         {product.imageUrl ? (
           <Image
@@ -112,7 +116,13 @@ export default function ProductsTableRow({
             <DropdownMenuItem
               className={product.status === 'archived' ? 'block' : 'hidden'}
             >
-              <button onClick={() => handleOpenDialog(product?._id || '')}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault(); // Prevents navigation
+                  e.stopPropagation(); // Stops Card click
+                  handleOpenDialog(product?._id || '');
+                }}
+              >
                 Delete
               </button>
             </DropdownMenuItem>
@@ -129,12 +139,23 @@ export default function ProductsTableRow({
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>
+              <Button
+                variant="outline"
+                onClick={(e) => {
+                  e.preventDefault(); // Prevents navigation
+                  e.stopPropagation(); // Stops Card click
+                  setDialogOpen(false);
+                }}
+              >
                 Cancel
               </Button>
               <Button
                 variant="destructive"
-                onClick={() => handleConfirmDelete(product._id || '')}
+                onClick={(e) => {
+                  e.preventDefault(); // Prevents navigation
+                  e.stopPropagation(); // Stops Card click
+                  handleConfirmDelete(product._id || '');
+                }}
               >
                 Confirm
               </Button>

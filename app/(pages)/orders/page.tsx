@@ -23,24 +23,22 @@ export default async function OrdersPage(props: {
 
   const { data: statusesLookup } = await GetLookups('order', 'status');
 
-  console.log(orders);
+  return (
+    <OrdersListBase
+      orders={orders}
+      limit={parseInt(limit)}
+      page={parseInt(page)}
+      totalDataCount={totalOrders}
+      statusesLookup={statusesLookup}
+      currentTab={status}
+    />
+  );
 
-  if (orders) {
-    return (
-      <OrdersListBase
-        orders={orders}
-        limit={parseInt(limit)}
-        page={parseInt(page)}
-        totalDataCount={totalOrders}
-        statusesLookup={statusesLookup}
-        currentTab={status}
-      />
-    );
-  }
-
+  /*
   if (!orders) {
     return (
       <NotFoundGlobal display={'Order data not found'} backUrl={'/dashboard'} />
     );
   }
+  */
 }

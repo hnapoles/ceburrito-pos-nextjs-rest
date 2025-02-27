@@ -83,7 +83,7 @@ const OrdersListBase: React.FC<orderListProps> = ({
           </Button>
         </div>
       </div>
-      <TabsContent value="open">
+      <TabsContent value={currentTab}>
         {/*
         <ProductsTableSimple
           data={orders}
