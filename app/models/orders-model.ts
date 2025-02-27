@@ -38,6 +38,11 @@ export const OrderZodSchema = z.object({
     .min(3, 'Mode must be at least 3 characters')
     .max(32, 'Mode must not exceed 32 characters')
     .optional(), //dine-in, takeout, store-pickup, delivery
+  storeName: z
+    .string()
+    .min(3, 'Must be at least 3 characters')
+    .max(32, 'Must not exceed 32 characters')
+    .optional(),
   orderedAt: z.string().datetime().optional(), // ISO 8601 format expected
   closedAt: z.string().datetime().optional(),
   canceledAt: z.string().datetime().optional(),

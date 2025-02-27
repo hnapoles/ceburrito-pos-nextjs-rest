@@ -103,6 +103,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
                 <div className="text-2xl font-bold">
                   {formatPeso(order.totalAmount || 0.0)}
                 </div>
+                {order.storeName}
                 <Badge variant="secondary">{order.type}</Badge>
               </CardContent>
               <CardFooter>
