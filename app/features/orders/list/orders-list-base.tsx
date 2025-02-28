@@ -11,11 +11,10 @@ import { File, PlusCircle } from 'lucide-react';
 //import ProductsTableSimple from './orders-table-simple';
 
 import { OrderBase } from '@/app/models/orders-model';
-import { Lookup } from '@/app/models/lookups-model';
-import GridPage from './grid';
 import { OrdersSearchInput } from './orders-list-search-input';
 import OrderListViewSwitcher from './orders-list-view-switcher';
 import OrdersListViewGrid from './orders-list-view-grid';
+import { Lookup } from '@/app/models/lookups-model';
 
 interface orderListProps {
   orders: OrderBase[];
@@ -84,13 +83,6 @@ const OrdersListBase: React.FC<orderListProps> = ({
         </div>
       </div>
       <TabsContent value={currentTab}>
-        {/*
-        <ProductsTableSimple
-          data={orders}
-          limit={Number(limit)}
-          page={Number(page)}
-          totalDataCount={totalDataCount}
-        />*/}
         <OrdersListViewGrid orders={orders} />
       </TabsContent>
     </Tabs>
@@ -98,10 +90,3 @@ const OrdersListBase: React.FC<orderListProps> = ({
 };
 
 export default OrdersListBase;
-
-/*
-<div className="flex items-center space-x-2">
-              <CalendarDateRangePicker />
-              <Button>Download</Button>
-            </div>
-*/
