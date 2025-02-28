@@ -8,14 +8,12 @@ export default async function OrdersPage(props: {
     keyword: string;
     page: string;
     limit: string;
-    category: string;
   }>;
 }) {
   const searchParams = await props.searchParams;
   const keyword = searchParams.keyword ?? null;
-  const limit = searchParams.limit ?? '10';
+  const limit = searchParams.limit ?? '99999';
   const page = searchParams.page ?? '1';
-  const category = searchParams.category ?? 'all';
 
   const results = await GetProducts(keyword, page, limit, 'active');
   const products = results.data;
@@ -35,8 +33,8 @@ export default async function OrdersPage(props: {
   return (
     <OrdersCreatePosPage
       products={products}
+      totalCount={totalProducts}
       categories={categoriesLookup}
-      currentTab={category}
     />
   );
 }
