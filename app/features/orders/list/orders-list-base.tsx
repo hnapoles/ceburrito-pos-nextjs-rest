@@ -20,7 +20,7 @@ interface orderListProps {
   orders: OrderBase[];
   limit: number | 10;
   page: number | 1;
-  totalDataCount: number | 1;
+  totalDataCount: number;
   statusesLookup: Lookup[];
   currentTab: string;
 }
@@ -83,7 +83,12 @@ const OrdersListBase: React.FC<orderListProps> = ({
         </div>
       </div>
       <TabsContent value={currentTab}>
-        <OrdersListViewGrid orders={orders} />
+        <OrdersListViewGrid
+          orders={orders}
+          limit={limit}
+          page={page}
+          totalDataCount={totalDataCount}
+        />
       </TabsContent>
     </Tabs>
   );
