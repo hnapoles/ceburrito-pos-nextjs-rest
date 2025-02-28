@@ -48,10 +48,27 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
     return <div className="ml-4 text-red-500">No products found !</div>;
   }
 
+  //const router = useRouter();
+
   const [selectedProduct, setSelectedProduct] =
     React.useState<ProductBase | null>(null);
 
-  const router = useRouter();
+  const [qty, setQty] = React.useState<number>(1);
+
+  async function handleChangeQty(action: string) {
+    if (action === 'add') {
+      if (qty === 99) return;
+      setQty((prev) => prev + 1);
+    } else {
+      if (qty === 1) return;
+      setQty((prev) => prev - 1);
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    setQty(isNaN(value) ? 0 : value); // Ensure a valid number
+  };
 
   async function markProductAsClosed() {
     if (selectedProduct) {
@@ -133,11 +150,6 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                   height={200}
                   className="h-35 w-50 aspect-square object-cover transition-all hover:scale-105"
                 />
-                <div className="mt-2 flex">
-                  <Button variant="outline">-</Button>
-                  <Button variant="outline">1</Button>
-                  <Button variant="outline">+</Button>
-                </div>
               </div>
               <div className="col-span-3 ml-4">
                 <strong>{selectedProduct?.name}</strong>
@@ -145,13 +157,14 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
               </div>
             </div>
           </div>
-
+          Size Options:
           <div className="grid grid-cols-4 items-left gap-2">
             <Button variant="outline">S</Button>
             <Button variant="outline">M</Button>
             <Button variant="outline">L</Button>
             <Button variant="outline">XL</Button>
           </div>
+          Spice Options:
           <div className="grid grid-cols-4 items-left gap-2">
             <Button variant="outline">Regular</Button>
             <Button variant="outline">Medium</Button>
@@ -159,9 +172,30 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
             <Button variant="outline">Xtra Spicy</Button>
           </div>
           <div>
-            <Button variant="outline">-</Button>
-            <Button variant="outline">1</Button>
-            <Button variant="outline">+</Button>
+            <div className="grid grid-cols-1">
+              <div className="mb-0">
+                <Label className="mb-0">Quantity:</Label>
+              </div>
+              <div className="mt-0 flex">
+                <Button
+                  variant="outline"
+                  onClick={() => handleChangeQty('subtract')}
+                  className="rounded-none"
+                >
+                  -
+                </Button>
+                <Button variant="outline" className="rounded-none">
+                  {qty}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handleChangeQty('add')}
+                  className="rounded-none"
+                >
+                  +
+                </Button>
+              </div>
+            </div>
           </div>
           <DialogFooter>
             <Button className="flex">Add to Order</Button>
