@@ -104,3 +104,33 @@ export async function UpdateProductSellingPriceById(
 
   return result;
 }
+
+export async function GetProductSellingPriceByOrderType(
+  productId: string,
+  orderType: string,
+  storeName?: string,
+) {
+  const productSellingPricesProps = {
+    andFilter: {
+      productId,
+      orderType,
+      storeName,
+    },
+    limit: 99999,
+    page: 1,
+  };
+
+  const entity = 'product_selling_price';
+  const operation = ApiOperationNames.FindAll;
+  const method = 'POST';
+
+  const result = await apiClientDq<
+    FindProductSellingPricesOutput,
+    FindAllProps
+  >(entity, operation, productId, {
+    method: method,
+    body: productSellingPricesProps,
+  });
+
+  return result;
+}

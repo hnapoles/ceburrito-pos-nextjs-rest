@@ -3,7 +3,10 @@ import React from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { ProductBase } from '@/app/models/products-model';
+import {
+  ProductBase,
+  ProductSellingPriceBase,
+} from '@/app/models/products-model';
 import { Lookup } from '@/app/models/lookups-model';
 
 import {
@@ -33,6 +36,10 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
+import {
+  GetProductSellingPriceByOrderType,
+  GetProductSellingPricesByOwnId,
+} from '@/app/actions/server/product-selling-prices-actions';
 
 interface productGridViewProps {
   products: ProductBase[];
@@ -50,14 +57,27 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
   //const router = useRouter();
   const [selectedProduct, setSelectedProduct] =
     React.useState<ProductBase | null>(null);
+  const [qty, setQty] = React.useState<number>(1);
+  const [amount, setAmount] = React.useState<number>(0);
+  const [size, setSize] = React.useState<string>('');
 
   const [sortedSizeOptions, setSortedSizeOptions] = React.useState<
     string[] | undefined | null
   >([]);
 
-  const [amount, setAmount] = React.useState<number>(0);
+  const [prices, setPrices] = React.useState<
+    ProductSellingPriceBase[] | undefined | null
+  >([]);
 
   async function handleSelectProduct(p: ProductBase) {
+    //get product price based on selected product
+    const price = await GetProductSellingPriceByOrderType(
+      p?._id || '',
+      'pos',
+      'Mandaue Main',
+    );
+    setPrices(price.data);
+
     setSelectedProduct(p);
 
     // Define the custom order
@@ -70,28 +90,33 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
     setSortedSizeOptions(newSizeOptions || []);
   }
 
-  const [size, setSize] = React.useState<string>('');
   async function handleSelectSize(size: string) {
-    setAmount(100);
+    setAmount(500);
     setSize(size);
   }
 
-  const [qty, setQty] = React.useState<number>(1);
-
   async function handleChangeQty(action: string) {
-    if (action === 'add') {
-      if (qty === 99) return;
-      setQty((prev) => prev + 1);
-    } else {
-      if (qty === 1) return;
-      setQty((prev) => prev - 1);
-    }
-  }
+    setQty((prev) => {
+      let newQty = prev;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    setQty(isNaN(value) ? 0 : value); // Ensure a valid number
-  };
+      // Update the qty based on the action
+      if (action === 'add' && newQty < 99) {
+        newQty += 1;
+      } else if (action === 'subtract' && newQty > 1) {
+        newQty -= 1;
+      }
+
+      const price = 500;
+
+      // Update amount based on new qty value
+      setAmount((prevAmount) => {
+        // Assuming amount is calculated as qty * price (for example)
+        return price * newQty; // Adjust this calculation based on your use case
+      });
+
+      return newQty; // Return the updated qty
+    });
+  }
 
   async function markProductAsClosed() {
     if (selectedProduct) {

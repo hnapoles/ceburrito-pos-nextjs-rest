@@ -55,6 +55,10 @@ export const ProductZodSchema = z.object({
 
 export type ProductBase = z.infer<typeof ProductZodSchema>;
 
+export interface ProductForPos extends ProductBase {
+  sellingPrices: [];
+}
+
 export interface FindProductsOutput {
   count: number;
   data: ProductBase[];
