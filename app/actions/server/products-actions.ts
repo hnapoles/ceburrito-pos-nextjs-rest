@@ -61,10 +61,18 @@ export async function GetProducts(
   page: string,
   limit: string,
   status: string,
+  isSellable?: boolean,
+  category?: string,
 ) {
+  let andFilter = {
+    ...(status !== 'all' && { status }),
+    ...(category !== 'all' && { category }),
+    ...(isSellable !== undefined && { isSellable }),
+  };
   let apiProps: FindAllProps = {
     entity: 'product',
-    ...(status !== 'all' && { andFilter: { status } }), // Conditionally add andFilter
+    //...(status !== 'all' && { andFilter: { status } }), // Conditionally add andFilter
+    andFilter,
     keyword: keyword,
     searchKeywordFields: ['name', 'description'],
     page: parseInt(page),

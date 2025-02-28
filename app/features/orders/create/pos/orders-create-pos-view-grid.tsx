@@ -33,7 +33,6 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 
 interface productGridViewProps {
   products: ProductBase[];
@@ -49,9 +48,33 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
   }
 
   //const router = useRouter();
-
   const [selectedProduct, setSelectedProduct] =
     React.useState<ProductBase | null>(null);
+
+  const [sortedSizeOptions, setSortedSizeOptions] = React.useState<
+    string[] | undefined | null
+  >([]);
+
+  const [amount, setAmount] = React.useState<number>(0);
+
+  async function handleSelectProduct(p: ProductBase) {
+    setSelectedProduct(p);
+
+    // Define the custom order
+    const order = ['S', 'M', 'L', 'XL'];
+
+    // Sort sizeOptions based on the custom order
+    const newSizeOptions = p.sizeOptions?.sort((a, b) => {
+      return order.indexOf(a) - order.indexOf(b);
+    });
+    setSortedSizeOptions(newSizeOptions || []);
+  }
+
+  const [size, setSize] = React.useState<string>('');
+  async function handleSelectSize(size: string) {
+    setAmount(100);
+    setSize(size);
+  }
 
   const [qty, setQty] = React.useState<number>(1);
 
@@ -100,7 +123,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
           <Card
             key={product._id}
             className="flex flex-col items-center hover:pointer-cursor"
-            onClick={() => setSelectedProduct(product)}
+            onClick={() => handleSelectProduct(product)}
           >
             <CardHeader className="w-full flex justify-center pb-2">
               <Image
@@ -157,48 +180,87 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
               </div>
             </div>
           </div>
-          Size Options:
-          <div className="grid grid-cols-4 items-left gap-2">
-            <Button variant="outline">S</Button>
-            <Button variant="outline">M</Button>
-            <Button variant="outline">L</Button>
-            <Button variant="outline">XL</Button>
-          </div>
-          Spice Options:
-          <div className="grid grid-cols-4 items-left gap-2">
-            <Button variant="outline">Regular</Button>
-            <Button variant="outline">Medium</Button>
-            <Button variant="outline">Spicy</Button>
-            <Button variant="outline">Xtra Spicy</Button>
-          </div>
-          <div>
-            <div className="grid grid-cols-1">
-              <div className="mb-0">
-                <Label className="mb-0">Quantity:</Label>
-              </div>
-              <div className="mt-0 flex">
+          <div className="grid grid-cols-1">
+            <div className="mb-0">
+              <Label className="mb-0">Size:</Label>
+            </div>
+            <div className="grid grid-cols-4 items-left gap-2">
+              {sortedSizeOptions?.map((s) => (
                 <Button
+                  key={s}
                   variant="outline"
-                  onClick={() => handleChangeQty('subtract')}
-                  className="rounded-none"
+                  onClick={() => {
+                    handleSelectSize(s);
+                  }}
+                  className={s === size ? 'border-purple-500' : ''}
                 >
-                  -
+                  {s}
                 </Button>
-                <Button variant="outline" className="rounded-none">
-                  {qty}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => handleChangeQty('add')}
-                  className="rounded-none"
-                >
-                  +
-                </Button>
-              </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1">
+            <div className="mb-0">
+              <Label className="mb-0">Spice:</Label>
+            </div>
+            <div className="grid grid-cols-4 items-left gap-2">
+              <Button variant="outline">Regular</Button>
+              <Button variant="outline">Medium</Button>
+              <Button variant="outline">Spicy</Button>
+              <Button variant="outline">Xtra Spicy</Button>
+            </div>
+          </div>
+          <div className="grid grid-cols-1">
+            <div className="mb-0">
+              <Label className="mb-0">Quantity:</Label>
+            </div>
+            <div className="mt-0 flex">
+              <Button
+                variant="outline"
+                onClick={() => handleChangeQty('subtract')}
+                className="rounded-none"
+              >
+                <strong>-</strong>
+              </Button>
+              <Button
+                variant="outline"
+                className={cn(
+                  'rounded-none',
+                  qty > 0 ? 'border-purple-500' : '',
+                )}
+              >
+                {qty}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handleChangeQty('add')}
+                className="rounded-none"
+              >
+                <strong>+</strong>
+              </Button>
+            </div>
+          </div>
+          <div className="grid grid-cols-1">
+            <div className="mb-0">
+              <Label className="mb-0">Amount:</Label>
+            </div>
+            <div className="mt-0 flex">
+              <Button
+                variant="outline"
+                className={cn(
+                  'rounded-none',
+                  amount > 0 ? 'border-purple-500' : '',
+                )}
+              >
+                {formatPeso(amount)}
+              </Button>
             </div>
           </div>
           <DialogFooter>
-            <Button className="flex">Add to Order</Button>
+            <Button className="flex" disabled={amount <= 0}>
+              Add to Order
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

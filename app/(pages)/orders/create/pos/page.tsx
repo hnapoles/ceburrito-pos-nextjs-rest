@@ -15,7 +15,14 @@ export default async function OrdersPage(props: {
   const limit = searchParams.limit ?? '99999';
   const page = searchParams.page ?? '1';
 
-  const results = await GetProducts(keyword, page, limit, 'active');
+  const results = await GetProducts(
+    keyword,
+    page,
+    limit,
+    'active',
+    true,
+    'all',
+  );
   const products = results.data;
   const totalProducts = results.count;
 
