@@ -31,10 +31,6 @@ export default async function OrdersPage(props: {
   }
 
   return (
-    <OrdersCreatePosPage
-      products={products}
-      totalCount={totalProducts}
-      categories={categoriesLookup}
-    />
+    <OrdersCreatePosPage products={products} categories={categoriesLookup} />
   );
 }

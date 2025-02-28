@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-//import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Lookup } from '@/app/models/lookups-model';
 import { ProductBase } from '@/app/models/products-model';
@@ -8,43 +7,31 @@ import {
   Card,
   CardContent,
   CardFooter,
-  //CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-//import { OrdersCreatePosSearchInput } from './orders-create-pos-search-input';
 import OrdersCreatePosViewGrid from './orders-create-pos-view-grid';
 import { Input } from '@/components/ui/input';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ordersCreatePosProps {
   products: ProductBase[];
-  totalCount: number;
+  //limit: number;
   categories: Lookup[];
-  //currentTab: string; //local search instead of db for faster response
 }
 
 export default function OrdersCreatePosBase({
   products,
-  totalCount,
+  //limit,
   categories,
-}: //currentTab,
-ordersCreatePosProps) {
-  //const router = useRouter();
-  //const searchParams = useSearchParams();
-
-  const handleTabChange = (value: string) => {
-    setCategory(value);
-    /* this will be a local search (faster)
-    const params = new URLSearchParams(searchParams);
-    params.set('category', value);
-    router.push(`?${params.toString()}`, { scroll: false });
-    */
-  };
-
+}: ordersCreatePosProps) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<string>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 24; // Define rows per page
 
   // Filtering logic
   const filteredProducts = products.filter((product) => {
@@ -63,14 +50,26 @@ ordersCreatePosProps) {
     return matchesCategory && matchesSearch;
   });
 
+  // Get paginated data
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+  const totalDataCount = filteredProducts.length; // Update total based on filtered results
+
+  // Pagination handlers
+  const prevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const nextPage = () => {
+    if (currentPage * rowsPerPage < totalDataCount)
+      setCurrentPage(currentPage + 1);
+  };
+
   return (
-    //grid cols=2 normal, cols1 for small
-    <div
-      className="grid gap-1
-       sm:grid-cols-1 lg:grid-cols-3 md:gids-cols-3"
-    >
+    <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4">
       {/* Left Side - add items */}
-      <div className="md:col-span-2 col-span-1">
+      <div className="md:col-span-3 col-span-1">
         <Card>
           <CardHeader>
             <CardTitle>Add Items</CardTitle>
@@ -79,7 +78,7 @@ ordersCreatePosProps) {
             <Tabs
               defaultValue={category}
               value={category}
-              onValueChange={handleTabChange}
+              onValueChange={setCategory}
             >
               <div className="flex items-center">
                 <TabsList>
@@ -94,17 +93,51 @@ ordersCreatePosProps) {
                   <Input
                     placeholder="Search..."
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      setCurrentPage(1); // Reset to first page on search change
+                    }}
                     className="mr-2 mb-4 h-8"
                   />
                 </div>
               </div>
               <TabsContent value={category}>
-                <OrdersCreatePosViewGrid products={filteredProducts} />
+                <OrdersCreatePosViewGrid products={paginatedProducts} />
               </TabsContent>
             </Tabs>
           </CardContent>
-          <CardFooter></CardFooter>
+          <CardFooter>
+            <div className="flex items-center w-full justify-between">
+              <div className="text-xs text-muted-foreground">
+                Showing{' '}
+                <strong>
+                  {totalDataCount > 0 ? startIndex + 1 : 0}-
+                  {Math.min(endIndex, totalDataCount)}
+                </strong>{' '}
+                of <strong>{totalDataCount}</strong> products
+              </div>
+              <div className="flex">
+                <Button
+                  onClick={prevPage}
+                  variant="ghost"
+                  size="sm"
+                  disabled={currentPage <= 1}
+                >
+                  <ChevronLeft className="mr-2 h-4 w-4" />
+                  Prev
+                </Button>
+                <Button
+                  onClick={nextPage}
+                  variant="ghost"
+                  size="sm"
+                  disabled={currentPage * rowsPerPage >= totalDataCount}
+                >
+                  Next
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </CardFooter>
         </Card>
       </div>
       {/* Right Side - cart */}

@@ -75,8 +75,8 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
   }
 
   return (
-    <div className="container mx-auto lg:p-4 md:p-2 p-1">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-1">
+    <div className="container mx-auto lg:p-1 md:p-1 p-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-1">
         {products.map((product) => (
           <Link href={`/products/${product._id}`} key={product._id}>
             <Card className="flex flex-col items-center">
@@ -84,19 +84,16 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 <Image
                   src={product.imageUrl || '/images/products/no-image.jpg'}
                   alt="image"
-                  width={200} // Increase width for a better view
-                  height={200} // Maintain aspect ratio
-                  className={cn(
-                    'w-full h-48 object-cover transition-all hover:scale-105', // Ensures full width & centered
-                  )}
+                  width={200} // Ensures correct size for Next.js optimization
+                  height={200} // Keeps a consistent aspect ratio
+                  className="w-full h-auto aspect-square object-cover transition-all hover:scale-105"
                 />
               </CardHeader>
               <CardContent className="text-center flex flex-col items-center">
-                <div className="text-lg font-semibold">{product.name}</div>
-                <div className="text-gray-500">
-                  {formatPeso(product.basePrice || 0.0)}
+                <div className="text-black-500 text-xs w-35 overflow-hidden text-ellipsis whitespace-nowrap">
+                  {product.name}
                 </div>
-                <Badge variant="secondary">{product.category}</Badge>
+                <Badge variant="outline">{product.category}</Badge>
               </CardContent>
             </Card>
           </Link>

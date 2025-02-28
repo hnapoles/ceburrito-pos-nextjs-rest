@@ -74,10 +74,14 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
 
   return (
     <div className="container mx-auto lg:p-4 md:p-2 p-1">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 auto-rows-fr">
         {orders.map((order) => (
-          <Link href={`/orders/${order._id}`} key={order._id}>
-            <Card>
+          <Link
+            href={`/orders/${order._id}`}
+            key={order._id}
+            className="h-full"
+          >
+            <Card className="h-full flex flex-col">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   <div>
@@ -106,25 +110,27 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({ orders }) => {
                 {order.storeName}
                 <Badge variant="secondary">{order.type}</Badge>
               </CardContent>
-              <CardFooter>
-                <Button
-                  className={cn(
-                    'w-full gap-1',
-                    order.status === 'xclosed' ? 'hidden' : 'flex',
-                  )}
-                  onClick={(e) => {
-                    e.preventDefault(); // Prevents navigation
-                    e.stopPropagation(); // Stops Card click
-                    setSelectedOrder(order);
-                  }}
-                  disabled={order.status === 'closed'}
-                >
-                  <RotateCw className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Mark as Closed
-                  </span>
-                </Button>
-              </CardFooter>
+              {order.status !== 'closed' && (
+                <CardFooter>
+                  <Button
+                    className={cn(
+                      'w-full gap-1',
+                      order.status === 'xclosed' ? 'hidden' : 'flex',
+                    )}
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevents navigation
+                      e.stopPropagation(); // Stops Card click
+                      setSelectedOrder(order);
+                    }}
+                    disabled={order.status === 'closed'}
+                  >
+                    <RotateCw className="h-3.5 w-3.5" />
+                    <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                      Mark as Closed
+                    </span>
+                  </Button>
+                </CardFooter>
+              )}
             </Card>
           </Link>
         ))}
