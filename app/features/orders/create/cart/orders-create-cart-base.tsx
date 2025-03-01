@@ -1,4 +1,5 @@
-import { ProductBase } from '@/app/models/products-model';
+import { useRouter } from 'next/navigation';
+
 import {
   Card,
   CardContent,
@@ -23,6 +24,7 @@ export default function OrdersCreateCartBase({
 }: {
   orderType: string;
 }) {
+  const router = useRouter();
   const { storeName } = useStore();
   const { orderLines } = useCartStore();
 
@@ -103,7 +105,13 @@ export default function OrdersCreateCartBase({
             .{totalAmount.toFixed(2).toString().split('.')[1]}
           </span>
         </p>
-        <Button className="w-full" disabled={orderLines.length === 0}>
+        <Button
+          className="w-full"
+          disabled={orderLines.length === 0}
+          onClick={() => {
+            router.push(`/orders/checkout/${orderType}`);
+          }}
+        >
           Checkout
         </Button>
       </CardHeader>
