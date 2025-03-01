@@ -75,6 +75,8 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
   async function handleSelectProduct(p: ProductBase) {
     //get product price based on selected product
 
+    if (p.isOutOfStock) return;
+
     const price = await GetProductSellingPriceByOrderType(
       p?._id || '',
       'pos',
@@ -181,7 +183,10 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
         {products.map((product) => (
           <Card
             key={product._id}
-            className="flex flex-col items-center hover:pointer-cursor"
+            className={cn(
+              'flex flex-col items-center',
+              product.isOutOfStock ? '' : 'hover:pointer-cursor',
+            )}
             onClick={() => handleSelectProduct(product)}
           >
             <CardHeader className="w-full flex justify-center pb-2 relative">
