@@ -176,7 +176,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
       setQty(0);
       setAmount(0);
       setSize('');
-      revalidateAndRedirectUrl('/orders');
+      revalidateAndRedirectUrl('/orders/create/pos');
     }
   }
 
