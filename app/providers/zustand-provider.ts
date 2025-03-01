@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { ProductBase, ProductSellingPriceBase } from '../models/products-model';
+import { OrderLineBase } from '../models/orders-model';
 
 //this is the only being used for now -- all other store is not used
 interface StoreState {
@@ -16,6 +17,89 @@ export const useStore = create<StoreState>((set) => ({
     set({ storeName: name });
   },
 }));
+
+interface CartStoreState {
+  orderLines: OrderLineBase[];
+  addOrUpdateOrderLine: (newOrder: OrderLineBase) => void;
+  removeOrderLine: (
+    productName: string,
+    sizeOption?: string,
+    spiceOption?: string,
+  ) => void;
+  clearCart: () => void;
+}
+
+export const useCartStore = create<CartStoreState>((set) => ({
+  orderLines: [],
+
+  addOrUpdateOrderLine: (newOrder) => {
+    set((state) => {
+      const existingIndex = state.orderLines.findIndex(
+        (order) =>
+          order.productName === newOrder.productName &&
+          order.sizeOption === newOrder.sizeOption &&
+          order.spiceOption === newOrder.spiceOption,
+      );
+
+      if (existingIndex !== -1) {
+        // Update the existing order line (increase quantity)
+        const updatedOrderLines = [...state.orderLines];
+        updatedOrderLines[existingIndex] = {
+          ...updatedOrderLines[existingIndex],
+          quantity:
+            updatedOrderLines[existingIndex].quantity + newOrder.quantity,
+          amount: updatedOrderLines[existingIndex].amount + newOrder.amount,
+        };
+        return { orderLines: updatedOrderLines };
+      } else {
+        // Add a new order line
+        return { orderLines: [...state.orderLines, newOrder] };
+      }
+    });
+  },
+
+  removeOrderLine: (productName, sizeOption, spiceOption) => {
+    set((state) => ({
+      orderLines: state.orderLines.filter(
+        (order) =>
+          order.productName !== productName ||
+          order.sizeOption !== sizeOption ||
+          order.spiceOption !== spiceOption,
+      ),
+    }));
+  },
+
+  clearCart: () => set({ orderLines: [] }),
+}));
+
+/*
+import { useCartStore } from "@/store/CartStore";
+
+const addItemToCart = () => {
+  const addOrUpdateOrderLine = useCartStore((state) => state.addOrUpdateOrderLine);
+
+  addOrUpdateOrderLine({
+    productId: "123",
+    productName: "Classic Beef Burrito",
+    sizeOption: "Large",
+    spiceOption: "Medium",
+    quantity: 2,
+    unitPrice: 100,
+    amount: 200,
+  });
+};
+
+const removeItem = () => {
+  const removeOrderLine = useCartStore((state) => state.removeOrderLine);
+
+  removeOrderLine("Classic Beef Burrito", "Large", "Medium");
+};
+
+
+const clearCart = useCartStore((state) => state.clearCart);
+clearCart();
+
+*/
 
 //not used - for now
 type DialogStore = {
