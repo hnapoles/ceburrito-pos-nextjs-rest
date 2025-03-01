@@ -62,8 +62,13 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
   const [qty, setQty] = React.useState<number>(1);
   const [amount, setAmount] = React.useState<number>(0);
   const [size, setSize] = React.useState<string>('');
+  const [spice, setSpice] = React.useState<string>('');
 
   const [sortedSizeOptions, setSortedSizeOptions] = React.useState<
+    string[] | undefined | null
+  >([]);
+
+  const [sortedSpiceOptions, setSortedSpiceOptions] = React.useState<
     string[] | undefined | null
   >([]);
 
@@ -87,13 +92,19 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
     setSelectedProduct(p);
 
     // Define the custom order
-    const order = ['S', 'M', 'L', 'XL'];
+    const sizeOrder = ['S', 'M', 'L', 'XL'];
+    const spiceOrder = ['Mild', 'Medium', 'Spicy', 'Extra Spicy'];
 
     // Sort sizeOptions based on the custom order
     const newSizeOptions = p.sizeOptions?.sort((a, b) => {
-      return order.indexOf(a) - order.indexOf(b);
+      return sizeOrder.indexOf(a) - sizeOrder.indexOf(b);
     });
     setSortedSizeOptions(newSizeOptions || []);
+
+    const newSpiceOptions = p.spiceOptions?.sort((a, b) => {
+      return spiceOrder.indexOf(a) - spiceOrder.indexOf(b);
+    });
+    setSortedSpiceOptions(newSpiceOptions || []);
   }
 
   async function handleSelectSize(size: string) {
@@ -273,7 +284,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                   key={s}
                   variant="outline"
                   onClick={() => {
-                    handleSelectSize(s);
+                    setSpice(s);
                   }}
                   className={s === size ? 'border-purple-500' : ''}
                 >
@@ -288,10 +299,18 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
               <Label className="mb-0">Spice:</Label>
             </div>
             <div className="grid grid-cols-4 items-left gap-2">
-              <Button variant="outline">Regular</Button>
-              <Button variant="outline">Medium</Button>
-              <Button variant="outline">Spicy</Button>
-              <Button variant="outline">Xtra Spicy</Button>
+              {sortedSpiceOptions?.map((s) => (
+                <Button
+                  key={s}
+                  variant="outline"
+                  onClick={() => {
+                    handleSelectSize(s);
+                  }}
+                  className={s === size ? 'border-purple-500' : ''}
+                >
+                  {s}
+                </Button>
+              ))}
             </div>
           </div>
           <div className="grid grid-cols-1">
