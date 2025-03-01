@@ -184,7 +184,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
             className="flex flex-col items-center hover:pointer-cursor"
             onClick={() => handleSelectProduct(product)}
           >
-            <CardHeader className="w-full flex justify-center pb-2">
+            <CardHeader className="w-full flex justify-center pb-2 relative">
               <Image
                 src={
                   product.imageUrl ||
@@ -193,8 +193,18 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 alt="image"
                 width={200} // Ensures correct size for Next.js optimization
                 height={200} // Keeps a consistent aspect ratio
-                className="w-full h-auto aspect-square object-cover transition-all hover:scale-105"
+                className={cn(
+                  'w-full h-auto aspect-square object-cover transition-all hover:scale-105',
+                  product.isOutOfStock ? 'grayscale opacity-50' : '', // Apply grayscale when out of stock
+                )}
               />
+              {/* Cross-out overlay */}
+              {product.isOutOfStock && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="absolute w-full h-0.5 bg-red-600 rotate-45"></div>
+                  <div className="absolute w-full h-0.5 bg-red-600 -rotate-45"></div>
+                </div>
+              )}
             </CardHeader>
             <CardContent className="text-center flex flex-col items-center">
               <div className="text-black-500 text-xs w-35 overflow-hidden text-ellipsis whitespace-nowrap">
