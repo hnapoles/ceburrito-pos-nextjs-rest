@@ -176,6 +176,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
       setQty(0);
       setAmount(0);
       setSize('');
+      setSpice('');
       revalidateAndRedirectUrl('/orders/create/pos');
     }
   }
@@ -248,6 +249,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
             setQty(0);
             setAmount(0);
             setSize('');
+            setSpice('');
           }
         }}
       >
@@ -311,7 +313,8 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 <Button
                   key={s}
                   variant="outline"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     setSpice(s);
                   }}
                   className={s === spice ? 'border-purple-500' : ''}

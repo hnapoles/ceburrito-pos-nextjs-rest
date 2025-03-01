@@ -25,6 +25,11 @@ export default function OrdersCreateCartBase({
   const { storeName } = useStore();
   const { orderLines } = useCartStore();
 
+  // Sort by productName (case-insensitive)
+  const sortedData = orderLines.sort((a, b) =>
+    a.productName.localeCompare(b.productName),
+  );
+
   const totalAmount = useCartStore((state) => state.totalAmount());
   const totalItems = useCartStore((state) => state.totalItems());
 
@@ -100,8 +105,8 @@ export default function OrdersCreateCartBase({
         </Button>
       </CardHeader>
       <CardContent>
-        {orderLines.map((l) => (
-          <div key={l.productId + l.sizeOption}>
+        {sortedData.map((l) => (
+          <div key={l.productId + l.sizeOption + l.spiceOption}>
             <div className="grid gap-4 py-2">
               <div className="grid grid-cols-4 items-left gap-1 grid-auto-rows-fr">
                 <div className="h-full flex flex-col">
