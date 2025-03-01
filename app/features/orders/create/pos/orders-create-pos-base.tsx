@@ -157,7 +157,7 @@ export default function OrdersCreatePosBase({
       </div>
       {/* Right Side - cart */}
       <div className="col-span-1 h-full">
-        <OrdersCreateCartBase />
+        <OrdersCreateCartBase orderType={'pos'} />
       </div>
     </div>
   );

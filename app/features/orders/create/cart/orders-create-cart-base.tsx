@@ -17,7 +17,11 @@ import { Separator } from '@/components/ui/separator';
 import React, { useEffect } from 'react';
 import { OrderLineBase } from '@/app/models/orders-model';
 
-export default function OrdersCreateCartBase() {
+export default function OrdersCreateCartBase({
+  orderType,
+}: {
+  orderType: string;
+}) {
   const { storeName } = useStore();
   const { orderLines } = useCartStore();
 
@@ -27,90 +31,13 @@ export default function OrdersCreateCartBase() {
   const addOrUpdateOrderLine = useCartStore(
     (state) => state.addOrUpdateOrderLine,
   );
+  const removeOrderLine = useCartStore((state) => state.removeOrderLine);
+
   const [isUpdating, setIsUpdating] = React.useState(false);
-  const [currentOrderLines, setCurrentOrderLines] =
-    React.useState<OrderLineBase[]>();
 
-  React.useEffect(() => {
-    setCurrentOrderLines(orderLines);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  /*
-  async function handleChangeQty(currentData: OrderLineBase, action: string) {
-    if (isUpdating) return;
-    setIsUpdating(true);
-    if (action === 'add') {
-      const newQuantity = currentData.quantity + 1;
-      const newAmount = currentData.unitPrice * newQuantity;
-      const newData = {
-        ...currentData,
-        quantity: newQuantity,
-        amount: newAmount,
-      };
-      addOrUpdateOrderLine(newData);
-    }
-
-    if (action === 'subtract') {
-      if (currentData.quantity > 1) {
-        // Prevent decrement below 1
-        const newQuantity = currentData.quantity - 1;
-        const newAmount = currentData.unitPrice * newQuantity;
-        const newData = {
-          ...currentData,
-          quantity: newQuantity,
-          amount: newAmount,
-        };
-        addOrUpdateOrderLine(newData);
-      }
-    }
-
-    setIsUpdating(false);
-  }
-    */
-
-  /*
-const existingIndex = state.orderLines.findIndex(
-            (order) =>
-              order.productName === newOrder.productName &&
-              order.sizeOption === newOrder.sizeOption &&
-              order.spiceOption === newOrder.spiceOption,
-          );
-
-          if (existingIndex !== -1) {
-            // Update the existing order line (increase quantity and recalculate amount)
-            const updatedOrderLines = [...state.orderLines];
-            const existingOrder = updatedOrderLines[existingIndex];
-
-            // Increase quantity and recalculate amount
-            updatedOrderLines[existingIndex] = {
-              ...existingOrder,
-              quantity: existingOrder.quantity + newOrder.quantity, // Increase by the new quantity
-              amount:
-                existingOrder.unitPrice *
-                (existingOrder.quantity + newOrder.quantity), // Update amount
-            };
-
-            return { orderLines: updatedOrderLines }; // Return updated state
-          } else {
-            // Add new order line if it doesn't exist
-            return { orderLines: [...state.orderLines, newOrder] };
-          }
-  */
   async function handleChangeQty(currentData: OrderLineBase, action: string) {
     if (isUpdating) return; // Avoid multiple updates at the same time
     setIsUpdating(true); // Disable further clicks until the update is complete
-
-    const foundItem = currentOrderLines?.find(
-      (item) =>
-        item.productName === currentData.productName &&
-        item.sizeOption === currentData.sizeOption &&
-        item.spiceOption === currentData.spiceOption,
-    );
-
-    console.log('currentOrderLines ', currentOrderLines);
-    console.log('foundItem ', foundItem);
-
     if (action === 'add') {
       const newQuantity = 1;
       const newAmount = currentData.unitPrice * newQuantity;
@@ -120,11 +47,18 @@ const existingIndex = state.orderLines.findIndex(
         quantity: newQuantity,
         amount: newAmount,
       };
-      console.log(newData);
       addOrUpdateOrderLine(newData);
     }
 
     if (action === 'subtract') {
+      if (currentData.quantity === 1) {
+        removeOrderLine(
+          currentData.productName,
+          currentData.sizeOption,
+          currentData.spiceOption,
+        );
+      }
+
       if (currentData.quantity > 1) {
         const newQuantity = -1;
         const newAmount = currentData.unitPrice * newQuantity;
@@ -149,8 +83,10 @@ const existingIndex = state.orderLines.findIndex(
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Cart</CardTitle>
-        {storeName}
+        <CardTitle>
+          Cart : {storeName} - {orderType.toUpperCase()}
+        </CardTitle>
+
         <p>
           {`Items (${totalItems}) : ${formatPesoNoDecimals(
             Math.floor(totalAmount),
