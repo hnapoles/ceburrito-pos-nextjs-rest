@@ -2,6 +2,22 @@ import { create } from 'zustand';
 
 import { ProductBase, ProductSellingPriceBase } from '../models/products-model';
 
+//this is the only being used for now -- all other store is not used
+interface StoreState {
+  storeName: string | null;
+  setStoreName: (name: string) => void;
+}
+
+export const useStore = create<StoreState>((set) => ({
+  storeName:
+    typeof window !== 'undefined' ? localStorage.getItem('storeName') : null,
+  setStoreName: (name) => {
+    localStorage.setItem('storeName', name);
+    set({ storeName: name });
+  },
+}));
+
+//not used - for now
 type DialogStore = {
   isCreateDialogOpen: boolean;
   openCreateDialog: () => void;

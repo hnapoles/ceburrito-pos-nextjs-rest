@@ -17,6 +17,8 @@ import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+import { useStore } from '@/app/providers/zustand-provider';
+
 interface ordersCreatePosProps {
   products: ProductBase[];
   //limit: number;
@@ -32,6 +34,9 @@ export default function OrdersCreatePosBase({
   const [category, setCategory] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 24; // Define rows per page
+
+  //
+  const { storeName } = useStore();
 
   // Filtering logic
   const filteredProducts = products.filter((product) => {
@@ -145,6 +150,7 @@ export default function OrdersCreatePosBase({
         <Card>
           <CardHeader>
             <CardTitle>Cart</CardTitle>
+            Store: {storeName}
           </CardHeader>
           <CardContent></CardContent>
           <CardFooter></CardFooter>

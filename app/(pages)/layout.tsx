@@ -7,6 +7,8 @@ import DesktopNav from '@/app/nav/nav-desktop';
 import MobileNav from '@/app/nav/nav-mobile';
 import PagesBreadCrumb from '@/app/nav/nav-bread-crumb';
 
+import StoreSelectionModal from '../features/stores/select/store-selection-modal';
+
 export default function DashboardDefaultLayout({
   children,
 }: {
@@ -26,6 +28,7 @@ export default function DashboardDefaultLayout({
           </header>
           <main className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-4 bg-muted/40">
             {children}
+            <StoreSelectionModal />
           </main>
         </div>
         <Analytics />
