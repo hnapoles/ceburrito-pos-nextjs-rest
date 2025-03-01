@@ -73,6 +73,8 @@ export default function BaseProductForm({
       imageUrl: '',
       sizeOptions: [],
       spiceOptions: [],
+      isOutOfStock: false,
+      isSellable: true,
     },
     mode: 'onBlur',
   });

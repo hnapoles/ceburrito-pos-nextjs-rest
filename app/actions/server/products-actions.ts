@@ -45,6 +45,7 @@ export async function UpdateProduct(data: ProductBase) {
   const operation = ApiOperationNames.Update;
   const id = data._id;
   const method = 'POST';
+  delete data._id;
 
   const result = await apiClientDq<ProductBase, ProductBase>(
     entity,

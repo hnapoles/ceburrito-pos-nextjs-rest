@@ -22,8 +22,8 @@ export const ProductZodSchema = z.object({
     .max(1000000, 'Price cannot exceed 1,000,000')
     .multipleOf(0.01, 'Price must be a valid decimal with two places')
     .optional(), // Allows undefined
-  isSellable: z.boolean().optional(),
-  isOutOfStock: z.boolean().optional(),
+  isSellable: z.boolean().default(true).optional(),
+  isOutOfStock: z.boolean().default(false).optional(),
   status: z
     .string()
     .min(3, 'Status must be at least 3 characters')
