@@ -14,6 +14,8 @@ import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import React, { useEffect } from 'react';
+import { OrderLineBase } from '@/app/models/orders-model';
 
 export default function OrdersCreateCartBase() {
   const { storeName } = useStore();
@@ -22,7 +24,127 @@ export default function OrdersCreateCartBase() {
   const totalAmount = useCartStore((state) => state.totalAmount());
   const totalItems = useCartStore((state) => state.totalItems());
 
-  async function handleChangeQty(action: string) {}
+  const addOrUpdateOrderLine = useCartStore(
+    (state) => state.addOrUpdateOrderLine,
+  );
+  const [isUpdating, setIsUpdating] = React.useState(false);
+  const [currentOrderLines, setCurrentOrderLines] =
+    React.useState<OrderLineBase[]>();
+
+  React.useEffect(() => {
+    setCurrentOrderLines(orderLines);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /*
+  async function handleChangeQty(currentData: OrderLineBase, action: string) {
+    if (isUpdating) return;
+    setIsUpdating(true);
+    if (action === 'add') {
+      const newQuantity = currentData.quantity + 1;
+      const newAmount = currentData.unitPrice * newQuantity;
+      const newData = {
+        ...currentData,
+        quantity: newQuantity,
+        amount: newAmount,
+      };
+      addOrUpdateOrderLine(newData);
+    }
+
+    if (action === 'subtract') {
+      if (currentData.quantity > 1) {
+        // Prevent decrement below 1
+        const newQuantity = currentData.quantity - 1;
+        const newAmount = currentData.unitPrice * newQuantity;
+        const newData = {
+          ...currentData,
+          quantity: newQuantity,
+          amount: newAmount,
+        };
+        addOrUpdateOrderLine(newData);
+      }
+    }
+
+    setIsUpdating(false);
+  }
+    */
+
+  /*
+const existingIndex = state.orderLines.findIndex(
+            (order) =>
+              order.productName === newOrder.productName &&
+              order.sizeOption === newOrder.sizeOption &&
+              order.spiceOption === newOrder.spiceOption,
+          );
+
+          if (existingIndex !== -1) {
+            // Update the existing order line (increase quantity and recalculate amount)
+            const updatedOrderLines = [...state.orderLines];
+            const existingOrder = updatedOrderLines[existingIndex];
+
+            // Increase quantity and recalculate amount
+            updatedOrderLines[existingIndex] = {
+              ...existingOrder,
+              quantity: existingOrder.quantity + newOrder.quantity, // Increase by the new quantity
+              amount:
+                existingOrder.unitPrice *
+                (existingOrder.quantity + newOrder.quantity), // Update amount
+            };
+
+            return { orderLines: updatedOrderLines }; // Return updated state
+          } else {
+            // Add new order line if it doesn't exist
+            return { orderLines: [...state.orderLines, newOrder] };
+          }
+  */
+  async function handleChangeQty(currentData: OrderLineBase, action: string) {
+    if (isUpdating) return; // Avoid multiple updates at the same time
+    setIsUpdating(true); // Disable further clicks until the update is complete
+
+    const foundItem = currentOrderLines?.find(
+      (item) =>
+        item.productName === currentData.productName &&
+        item.sizeOption === currentData.sizeOption &&
+        item.spiceOption === currentData.spiceOption,
+    );
+
+    console.log('currentOrderLines ', currentOrderLines);
+    console.log('foundItem ', foundItem);
+
+    if (action === 'add') {
+      const newQuantity = 1;
+      const newAmount = currentData.unitPrice * newQuantity;
+
+      const newData = {
+        ...currentData,
+        quantity: newQuantity,
+        amount: newAmount,
+      };
+      console.log(newData);
+      addOrUpdateOrderLine(newData);
+    }
+
+    if (action === 'subtract') {
+      if (currentData.quantity > 1) {
+        const newQuantity = -1;
+        const newAmount = currentData.unitPrice * newQuantity;
+
+        if (
+          newQuantity !== currentData.quantity ||
+          newAmount !== currentData.amount
+        ) {
+          const newData = {
+            ...currentData,
+            quantity: newQuantity,
+            amount: newAmount,
+          };
+          addOrUpdateOrderLine(newData);
+        }
+      }
+    }
+
+    setIsUpdating(false); // Re-enable buttons after update is complete
+  }
 
   return (
     <Card className="h-full flex flex-col">
@@ -34,7 +156,7 @@ export default function OrdersCreateCartBase() {
             Math.floor(totalAmount),
           )}`}
           <span className="text-xs">
-            .{totalAmount.toString().split('.')[1]}
+            .{totalAmount.toFixed(2).toString().split('.')[1]}
           </span>
         </p>
         <Button className="w-full" disabled={orderLines.length === 0}>
@@ -45,8 +167,8 @@ export default function OrdersCreateCartBase() {
         {orderLines.map((l) => (
           <div key={l.productId + l.sizeOption}>
             <div className="grid gap-4 py-2">
-              <div className="grid grid-cols-4 items-left gap-1">
-                <div>
+              <div className="grid grid-cols-4 items-left gap-1 grid-auto-rows-fr">
+                <div className="h-full flex flex-col">
                   <Image
                     src={
                       l.imageUrl || '/images/products/no-image-for-display.webp'
@@ -54,39 +176,42 @@ export default function OrdersCreateCartBase() {
                     alt="image"
                     width={100}
                     height={100}
-                    className="h-20 w-20 aspect-square object-cover transition-all hover:scale-105"
+                    className="h-auto w-auto aspect-square object-cover transition-all hover:scale-105 h-full flex flex-col"
                   />
                 </div>
                 <div className="col-span-3 ml-0">
                   <div>
                     <strong>{l.productName}</strong>
                   </div>
-                  Amount : {formatPeso(l.amount)}{' '}
-                  <Badge variant="outline">{l.sizeOption}</Badge>
-                  <div className="text-xs">spice : {l.spiceOption}</div>
+                  {formatPesoNoDecimals(Math.floor(l.amount))}
+                  <span className="text-xs mr-2">
+                    .{l.amount.toFixed(2).toString().split('.')[1]}
+                  </span>
+                  <Badge variant="outline" className="border-blue-300">
+                    {l.sizeOption}
+                  </Badge>{' '}
+                  {l.spiceOption && (
+                    <Badge variant="outline" className="border-red-500">
+                      {l.spiceOption}
+                    </Badge>
+                  )}
                   <div className="text-xs">
                     Unit Price: {formatPeso(l.unitPrice)}
                   </div>
                   <div className="mt-0 flex">
                     <Button
                       variant="outline"
-                      onClick={() => handleChangeQty('subtract')}
+                      onClick={() => handleChangeQty(l, 'subtract')}
                       className="rounded-none"
                     >
                       <strong>-</strong>
                     </Button>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        'rounded-none',
-                        l.quantity > 0 ? 'border-purple-500' : '',
-                      )}
-                    >
+                    <Button variant="outline" className={cn(l, 'rounded-none')}>
                       {l.quantity}
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={() => handleChangeQty('add')}
+                      onClick={() => handleChangeQty(l, 'add')}
                       className="rounded-none"
                     >
                       <strong>+</strong>

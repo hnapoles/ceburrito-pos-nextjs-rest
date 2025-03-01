@@ -23,6 +23,7 @@ export const useStore = create<StoreState>((set) => ({
 interface CartStoreState {
   orderLines: OrderLineBase[];
   addOrUpdateOrderLine: (newOrder: OrderLineBase) => void;
+  replaceAllOrderLines: (newOrderLines: OrderLineBase[]) => void;
   removeOrderLine: (
     productName: string,
     sizeOption?: string,
@@ -38,6 +39,7 @@ export const useCartStore = create<CartStoreState>()(
     (set, get) => ({
       orderLines: [],
 
+      /*
       addOrUpdateOrderLine: (newOrder) => {
         set((state) => {
           const existingIndex = state.orderLines.findIndex(
@@ -62,6 +64,43 @@ export const useCartStore = create<CartStoreState>()(
             return { orderLines: [...state.orderLines, newOrder] };
           }
         });
+      },
+      */
+      // Store Update Function - Adding or Updating Order Line
+      addOrUpdateOrderLine: (newOrder) => {
+        set((state) => {
+          // Check if the order exists based on unique criteria (productName, sizeOption, spiceOption)
+          const existingIndex = state.orderLines.findIndex(
+            (order) =>
+              order.productName === newOrder.productName &&
+              order.sizeOption === newOrder.sizeOption &&
+              order.spiceOption === newOrder.spiceOption,
+          );
+
+          if (existingIndex !== -1) {
+            // Update the existing order line (increase quantity and recalculate amount)
+            const updatedOrderLines = state.orderLines;
+            const existingOrder = updatedOrderLines[existingIndex];
+
+            // Increase quantity and recalculate amount
+            updatedOrderLines[existingIndex] = {
+              ...existingOrder,
+              quantity: existingOrder.quantity + newOrder.quantity, // Increase by the new quantity
+              amount:
+                existingOrder.unitPrice *
+                (existingOrder.quantity + newOrder.quantity), // Update amount
+            };
+
+            return { orderLines: updatedOrderLines }; // Return updated state
+          } else {
+            // Add new order line if it doesn't exist
+            return { orderLines: [...state.orderLines, newOrder] };
+          }
+        });
+      },
+
+      replaceAllOrderLines: (newOrderLines) => {
+        set(() => ({ orderLines: newOrderLines }));
       },
 
       removeOrderLine: (productName, sizeOption, spiceOption) => {
