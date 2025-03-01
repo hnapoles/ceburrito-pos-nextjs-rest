@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 import { ProductBase, ProductSellingPriceBase } from '../models/products-model';
 import { OrderLineBase } from '../models/orders-model';
@@ -18,6 +19,7 @@ export const useStore = create<StoreState>((set) => ({
   },
 }));
 
+// Define Zustand store with localStorage persistence
 interface CartStoreState {
   orderLines: OrderLineBase[];
   addOrUpdateOrderLine: (newOrder: OrderLineBase) => void;
@@ -29,48 +31,56 @@ interface CartStoreState {
   clearCart: () => void;
 }
 
-export const useCartStore = create<CartStoreState>((set) => ({
-  orderLines: [],
+export const useCartStore = create<CartStoreState>()(
+  persist(
+    (set) => ({
+      orderLines: [],
 
-  addOrUpdateOrderLine: (newOrder) => {
-    set((state) => {
-      const existingIndex = state.orderLines.findIndex(
-        (order) =>
-          order.productName === newOrder.productName &&
-          order.sizeOption === newOrder.sizeOption &&
-          order.spiceOption === newOrder.spiceOption,
-      );
+      addOrUpdateOrderLine: (newOrder) => {
+        set((state) => {
+          const existingIndex = state.orderLines.findIndex(
+            (order) =>
+              order.productName === newOrder.productName &&
+              order.sizeOption === newOrder.sizeOption &&
+              order.spiceOption === newOrder.spiceOption,
+          );
 
-      if (existingIndex !== -1) {
-        // Update the existing order line (increase quantity)
-        const updatedOrderLines = [...state.orderLines];
-        updatedOrderLines[existingIndex] = {
-          ...updatedOrderLines[existingIndex],
-          quantity:
-            updatedOrderLines[existingIndex].quantity + newOrder.quantity,
-          amount: updatedOrderLines[existingIndex].amount + newOrder.amount,
-        };
-        return { orderLines: updatedOrderLines };
-      } else {
-        // Add a new order line
-        return { orderLines: [...state.orderLines, newOrder] };
-      }
-    });
-  },
+          if (existingIndex !== -1) {
+            // Update existing order line (increase quantity and amount)
+            const updatedOrderLines = [...state.orderLines];
+            updatedOrderLines[existingIndex] = {
+              ...updatedOrderLines[existingIndex],
+              quantity:
+                updatedOrderLines[existingIndex].quantity + newOrder.quantity,
+              amount: updatedOrderLines[existingIndex].amount + newOrder.amount,
+            };
+            return { orderLines: updatedOrderLines };
+          } else {
+            // Add new order line
+            return { orderLines: [...state.orderLines, newOrder] };
+          }
+        });
+      },
 
-  removeOrderLine: (productName, sizeOption, spiceOption) => {
-    set((state) => ({
-      orderLines: state.orderLines.filter(
-        (order) =>
-          order.productName !== productName ||
-          order.sizeOption !== sizeOption ||
-          order.spiceOption !== spiceOption,
-      ),
-    }));
-  },
+      removeOrderLine: (productName, sizeOption, spiceOption) => {
+        set((state) => ({
+          orderLines: state.orderLines.filter(
+            (order) =>
+              order.productName !== productName ||
+              order.sizeOption !== sizeOption ||
+              order.spiceOption !== spiceOption,
+          ),
+        }));
+      },
 
-  clearCart: () => set({ orderLines: [] }),
-}));
+      clearCart: () => set({ orderLines: [] }),
+    }),
+    {
+      name: 'cart-storage', // Key used in localStorage
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
+);
 
 /*
 import { useCartStore } from "@/store/CartStore";
