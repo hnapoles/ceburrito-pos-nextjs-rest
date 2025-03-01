@@ -7,7 +7,7 @@ import DesktopNav from '@/app/nav/nav-desktop';
 import MobileNav from '@/app/nav/nav-mobile';
 import PagesBreadCrumb from '@/app/nav/nav-bread-crumb';
 
-import StoreSelectionModal from '../features/stores/select/store-selection-modal';
+import StoreSelectionModal from '../features/stores/select/store-selection-for-local-storage';
 
 export default function DashboardDefaultLayout({
   children,

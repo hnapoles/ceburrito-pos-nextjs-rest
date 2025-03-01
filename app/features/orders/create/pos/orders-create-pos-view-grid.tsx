@@ -43,12 +43,14 @@ import {
 
 interface productGridViewProps {
   products: ProductBase[];
+  storeName?: string | null;
   totalDataCount?: number | 1;
   statusesLookup?: Lookup[];
 }
 
 const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
   products,
+  storeName,
 }) => {
   if (!products) {
     return <div className="ml-4 text-red-500">No products found !</div>;
@@ -68,9 +70,11 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
   const [prices, setPrices] = React.useState<
     ProductSellingPriceBase[] | undefined | null
   >([]);
+  const [currentPrice, setCurrentPrice] = React.useState<number>(0);
 
   async function handleSelectProduct(p: ProductBase) {
     //get product price based on selected product
+
     const price = await GetProductSellingPriceByOrderType(
       p?._id || '',
       'pos',
@@ -91,8 +95,21 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
   }
 
   async function handleSelectSize(size: string) {
-    setAmount(500);
+    // Function to find the matching size
+    const findSizeMatch = (size: string) => {
+      return prices?.find((item) => item.size === size);
+    };
+    const result = findSizeMatch(size);
+    if (result && result?.sellingPrice) {
+      setCurrentPrice(result?.sellingPrice || 0);
+      setAmount(result?.sellingPrice || 0);
+    } else {
+      setCurrentPrice(selectedProduct?.basePrice || 0);
+      setAmount(selectedProduct?.basePrice || 0);
+    }
     setSize(size);
+    //reset qty to 1
+    setQty(1);
   }
 
   async function handleChangeQty(action: string) {
@@ -105,8 +122,11 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
       } else if (action === 'subtract' && newQty > 1) {
         newQty -= 1;
       }
+      if (action === 'refresh') {
+        newQty = prev;
+      }
 
-      const price = 500;
+      const price = currentPrice;
 
       // Update amount based on new qty value
       setAmount((prevAmount) => {
@@ -141,6 +161,20 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
     }
   }
 
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (storeName) {
+      setIsLoading(false);
+    }
+  }, [storeName]);
+
+  if (isLoading) {
+    return (
+      <div className="text-center text-gray-500">Loading store data...</div>
+    );
+  }
+
   return (
     <div className="container mx-auto lg:p-1 md:p-1 p-1">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-1">
@@ -152,7 +186,10 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
           >
             <CardHeader className="w-full flex justify-center pb-2">
               <Image
-                src={product.imageUrl || '/images/products/no-image.jpg'}
+                src={
+                  product.imageUrl ||
+                  '/images/products/no-image-for-display.webp'
+                }
                 alt="image"
                 width={200} // Ensures correct size for Next.js optimization
                 height={200} // Keeps a consistent aspect ratio
@@ -176,6 +213,9 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
           if (!isOpen) {
             // If "X" button is clicked or another valid close action, allow closing
             setSelectedProduct(null);
+            setQty(0);
+            setAmount(0);
+            setSize('');
           }
         }}
       >
@@ -191,7 +231,8 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
               <div>
                 <Image
                   src={
-                    selectedProduct?.imageUrl || '/images/products/no-image.jpg'
+                    selectedProduct?.imageUrl ||
+                    '/images/products/no-image-for-display.webp'
                   }
                   alt="image"
                   width={200}
@@ -202,6 +243,8 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
               <div className="col-span-3 ml-4">
                 <strong>{selectedProduct?.name}</strong>
                 <p>{selectedProduct?.description}</p>
+                {formatPeso(selectedProduct?.basePrice)}{' '}
+                <Badge variant="outline">base</Badge>
               </div>
             </div>
           </div>

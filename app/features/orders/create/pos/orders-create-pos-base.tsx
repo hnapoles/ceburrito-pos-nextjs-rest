@@ -107,7 +107,16 @@ export default function OrdersCreatePosBase({
                 </div>
               </div>
               <TabsContent value={category}>
-                <OrdersCreatePosViewGrid products={paginatedProducts} />
+                {!storeName ? (
+                  <div className="flex justify-center items-center h-20">
+                    <span className="text-gray-500">Loading store...</span>
+                  </div>
+                ) : (
+                  <OrdersCreatePosViewGrid
+                    products={paginatedProducts}
+                    storeName={storeName}
+                  />
+                )}
               </TabsContent>
             </Tabs>
           </CardContent>

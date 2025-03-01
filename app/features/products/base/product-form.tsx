@@ -68,7 +68,7 @@ export default function BaseProductForm({
       _id: '',
       name: '',
       description: '',
-      basePrice: undefined,
+      basePrice: 0,
       status: 'draft',
       imageUrl: '',
       sizeOptions: [],
