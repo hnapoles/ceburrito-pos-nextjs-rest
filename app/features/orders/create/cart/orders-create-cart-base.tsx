@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import React, { useEffect } from 'react';
 import { OrderLineBase } from '@/app/models/orders-model';
+import { Minus, Plus, Trash } from 'lucide-react';
 
 export default function OrdersCreateCartBase({
   orderType,
@@ -32,6 +33,8 @@ export default function OrdersCreateCartBase({
 
   const totalAmount = useCartStore((state) => state.totalAmount());
   const totalItems = useCartStore((state) => state.totalItems());
+
+  const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
 
   const addOrUpdateOrderLine = useCartStore(
     (state) => state.addOrUpdateOrderLine,
@@ -109,7 +112,11 @@ export default function OrdersCreateCartBase({
           <div key={l.productId + l.sizeOption + l.spiceOption}>
             <div className="grid gap-4 py-2">
               <div className="grid grid-cols-4 items-left gap-1 grid-auto-rows-fr">
-                <div className="h-full flex flex-col">
+                <div
+                  className="relative"
+                  onMouseEnter={() => setHoveredItem(l.productId)}
+                  onMouseLeave={() => setHoveredItem(null)}
+                >
                   <Image
                     src={
                       l.imageUrl || '/images/products/no-image-for-display.webp'
@@ -119,6 +126,22 @@ export default function OrdersCreateCartBase({
                     height={100}
                     className="h-auto w-auto aspect-square object-cover transition-all hover:scale-105 h-full flex flex-col"
                   />
+                  {/* Delete Button (Shown on Hover) */}
+                  {hoveredItem === l.productId && (
+                    <Button
+                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full shadow-md hover:bg-red-600"
+                      size="icon"
+                      onClick={() =>
+                        removeOrderLine(
+                          l.productName,
+                          l.sizeOption,
+                          l.spiceOption,
+                        )
+                      }
+                    >
+                      <Trash size={16} />
+                    </Button>
+                  )}
                 </div>
                 <div className="col-span-3 ml-0">
                   <div>
@@ -144,18 +167,24 @@ export default function OrdersCreateCartBase({
                       variant="outline"
                       onClick={() => handleChangeQty(l, 'subtract')}
                       className="rounded-none"
+                      size="icon"
                     >
-                      <strong>-</strong>
+                      <Minus />
                     </Button>
-                    <Button variant="outline" className={cn(l, 'rounded-none')}>
+                    <Button
+                      variant="outline"
+                      className="rounded-none"
+                      size="icon"
+                    >
                       {l.quantity}
                     </Button>
                     <Button
                       variant="outline"
                       onClick={() => handleChangeQty(l, 'add')}
                       className="rounded-none"
+                      size="icon"
                     >
-                      <strong>+</strong>
+                      <Plus />
                     </Button>
                   </div>
                 </div>

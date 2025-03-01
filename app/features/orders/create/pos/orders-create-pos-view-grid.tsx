@@ -36,6 +36,7 @@ import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { GetProductSellingPriceByOrderType } from '@/app/actions/server/product-selling-prices-actions';
+import { Minus, Plus } from 'lucide-react';
 
 interface productGridViewProps {
   products: ProductBase[];
@@ -333,8 +334,9 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 variant="outline"
                 onClick={() => handleChangeQty('subtract')}
                 className="rounded-none"
+                size="icon"
               >
-                <strong>-</strong>
+                <Minus />
               </Button>
               <Button
                 variant="outline"
@@ -342,6 +344,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                   'rounded-none',
                   qty > 0 ? 'border-purple-500' : '',
                 )}
+                size="icon"
               >
                 {qty}
               </Button>
@@ -349,8 +352,9 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 variant="outline"
                 onClick={() => handleChangeQty('add')}
                 className="rounded-none"
+                size="icon"
               >
-                <strong>+</strong>
+                <Plus />
               </Button>
             </div>
           </div>
