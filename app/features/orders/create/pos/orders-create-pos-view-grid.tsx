@@ -89,7 +89,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
 
     // Define the custom order
     const sizeOrder = ['S', 'M', 'L', 'XL'];
-    const spiceOrder = ['Mild', 'Medium', 'Spicy', 'Extra Spicy'];
+    const spiceOrder = ['Mild', 'Regular', 'Spicy', 'Extra Spicy'];
 
     // Sort sizeOptions based on the custom order
     const newSizeOptions = p.sizeOptions?.sort((a, b) => {
@@ -168,7 +168,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
         title: 'Update success',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">Added to cart</code>
+            <p className="text-white">{selectedProduct.name}, added to cart </p>
           </pre>
         ),
       });
@@ -302,7 +302,9 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
 
           <div className="grid grid-cols-1">
             <div className="mb-0">
-              <Label className="mb-0">Spice:</Label>
+              <Label className="mb-0" hidden={sortedSpiceOptions?.length === 0}>
+                Spice:
+              </Label>
             </div>
             <div className="grid grid-cols-4 items-left gap-2">
               {sortedSpiceOptions?.map((s) => (

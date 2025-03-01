@@ -55,9 +55,9 @@ export const DefaultSpiceOptions: Lookup[] = [
   {
     _id: '2',
     lookupCode: 'spiceOption',
-    lookupDescription: 'Medium',
+    lookupDescription: 'Regular',
     lookupGroup: 'order',
-    lookupValue: 'Medium',
+    lookupValue: 'Regular',
     sortSeq: 2,
   },
   {

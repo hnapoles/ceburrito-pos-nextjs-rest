@@ -73,10 +73,10 @@ export default function OrdersCreatePosBase({
   };
 
   return (
-    <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4">
+    <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
       {/* Left Side - add items */}
       <div className="md:col-span-3 col-span-1">
-        <Card>
+        <Card className="h-full flex flex-col">
           <CardHeader>
             <CardTitle>Add Items</CardTitle>
           </CardHeader>
@@ -156,7 +156,7 @@ export default function OrdersCreatePosBase({
         </Card>
       </div>
       {/* Right Side - cart */}
-      <div className="col-span-1">
+      <div className="col-span-1 h-full">
         <OrdersCreateCartBase />
       </div>
     </div>

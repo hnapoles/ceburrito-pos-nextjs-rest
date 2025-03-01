@@ -29,11 +29,13 @@ interface CartStoreState {
     spiceOption?: string,
   ) => void;
   clearCart: () => void;
+  totalAmount: () => number; // Function to get total amount
+  totalItems: () => number; // Function to get total quantity count
 }
 
 export const useCartStore = create<CartStoreState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       orderLines: [],
 
       addOrUpdateOrderLine: (newOrder) => {
@@ -74,6 +76,10 @@ export const useCartStore = create<CartStoreState>()(
       },
 
       clearCart: () => set({ orderLines: [] }),
+      totalAmount: () =>
+        get().orderLines.reduce((sum, item) => sum + item.amount, 0),
+      totalItems: () =>
+        get().orderLines.reduce((sum, item) => sum + item.quantity, 0),
     }),
     {
       name: 'cart-storage', // Key used in localStorage
