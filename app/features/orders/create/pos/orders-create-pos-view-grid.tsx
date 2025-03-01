@@ -1,7 +1,8 @@
 'use client';
 import React from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useCartStore } from '@/app/providers/zustand-provider';
+//import { useRouter } from 'next/navigation';
 
 import {
   ProductBase,
@@ -12,15 +13,14 @@ import { Lookup } from '@/app/models/lookups-model';
 import {
   Card,
   CardContent,
-  CardFooter,
+  //CardFooter,
   //CardDescription,
   CardHeader,
-  CardTitle,
+  //CardTitle,
 } from '@/components/ui/card';
 import { formatPeso } from '@/app/actions/client/peso';
 import { Button } from '@/components/ui/button';
-import { RotateCw } from 'lucide-react';
-import Link from 'next/link';
+
 import {
   Dialog,
   DialogContent,
@@ -29,17 +29,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { UpdateProduct } from '@/app/actions/server/products-actions';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
-import {
-  GetProductSellingPriceByOrderType,
-  GetProductSellingPricesByOwnId,
-} from '@/app/actions/server/product-selling-prices-actions';
+import { GetProductSellingPriceByOrderType } from '@/app/actions/server/product-selling-prices-actions';
 
 interface productGridViewProps {
   products: ProductBase[];
@@ -151,26 +147,36 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
     });
   }
 
-  async function markProductAsClosed() {
+  const addOrUpdateOrderLine = useCartStore(
+    (state) => state.addOrUpdateOrderLine,
+  );
+
+  async function handleAddToOrder() {
     if (selectedProduct) {
-      let newData: ProductBase = {
-        ...selectedProduct,
-        status: 'closed',
-      };
-      const updatedData = await UpdateProduct(newData);
+      addOrUpdateOrderLine({
+        productId: selectedProduct._id || '',
+        productName: selectedProduct.name,
+        imageUrl: selectedProduct.imageUrl,
+        sizeOption: size,
+        spiceOption: spice,
+        quantity: qty,
+        unitPrice: currentPrice,
+        amount: amount,
+      });
 
       toast({
         title: 'Update success',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(updatedData, null, 2)}
-            </code>
+            <code className="text-white">Added to cart</code>
           </pre>
         ),
       });
       setSelectedProduct(null);
-      revalidateAndRedirectUrl('/products');
+      setQty(0);
+      setAmount(0);
+      setSize('');
+      revalidateAndRedirectUrl('/orders');
     }
   }
 
@@ -284,7 +290,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                   key={s}
                   variant="outline"
                   onClick={() => {
-                    setSpice(s);
+                    handleSelectSize(s);
                   }}
                   className={s === size ? 'border-purple-500' : ''}
                 >
@@ -304,9 +310,9 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                   key={s}
                   variant="outline"
                   onClick={() => {
-                    handleSelectSize(s);
+                    setSpice(s);
                   }}
-                  className={s === size ? 'border-purple-500' : ''}
+                  className={s === spice ? 'border-purple-500' : ''}
                 >
                   {s}
                 </Button>
@@ -360,7 +366,11 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
             </div>
           </div>
           <DialogFooter>
-            <Button className="flex" disabled={amount <= 0}>
+            <Button
+              className="flex"
+              disabled={amount <= 0}
+              onClick={handleAddToOrder}
+            >
               Add to Order
             </Button>
           </DialogFooter>

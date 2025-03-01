@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const OrderLineZodSchema = z.object({
   productId: z.string().min(3, 'Product ID is required'),
   productName: z.string().min(3, 'Product name is required'),
+  imageUrl: z.string().optional(),
   sizeOption: z.string().optional(),
   spiceOption: z.string().optional(),
   quantity: z.number().min(1, 'Quantity must be at least 1'),
