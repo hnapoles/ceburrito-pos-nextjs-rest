@@ -28,9 +28,11 @@ import React from 'react';
 export default function OrdersCheckoutBase({
   orderType,
   dineModes,
+  paymentMethods,
 }: {
   orderType: string;
   dineModes: Lookup[];
+  paymentMethods: Lookup[];
 }) {
   const { storeName } = useStore();
   const { orderLines } = useCartStore();
@@ -41,12 +43,15 @@ export default function OrdersCheckoutBase({
 
   const [dineMode, setDineMode] = React.useState(
     dineModes[0]?.lookupValue || '',
-  ); // Default to first lookupValue
-  // ✅ Fix: Ensure `lookupDescription` is displayed for the selected `lookupValue`
-  // ✅ Fix: Ensure `lookupDescription` is displayed correctly
+  );
   const selectedMode = dineModes.find((mode) => mode.lookupValue === dineMode);
 
-  console.log('selected mode ', selectedMode);
+  const [paymentMethod, setPaymentMethod] = React.useState(
+    paymentMethods[0]?.lookupValue || '',
+  );
+  const selectedMethod = paymentMethods.find(
+    (method) => method.lookupValue === paymentMethod,
+  );
 
   return (
     <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
@@ -86,7 +91,6 @@ export default function OrdersCheckoutBase({
                   className="bg-gray-50 border-none"
                 />
                 <Label htmlFor="dineMode">Dine Mode</Label>
-
                 {/* Select for predefined options */}
                 <Select value={dineMode} onValueChange={setDineMode}>
                   <SelectTrigger>
@@ -96,10 +100,31 @@ export default function OrdersCheckoutBase({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectLabel>Options</SelectLabel>
+                      <SelectLabel>Dine Options</SelectLabel>
                       {dineModes.map((mode) => (
                         <SelectItem key={mode._id} value={mode.lookupValue}>
                           {mode.lookupDescription}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Label htmlFor="dineMode">Payment Method</Label>
+                {/* Select for predefined options */}
+                <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                  <SelectTrigger>
+                    <SelectValue>
+                      {selectedMethod?.lookupDescription ||
+                        'Select Payment Method'}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Payment Options</SelectLabel>
+                      {paymentMethods.map((m) => (
+                        <SelectItem key={m._id} value={m.lookupValue}>
+                          {m.lookupDescription}
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -109,6 +134,14 @@ export default function OrdersCheckoutBase({
                 <Input
                   type="text"
                   id="customer"
+                  defaultValue={''}
+                  readOnly
+                  className="bg-gray-50 border-none"
+                />
+                <Label>Customer Email</Label>
+                <Input
+                  type="email"
+                  id="customerEmail"
                   defaultValue={''}
                   readOnly
                   className="bg-gray-50 border-none"

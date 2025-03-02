@@ -10,6 +10,13 @@ export default async function OrdersCheckoutByOrderType({
   const orderType = (await params).orderType;
 
   const { data: dineModes } = await GetLookups(orderType, 'dineMode');
+  const { data: paymentMethods } = await GetLookups('order', 'paymentMethod');
 
-  return <OrdersCheckoutBase orderType={orderType} dineModes={dineModes} />;
+  return (
+    <OrdersCheckoutBase
+      orderType={orderType}
+      dineModes={dineModes}
+      paymentMethods={paymentMethods}
+    />
+  );
 }
