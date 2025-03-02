@@ -219,7 +219,9 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 height={200} // Keeps a consistent aspect ratio
                 className={cn(
                   'w-full h-auto aspect-square object-cover transition-all hover:scale-105',
-                  product.isOutOfStock ? 'grayscale opacity-50' : '', // Apply grayscale when out of stock
+                  product.isOutOfStock
+                    ? 'grayscale-50 saturate-95 opacity-95'
+                    : '', // Apply grayscale when out of stock
                 )}
               />
               {/* Cross-out overlay */}

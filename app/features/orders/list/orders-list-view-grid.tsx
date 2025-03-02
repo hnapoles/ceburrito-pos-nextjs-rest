@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import { OrderBase } from '@/app/models/orders-model';
 import { Lookup } from '@/app/models/lookups-model';
@@ -65,6 +65,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
 
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const rowsPerPage = limit;
 
   function prevPage() {
@@ -97,7 +98,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
         ),
       });
       setSelectedOrder(null);
-      revalidateAndRedirectUrl('/orders');
+      revalidateAndRedirectUrl(`${pathname}?${searchParams}`);
     }
   }
 
