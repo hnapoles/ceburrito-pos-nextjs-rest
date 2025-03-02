@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { formatPeso } from '@/app/actions/client/peso';
+import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Button } from '@/components/ui/button';
 import { RotateCw } from 'lucide-react';
 import Link from 'next/link';
@@ -134,7 +134,10 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
                 </div>
 
                 <div className="text-2xl font-bold">
-                  {formatPeso(order.totalAmount || 0.0)}
+                  {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
+                  <span className="text-xs">
+                    .{order?.totalAmount?.toFixed(2).toString().split('.')[1]}{' '}
+                  </span>
                 </div>
                 {order.storeName}
                 <Badge variant="secondary">{order.type}</Badge>

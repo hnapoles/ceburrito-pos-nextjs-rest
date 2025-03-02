@@ -32,6 +32,7 @@ import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
 import { CreateOrder } from '@/app/actions/server/orders-actions';
 import { toast } from '@/hooks/use-toast';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
+import { cn } from '@/lib/utils';
 
 export default function OrdersCheckoutBase({
   orderType,
@@ -242,7 +243,7 @@ export default function OrdersCheckoutBase({
           </CardContent>
           <CardFooter>
             <Button
-              className="w-full md:w-1/2"
+              className={cn('w-full md:w-1/2', cartIsEmpty ? 'hidden' : '')}
               disabled={
                 !paymentMethod || !dineMode || !customerName || isProcessing
               }
