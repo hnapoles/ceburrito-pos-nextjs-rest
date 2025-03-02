@@ -1,3 +1,4 @@
+import { GetLookups } from '@/app/actions/server/lookups-actions';
 import OrdersCheckoutBase from '@/app/features/orders/checkout/orders-checkout-base';
 
 //start of function
@@ -8,5 +9,7 @@ export default async function OrdersCheckoutByOrderType({
 }) {
   const orderType = (await params).orderType;
 
-  return <OrdersCheckoutBase orderType={orderType} />;
+  const { data: dineModes } = await GetLookups(orderType, 'dineMode');
+
+  return <OrdersCheckoutBase orderType={orderType} dineModes={dineModes} />;
 }
