@@ -1,3 +1,5 @@
+import OrdersCheckoutBase from '@/app/features/orders/checkout/orders-checkout-base';
+
 //start of function
 export default async function OrdersCheckoutByOrderType({
   params,
@@ -6,5 +8,5 @@ export default async function OrdersCheckoutByOrderType({
 }) {
   const orderType = (await params).orderType;
 
-  return <div>{orderType}</div>;
+  return <OrdersCheckoutBase orderType={orderType} />;
 }

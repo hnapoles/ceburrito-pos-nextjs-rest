@@ -18,7 +18,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { useStore } from '@/app/providers/zustand-provider';
-import OrdersCreateCartBase from '../cart/orders-create-cart-base';
+import OrdersCartBase from '../../cart/orders-create-cart-base';
 
 interface ordersCreatePosProps {
   products: ProductBase[];
@@ -157,7 +157,7 @@ export default function OrdersCreatePosBase({
       </div>
       {/* Right Side - cart */}
       <div className="col-span-1 h-full">
-        <OrdersCreateCartBase orderType={'pos'} />
+        <OrdersCartBase orderType={'pos'} />
       </div>
     </div>
   );

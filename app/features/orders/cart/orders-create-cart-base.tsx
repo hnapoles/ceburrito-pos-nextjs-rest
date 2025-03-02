@@ -19,10 +19,12 @@ import React, { useEffect } from 'react';
 import { OrderLineBase } from '@/app/models/orders-model';
 import { Minus, Plus, Trash } from 'lucide-react';
 
-export default function OrdersCreateCartBase({
+export default function OrdersCartBase({
   orderType,
+  onCheckout = false,
 }: {
   orderType: string;
+  onCheckout?: boolean;
 }) {
   const router = useRouter();
   const { storeName } = useStore();
@@ -105,15 +107,26 @@ export default function OrdersCreateCartBase({
             .{totalAmount.toFixed(2).toString().split('.')[1]}
           </span>
         </p>
-        <Button
-          className="w-full"
-          disabled={orderLines.length === 0}
-          onClick={() => {
-            router.push(`/orders/checkout/${orderType}`);
-          }}
-        >
-          Checkout
-        </Button>
+        {onCheckout ? (
+          <Button
+            className="w-full"
+            onClick={() => {
+              router.push(`/orders/create/${orderType}`);
+            }}
+          >
+            Add More Items
+          </Button>
+        ) : (
+          <Button
+            className="w-full"
+            disabled={orderLines.length === 0}
+            onClick={() => {
+              router.push(`/orders/checkout/${orderType}`);
+            }}
+          >
+            Checkout
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         {sortedData.map((l) => (
