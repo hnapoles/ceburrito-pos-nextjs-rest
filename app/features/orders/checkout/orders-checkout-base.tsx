@@ -27,6 +27,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 
 import KeyboardTouchLettersDialog from '../../keyboard/keyboard-toch-letters-dialog';
+import KeyboardTouchEmailDialog from '../../keyboard/keyboard-touch-email-dialog';
 
 export default function OrdersCheckoutBase({
   orderType,
@@ -55,9 +56,12 @@ export default function OrdersCheckoutBase({
   );
 
   const [customerName, setCustomerName] = React.useState('');
+  const [customerEmail, setCustomerEmail] = React.useState('');
 
-  const [isTouchDialogOpen, setIsTouchDialogOpen] = React.useState(false);
-  const [touchValue, setTouchValue] = React.useState('');
+  const [isNameTouchDialogOpen, setIsNameTouchDialogOpen] =
+    React.useState(false);
+  const [isEmailTouchDialogOpen, setIsEmailTouchDialogOpen] =
+    React.useState(false);
 
   return (
     <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
@@ -176,17 +180,12 @@ export default function OrdersCheckoutBase({
                     <Input
                       type="text"
                       id="customer"
-                      defaultValue={''}
+                      defaultValue={customerName}
                       readOnly
-                      className="bg-gray-50 border-none flex-1"
+                      className="flex-1"
+                      placeholder="Enter name"
+                      onClick={() => setIsNameTouchDialogOpen(true)}
                     />
-                    <Button
-                      variant="outline"
-                      className="w-32 min-w-[100px]"
-                      onClick={() => setIsTouchDialogOpen(true)}
-                    >
-                      Edit Customer
-                    </Button>
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -194,13 +193,12 @@ export default function OrdersCheckoutBase({
                     <Input
                       type="email"
                       id="customerEmail"
-                      defaultValue={''}
+                      defaultValue={customerEmail}
+                      placeholder="Enter email"
                       readOnly
-                      className="bg-gray-50 border-none flex-1"
+                      className="flex-1"
+                      onClick={() => setIsEmailTouchDialogOpen(true)}
                     />
-                    <Button variant="outline" className="w-32 min-w-[100px]">
-                      Edit Email
-                    </Button>
                   </div>
                 </div>
               </div>
@@ -216,9 +214,16 @@ export default function OrdersCheckoutBase({
           </CardFooter>
         </Card>
         <KeyboardTouchLettersDialog
-          setTouchValue={setTouchValue}
-          setIsTouchDialogOpen={setIsTouchDialogOpen}
-          isTouchDialogOpen={isTouchDialogOpen}
+          currentValue={customerName}
+          setTouchValue={setCustomerName}
+          setIsTouchDialogOpen={setIsNameTouchDialogOpen}
+          isTouchDialogOpen={isNameTouchDialogOpen}
+        />
+        <KeyboardTouchEmailDialog
+          currentValue={customerEmail}
+          setTouchValue={setCustomerEmail}
+          setIsTouchDialogOpen={setIsEmailTouchDialogOpen}
+          isTouchDialogOpen={isEmailTouchDialogOpen}
         />
       </div>
       {/* Right Side - cart */}

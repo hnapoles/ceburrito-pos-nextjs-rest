@@ -20,7 +20,7 @@ const nameSchema = z.object({
 
 type FormData = z.infer<typeof nameSchema>;
 
-export default function KeyboardTouchLettersDialog({
+export default function KeyboardTouchEmailDialog({
   currentValue,
   setTouchValue,
   setIsTouchDialogOpen,
@@ -75,7 +75,7 @@ export default function KeyboardTouchLettersDialog({
       <Dialog open={isTouchDialogOpen} onOpenChange={setIsTouchDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Enter Name</DialogTitle>
+            <DialogTitle>Enter Email</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
@@ -127,8 +127,24 @@ export default function KeyboardTouchLettersDialog({
                 'X',
                 'Y',
                 'Z',
+                '@',
+                '.com',
+                '.ph',
+                '.org',
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+                '0',
                 '-',
                 '.',
+                '_',
+                '#',
               ].map((char) => (
                 <Button
                   key={char}
@@ -140,14 +156,21 @@ export default function KeyboardTouchLettersDialog({
                   {char}
                 </Button>
               ))}
-              {/* Space Key */}
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => handleKeyPress(' ')}
+                onClick={() => handleKeyPress('@gmail.com')}
                 className="col-span-2 text-lg"
               >
-                Space
+                @gmail.com
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => handleKeyPress('@yahoo.com')}
+                className="col-span-2 text-lg"
+              >
+                @yahoo.com
               </Button>
               {/* Backspace Key */}
               <Button
