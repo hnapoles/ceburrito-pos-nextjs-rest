@@ -24,6 +24,7 @@ import ErrorDisplay from '../../error/error-display';
 import { formatPeso } from '@/app/actions/client/peso';
 import { Lookup } from '@/app/models/lookups-model';
 import React from 'react';
+import { Button } from '@/components/ui/button';
 
 export default function OrdersCheckoutBase({
   orderType,
@@ -46,12 +47,12 @@ export default function OrdersCheckoutBase({
   );
   const selectedMode = dineModes.find((mode) => mode.lookupValue === dineMode);
 
-  const [paymentMethod, setPaymentMethod] = React.useState(
-    paymentMethods[0]?.lookupValue || '',
-  );
+  const [paymentMethod, setPaymentMethod] = React.useState('');
   const selectedMethod = paymentMethods.find(
     (method) => method.lookupValue === paymentMethod,
   );
+
+  const [customerName, setCustomerName] = React.useState('');
 
   return (
     <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
@@ -65,91 +66,145 @@ export default function OrdersCheckoutBase({
             {cartIsEmpty ? (
               <ErrorDisplay message={'Empty Cart'} className={'bg-white'} />
             ) : (
-              <div className="flex flex-col gap-3 md:w-1/4 w-full">
-                <Label>Order Type</Label>
-                <Input
-                  type="text"
-                  id="orderType"
-                  defaultValue={orderType.toUpperCase()}
-                  readOnly
-                  className="bg-gray-50 border-none"
-                />
-                <Label>Item Count</Label>
-                <Input
-                  type="text"
-                  id="orderType"
-                  defaultValue={totalItems}
-                  readOnly
-                  className="bg-gray-50 border-none"
-                />
-                <Label>Total Amount</Label>
-                <Input
-                  type="text"
-                  id="orderType"
-                  defaultValue={formatPeso(totalAmount)}
-                  readOnly
-                  className="bg-gray-50 border-none"
-                />
-                <Label htmlFor="dineMode">Dine Mode</Label>
-                {/* Select for predefined options */}
-                <Select value={dineMode} onValueChange={setDineMode}>
-                  <SelectTrigger>
-                    <SelectValue>
-                      {selectedMode?.lookupDescription || 'Select Dine Mode'}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Dine Options</SelectLabel>
-                      {dineModes.map((mode) => (
-                        <SelectItem key={mode._id} value={mode.lookupValue}>
-                          {mode.lookupDescription}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Left Side: Order Type, Item Count, Total Amount */}
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-2">
+                    <Label className="w-32">Total Amount</Label>
+                    <Input
+                      type="text"
+                      id="totalAmount"
+                      defaultValue={formatPeso(totalAmount)}
+                      readOnly
+                      className="bg-gray-50 border-none w-full"
+                    />
+                  </div>
 
-                <Label htmlFor="dineMode">Payment Method</Label>
-                {/* Select for predefined options */}
-                <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                  <SelectTrigger>
-                    <SelectValue>
-                      {selectedMethod?.lookupDescription ||
-                        'Select Payment Method'}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Payment Options</SelectLabel>
-                      {paymentMethods.map((m) => (
-                        <SelectItem key={m._id} value={m.lookupValue}>
-                          {m.lookupDescription}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <Label>Customer</Label>
-                <Input
-                  type="text"
-                  id="customer"
-                  defaultValue={''}
-                  readOnly
-                  className="bg-gray-50 border-none"
-                />
-                <Label>Customer Email</Label>
-                <Input
-                  type="email"
-                  id="customerEmail"
-                  defaultValue={''}
-                  readOnly
-                  className="bg-gray-50 border-none"
-                />
+                  <div className="flex items-center gap-2">
+                    <Label className="w-32">Item Count</Label>
+                    <Input
+                      type="text"
+                      id="itemCount"
+                      defaultValue={totalItems}
+                      readOnly
+                      className="bg-gray-50 border-none w-full"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Label className="w-32">Order Type</Label>
+                    <Input
+                      type="text"
+                      id="orderType"
+                      defaultValue={orderType.toUpperCase()}
+                      readOnly
+                      className="bg-gray-50 border-none w-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Right Side: Payment Method, Dine Mode, Store Name */}
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-2">
+                    <Label className="w-32">Payment Method</Label>
+                    <Select
+                      value={paymentMethod}
+                      onValueChange={setPaymentMethod}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Payment Method" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Payment Options</SelectLabel>
+                          {paymentMethods.map((method) => (
+                            <SelectItem
+                              key={method._id}
+                              value={method.lookupValue}
+                            >
+                              {method.lookupDescription}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Label className="w-32">Dine Mode</Label>
+                    <Select value={dineMode} onValueChange={setDineMode}>
+                      <SelectTrigger>
+                        <SelectValue>
+                          {selectedMode?.lookupDescription ||
+                            'Select Dine Mode'}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Dine Options</SelectLabel>
+                          {dineModes.map((mode) => (
+                            <SelectItem key={mode._id} value={mode.lookupValue}>
+                              {mode.lookupDescription}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Label className="w-32">Store Name</Label>
+                    <Input
+                      type="text"
+                      id="storeName"
+                      defaultValue={storeName?.toUpperCase()}
+                      readOnly
+                      className="bg-gray-50 border-none w-full"
+                    />
+                  </div>
+                </div>
+
+                {/* Customer and Email Fields */}
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-2">
+                    <Label className="w-32">Customer</Label>
+                    <Input
+                      type="text"
+                      id="customer"
+                      defaultValue={''}
+                      readOnly
+                      className="bg-gray-50 border-none flex-1"
+                    />
+                    <Button variant="outline" className="w-32 min-w-[100px]">
+                      Edit Customer
+                    </Button>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Label className="w-32">Email</Label>
+                    <Input
+                      type="email"
+                      id="customerEmail"
+                      defaultValue={''}
+                      readOnly
+                      className="bg-gray-50 border-none flex-1"
+                    />
+                    <Button variant="outline" className="w-32 min-w-[100px]">
+                      Edit Email
+                    </Button>
+                  </div>
+                </div>
               </div>
             )}
           </CardContent>
-          <CardFooter></CardFooter>
+          <CardFooter>
+            <Button
+              className="w-full md:w-1/2"
+              disabled={!paymentMethod || !dineMode || !customerName}
+            >
+              Save
+            </Button>
+          </CardFooter>
         </Card>
       </div>
       {/* Right Side - cart */}
