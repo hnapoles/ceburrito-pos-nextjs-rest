@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import OrdersCartBase from '../cart/orders-create-cart-base';
+import OrdersCartBase from '../cart/orders-cart-base';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { useCartStore, useStore } from '@/app/providers/zustand-provider';
@@ -28,6 +28,10 @@ import { Button } from '@/components/ui/button';
 
 import KeyboardTouchLettersDialog from '../../keyboard/keyboard-toch-letters-dialog';
 import KeyboardTouchEmailDialog from '../../keyboard/keyboard-touch-email-dialog';
+import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
+import { CreateOrder } from '@/app/actions/server/orders-actions';
+import { toast } from '@/hooks/use-toast';
+import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
 export default function OrdersCheckoutBase({
   orderType,
@@ -42,6 +46,7 @@ export default function OrdersCheckoutBase({
   const { orderLines } = useCartStore();
   const totalAmount = useCartStore((state) => state.totalAmount());
   const totalItems = useCartStore((state) => state.totalItems());
+  const { clearCart } = useCartStore();
 
   const cartIsEmpty = !orderLines || orderLines.length === 0;
 
@@ -62,6 +67,37 @@ export default function OrdersCheckoutBase({
     React.useState(false);
   const [isEmailTouchDialogOpen, setIsEmailTouchDialogOpen] =
     React.useState(false);
+
+  const [isProcessing, setIsProcessing] = React.useState(false);
+
+  const handleSaveOrder = async () => {
+    setIsProcessing(true);
+    let newOrder: OrderBase = {
+      type: orderType,
+      mode: dineMode,
+      status: 'open',
+      storeName: storeName || '',
+      customerName: customerName,
+      customerEmail: customerEmail,
+      totalAmount: totalAmount,
+      orderLines: orderLines,
+    };
+
+    const createdOrder = await CreateOrder(newOrder);
+    clearCart();
+    setIsProcessing(true);
+
+    toast({
+      title: 'Data saved',
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{`Order Id : ${createdOrder._id}`}</code>
+        </pre>
+      ),
+    });
+
+    revalidateAndRedirectUrl('/orders');
+  };
 
   return (
     <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
@@ -207,9 +243,12 @@ export default function OrdersCheckoutBase({
           <CardFooter>
             <Button
               className="w-full md:w-1/2"
-              disabled={!paymentMethod || !dineMode || !customerName}
+              disabled={
+                !paymentMethod || !dineMode || !customerName || isProcessing
+              }
+              onClick={handleSaveOrder}
             >
-              Save
+              {isProcessing ? 'Processing...' : 'Save Order'}
             </Button>
           </CardFooter>
         </Card>

@@ -18,7 +18,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 import { useStore } from '@/app/providers/zustand-provider';
-import OrdersCartBase from '../../cart/orders-create-cart-base';
+import OrdersCartBase from '../../cart/orders-cart-base';
 
 interface ordersCreatePosProps {
   products: ProductBase[];
