@@ -60,7 +60,7 @@ export default function KeyboardTouchEmailDialog({
     } else if (char === 'Clear') {
       setValue('name', '');
     } else {
-      setValue('name', nameValue + char);
+      setValue('name', nameValue + char.toLowerCase());
     }
   };
 
