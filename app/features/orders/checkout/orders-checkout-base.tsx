@@ -210,7 +210,7 @@ export default function OrdersCheckoutBase({
                 </div>
 
                 {/* Customer and Email Fields */}
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-2">
                     <Label className="w-32">Customer</Label>
                     <Input
@@ -218,7 +218,7 @@ export default function OrdersCheckoutBase({
                       id="customer"
                       defaultValue={customerName}
                       readOnly
-                      className="flex-1"
+                      className="w-full"
                       placeholder="Enter name"
                       onClick={() => setIsNameTouchDialogOpen(true)}
                     />
@@ -232,7 +232,7 @@ export default function OrdersCheckoutBase({
                       defaultValue={customerEmail}
                       placeholder="Enter email"
                       readOnly
-                      className="flex-1"
+                      className="w-full"
                       onClick={() => setIsEmailTouchDialogOpen(true)}
                     />
                   </div>

@@ -33,6 +33,7 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ErrorDisplay from '../../error/error-display';
 
 interface orderGridViewProps {
   orders: OrderBase[];
@@ -49,7 +50,13 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
   totalDataCount,
 }) => {
   if (!orders) {
-    return <div className="ml-4 text-red-500">No orders found !</div>;
+    return (
+      <ErrorDisplay
+        message={'No orders found'}
+        type={'empty'}
+        className={'bg-none'}
+      />
+    );
   }
 
   const [selectedOrder, setSelectedOrder] = React.useState<OrderBase | null>(

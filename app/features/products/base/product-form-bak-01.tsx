@@ -205,8 +205,8 @@ export default function BaseProductForm({
                 control={form.control}
                 name="_id"
                 render={({ field }) => (
-                  <FormItem className="flex items-center gap-4">
-                    <FormLabel className="w-32">Id</FormLabel>
+                  <FormItem>
+                    <FormLabel>Id</FormLabel>
                     <Input
                       placeholder=""
                       readOnly
@@ -226,16 +226,15 @@ export default function BaseProductForm({
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="w-full flex flex-col">
-                  <div className="flex items-center gap-4">
-                    <FormLabel className="w-32">Name</FormLabel>
-                    <Input
-                      type="text"
-                      placeholder="Enter product name"
-                      {...field}
-                    />
-                  </div>
-                  <FormMessage className="ml-auto" />
+                <FormItem>
+                  <FormLabel>Product Name</FormLabel>
+                  <Input
+                    type="text"
+                    placeholder="Enter product name"
+                    {...field}
+                  />
+
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -243,16 +242,14 @@ export default function BaseProductForm({
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem className="w-full flex flex-col">
-                  <div className="flex items-center gap-4">
-                    <FormLabel className="w-32">Description</FormLabel>
-                    <Textarea
-                      placeholder="Enter product description"
-                      {...field}
-                    />
-                  </div>
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <Textarea
+                    placeholder="Enter product description"
+                    {...field}
+                  />
 
-                  <FormMessage className="ml-auto" />
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -261,8 +258,8 @@ export default function BaseProductForm({
               control={form.control}
               name="category"
               render={({ field }) => (
-                <FormItem className="flex items-center gap-4">
-                  <FormLabel className="w-32">Category</FormLabel>
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     {...field}
@@ -293,7 +290,7 @@ export default function BaseProductForm({
               name="basePrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="w-32">Base Price</FormLabel>
+                  <FormLabel>Base Price</FormLabel>
                   <Input
                     type="number"
                     step="0.01" // Allows decimals
@@ -336,17 +333,10 @@ export default function BaseProductForm({
               control={form.control}
               name="basePrice"
               render={({ field }) => (
-                <FormItem className="w-full flex flex-col">
-                  <div className="flex items-center gap-4">
-                    <FormLabel className="w-32">Base Price</FormLabel>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      placeholder=""
-                      {...field}
-                    />
-                  </div>
-                  <FormMessage className="ml-auto" />
+                <FormItem>
+                  <FormLabel>Base Price</FormLabel>
+                  <Input type="number" step="0.01" placeholder="" {...field} />
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -355,8 +345,8 @@ export default function BaseProductForm({
               control={form.control}
               name="sizeOptions"
               render={({ field }) => (
-                <FormItem className="flex items-center gap-4">
-                  <FormLabel className="w-32">Size Options</FormLabel>
+                <FormItem>
+                  <FormLabel>Size Options</FormLabel>
                   <div className="flex flex-wrap gap-2">
                     {sizeOptions.map((size) => {
                       const isChecked = field.value?.includes(size);
@@ -388,8 +378,8 @@ export default function BaseProductForm({
               control={form.control}
               name="spiceOptions"
               render={({ field }) => (
-                <FormItem className="flex items-center gap-4">
-                  <FormLabel className="w-32">Spice Options</FormLabel>
+                <FormItem>
+                  <FormLabel>Spice Options</FormLabel>
                   <div className="flex flex-wrap gap-2">
                     {spiceOptions.map((spice) => {
                       const isChecked = field.value?.includes(spice);
@@ -427,7 +417,7 @@ export default function BaseProductForm({
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />
-                  <FormLabel className="w-32">Sellable?</FormLabel>
+                  <FormLabel>Sellable?</FormLabel>
                 </FormItem>
               )}
             />
@@ -441,7 +431,7 @@ export default function BaseProductForm({
                     checked={field.value}
                     onCheckedChange={field.onChange}
                   />
-                  <FormLabel className="w-32">Out of Stock?</FormLabel>
+                  <FormLabel>Out of Stock?</FormLabel>
                 </FormItem>
               )}
             />
@@ -450,8 +440,8 @@ export default function BaseProductForm({
               control={form.control}
               name="status"
               render={({ field }) => (
-                <FormItem className="flex items-center gap-4">
-                  <FormLabel className="w-32">Status</FormLabel>
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
                   <Select
                     onValueChange={(value) => {
                       field.onChange(value);

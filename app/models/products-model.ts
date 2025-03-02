@@ -20,8 +20,7 @@ export const ProductZodSchema = z.object({
     .number()
     .min(0.01, 'Price must be at least 0.01')
     .max(1000000, 'Price cannot exceed 1,000,000')
-    .multipleOf(0.01, 'Price must be a valid decimal with two places')
-    .optional(), // Allows undefined
+    .multipleOf(0.01, 'Price must be a valid decimal with two places'),
   isSellable: z.boolean().default(true).optional(),
   isOutOfStock: z.boolean().default(false).optional(),
   status: z
