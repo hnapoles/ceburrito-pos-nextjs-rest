@@ -9,6 +9,7 @@ export const OrderLineZodSchema = z.object({
   quantity: z.number().min(1, 'Quantity must be at least 1'),
   unitPrice: z.number().min(1, 'Price must be at least 1'),
   amount: z.number().min(1, 'Price must be at least 1'),
+  status: z.string().optional(),
 });
 
 export type OrderLineBase = z.infer<typeof OrderLineZodSchema>;
@@ -25,6 +26,12 @@ export const OrderZodSchema = z.object({
     .min(6, 'Name must be at least 6 characters')
     .max(64, 'Name must not exceed 64 characters')
     .optional(),
+  customerId: z
+    .string()
+    .min(6, 'Id must be at least 6 characters')
+    .max(64, 'Id must not exceed 64 characters')
+    .optional(),
+  customerEmail: z.string().email().optional(),
   description: z.string().optional(),
   totalAmount: z.coerce
     .number()
@@ -41,6 +48,11 @@ export const OrderZodSchema = z.object({
     .min(3, 'Mode must be at least 3 characters')
     .max(32, 'Mode must not exceed 32 characters')
     .optional(), //dine-in, takeout, store-pickup, delivery
+  paymentMethod: z
+    .string()
+    .min(3, 'Payment method must be at least 3 characters')
+    .max(32, 'Payment method must not exceed 32 characters')
+    .optional(), //cash, card, Gcash
   storeName: z
     .string()
     .min(3, 'Must be at least 3 characters')

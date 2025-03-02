@@ -27,8 +27,8 @@ export async function DeleteOrderById(id: string) {
 export async function CreateOrder(data: OrderBase) {
   const entity = 'order';
   const operation = ApiOperationNames.Create;
-  const id = '';
   const method = 'POST';
+  const id = '';
 
   const result = await apiClientDq<OrderBase, OrderBase>(
     entity,

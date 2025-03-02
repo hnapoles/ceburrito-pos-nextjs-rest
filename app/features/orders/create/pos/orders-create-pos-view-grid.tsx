@@ -36,6 +36,7 @@ import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { GetProductSellingPriceByOrderType } from '@/app/actions/server/product-selling-prices-actions';
+import { Minus, Plus } from 'lucide-react';
 
 interface productGridViewProps {
   products: ProductBase[];
@@ -176,6 +177,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
       setQty(0);
       setAmount(0);
       setSize('');
+      setSpice('');
       revalidateAndRedirectUrl('/orders/create/pos');
     }
   }
@@ -248,6 +250,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
             setQty(0);
             setAmount(0);
             setSize('');
+            setSpice('');
           }
         }}
       >
@@ -311,7 +314,8 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 <Button
                   key={s}
                   variant="outline"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     setSpice(s);
                   }}
                   className={s === spice ? 'border-purple-500' : ''}
@@ -330,8 +334,9 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 variant="outline"
                 onClick={() => handleChangeQty('subtract')}
                 className="rounded-none"
+                size="icon"
               >
-                <strong>-</strong>
+                <Minus />
               </Button>
               <Button
                 variant="outline"
@@ -339,6 +344,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                   'rounded-none',
                   qty > 0 ? 'border-purple-500' : '',
                 )}
+                size="icon"
               >
                 {qty}
               </Button>
@@ -346,8 +352,9 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 variant="outline"
                 onClick={() => handleChangeQty('add')}
                 className="rounded-none"
+                size="icon"
               >
-                <strong>+</strong>
+                <Plus />
               </Button>
             </div>
           </div>
