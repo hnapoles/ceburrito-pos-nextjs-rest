@@ -234,7 +234,14 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
               <div className="text-black-500 text-xs w-35 overflow-hidden text-ellipsis whitespace-nowrap">
                 {product.name}
               </div>
-              <Badge variant="outline">{product.category}</Badge>
+
+              {product.isOutOfStock ? (
+                <Badge variant="outline" className="border-red-200">
+                  out of stock
+                </Badge>
+              ) : (
+                <Badge variant="outline">{product.category}</Badge>
+              )}
             </CardContent>
           </Card>
         ))}
