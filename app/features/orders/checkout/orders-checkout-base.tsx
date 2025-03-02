@@ -84,8 +84,6 @@ export default function OrdersCheckoutBase({
     };
 
     const createdOrder = await CreateOrder(newOrder);
-    clearCart();
-    setIsProcessing(true);
 
     toast({
       title: 'Data saved',
@@ -96,7 +94,9 @@ export default function OrdersCheckoutBase({
       ),
     });
 
-    revalidateAndRedirectUrl('/orders');
+    await revalidateAndRedirectUrl('/orders');
+    clearCart();
+    setIsProcessing(true);
   };
 
   return (
