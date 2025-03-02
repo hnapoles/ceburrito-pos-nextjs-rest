@@ -26,6 +26,8 @@ import { Lookup } from '@/app/models/lookups-model';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
+import KeyboardTouchLettersDialog from '../../keyboard/keyboard-toch-letters-dialog';
+
 export default function OrdersCheckoutBase({
   orderType,
   dineModes,
@@ -53,6 +55,9 @@ export default function OrdersCheckoutBase({
   );
 
   const [customerName, setCustomerName] = React.useState('');
+
+  const [isTouchDialogOpen, setIsTouchDialogOpen] = React.useState(false);
+  const [touchValue, setTouchValue] = React.useState('');
 
   return (
     <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
@@ -175,7 +180,11 @@ export default function OrdersCheckoutBase({
                       readOnly
                       className="bg-gray-50 border-none flex-1"
                     />
-                    <Button variant="outline" className="w-32 min-w-[100px]">
+                    <Button
+                      variant="outline"
+                      className="w-32 min-w-[100px]"
+                      onClick={() => setIsTouchDialogOpen(true)}
+                    >
                       Edit Customer
                     </Button>
                   </div>
@@ -206,6 +215,11 @@ export default function OrdersCheckoutBase({
             </Button>
           </CardFooter>
         </Card>
+        <KeyboardTouchLettersDialog
+          setTouchValue={setTouchValue}
+          setIsTouchDialogOpen={setIsTouchDialogOpen}
+          isTouchDialogOpen={isTouchDialogOpen}
+        />
       </div>
       {/* Right Side - cart */}
       <div className="col-span-1 h-full">
