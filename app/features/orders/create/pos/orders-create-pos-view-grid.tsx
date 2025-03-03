@@ -163,6 +163,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
         quantity: qty,
         unitPrice: currentPrice,
         amount: amount,
+        status: 'open',
       });
 
       toast({

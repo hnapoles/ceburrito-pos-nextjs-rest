@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -15,10 +14,12 @@ import Image from 'next/image';
 import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-
+import { Separator } from '@/components/ui/separator';
+import React, { useEffect } from 'react';
 import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
-import { Minus, Plus, Trash, Loader2 } from 'lucide-react';
+import { Minus, Plus, Trash } from 'lucide-react';
 import { UpdateOrder } from '@/app/actions/server/orders-actions';
+import { Toast } from '@/components/ui/toast';
 import { toast } from '@/hooks/use-toast';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 
@@ -52,13 +53,7 @@ export default function OrdersIdLines({
     (state) => state.addOrUpdateOrderLine,
   );
   const removeOrderLine = useCartStore((state) => state.removeOrderLine);
-  const [loadingItems, setLoadingItems] = React.useState<
-    Record<string, boolean>
-  >({});
   const handleCancelLine = async (line: OrderLineBase) => {
-    const lineKey = `${line.productId}-${line.sizeOption}-${line.spiceOption}`;
-
-    setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
     const existingIndex = orderLines.findIndex(
       (order) =>
         order.productName === line.productName &&
@@ -93,7 +88,6 @@ export default function OrdersIdLines({
     } else {
       console.log('not found - can not cancel');
     }
-    setLoadingItems((prev) => ({ ...prev, [lineKey]: false })); // Stop loading
   };
 
   const [isUpdating, setIsUpdating] = React.useState(false);
@@ -199,22 +193,11 @@ export default function OrdersIdLines({
                   {/* Delete Button (Shown on Hover) */}
                   {hoveredItem === l.productId && l.status !== 'canceled' && (
                     <Button
-                      className="absolute top-1 right-1 bg-red-500 text-white p-2 rounded-full shadow-md hover:bg-red-600 transition"
+                      className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full shadow-md hover:bg-red-600"
                       size="icon"
                       onClick={() => handleCancelLine(l)}
-                      disabled={
-                        loadingItems[
-                          `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                        ]
-                      }
                     >
-                      {loadingItems[
-                        `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                      ] ? (
-                        <Loader2 className="animate-spin" size={16} />
-                      ) : (
-                        <Trash size={16} />
-                      )}
+                      <Trash size={16} />
                     </Button>
                   )}
                 </div>
