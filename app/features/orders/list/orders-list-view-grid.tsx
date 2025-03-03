@@ -140,8 +140,12 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
                     .{order?.totalAmount?.toFixed(2).toString().split('.')[1]}{' '}
                   </span>
                 </div>
-                {order.storeName}
-                <Badge variant="secondary">{order.type}</Badge>
+                <div>
+                  {order.storeName}
+                  <Badge variant="secondary">{order.type}</Badge>
+                </div>
+
+                {order.orderedAt?.toLocaleString()}
               </CardContent>
               {order.status !== 'closed' && (
                 <CardFooter>

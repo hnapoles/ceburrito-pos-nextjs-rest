@@ -74,6 +74,7 @@ export default function OrdersCheckoutBase({
   const handleSaveOrder = async () => {
     setIsProcessing(true);
     let newOrder: OrderBase = {
+      orderedAt: new Date().toISOString(),
       type: orderType,
       mode: dineMode,
       status: 'open',
@@ -95,9 +96,9 @@ export default function OrdersCheckoutBase({
       ),
     });
 
-    await revalidateAndRedirectUrl('/orders');
     clearCart();
     setIsProcessing(true);
+    await revalidateAndRedirectUrl('/orders');
   };
 
   return (
