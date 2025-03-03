@@ -146,6 +146,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
                 </div>
 
                 {order.orderedAt?.toLocaleString()}
+                <Badge variant="secondary">{order.status}</Badge>
               </CardContent>
               {order.status !== 'closed' && (
                 <CardFooter>
@@ -159,7 +160,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
                       e.stopPropagation(); // Stops Card click
                       setSelectedOrder(order);
                     }}
-                    disabled={order.status === 'closed'}
+                    disabled={order.status !== 'open'}
                   >
                     <RotateCw className="h-3.5 w-3.5" />
                     <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">

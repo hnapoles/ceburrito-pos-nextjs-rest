@@ -38,7 +38,7 @@ export default function KeyboardTouchEmailDialog({
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(nameSchema),
-    defaultValues: { name: '' },
+    defaultValues: { name: currentValue },
   });
 
   //const [isDialogOpen, setIsTouchDialogOpen] = useState(false);

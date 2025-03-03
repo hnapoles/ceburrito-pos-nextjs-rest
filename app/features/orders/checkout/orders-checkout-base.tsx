@@ -77,6 +77,7 @@ export default function OrdersCheckoutBase({
       orderedAt: new Date().toISOString(),
       type: orderType,
       mode: dineMode,
+      paymentMethod: paymentMethod,
       status: 'open',
       storeName: storeName || '',
       customerName: customerName,
