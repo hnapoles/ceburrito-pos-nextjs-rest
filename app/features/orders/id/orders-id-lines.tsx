@@ -97,64 +97,65 @@ export default function OrdersIdLines({
 
   async function handleChangeQty(line: OrderLineBase, action: string) {
     const lineKey = `${line.productId}-${line.sizeOption}-${line.spiceOption}`;
+
     setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
-    const existingIndex = orderLines.findIndex(
-      (orderLine) =>
-        orderLine.productName === line.productName &&
-        orderLine.sizeOption === line.sizeOption &&
-        orderLine.spiceOption === line.spiceOption &&
-        orderLine.status === line.status,
-    );
 
-    if (existingIndex !== -1) {
-      const updatedOrderLines = [...orderLines];
-      const existingOrder = updatedOrderLines[existingIndex];
+    try {
+      const existingIndex = orderLines.findIndex(
+        (orderLine) =>
+          orderLine.productName === line.productName &&
+          orderLine.sizeOption === line.sizeOption &&
+          orderLine.spiceOption === line.spiceOption &&
+          orderLine.status === line.status,
+      );
 
-      if (action === 'add') {
-        updatedOrderLines[existingIndex] = {
-          ...existingOrder,
-          quantity: existingOrder.quantity + 1,
-          amount: existingOrder.amount + line.unitPrice,
-        };
-      }
+      if (existingIndex !== -1) {
+        const updatedOrderLines = [...orderLines];
+        const existingOrder = updatedOrderLines[existingIndex];
 
-      if (action == 'substract') {
-        if (line.quantity === 1) {
-          //set the status to cancel
+        if (action === 'add') {
           updatedOrderLines[existingIndex] = {
             ...existingOrder,
-            status: 'canceled',
+            quantity: existingOrder.quantity + 1,
+            amount: existingOrder.amount + line.unitPrice,
           };
-        } else {
-          updatedOrderLines[existingIndex] = {
-            ...existingOrder,
-            quantity: existingOrder.quantity - 1,
-            amount: existingOrder.amount - line.unitPrice,
-          };
+        } else if (action === 'subtract') {
+          if (line.quantity === 1) {
+            updatedOrderLines[existingIndex] = {
+              ...existingOrder,
+              status: 'canceled',
+            };
+          } else {
+            updatedOrderLines[existingIndex] = {
+              ...existingOrder,
+              quantity: existingOrder.quantity - 1,
+              amount: existingOrder.amount - line.unitPrice,
+            };
+          }
         }
+
+        let updatedData = { ...order, orderLines: updatedOrderLines };
+
+        await UpdateOrder(updatedData);
+
+        toast({
+          title: 'Line updated',
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">{`Data : ${line.productName}, ${line.sizeOption}, ${line.spiceOption}`}</code>
+            </pre>
+          ),
+        });
+
+        await revalidateAndRedirectUrl(`/orders/${order._id}`);
+      } else {
+        console.log('Order line not found - cannot update');
       }
-
-      let updatedData = order;
-      updatedData.orderLines = updatedOrderLines;
-
-      const updatedOrder = await UpdateOrder(updatedData);
-
-      toast({
-        title: 'Line updated',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{`Data : ${line.productName}, ${line.sizeOption}, ${line.spiceOption}`}</code>
-          </pre>
-        ),
-      });
-
-      await revalidateAndRedirectUrl(`/orders/${order._id}`);
-    } else {
-      /* not found */
-      console.log('order line not found - can not update');
+    } catch (error) {
+      console.error('Error updating order line:', error);
+    } finally {
+      setLoadingItems((prev) => ({ ...prev, [lineKey]: false })); // Stop loading (always runs)
     }
-
-    setLoadingItems((prev) => ({ ...prev, [lineKey]: false })); // Stop loading
   }
 
   return (
