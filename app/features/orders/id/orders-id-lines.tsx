@@ -21,6 +21,7 @@ import { Minus, Plus, Trash, Loader2 } from 'lucide-react';
 import { UpdateOrder } from '@/app/actions/server/orders-actions';
 import { toast } from '@/hooks/use-toast';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
+import { Separator } from '@/components/ui/separator';
 
 export default function OrdersIdLines({
   orderType,
@@ -60,10 +61,11 @@ export default function OrdersIdLines({
 
     setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
     const existingIndex = orderLines.findIndex(
-      (order) =>
-        order.productName === line.productName &&
-        order.sizeOption === line.sizeOption &&
-        order.spiceOption === line.spiceOption,
+      (orderLine) =>
+        orderLine.productName === line.productName &&
+        orderLine.sizeOption === line.sizeOption &&
+        orderLine.spiceOption === line.spiceOption &&
+        orderLine.status === line.status,
     );
 
     if (existingIndex !== -1) {
@@ -98,49 +100,66 @@ export default function OrdersIdLines({
 
   const [isUpdating, setIsUpdating] = React.useState(false);
 
-  async function handleChangeQty(currentData: OrderLineBase, action: string) {
-    if (isUpdating) return; // Avoid multiple updates at the same time
-    setIsUpdating(true); // Disable further clicks until the update is complete
-    if (action === 'add') {
-      const newQuantity = 1;
-      const newAmount = currentData.unitPrice * newQuantity;
+  async function handleChangeQty(line: OrderLineBase, action: string) {
+    const lineKey = `${line.productId}-${line.sizeOption}-${line.spiceOption}`;
+    setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
+    const existingIndex = orderLines.findIndex(
+      (orderLine) =>
+        orderLine.productName === line.productName &&
+        orderLine.sizeOption === line.sizeOption &&
+        orderLine.spiceOption === line.spiceOption &&
+        orderLine.status === line.status,
+    );
 
-      const newData = {
-        ...currentData,
-        quantity: newQuantity,
-        amount: newAmount,
-      };
-      addOrUpdateOrderLine(newData);
-    }
+    if (existingIndex !== -1) {
+      const updatedOrderLines = [...orderLines];
+      const existingOrder = updatedOrderLines[existingIndex];
 
-    if (action === 'subtract') {
-      if (currentData.quantity === 1) {
-        removeOrderLine(
-          currentData.productName,
-          currentData.sizeOption,
-          currentData.spiceOption,
-        );
+      if (action === 'add') {
+        updatedOrderLines[existingIndex] = {
+          ...existingOrder,
+          quantity: existingOrder.quantity + 1,
+          amount: existingOrder.amount + line.unitPrice,
+        };
       }
 
-      if (currentData.quantity > 1) {
-        const newQuantity = -1;
-        const newAmount = currentData.unitPrice * newQuantity;
-
-        if (
-          newQuantity !== currentData.quantity ||
-          newAmount !== currentData.amount
-        ) {
-          const newData = {
-            ...currentData,
-            quantity: newQuantity,
-            amount: newAmount,
+      if (action == 'substract') {
+        if (line.quantity === 1) {
+          //set the status to cancel
+          updatedOrderLines[existingIndex] = {
+            ...existingOrder,
+            status: 'canceled',
           };
-          addOrUpdateOrderLine(newData);
+        } else {
+          updatedOrderLines[existingIndex] = {
+            ...existingOrder,
+            quantity: existingOrder.quantity - 1,
+            amount: existingOrder.amount - line.unitPrice,
+          };
         }
       }
+
+      let updatedData = order;
+      updatedData.orderLines = updatedOrderLines;
+
+      const updatedOrder = await UpdateOrder(updatedData);
+
+      toast({
+        title: 'Line updated',
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{`Data : ${line.productName}, ${line.sizeOption}, ${line.spiceOption}`}</code>
+          </pre>
+        ),
+      });
+
+      await revalidateAndRedirectUrl(`/orders/${order._id}`);
+    } else {
+      /* not found */
+      console.log('order line not found - can not update');
     }
 
-    setIsUpdating(false); // Re-enable buttons after update is complete
+    setLoadingItems((prev) => ({ ...prev, [lineKey]: false })); // Stop loading
   }
 
   return (
@@ -148,7 +167,7 @@ export default function OrdersIdLines({
       <CardHeader>
         <CardTitle>Order Lines</CardTitle>
 
-        <p>
+        <p className="p-2">
           {`Items (${totalItems}) : ${formatPesoNoDecimals(
             Math.floor(totalAmount),
           )}`}
@@ -156,7 +175,7 @@ export default function OrdersIdLines({
             .{totalAmount.toFixed(2).toString().split('.')[1]}
           </span>
         </p>
-        {onCheckout ? (
+        {onCheckout && order.status === 'open' ? (
           <Button
             className="w-full"
             onClick={() => {
@@ -166,15 +185,7 @@ export default function OrdersIdLines({
             Add More Items
           </Button>
         ) : (
-          <Button
-            className="w-full"
-            disabled={orderLines.length === 0}
-            onClick={() => {
-              router.push(`/orders/checkout/${orderType}`);
-            }}
-          >
-            Checkout
-          </Button>
+          <Separator />
         )}
       </CardHeader>
       <CardContent>
@@ -208,26 +219,28 @@ export default function OrdersIdLines({
                   )}
 
                   {/* Delete Button (Shown on Hover) */}
-                  {hoveredItem === l.productId && l.status !== 'canceled' && (
-                    <Button
-                      className="absolute top-1 right-1 bg-red-500 text-white p-2 rounded-full shadow-md hover:bg-red-600 transition"
-                      size="icon"
-                      onClick={() => handleCancelLine(l)}
-                      disabled={
-                        loadingItems[
+                  {hoveredItem === l.productId &&
+                    l.status !== 'canceled' &&
+                    order.status === 'open' && (
+                      <Button
+                        className="absolute top-1 right-1 bg-red-500 text-white p-2 rounded-full shadow-md hover:bg-red-600 transition"
+                        size="icon"
+                        onClick={() => handleCancelLine(l)}
+                        disabled={
+                          loadingItems[
+                            `${l.productId}-${l.sizeOption}-${l.spiceOption}`
+                          ]
+                        }
+                      >
+                        {loadingItems[
                           `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                        ]
-                      }
-                    >
-                      {loadingItems[
-                        `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                      ] ? (
-                        <Loader2 className="animate-spin" size={16} />
-                      ) : (
-                        <Trash size={16} />
-                      )}
-                    </Button>
-                  )}
+                        ] ? (
+                          <Loader2 className="animate-spin" size={16} />
+                        ) : (
+                          <Trash size={16} />
+                        )}
+                      </Button>
+                    )}
                 </div>
                 <div className="col-span-3 ml-0">
                   <div>
@@ -254,7 +267,24 @@ export default function OrdersIdLines({
                   <div className="text-xs">
                     ( {formatPeso(l.unitPrice)} / item )
                   </div>
-                  <div className="mt-0 flex">
+                  <div
+                    className={cn(
+                      'text-xs',
+                      order.status === 'open' && l.status !== 'canceled'
+                        ? 'hidden'
+                        : 'mt-3',
+                    )}
+                  >
+                    {l.quantity} item(s)
+                  </div>
+                  <div
+                    className={cn(
+                      'mt-0 flex',
+                      order.status === 'open' && l.status !== 'canceled'
+                        ? ''
+                        : 'hidden',
+                    )}
+                  >
                     <Button
                       variant="outline"
                       onClick={() => handleChangeQty(l, 'subtract')}
