@@ -62,7 +62,7 @@ export async function GetOrders(
   limit: string,
   status: string,
 ) {
-  let apiProps: FindAllProps = {
+  const apiProps: FindAllProps = {
     entity: 'order',
     ...(status !== 'all' && { andFilter: { status } }), // Conditionally add andFilter
     keyword: keyword,

@@ -1,7 +1,7 @@
 import { apiClientDq } from '@/lib/fetch-helper';
 
 import { StoreBase, IGetStoresResults } from '@/app/models/stores-model';
-import { ApiOperationNames, FindAll } from '@/app/models/api-model';
+import { ApiOperationNames, FindAllProps } from '@/app/models/api-model';
 
 import StoresMainPage from '@/app/features/stores/list/stores-main-page';
 import NotFound from './not-found';
@@ -17,7 +17,7 @@ export default async function Page(props: {
   let stores: StoreBase[] = [];
   let totalStores = 0;
 
-  const apiProps: FindAll = {
+  const apiProps: FindAllProps = {
     entity: 'store',
     keyword: keyword,
     searchKeywordFields: ['name'],
@@ -26,7 +26,7 @@ export default async function Page(props: {
   };
 
   try {
-    const results = await apiClientDq<IGetStoresResults, FindAll>(
+    const results = await apiClientDq<IGetStoresResults, FindAllProps>(
       'store',
       ApiOperationNames.FindAll,
       '',

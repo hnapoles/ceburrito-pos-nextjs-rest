@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import { useCartStore, useStore } from '@/app/providers/zustand-provider';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
@@ -36,10 +35,9 @@ export default function OrdersIdLines({
   totalAmount: number;
   order: OrderBase;
 }) {
+  console.log(orderType);
   const router = useRouter();
   const pathname = usePathname();
-  const { storeName } = useStore();
-  //const { orderLines } = useCartStore();
 
   // Sort by productName (case-insensitive)
   const sortedData = orderLines.sort((a, b) =>
@@ -75,10 +73,10 @@ export default function OrdersIdLines({
         status: 'canceled',
       };
 
-      let updatedData = order;
+      const updatedData = order;
       updatedData.orderLines = updatedOrderLines;
 
-      const updatedOrder = await UpdateOrder(updatedData);
+      await UpdateOrder(updatedData);
 
       toast({
         title: 'Line canceled',
@@ -135,7 +133,7 @@ export default function OrdersIdLines({
           }
         }
 
-        let updatedData = { ...order, orderLines: updatedOrderLines };
+        const updatedData = { ...order, orderLines: updatedOrderLines };
 
         await UpdateOrder(updatedData);
 

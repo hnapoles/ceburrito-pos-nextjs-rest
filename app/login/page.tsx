@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
 //import { GoogleSignIn } from "./google-signin"
-import { signIn } from "next-auth/react";
-import { useState } from "react";
- 
-import { useSearchParams } from "next/navigation"
-import { Suspense } from 'react'
+import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 
-import Image from 'next/image'
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+
+import Image from 'next/image';
 
 import {
   Card,
@@ -16,10 +16,9 @@ import {
   CardHeader,
   CardFooter,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 
-import { Button } from "@/components/ui/button"
-
+import { Button } from '@/components/ui/button';
 
 export default function SignIn() {
   return (
@@ -27,31 +26,28 @@ export default function SignIn() {
       <Suspense>
         <LoginForm />
       </Suspense>
-      
     </div>
-  )
-} 
-
+  );
+}
 
 const LoginForm = () => {
-
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"; // Default redirect
-  
+  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'; // Default redirect
+
   const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
     setLoading(true);
-    await signIn("google", { callbackUrl });
+    await signIn('google', { callbackUrl });
     setLoading(false);
   };
 
   return (
-    <form action={handleSignIn} >
-      <Card className="flex min-h-full flex-1 flex-col justify-center px-6 py-4 lg:px-8"> {/*className="mx-auto max-w-sm">*/}
-          
-  
-          <CardHeader>
+    <form action={handleSignIn}>
+      <Card className="flex min-h-full flex-1 flex-col justify-center px-6 py-4 lg:px-8">
+        {' '}
+        {/*className="mx-auto max-w-sm">*/}
+        <CardHeader>
           <div className="grid justify-center place-items-center p-1">
             <Image
               src="/logos/3.png"
@@ -62,37 +58,30 @@ const LoginForm = () => {
               priority
             />
           </div>
-            <CardTitle className="text-2xl">Login</CardTitle>
-            {/*<CardDescription>
+          <CardTitle className="text-2xl">Login</CardTitle>
+          {/*<CardDescription>
               Enter your email below to login to your account
             </CardDescription>
             */}
-          </CardHeader>
-          <CardContent>
-            
-              
-              <Button variant="outline" className="w-full" type="submit">
-                <Image
-                  src="https://developers.google.com/identity/images/g-logo.png"
-                  alt="Google Logo"
-                  width={20}
-                  height={20}
-                />
-                {loading ? "Signing in..." : "Log in with Google"}
-              </Button>
-                
-           
-          </CardContent>
-          <CardFooter  className="w-[350px]">
-            
-            <CardDescription>
-              By clicking continue, you agree to our Terms of Service and Privacy Policy.
-            </CardDescription>
-          
-          </CardFooter>
-        </Card>
-        </form>
-    )
-  
-}
-  
+        </CardHeader>
+        <CardContent>
+          <Button variant="outline" className="w-full" type="submit">
+            <Image
+              src="https://developers.google.com/identity/images/g-logo.png"
+              alt="Google Logo"
+              width={20}
+              height={20}
+            />
+            {loading ? 'Signing in...' : 'Log in with Google'}
+          </Button>
+        </CardContent>
+        <CardFooter className="w-[350px]">
+          <CardDescription>
+            By clicking continue, you agree to our Terms of Service and Privacy
+            Policy.
+          </CardDescription>
+        </CardFooter>
+      </Card>
+    </form>
+  );
+};

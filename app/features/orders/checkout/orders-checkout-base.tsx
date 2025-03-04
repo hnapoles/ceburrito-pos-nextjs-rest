@@ -26,9 +26,9 @@ import { Lookup } from '@/app/models/lookups-model';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
-import KeyboardTouchLettersDialog from '../../keyboard/keyboard-toch-letters-dialog';
+import KeyboardTouchLettersDialog from '../../keyboard/keyboard-touch-letters-dialog';
 import KeyboardTouchEmailDialog from '../../keyboard/keyboard-touch-email-dialog';
-import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
+import { OrderBase } from '@/app/models/orders-model';
 import { CreateOrder } from '@/app/actions/server/orders-actions';
 import { toast } from '@/hooks/use-toast';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
@@ -57,9 +57,11 @@ export default function OrdersCheckoutBase({
   const selectedMode = dineModes.find((mode) => mode.lookupValue === dineMode);
 
   const [paymentMethod, setPaymentMethod] = React.useState('');
+  /*
   const selectedMethod = paymentMethods.find(
     (method) => method.lookupValue === paymentMethod,
   );
+  */
 
   const [customerName, setCustomerName] = React.useState('');
   const [customerEmail, setCustomerEmail] = React.useState('');
@@ -73,7 +75,7 @@ export default function OrdersCheckoutBase({
 
   const handleSaveOrder = async () => {
     setIsProcessing(true);
-    let newOrder: OrderBase = {
+    const newOrder: OrderBase = {
       orderedAt: new Date().toISOString(),
       type: orderType,
       mode: dineMode,

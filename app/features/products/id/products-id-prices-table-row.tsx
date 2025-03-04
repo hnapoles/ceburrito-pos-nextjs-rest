@@ -42,7 +42,9 @@ export default function ProductsByIdPricesTableRow({
   const router = useRouter();
   const pathname = usePathname();
 
-  const [toggleEditDialog, setToggleEditDialog] = useState(false);
+  console.log(productName);
+
+  //const [toggleEditDialog, setToggleEditDialog] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogData, setDialogData] = useState({
@@ -95,7 +97,7 @@ export default function ProductsByIdPricesTableRow({
     }, 300);
   };
 
-  const editLink = `${pathname}/${productPrice._id}`;
+  //const editLink = `${pathname}/${productPrice._id}`;
 
   return (
     <>

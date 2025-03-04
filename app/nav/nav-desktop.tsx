@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 //import Image from 'next/image'
 import { Settings } from 'lucide-react';
-import { VercelLogo } from '../styles/icons';
+//import { VercelLogo } from '../styles/icons';
 
 import {
   Tooltip,

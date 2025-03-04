@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
+import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Button } from '@/components/ui/button';
 import { RotateCw } from 'lucide-react';
 import Link from 'next/link';
@@ -49,16 +49,6 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
   page,
   totalDataCount,
 }) => {
-  if (!orders) {
-    return (
-      <ErrorDisplay
-        message={'No orders found'}
-        type={'empty'}
-        className={'bg-none'}
-      />
-    );
-  }
-
   const [selectedOrder, setSelectedOrder] = React.useState<OrderBase | null>(
     null,
   );
@@ -81,7 +71,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
 
   async function markOrderAsClosed() {
     if (selectedOrder) {
-      let newData: OrderBase = {
+      const newData: OrderBase = {
         ...selectedOrder,
         status: 'closed',
       };
@@ -100,6 +90,16 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
       setSelectedOrder(null);
       revalidateAndRedirectUrl(`${pathname}?${searchParams}`);
     }
+  }
+
+  if (!orders) {
+    return (
+      <ErrorDisplay
+        message={'No orders found'}
+        type={'empty'}
+        className={'bg-none'}
+      />
+    );
   }
 
   return (

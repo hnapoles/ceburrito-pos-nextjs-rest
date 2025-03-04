@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-import { useCartStore } from '@/app/providers/zustand-provider';
+//import { useCartStore } from '@/app/providers/zustand-provider';
 //import { useRouter } from 'next/navigation';
 
 import {
@@ -53,10 +53,6 @@ const OrdersIdAddItemsViewGrid: React.FC<productGridViewProps> = ({
   storeName,
   order,
 }) => {
-  if (!products) {
-    return <div className="ml-4 text-red-500">No products found !</div>;
-  }
-
   //const router = useRouter();
   const [selectedProduct, setSelectedProduct] =
     React.useState<ProductBase | null>(null);
@@ -143,7 +139,7 @@ const OrdersIdAddItemsViewGrid: React.FC<productGridViewProps> = ({
       const price = currentPrice;
 
       // Update amount based on new qty value
-      setAmount((prevAmount) => {
+      setAmount(() => {
         // Assuming amount is calculated as qty * price (for example)
         return price * newQty; // Adjust this calculation based on your use case
       });
@@ -152,27 +148,9 @@ const OrdersIdAddItemsViewGrid: React.FC<productGridViewProps> = ({
     });
   }
 
-  const addOrUpdateOrderLine = useCartStore(
-    (state) => state.addOrUpdateOrderLine,
-  );
-
   async function handleAddToOrder() {
     if (selectedProduct) {
-      /*
-      addOrUpdateOrderLine({
-        productId: selectedProduct._id || '',
-        productName: selectedProduct.name,
-        imageUrl: selectedProduct.imageUrl,
-        sizeOption: size,
-        spiceOption: spice,
-        quantity: qty,
-        unitPrice: currentPrice,
-        amount: amount,
-        status: 'open',
-      });
-    */
-
-      let newOrderLine: OrderLineBase = {
+      const newOrderLine: OrderLineBase = {
         productId: selectedProduct._id || '',
         productName: selectedProduct.name,
         imageUrl: selectedProduct.imageUrl,
@@ -206,12 +184,20 @@ const OrdersIdAddItemsViewGrid: React.FC<productGridViewProps> = ({
           amount: existingOrder.amount + existingOrder.unitPrice * qty,
         };
 
-        updatedOrder = { ...order, orderLines: updatedOrderLines };
+        updatedOrder = {
+          ...order,
+          totalAmount: order.totalAmount || 0 + amount,
+          orderLines: updatedOrderLines,
+        };
       } else {
-        updatedOrder = { ...order, orderLines: [...orderLines, newOrderLine] };
+        updatedOrder = {
+          ...order,
+          totalAmount: order.totalAmount || 0 + amount,
+          orderLines: [...orderLines, newOrderLine],
+        };
       }
 
-      const updatedData = await UpdateOrder(updatedOrder);
+      await UpdateOrder(updatedOrder);
 
       toast({
         title: 'Update success',
@@ -244,6 +230,10 @@ const OrdersIdAddItemsViewGrid: React.FC<productGridViewProps> = ({
     return (
       <div className="text-center text-gray-500">Loading store data...</div>
     );
+  }
+
+  if (!products) {
+    return <div className="ml-4 text-red-500">No products found !</div>;
   }
 
   return (

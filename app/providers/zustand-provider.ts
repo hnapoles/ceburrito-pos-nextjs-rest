@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-import { ProductBase, ProductSellingPriceBase } from '../models/products-model';
 import { OrderLineBase } from '../models/orders-model';
 
 //this is the only being used for now -- all other store is not used
@@ -99,32 +98,3 @@ export const useCartStore = create<CartStoreState>()(
     },
   ),
 );
-
-/*
-import { useCartStore } from "@/store/CartStore";
-
-const addItemToCart = () => {
-  const addOrUpdateOrderLine = useCartStore((state) => state.addOrUpdateOrderLine);
-
-  addOrUpdateOrderLine({
-    productId: "123",
-    productName: "Classic Beef Burrito",
-    sizeOption: "Large",
-    spiceOption: "Medium",
-    quantity: 2,
-    unitPrice: 100,
-    amount: 200,
-  });
-};
-
-const removeItem = () => {
-  const removeOrderLine = useCartStore((state) => state.removeOrderLine);
-
-  removeOrderLine("Classic Beef Burrito", "Large", "Medium");
-};
-
-
-const clearCart = useCartStore((state) => state.clearCart);
-clearCart();
-
-*/

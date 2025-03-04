@@ -9,13 +9,13 @@ import {
 } from '@/components/ui/card';
 
 import { useCartStore, useStore } from '@/app/providers/zustand-provider';
-import { cn } from '@/lib/utils';
+//import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import React, { useEffect } from 'react';
+//import { Separator } from '@/components/ui/separator';
+import React from 'react';
 import { OrderLineBase } from '@/app/models/orders-model';
 import { Minus, Plus, Trash } from 'lucide-react';
 
