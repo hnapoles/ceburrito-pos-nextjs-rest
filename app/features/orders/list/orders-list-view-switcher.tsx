@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Check, ChevronsUpDown, PlusCircle } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,7 +13,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
+  //CommandSeparator,
 } from '@/components/ui/command';
 import {
   Dialog,
@@ -24,8 +24,8 @@ import {
   //DialogTitle,
   //DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+//import { Input } from '@/components/ui/input';
+//import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
@@ -64,7 +64,9 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
 
-interface OrderListViewSwitcherProps extends PopoverTriggerProps {}
+interface OrderListViewSwitcherProps extends PopoverTriggerProps {
+  dummyField?: string;
+}
 
 export default function OrderListViewSwitcher({
   className,

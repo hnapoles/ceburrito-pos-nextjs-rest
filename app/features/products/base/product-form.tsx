@@ -49,7 +49,7 @@ interface baseProductFormProps {
   statuses: Lookup[];
   sizes: Lookup[];
   spices: Lookup[];
-  onSubmit: (data: any) => void;
+  onSubmit: (data: ProductBase) => void;
 }
 
 export default function BaseProductForm({
@@ -106,9 +106,11 @@ export default function BaseProductForm({
     fileInputRef.current?.click();
   };
 
+  /*
   const [imagePreview, setImagePreview] = useState<string | null>(
     initialData?.imageUrl || null,
   );
+  */
   const [showDialog, setShowDialog] = useState(false);
 
   const handleCancel = () => {

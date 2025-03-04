@@ -1,8 +1,6 @@
 import { z } from 'zod';
-import { ObjectId } from 'mongodb';
 
 export const OrderLineZodSchema = z.object({
-  orderLineId: z.instanceof(ObjectId).optional(), // Use MongoDB ObjectID
   productId: z.string().min(3, 'Product ID is required'),
   productName: z.string().min(3, 'Product name is required'),
   imageUrl: z.string().optional(),

@@ -51,9 +51,12 @@ export default function OrdersIdBase({
   const selectedMode = dineModes.find((mode) => mode.lookupValue === dineMode);
 
   const [paymentMethod, setPaymentMethod] = React.useState(order.paymentMethod);
+
+  /*
   const selectedMethod = paymentMethods.find(
     (method) => method.lookupValue === paymentMethod,
   );
+  */
 
   const [status, setStatus] = React.useState(order.status);
   const selectedStatus = statuses.find((s) => s.lookupValue === status);
@@ -102,7 +105,7 @@ export default function OrdersIdBase({
 
   const handleDuplicateOrder = async () => {
     setIsProcessing(true);
-    let newData = order;
+    const newData = order;
     delete newData._id;
     newData.customerName = customerName;
     newData.status = 'open';

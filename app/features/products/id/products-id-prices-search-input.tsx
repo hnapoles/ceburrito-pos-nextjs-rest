@@ -6,7 +6,7 @@ import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 //import { useDebouncedCallback } from 'use-debounce';
 
 import { Input } from '@/components/ui/input';
-import { Spinner } from '@/app/styles/icons';
+//import { Spinner } from '@/app/styles/icons';
 import { Search } from 'lucide-react';
 
 export function ProductsByIdPricesSearchInput() {
@@ -24,6 +24,8 @@ export function ProductsByIdPricesSearchInput() {
       router.replace(`${pathname}?${params.toString()}`);
     });
   }
+
+  console.log(isPending);
 
   return (
     <form action={searchAction} className="relative ml-auto flex-1 md:grow-0">

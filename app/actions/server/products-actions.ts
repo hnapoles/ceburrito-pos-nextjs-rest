@@ -65,12 +65,12 @@ export async function GetProducts(
   isSellable?: boolean,
   category?: string,
 ) {
-  let andFilter = {
+  const andFilter = {
     ...(status !== 'all' && { status }),
     ...(category !== 'all' && { category }),
     ...(isSellable !== undefined && { isSellable }),
   };
-  let apiProps: FindAllProps = {
+  const apiProps: FindAllProps = {
     entity: 'product',
     //...(status !== 'all' && { andFilter: { status } }), // Conditionally add andFilter
     andFilter,

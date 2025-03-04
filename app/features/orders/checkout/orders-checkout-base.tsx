@@ -57,9 +57,11 @@ export default function OrdersCheckoutBase({
   const selectedMode = dineModes.find((mode) => mode.lookupValue === dineMode);
 
   const [paymentMethod, setPaymentMethod] = React.useState('');
+  /*
   const selectedMethod = paymentMethods.find(
     (method) => method.lookupValue === paymentMethod,
   );
+  */
 
   const [customerName, setCustomerName] = React.useState('');
   const [customerEmail, setCustomerEmail] = React.useState('');
@@ -73,7 +75,7 @@ export default function OrdersCheckoutBase({
 
   const handleSaveOrder = async () => {
     setIsProcessing(true);
-    let newOrder: OrderBase = {
+    const newOrder: OrderBase = {
       orderedAt: new Date().toISOString(),
       type: orderType,
       mode: dineMode,

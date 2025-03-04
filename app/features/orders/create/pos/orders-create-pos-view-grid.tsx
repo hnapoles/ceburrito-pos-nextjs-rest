@@ -49,10 +49,6 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
   products,
   storeName,
 }) => {
-  if (!products) {
-    return <div className="ml-4 text-red-500">No products found !</div>;
-  }
-
   //const router = useRouter();
   const [selectedProduct, setSelectedProduct] =
     React.useState<ProductBase | null>(null);
@@ -137,9 +133,8 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
       }
 
       const price = currentPrice;
-
       // Update amount based on new qty value
-      setAmount((prevAmount) => {
+      setAmount(() => {
         // Assuming amount is calculated as qty * price (for example)
         return price * newQty; // Adjust this calculation based on your use case
       });
@@ -195,6 +190,10 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
     return (
       <div className="text-center text-gray-500">Loading store data...</div>
     );
+  }
+
+  if (!products) {
+    return <div className="ml-4 text-red-500">No products found !</div>;
   }
 
   return (

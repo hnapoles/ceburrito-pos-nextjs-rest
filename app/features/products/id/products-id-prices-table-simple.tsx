@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableBody,
   Table,
-  TableCell,
+  //TableCell,
 } from '@/components/ui/table';
 
 import {
@@ -62,13 +62,23 @@ export default function ProductsByIdPricesTableSimple({
     });
   }
 
-  const [toggleCreateDialog, setToggleCreateDialog] = useState<boolean>(false);
+  //const [toggleCreateDialog, setToggleCreateDialog] = useState<boolean>(false);
 
-  const [toggleEditForm, setToggleEditForm] = useState<boolean>(false);
+  //const [toggleEditForm, setToggleEditForm] = useState<boolean>(false);
 
   const handleClickAddButton = () => {
     router.push(`/products/${productId}/prices/create`);
   };
+
+  const [search, setSearch] = useState('');
+
+  const filteredData = data.filter((item) =>
+    Object.values(item)
+      .filter((value) => typeof value === 'string')
+      .some((value) =>
+        (value as string).toLowerCase().includes(search.toLowerCase()),
+      ),
+  );
 
   if (!data || data.length <= 0) {
     return (
@@ -94,16 +104,6 @@ export default function ProductsByIdPricesTableSimple({
       </Card>
     );
   }
-
-  const [search, setSearch] = useState('');
-
-  const filteredData = data.filter((item) =>
-    Object.values(item)
-      .filter((value) => typeof value === 'string')
-      .some((value) =>
-        (value as string).toLowerCase().includes(search.toLowerCase()),
-      ),
-  );
 
   return (
     <>
@@ -169,13 +169,6 @@ export default function ProductsByIdPricesTableSimple({
                   productId={productId}
                 />
               ))}
-            </TableBody>
-            <TableBody>
-              {toggleEditForm && (
-                <TableRow>
-                  <TableCell>123</TableCell>
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </CardContent>

@@ -1,11 +1,17 @@
 import { useState } from 'react';
+import { UseFormSetValue } from 'react-hook-form';
+
+// Define the type for your form values
+interface FormValues {
+  imageUrl: string;
+}
 
 export function useFileUpload() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
-    setValue: any,
+    setValue: UseFormSetValue<FormValues>,
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
