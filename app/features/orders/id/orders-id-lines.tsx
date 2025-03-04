@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 import {
   Card,
@@ -37,6 +37,7 @@ export default function OrdersIdLines({
   order: OrderBase;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const { storeName } = useStore();
   //const { orderLines } = useCartStore();
 
@@ -147,7 +148,7 @@ export default function OrdersIdLines({
           ),
         });
 
-        await revalidateAndRedirectUrl(`/orders/${order._id}`);
+        await revalidateAndRedirectUrl(pathname);
       } else {
         console.log('Order line not found - cannot update');
       }
@@ -175,7 +176,7 @@ export default function OrdersIdLines({
           <Button
             className="w-full"
             onClick={() => {
-              router.push(`/orders/create/${orderType}`);
+              router.push(`/orders/${order._id}/addItems`);
             }}
           >
             Add More Items
