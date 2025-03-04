@@ -49,13 +49,10 @@ export default function OrdersIdLines({
 
   const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
 
-  const addOrUpdateOrderLine = useCartStore(
-    (state) => state.addOrUpdateOrderLine,
-  );
-  const removeOrderLine = useCartStore((state) => state.removeOrderLine);
   const [loadingItems, setLoadingItems] = React.useState<
     Record<string, boolean>
   >({});
+
   const handleCancelLine = async (line: OrderLineBase) => {
     const lineKey = `${line.productId}-${line.sizeOption}-${line.spiceOption}`;
 
@@ -97,8 +94,6 @@ export default function OrdersIdLines({
     }
     setLoadingItems((prev) => ({ ...prev, [lineKey]: false })); // Stop loading
   };
-
-  const [isUpdating, setIsUpdating] = React.useState(false);
 
   async function handleChangeQty(line: OrderLineBase, action: string) {
     const lineKey = `${line.productId}-${line.sizeOption}-${line.spiceOption}`;
@@ -290,8 +285,19 @@ export default function OrdersIdLines({
                       onClick={() => handleChangeQty(l, 'subtract')}
                       className="rounded-none"
                       size="icon"
+                      disabled={
+                        loadingItems[
+                          `${l.productId}-${l.sizeOption}-${l.spiceOption}`
+                        ]
+                      } // Disable button when loading
                     >
-                      <Minus />
+                      {loadingItems[
+                        `${l.productId}-${l.sizeOption}-${l.spiceOption}`
+                      ] ? (
+                        <Loader2 className="animate-spin" size={16} />
+                      ) : (
+                        <Minus />
+                      )}
                     </Button>
                     <Button
                       variant="outline"
@@ -305,8 +311,19 @@ export default function OrdersIdLines({
                       onClick={() => handleChangeQty(l, 'add')}
                       className="rounded-none"
                       size="icon"
+                      disabled={
+                        loadingItems[
+                          `${l.productId}-${l.sizeOption}-${l.spiceOption}`
+                        ]
+                      } // Disable button when loading
                     >
-                      <Plus />
+                      {loadingItems[
+                        `${l.productId}-${l.sizeOption}-${l.spiceOption}`
+                      ] ? (
+                        <Loader2 className="animate-spin" size={16} />
+                      ) : (
+                        <Plus />
+                      )}
                     </Button>
                   </div>
                 </div>
