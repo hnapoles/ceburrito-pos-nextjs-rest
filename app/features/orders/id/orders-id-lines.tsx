@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import { useCartStore, useStore } from '@/app/providers/zustand-provider';
+import { useStore } from '@/app/providers/zustand-provider';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
@@ -38,8 +38,6 @@ export default function OrdersIdLines({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { storeName } = useStore();
-  //const { orderLines } = useCartStore();
 
   // Sort by productName (case-insensitive)
   const sortedData = orderLines.sort((a, b) =>

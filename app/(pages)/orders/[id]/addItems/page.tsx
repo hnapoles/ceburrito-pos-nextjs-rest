@@ -31,7 +31,7 @@ export default async function OrdersIdAddItemsPage(props: {
     'all',
   );
   const products = results.data;
-  const totalProducts = results.count;
+  //const totalProducts = results.count;
 
   const { data: categoriesLookup } = await GetLookups('product', 'category');
 

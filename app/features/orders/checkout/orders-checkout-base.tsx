@@ -26,9 +26,9 @@ import { Lookup } from '@/app/models/lookups-model';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
-import KeyboardTouchLettersDialog from '../../keyboard/keyboard-toch-letters-dialog';
+import KeyboardTouchLettersDialog from '../../keyboard/keyboard-touch-letters-dialog';
 import KeyboardTouchEmailDialog from '../../keyboard/keyboard-touch-email-dialog';
-import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
+import { OrderBase } from '@/app/models/orders-model';
 import { CreateOrder } from '@/app/actions/server/orders-actions';
 import { toast } from '@/hooks/use-toast';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';

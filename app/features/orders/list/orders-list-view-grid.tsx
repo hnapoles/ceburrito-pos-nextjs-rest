@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
+import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Button } from '@/components/ui/button';
 import { RotateCw } from 'lucide-react';
 import Link from 'next/link';

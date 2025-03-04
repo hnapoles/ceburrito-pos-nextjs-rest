@@ -18,17 +18,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { WhoTabContent } from '@/app/nav/who-tab-content';
 import { UserWhoProps } from '@/app/models/users-model';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  //CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import ProductsByIdPricesTableSimple from '@/app/features/products/id/products-id-prices-table-simple';
 
-import { ProductsByIdPricesSearchInput } from '@/app/features/products/id/products-id-prices-search-input';
+//import { ProductsByIdPricesSearchInput } from '@/app/features/products/id/products-id-prices-search-input';
 
 //start of function
 export default async function ProductUpdatePage({

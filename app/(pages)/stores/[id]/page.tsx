@@ -3,7 +3,7 @@ import StoreUpdate from '@/app/features/stores/update/store-update';
 import { apiClientDq } from '@/lib/fetch-helper';
 
 import { StoreBase } from '@/app/models/stores-model';
-import { ApiOperationNames, FindOne } from '@/app/models/api-model';
+import { ApiOperationNames, FindOneProps } from '@/app/models/api-model';
 
 export default async function StoreUpdatePage({
   params,
@@ -14,7 +14,7 @@ export default async function StoreUpdatePage({
   const id = (await params).id;
   const entity = 'store';
 
-  const store = await apiClientDq<StoreBase, FindOne>(
+  const store = await apiClientDq<StoreBase, FindOneProps>(
     entity,
     ApiOperationNames.FindOne,
     id,

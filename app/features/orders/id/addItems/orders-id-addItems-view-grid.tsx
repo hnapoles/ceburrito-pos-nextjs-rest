@@ -206,9 +206,17 @@ const OrdersIdAddItemsViewGrid: React.FC<productGridViewProps> = ({
           amount: existingOrder.amount + existingOrder.unitPrice * qty,
         };
 
-        updatedOrder = { ...order, orderLines: updatedOrderLines };
+        updatedOrder = {
+          ...order,
+          totalAmount: order.totalAmount || 0 + amount,
+          orderLines: updatedOrderLines,
+        };
       } else {
-        updatedOrder = { ...order, orderLines: [...orderLines, newOrderLine] };
+        updatedOrder = {
+          ...order,
+          totalAmount: order.totalAmount || 0 + amount,
+          orderLines: [...orderLines, newOrderLine],
+        };
       }
 
       const updatedData = await UpdateOrder(updatedOrder);

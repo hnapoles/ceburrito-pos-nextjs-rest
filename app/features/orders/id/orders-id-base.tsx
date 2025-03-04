@@ -19,13 +19,12 @@ import {
 import OrdersIdLines from './orders-id-lines';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import ErrorDisplay from '../../error/error-display';
 import { formatPeso } from '@/app/actions/client/peso';
 import { Lookup } from '@/app/models/lookups-model';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
-import KeyboardTouchLettersDialog from '../../keyboard/keyboard-toch-letters-dialog';
+import KeyboardTouchLettersDialog from '../../keyboard/keyboard-touch-letters-dialog';
 import KeyboardTouchEmailDialog from '../../keyboard/keyboard-touch-email-dialog';
 import { OrderBase } from '@/app/models/orders-model';
 import { CreateOrder, UpdateOrder } from '@/app/actions/server/orders-actions';
