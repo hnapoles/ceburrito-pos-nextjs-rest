@@ -163,6 +163,7 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
         quantity: qty,
         unitPrice: currentPrice,
         amount: amount,
+        status: 'open',
       });
 
       toast({
@@ -219,7 +220,9 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
                 height={200} // Keeps a consistent aspect ratio
                 className={cn(
                   'w-full h-auto aspect-square object-cover transition-all hover:scale-105',
-                  product.isOutOfStock ? 'grayscale opacity-50' : '', // Apply grayscale when out of stock
+                  product.isOutOfStock
+                    ? 'grayscale-50 saturate-95 opacity-95'
+                    : '', // Apply grayscale when out of stock
                 )}
               />
               {/* Cross-out overlay */}
@@ -234,7 +237,14 @@ const OrdersCreatePosViewGrid: React.FC<productGridViewProps> = ({
               <div className="text-black-500 text-xs w-35 overflow-hidden text-ellipsis whitespace-nowrap">
                 {product.name}
               </div>
-              <Badge variant="outline">{product.category}</Badge>
+
+              {product.isOutOfStock ? (
+                <Badge variant="outline" className="border-red-200">
+                  out of stock
+                </Badge>
+              ) : (
+                <Badge variant="outline">{product.category}</Badge>
+              )}
             </CardContent>
           </Card>
         ))}

@@ -38,7 +38,7 @@ export default function KeyboardTouchLettersDialog({
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(nameSchema),
-    defaultValues: { name: '' },
+    defaultValues: { name: currentValue },
   });
 
   //const [isDialogOpen, setIsTouchDialogOpen] = useState(false);

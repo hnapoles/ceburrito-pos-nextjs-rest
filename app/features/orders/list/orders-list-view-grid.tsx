@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import { OrderBase } from '@/app/models/orders-model';
 import { Lookup } from '@/app/models/lookups-model';
@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { formatPeso } from '@/app/actions/client/peso';
+import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Button } from '@/components/ui/button';
 import { RotateCw } from 'lucide-react';
 import Link from 'next/link';
@@ -65,6 +65,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
 
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const rowsPerPage = limit;
 
   function prevPage() {
@@ -97,7 +98,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
         ),
       });
       setSelectedOrder(null);
-      revalidateAndRedirectUrl('/orders');
+      revalidateAndRedirectUrl(`${pathname}?${searchParams}`);
     }
   }
 
@@ -134,10 +135,18 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
                 </div>
 
                 <div className="text-2xl font-bold">
-                  {formatPeso(order.totalAmount || 0.0)}
+                  {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
+                  <span className="text-xs">
+                    .{order?.totalAmount?.toFixed(2).toString().split('.')[1]}{' '}
+                  </span>
                 </div>
-                {order.storeName}
-                <Badge variant="secondary">{order.type}</Badge>
+                <div>
+                  {order.storeName}
+                  <Badge variant="secondary">{order.type}</Badge>
+                </div>
+
+                {order.orderedAt?.toLocaleString()}
+                <Badge variant="secondary">{order.status}</Badge>
               </CardContent>
               {order.status !== 'closed' && (
                 <CardFooter>
@@ -151,7 +160,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
                       e.stopPropagation(); // Stops Card click
                       setSelectedOrder(order);
                     }}
-                    disabled={order.status === 'closed'}
+                    disabled={order.status !== 'open'}
                   >
                     <RotateCw className="h-3.5 w-3.5" />
                     <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
