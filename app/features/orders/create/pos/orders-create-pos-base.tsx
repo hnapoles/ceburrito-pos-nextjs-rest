@@ -97,7 +97,7 @@ export default function OrdersCreatePosBase({
                 </TabsList>
                 <div className="ml-auto flex items-center gap-2">
                   <Input
-                    placeholder="Search..."
+                    placeholder="Quick Search..."
                     value={search}
                     onChange={(e) => {
                       setSearch(e.target.value);

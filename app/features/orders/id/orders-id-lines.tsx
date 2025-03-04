@@ -187,6 +187,7 @@ export default function OrdersIdLines({
                   onMouseEnter={() => setHoveredItem(l.productId)}
                   onMouseLeave={() => setHoveredItem(null)}
                 >
+                  {/* Product Image */}
                   <Image
                     src={
                       l.imageUrl || '/images/products/no-image-for-display.webp'
@@ -194,8 +195,18 @@ export default function OrdersIdLines({
                     alt="image"
                     width={100}
                     height={100}
-                    className="h-auto w-auto aspect-square object-cover transition-all hover:scale-105 h-full flex flex-col"
+                    className="h-auto w-auto aspect-square object-cover transition-all hover:scale-105"
                   />
+
+                  {/* CANCELED Overlay */}
+                  {l.status === 'canceled' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60">
+                      <span className="text-white text-sm font-bold">
+                        CANCELED
+                      </span>
+                    </div>
+                  )}
+
                   {/* Delete Button (Shown on Hover) */}
                   {hoveredItem === l.productId && l.status !== 'canceled' && (
                     <Button
@@ -221,7 +232,6 @@ export default function OrdersIdLines({
                 <div className="col-span-3 ml-0">
                   <div>
                     <strong>{l.productName}</strong>
-                    <Badge variant="outline">{l.status || 'open'}</Badge>
                   </div>
                   {formatPesoNoDecimals(Math.floor(l.quantity * l.unitPrice))}
                   <span className="text-xs mr-2">
