@@ -9,10 +9,13 @@ import {
   //Settings,
   ShoppingCart,
   Users2,
-  PhilippinePeso,
-  Utensils,
+  //PhilippinePeso,
+  //Utensils,
   Building,
-  Shapes,
+  //Shapes,
+  ListOrdered,
+  Beef,
+  ChartLine,
 } from 'lucide-react';
 
 export interface NavItems {
@@ -34,12 +37,12 @@ export const listNavItems = [
   {
     title: 'Orders',
     href: '/orders',
-    iconName: Utensils,
+    iconName: ListOrdered,
   },
   {
     title: 'Products',
     href: '/products',
-    iconName: Shapes,
+    iconName: Beef,
   },
   {
     title: 'Stores',
@@ -54,7 +57,7 @@ export const listNavItems = [
   {
     title: 'Analytics',
     href: '/analytics',
-    iconName: PhilippinePeso,
+    iconName: ChartLine,
   },
   {
     title: 'POS',

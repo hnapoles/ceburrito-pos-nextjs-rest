@@ -75,6 +75,16 @@ export default function OrdersIdAddItemsBase({
 
   return (
     <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
+      {/* Right Side - cart */}
+      <div className="col-span-1 h-full">
+        <OrdersIdLines
+          orderType={order.type || ''}
+          onCheckout={false}
+          orderLines={order.orderLines || []}
+          totalAmount={order.totalAmount || 0}
+          order={order}
+        />
+      </div>
       {/* Left Side - add items */}
       <div className="md:col-span-3 col-span-1">
         <Card className="h-full flex flex-col">
@@ -156,16 +166,6 @@ export default function OrdersIdAddItemsBase({
             </div>
           </CardFooter>
         </Card>
-      </div>
-      {/* Right Side - cart */}
-      <div className="col-span-1 h-full">
-        <OrdersIdLines
-          orderType={order.type || ''}
-          onCheckout={false}
-          orderLines={order.orderLines || []}
-          totalAmount={order.totalAmount || 0}
-          order={order}
-        />
       </div>
     </div>
   );
