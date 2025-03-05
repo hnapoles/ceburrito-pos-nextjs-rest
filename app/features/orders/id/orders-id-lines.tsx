@@ -74,6 +74,7 @@ export default function OrdersIdLines({
       };
 
       const updatedData = order;
+      updatedData.totalAmount = (updatedData.totalAmount || 0) - line.amount;
       updatedData.orderLines = updatedOrderLines;
 
       await UpdateOrder(updatedData);
@@ -108,6 +109,7 @@ export default function OrdersIdLines({
           orderLine.status === line.status,
       );
 
+      let totalAmount = order.totalAmount;
       if (existingIndex !== -1) {
         const updatedOrderLines = [...orderLines];
         const existingOrder = updatedOrderLines[existingIndex];
@@ -118,6 +120,7 @@ export default function OrdersIdLines({
             quantity: existingOrder.quantity + 1,
             amount: existingOrder.amount + line.unitPrice,
           };
+          totalAmount = (order.totalAmount || 0) + line.unitPrice;
         } else if (action === 'subtract') {
           if (line.quantity === 1) {
             updatedOrderLines[existingIndex] = {
@@ -131,9 +134,14 @@ export default function OrdersIdLines({
               amount: existingOrder.amount - line.unitPrice,
             };
           }
+          totalAmount = (order.totalAmount || 0) - line.unitPrice;
         }
 
-        const updatedData = { ...order, orderLines: updatedOrderLines };
+        const updatedData = {
+          ...order,
+          totalAmount: totalAmount,
+          orderLines: updatedOrderLines,
+        };
 
         await UpdateOrder(updatedData);
 
