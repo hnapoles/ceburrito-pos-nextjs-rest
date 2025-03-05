@@ -144,8 +144,11 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
                   {order.storeName}
                   <Badge variant="secondary">{order.type}</Badge>
                 </div>
-
-                {order.orderedAt?.toLocaleString()}
+                <p className="text-xs">
+                  {order.orderedAt
+                    ? new Date(order.orderedAt).toLocaleString()
+                    : ''}
+                </p>
                 <Badge variant="secondary">{order.status}</Badge>
               </CardContent>
               {order.status !== 'closed' && (

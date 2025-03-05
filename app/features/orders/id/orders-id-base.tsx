@@ -208,7 +208,7 @@ export default function OrdersIdBase({
                       defaultValue={
                         order.orderedAt
                           ? new Date(order.orderedAt).toLocaleString()
-                          : 'N/A'
+                          : ''
                       }
                       readOnly
                       className="bg-transparent border-none w-full text-right focus:ring-0 focus:outline-none"
@@ -240,6 +240,7 @@ export default function OrdersIdBase({
                     <Select
                       value={paymentMethod}
                       onValueChange={setPaymentMethod}
+                      disabled={order.status !== 'open'}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select Payment Method" />
@@ -262,7 +263,11 @@ export default function OrdersIdBase({
 
                   <div className="flex items-center gap-2">
                     <Label className="w-32">Dine Mode</Label>
-                    <Select value={dineMode} onValueChange={setDineMode}>
+                    <Select
+                      value={dineMode}
+                      onValueChange={setDineMode}
+                      disabled={order.status !== 'open'}
+                    >
                       <SelectTrigger>
                         <SelectValue>
                           {selectedMode?.lookupDescription ||

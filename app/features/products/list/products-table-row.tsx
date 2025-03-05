@@ -100,7 +100,7 @@ export default function ProductsTableRow({
       </TableCell>
       <TableCell className="hidden md:table-cell">{product._id}</TableCell>
       <TableCell className="hidden md:table-cell">
-        {product.updatedAt?.toLocaleString()}
+        {product.updatedAt ? new Date(product.updatedAt).toLocaleString() : ''}
       </TableCell>
       <TableCell className="hidden md:table-cell">
         {product.updatedBy}
