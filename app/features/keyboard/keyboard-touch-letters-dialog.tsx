@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 import { Label } from '@/components/ui/label';
 import {
   Dialog,

@@ -1,14 +1,14 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { z } from "zod"
+import * as React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
-import { getErrorMessage } from "@/lib/handle-error"
-import { useUploadFile } from "@/hooks/use-upload-file"
-import { Button } from "@/components/ui/button"
+import { getErrorMessage } from '@/lib/handle-error';
+import { useUploadFile } from '@/hooks/use-upload-file';
+import { Button } from '@/components/ui/button-rounded-sm';
 import {
   Form,
   FormControl,
@@ -16,49 +16,47 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { FileUploader } from "./file-uploader"
+} from '@/components/ui/form';
+import { FileUploader } from './file-uploader';
 
-import { UploadedFilesCard } from "./uploaded-files-card"
+import { UploadedFilesCard } from './uploaded-files-card';
 
 const schema = z.object({
   images: z.array(z.instanceof(File)),
-})
-type Schema = z.infer<typeof schema>
+});
+type Schema = z.infer<typeof schema>;
 
 //begin function
-export function FileUploadReactHookForm({entity} : {entity: string}) {
-
-  const [loading, setLoading] = React.useState(false)
+export function FileUploadReactHookForm({ entity }: { entity: string }) {
+  const [loading, setLoading] = React.useState(false);
   const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
-    "imageUploader",
-    { defaultUploadedFiles: [] }
-  )
+    'imageUploader',
+    { defaultUploadedFiles: [] },
+  );
   const form = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: {
       images: [],
     },
-  })
+  });
 
   function onSubmit(input: Schema) {
+    console.log(entity);
 
-    console.log(entity)
-
-    setLoading(true)
+    setLoading(true);
 
     toast.promise(onUpload(input.images), {
-      loading: "Uploading images...",
+      loading: 'Uploading images...',
       success: () => {
-        form.reset()
-        setLoading(false)
-        return "Images uploaded"
+        form.reset();
+        setLoading(false);
+        return 'Images uploaded';
       },
       error: (err) => {
-        setLoading(false)
-        return getErrorMessage(err)
+        setLoading(false);
+        return getErrorMessage(err);
       },
-    })
+    });
   }
 
   return (
@@ -99,5 +97,5 @@ export function FileUploadReactHookForm({entity} : {entity: string}) {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

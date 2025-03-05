@@ -1,14 +1,14 @@
 //import { Metadata } from 'next';
 import Image from 'next/image';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card-rounded-sm';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CalendarDateRangePicker } from '@/app/features/overview/date-range-picker';
 import { MainNav } from '@/app/features/overview/main-nav';

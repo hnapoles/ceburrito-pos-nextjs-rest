@@ -7,13 +7,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card-rounded-sm';
 
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 
 import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
 import { Minus, Plus, Trash, Loader2 } from 'lucide-react';
