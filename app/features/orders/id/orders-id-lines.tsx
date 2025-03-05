@@ -168,7 +168,16 @@ export default function OrdersIdLines({
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Order Lines</CardTitle>
+        <CardTitle>Order</CardTitle>
+        <div className="border-md bg-gray-100">
+          <p className="p-2">Order Id : {order._id}</p>
+          <p className="p-2">Status : {order.status}</p>
+        </div>
+        <Separator />
+        <p className="p-2">Order Id : {order._id}</p>
+        <p className="p-2">Status : {order.status}</p>
+        <Separator />
+        <CardTitle>Order LInes</CardTitle>
 
         <p className="p-2">
           {`Items (${totalItems}) : ${formatPesoNoDecimals(

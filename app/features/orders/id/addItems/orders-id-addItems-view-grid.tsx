@@ -243,7 +243,7 @@ const OrdersIdAddItemsViewGrid: React.FC<productGridViewProps> = ({
           <Card
             key={product._id}
             className={cn(
-              'flex flex-col items-center',
+              'flex flex-col items-center border-none',
               product.isOutOfStock ? '' : 'hover:pointer-cursor',
             )}
             onClick={() => handleSelectProduct(product)}
