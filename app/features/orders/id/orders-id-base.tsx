@@ -135,7 +135,7 @@ export default function OrdersIdBase({
         <div className="md:col-span-2 col-span-1">
           <Card className="h-full flex flex-col">
             <CardHeader>
-              <CardTitle>Order Details</CardTitle>
+              <CardTitle>Order</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -205,7 +205,11 @@ export default function OrdersIdBase({
                     <Input
                       type="text"
                       id="itemCount"
-                      defaultValue={order.orderedAt}
+                      defaultValue={
+                        order.orderedAt
+                          ? new Date(order.orderedAt).toLocaleString()
+                          : 'N/A'
+                      }
                       readOnly
                       className="bg-transparent border-none w-full text-right focus:ring-0 focus:outline-none"
                     />
