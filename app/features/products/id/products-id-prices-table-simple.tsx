@@ -72,7 +72,7 @@ export default function ProductsByIdPricesTableSimple({
 
   const [search, setSearch] = useState('');
 
-  const filteredData = data.filter((item) =>
+  const filteredData = (data || []).filter((item) =>
     Object.values(item)
       .filter((value) => typeof value === 'string')
       .some((value) =>
