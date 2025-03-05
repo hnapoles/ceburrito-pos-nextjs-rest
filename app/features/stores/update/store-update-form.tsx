@@ -19,7 +19,7 @@ import {
   //CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card-rounded-sm';
 
 export default function StoreUpdateForm({ store }: { store: StoreBase }) {
   const thisImageUrl = store.imageUrl ?? null;

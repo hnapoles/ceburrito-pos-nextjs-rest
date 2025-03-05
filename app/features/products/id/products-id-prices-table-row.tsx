@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Loader2 } from 'lucide-react'; // Icon for the spinner
 import { useRouter, usePathname } from 'next/navigation';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 import {
   DropdownMenu,
   DropdownMenuContent,

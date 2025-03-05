@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card-rounded-sm';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { EmptyCard } from '../files-empty-card';
 

@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 
 import Image from 'next/image';
 //import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 import {
   DropdownMenu,
   DropdownMenuContent,

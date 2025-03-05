@@ -1,7 +1,14 @@
-"use client";
+'use client';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button-rounded-sm';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -11,7 +18,13 @@ interface ConfirmDialogProps {
   onConfirm: () => void;
 }
 
-export function ConfirmDialog({ isOpen, onClose, title, description, onConfirm }: ConfirmDialogProps) {
+export function ConfirmDialog({
+  isOpen,
+  onClose,
+  title,
+  description,
+  onConfirm,
+}: ConfirmDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>

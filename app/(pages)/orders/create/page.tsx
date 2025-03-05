@@ -9,7 +9,7 @@ import {
   //CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card-rounded-sm';
 import { CreditCard, Handshake, ShoppingCart } from 'lucide-react';
 
 export default async function OrdersCreatePage() {

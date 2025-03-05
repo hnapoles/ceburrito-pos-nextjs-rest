@@ -26,7 +26,7 @@ export default function DashboardDefaultLayout({
             <div className="relative ml-auto flex-1 md:grow-0"></div>
             <User />
           </header>
-          <main className="grid flex-1 items-start gap-2 p-4 sm:px-6 sm:py-0 md:gap-4 bg-muted/40">
+          <main className="grid flex-1 items-start gap-2 p-0 sm:px-0 sm:py-0 md:gap-4 bg-muted/40">
             {children}
             <StoreSelectionModal />
           </main>

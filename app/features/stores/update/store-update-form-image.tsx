@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Upload } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 
 import { cn } from '@/lib/utils';
 

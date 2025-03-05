@@ -18,14 +18,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card-rounded-sm';
 
 import { Input } from '@/components/ui/input';
 
 //import ProductsTableRow from './products-table-row';
 import { useRouter, usePathname } from 'next/navigation';
 import { ChevronLeft, ChevronRight, PlusCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 
 import { ProductSellingPriceBase } from '@/app/models/products-model';
 import ProductsByIdPricesTableRow from './products-id-prices-table-row';

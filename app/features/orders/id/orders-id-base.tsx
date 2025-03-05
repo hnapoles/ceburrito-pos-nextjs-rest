@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card-rounded-sm';
 import {
   Select,
   SelectContent,
@@ -22,7 +22,7 @@ import { Input } from '@/components/ui/input';
 import { formatPeso } from '@/app/actions/client/peso';
 import { Lookup } from '@/app/models/lookups-model';
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 
 import KeyboardTouchLettersDialog from '../../keyboard/keyboard-touch-letters-dialog';
 import KeyboardTouchEmailDialog from '../../keyboard/keyboard-touch-email-dialog';

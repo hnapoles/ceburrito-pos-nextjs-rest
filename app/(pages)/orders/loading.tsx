@@ -1,5 +1,10 @@
 //import { Loader2 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card-rounded-sm';
 
 export default function Loading() {
   return (

@@ -4,7 +4,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 import { File, PlusCircle } from 'lucide-react';
 
 //import { ProductSearchInput } from './order-search-input.';

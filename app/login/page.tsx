@@ -16,9 +16,9 @@ import {
   CardHeader,
   CardFooter,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card-rounded-sm';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button-rounded-sm';
 
 export default function SignIn() {
   return (
