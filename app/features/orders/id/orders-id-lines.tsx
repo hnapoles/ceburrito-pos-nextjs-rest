@@ -74,7 +74,7 @@ export default function OrdersIdLines({
       };
 
       const updatedData = order;
-      updatedData.totalAmount = updatedData.totalAmount || 0 - line.amount;
+      updatedData.totalAmount = (updatedData.totalAmount || 0) - line.amount;
       updatedData.orderLines = updatedOrderLines;
 
       await UpdateOrder(updatedData);
@@ -120,7 +120,7 @@ export default function OrdersIdLines({
             quantity: existingOrder.quantity + 1,
             amount: existingOrder.amount + line.unitPrice,
           };
-          totalAmount = order.totalAmount || 0 + line.unitPrice;
+          totalAmount = (order.totalAmount || 0) + line.unitPrice;
         } else if (action === 'subtract') {
           if (line.quantity === 1) {
             updatedOrderLines[existingIndex] = {
@@ -134,10 +134,9 @@ export default function OrdersIdLines({
               amount: existingOrder.amount - line.unitPrice,
             };
           }
-          totalAmount = order.totalAmount || 0 - line.unitPrice;
+          totalAmount = (order.totalAmount || 0) - line.unitPrice;
         }
 
-        console.log('total amount ', totalAmount);
         const updatedData = {
           ...order,
           totalAmount: totalAmount,
