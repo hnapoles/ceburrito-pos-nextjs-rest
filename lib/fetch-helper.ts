@@ -1,3 +1,5 @@
+'use server';
+
 import { auth } from '@/auth';
 import { ApiOperationNames } from '@/app/models/api-model';
 

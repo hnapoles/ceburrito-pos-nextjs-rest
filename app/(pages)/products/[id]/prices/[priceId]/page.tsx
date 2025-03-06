@@ -1,7 +1,7 @@
 import { GetProductById } from '@/app/actions/server/products-actions';
 import ProductsIdPricesPriceIdEdit from '@/app/features/products/prices/priceId/products-id-prices-priceId-edit';
 import { GetProductSellingPricesByOwnId } from '@/app/actions/server/product-selling-prices-actions';
-import ProductsByIdPricesTableSimple from '@/app/features/products/id/products-id-prices-table-simple';
+import ProductsByIdPricesTableSimple from '@/app/features/products/id/edit/products-id-prices-table-simple';
 
 import { GetProductSellingPricesByProductId } from '@/app/actions/server/product-selling-prices-actions';
 

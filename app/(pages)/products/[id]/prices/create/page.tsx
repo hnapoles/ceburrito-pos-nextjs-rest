@@ -12,7 +12,7 @@ import {
 
 import { DefaultSizeOptions } from '@/app/models/lookups-model';
 
-import ProductsByIdPricesTableSimple from '@/app/features/products/id/products-id-prices-table-simple';
+import ProductsByIdPricesTableSimple from '@/app/features/products/id/edit/products-id-prices-table-simple';
 
 export default async function ProductsByIdPricesCreatePage({
   params,

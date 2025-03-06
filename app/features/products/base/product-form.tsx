@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, ChangeEvent } from 'react';
+import { useState, useRef, ChangeEvent, useEffect } from 'react';
 
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -48,6 +48,8 @@ import { Switch } from '@/components/ui/switch';
 import { ProductBase, ProductZodSchema } from '@/app/models/products-model';
 import { Lookup } from '@/app/models/lookups-model';
 
+import { IsUserPermissionLevelAllowed } from '@/app/actions/server/permissions-actions';
+
 interface baseProductFormProps {
   initialData?: ProductBase;
   categories: Lookup[];
@@ -55,6 +57,7 @@ interface baseProductFormProps {
   sizes: Lookup[];
   spices: Lookup[];
   onSubmit: (data: ProductBase) => void;
+  isViewOnly?: boolean;
 }
 
 export default function BaseProductForm({
@@ -64,8 +67,20 @@ export default function BaseProductForm({
   sizes,
   spices,
   onSubmit,
+  isViewOnly = true,
 }: baseProductFormProps) {
   const router = useRouter();
+
+  const [isEditAllowed, setIsEditAllowed] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    async function checkAccess() {
+      const allowed = await IsUserPermissionLevelAllowed('admin'); // ✅ Await the result
+      setIsEditAllowed(allowed);
+    }
+
+    checkAccess();
+  }, []);
 
   const form = useForm<ProductBase>({
     resolver: zodResolver(ProductZodSchema),
@@ -108,6 +123,7 @@ export default function BaseProductForm({
   };
 
   const handleImageButtonClick = () => {
+    if (isViewOnly) return;
     fileInputRef.current?.click();
   };
 
@@ -153,7 +169,14 @@ export default function BaseProductForm({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{initialData ? 'Edit Product' : 'New Product'}</CardTitle>
+        <CardTitle>
+          {' '}
+          {isViewOnly
+            ? 'View Product'
+            : initialData
+            ? 'Edit Product'
+            : 'New Product'}
+        </CardTitle>
       </CardHeader>
 
       <CardContent>
@@ -239,6 +262,12 @@ export default function BaseProductForm({
                     <Input
                       type="text"
                       placeholder="Enter product name"
+                      readOnly={isViewOnly}
+                      className={cn(
+                        isViewOnly
+                          ? 'bg-gray-50 border-none' // ✅ Force styles for disabled input
+                          : '',
+                      )}
                       {...field}
                     />
                   </div>
@@ -256,6 +285,12 @@ export default function BaseProductForm({
                     <Textarea
                       placeholder="Enter product description"
                       {...field}
+                      readOnly={isViewOnly}
+                      className={cn(
+                        isViewOnly
+                          ? 'bg-gray-50 border-none' // ✅ Force styles for disabled input
+                          : '',
+                      )}
                     />
                   </div>
 
@@ -274,9 +309,16 @@ export default function BaseProductForm({
                     onValueChange={field.onChange}
                     {...field}
                     value={field.value || ''}
+                    disabled={isViewOnly}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger
+                        className={cn(
+                          isViewOnly
+                            ? 'disabled:opacity-90 disabled:bg-gray-50 disabled:border-none'
+                            : '',
+                        )}
+                      >
                         <SelectValue placeholder="Select product category" />
                       </SelectTrigger>
                     </FormControl>
@@ -351,6 +393,12 @@ export default function BaseProductForm({
                       step="0.01"
                       placeholder=""
                       {...field}
+                      readOnly={isViewOnly}
+                      className={cn(
+                        isViewOnly
+                          ? 'bg-gray-50 border-none' // ✅ Force styles for disabled input
+                          : '',
+                      )}
                     />
                   </div>
                   <FormMessage className="ml-auto" />
@@ -379,6 +427,10 @@ export default function BaseProductForm({
                                     [];
                                 field.onChange(newValue);
                               }}
+                              disabled={isViewOnly}
+                              className={cn(
+                                isViewOnly ? 'disabled:opacity-100' : '',
+                              )}
                             />
                             <Label>{size}</Label>
                           </div>
@@ -412,6 +464,10 @@ export default function BaseProductForm({
                                     [];
                                 field.onChange(newValue);
                               }}
+                              disabled={isViewOnly}
+                              className={cn(
+                                isViewOnly ? 'disabled:opacity-100' : '',
+                              )}
                             />
                             <Label>{spice}</Label>
                           </div>
@@ -433,6 +489,8 @@ export default function BaseProductForm({
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    disabled={isViewOnly}
+                    className={cn(isViewOnly ? 'disabled:opacity-100' : '')}
                   />
                   <FormLabel className="w-32">Sellable?</FormLabel>
                 </FormItem>
@@ -447,6 +505,8 @@ export default function BaseProductForm({
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    disabled={isViewOnly}
+                    className={cn(isViewOnly ? 'disabled:opacity-100' : '')}
                   />
                   <FormLabel className="w-32">Out of Stock?</FormLabel>
                 </FormItem>
@@ -466,9 +526,16 @@ export default function BaseProductForm({
                     }}
                     {...field}
                     value={field.value || ''}
+                    disabled={isViewOnly}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger
+                        className={cn(
+                          isViewOnly
+                            ? 'disabled:opacity-90 disabled:bg-gray-50 disabled:border-none'
+                            : '',
+                        )}
+                      >
                         <SelectValue placeholder="Select product status" />
                       </SelectTrigger>
                     </FormControl>
@@ -486,19 +553,34 @@ export default function BaseProductForm({
               )}
             />
 
-            <div className="flex justify-between pt-2 md:pt-4">
-              <Button type="button" variant="outline" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={
-                  isSubmitting || !isDirty || Object.keys(errors).length > 0
-                }
-              >
-                {isSubmitting ? 'Submitting...' : 'Save'}
-              </Button>
-            </div>
+            {isViewOnly && isEditAllowed && (
+              <div className="flex justify-end pt-2 md:pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() =>
+                    router.push(`/products/${initialData?._id || ''}/edit`)
+                  }
+                >
+                  Edit
+                </Button>
+              </div>
+            )}
+            {!isViewOnly && isEditAllowed && (
+              <div className="flex justify-between pt-2 md:pt-4">
+                <Button type="button" variant="outline" onClick={handleCancel}>
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={
+                    isSubmitting || !isDirty || Object.keys(errors).length > 0
+                  }
+                >
+                  {isSubmitting ? 'Submitting...' : 'Save'}
+                </Button>
+              </div>
+            )}
           </form>
         </Form>
         {/* end - form details */}

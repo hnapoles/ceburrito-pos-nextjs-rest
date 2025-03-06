@@ -73,12 +73,12 @@ export default function ProductsTableRow({
     revalidateAndRedirectUrl(pathname);
   };
 
-  const editLink = `${pathname}/${product._id}`;
+  const viewLink = `${pathname}/${product._id}/view`;
 
   return (
     <TableRow
       className="hover:pointer-cursor"
-      onClick={() => router.push(editLink)}
+      onClick={() => router.push(viewLink)}
     >
       <TableCell className="hidden sm:table-cell">
         {product.imageUrl ? (
@@ -115,7 +115,7 @@ export default function ProductsTableRow({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <Link href={editLink}>
+            <Link href={viewLink}>
               <DropdownMenuItem>Edit</DropdownMenuItem>
             </Link>
             <DropdownMenuItem
