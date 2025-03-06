@@ -24,18 +24,20 @@ import { OrderBase } from '@/app/models/orders-model';
 interface ordersCreatePosProps {
   products: ProductBase[];
   categories: Lookup[];
-  order: OrderBase;
+  orderData: OrderBase;
 }
 
 export default function OrdersIdAddItemsBase({
   products,
   categories,
-  order,
+  orderData,
 }: ordersCreatePosProps) {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 24; // Define rows per page
+
+  const [order, setOrder] = useState(orderData);
 
   //
   const { storeName } = useStore();
@@ -83,6 +85,7 @@ export default function OrdersIdAddItemsBase({
           orderLines={order.orderLines || []}
           totalAmount={order.totalAmount || 0}
           order={order}
+          setOrder={setOrder}
         />
       </div>
       {/* Left Side - add items */}

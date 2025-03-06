@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import {
   Card,
@@ -28,14 +28,18 @@ export default function OrdersIdLines({
   orderLines,
   totalAmount,
   order,
+  setOrder,
 }: {
   orderType: string;
   onCheckout?: boolean;
   orderLines: OrderLineBase[];
   totalAmount: number;
   order: OrderBase;
+  setOrder: React.Dispatch<React.SetStateAction<OrderBase>>;
 }) {
   console.log(orderType);
+  const searchParams = useSearchParams();
+  const query = new URLSearchParams(searchParams);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -143,7 +147,7 @@ export default function OrdersIdLines({
           orderLines: updatedOrderLines,
         };
 
-        await UpdateOrder(updatedData);
+        const newData = await UpdateOrder(updatedData);
 
         toast({
           title: 'Line updated',
@@ -154,7 +158,11 @@ export default function OrdersIdLines({
           ),
         });
 
-        await revalidateAndRedirectUrl(pathname);
+        setOrder(updatedData);
+        //await revalidateAndRedirectUrl(pathname);
+        //router.refresh(); // ✅ Forces a fresh fetch from the server
+        query.set('refresh', Date.now().toString()); // Change URL to trigger a refresh
+        router.push(`?${query.toString()}`);
       } else {
         console.log('Order line not found - cannot update');
       }
@@ -164,6 +172,10 @@ export default function OrdersIdLines({
       setLoadingItems((prev) => ({ ...prev, [lineKey]: false })); // Stop loading (always runs)
     }
   }
+
+  const itemsCount = (order.orderLines || [])
+    .filter((line) => (line.status ?? 'open') !== 'canceled') // Default status to "open"
+    .reduce((sum, line) => sum + line.quantity, 0);
 
   return (
     <Card className="h-full flex flex-col">
@@ -180,7 +192,7 @@ export default function OrdersIdLines({
         <CardTitle>Order LInes</CardTitle>
 
         <p className="p-2">
-          {`Items (${totalItems}) : ${formatPesoNoDecimals(
+          {`Items (${itemsCount}) : ${formatPesoNoDecimals(
             Math.floor(totalAmount),
           )}`}
           <span className="text-xs">

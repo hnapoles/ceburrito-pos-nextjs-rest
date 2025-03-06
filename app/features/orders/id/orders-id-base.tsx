@@ -36,17 +36,18 @@ export default function OrdersIdBase({
   dineModes,
   paymentMethods,
   statuses,
-  order,
+  orderData,
 }: {
   dineModes: Lookup[];
   paymentMethods: Lookup[];
   statuses: Lookup[];
-  order: OrderBase;
+  orderData: OrderBase;
 }) {
-  const orderIdWithDashes = `${order._id?.slice(0, 4)}-${order._id?.slice(
-    4,
-    -4,
-  )}-${order._id?.slice(-4)}`;
+  const [order, setOrder] = React.useState(orderData);
+
+  const orderIdWithDashes = `${(order._id || '').slice(0, 4)}-${(
+    order._id || ''
+  ).slice(4, -4)}-${(order._id || '').slice(-4)}`;
   const [dineMode, setDineMode] = React.useState(order.mode);
   const selectedMode = dineModes.find((mode) => mode.lookupValue === dineMode);
 
@@ -57,6 +58,8 @@ export default function OrdersIdBase({
     (method) => method.lookupValue === paymentMethod,
   );
   */
+
+  console.log('order data =', order);
 
   const [status, setStatus] = React.useState(order.status);
   const selectedStatus = statuses.find((s) => s.lookupValue === status);
@@ -74,6 +77,25 @@ export default function OrdersIdBase({
     React.useState(false);
 
   const [isProcessing, setIsProcessing] = React.useState(false);
+
+  const lineItemCount = (order.orderLines || [])
+    .filter((line) => (line.status ?? 'open') !== 'canceled') // Default status to "open"
+    .reduce((sum, line) => sum + line.quantity, 0);
+
+  const [itemsCount, setItemsCount] = React.useState(lineItemCount);
+
+  // Sync state when `order` prop updates
+
+  React.useEffect(() => {
+    setOrder(order);
+    setDineMode(order.mode);
+    setPaymentMethod(order.paymentMethod);
+    setStatus(order.status);
+    setCustomerName(order.customerName || '');
+    setCustomerEmail(order.customerEmail || '');
+
+    setItemsCount(lineItemCount);
+  }, [order]); // Re-run effect when `order` changes
 
   const handleSaveOrder = async () => {
     setIsProcessing(true);
@@ -214,13 +236,14 @@ export default function OrdersIdBase({
                       className="bg-transparent border-none w-full text-right focus:ring-0 focus:outline-none"
                     />
                   </div>
+                  new Item Count: {itemsCount}
                   <div className="flex items-center gap-2">
-                    <Label className="w-32">Line Count</Label>
+                    <Label className="w-32">Items</Label>
                     <Input
                       type="text"
-                      id="itemCount"
-                      defaultValue={order.orderLines?.length || 0}
-                      readOnly
+                      id="itemsCount"
+                      defaultValue={itemsCount}
+                      onChange={() => setItemsCount}
                       className="bg-transparent border-none w-full text-right focus:ring-0 focus:outline-none"
                     />
                   </div>
@@ -234,7 +257,6 @@ export default function OrdersIdBase({
                       className="bg-transparent border-none w-full text-right focus:ring-0 focus:outline-none"
                     />
                   </div>
-
                   <div className="flex items-center gap-2">
                     <Label className="w-32">Payment Method</Label>
                     <Select
@@ -260,7 +282,6 @@ export default function OrdersIdBase({
                       </SelectContent>
                     </Select>
                   </div>
-
                   <div className="flex items-center gap-2">
                     <Label className="w-32">Dine Mode</Label>
                     <Select
@@ -345,6 +366,7 @@ export default function OrdersIdBase({
             orderLines={order.orderLines || []}
             totalAmount={order.totalAmount || 0}
             order={order}
+            setOrder={setOrder}
           />
         </div>
       </div>

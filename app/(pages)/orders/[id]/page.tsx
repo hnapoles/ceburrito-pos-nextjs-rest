@@ -36,6 +36,8 @@ export default async function OrdersByIdPage({
     );
   }
 
+  console.log('order data from the server ', order);
+
   const customers = await GetLookupCustomers();
 
   //if-testing - set to true
@@ -52,7 +54,7 @@ export default async function OrdersByIdPage({
 
   return (
     <OrdersIdBase
-      order={order}
+      orderData={order}
       dineModes={dineModes}
       paymentMethods={paymentMethods}
       statuses={statuses}
