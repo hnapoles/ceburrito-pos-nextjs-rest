@@ -107,7 +107,7 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 auto-rows-fr">
         {orders.map((order) => (
           <Link
-            href={`/orders/${order._id}/edit`}
+            href={`/orders/${order._id}/view`}
             key={order._id}
             className="h-full"
           >

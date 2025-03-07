@@ -24,8 +24,8 @@ import { Lookup } from '@/app/models/lookups-model';
 import React from 'react';
 import { Button } from '@/components/ui/button-rounded-sm';
 
-import KeyboardTouchLettersDialog from '../../keyboard/keyboard-touch-letters-dialog';
-import KeyboardTouchEmailDialog from '../../keyboard/keyboard-touch-email-dialog';
+import KeyboardTouchLettersDialog from '../../../keyboard/keyboard-touch-letters-dialog';
+import KeyboardTouchEmailDialog from '../../../keyboard/keyboard-touch-email-dialog';
 import { OrderBase } from '@/app/models/orders-model';
 import { CreateOrder, UpdateOrder } from '@/app/actions/server/orders-actions';
 import { toast } from '@/hooks/use-toast';
