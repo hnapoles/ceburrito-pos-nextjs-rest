@@ -20,8 +20,8 @@ import { UserWhoProps } from '@/app/models/users-model';
 
 import ProductsByIdPricesTableSimple from '@/app/features/products/id/edit/products-id-prices-table-simple';
 
-import { IsUserPermissionLevelAllowed } from '@/app/actions/server/permissions-actions';
-import ErrorDisplay from '@/app/features/error/error-display';
+//import { IsUserPermissionLevelAllowed } from '@/app/actions/server/permissions-actions';
+//import ErrorDisplay from '@/app/features/error/error-display';
 
 //start of function
 export default async function ProductUpdatePage({

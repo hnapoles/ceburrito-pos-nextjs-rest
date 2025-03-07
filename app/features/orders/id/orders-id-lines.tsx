@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
   Card,
@@ -41,14 +41,12 @@ export default function OrdersIdLines({
   const searchParams = useSearchParams();
   const query = new URLSearchParams(searchParams);
   const router = useRouter();
-  const pathname = usePathname();
+  //const pathname = usePathname();
 
   // Sort by productName (case-insensitive)
   const sortedData = orderLines.sort((a, b) =>
     a.productName.localeCompare(b.productName),
   );
-
-  const totalItems = orderLines.length || 0;
 
   const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
 
@@ -147,7 +145,7 @@ export default function OrdersIdLines({
           orderLines: updatedOrderLines,
         };
 
-        const newData = await UpdateOrder(updatedData);
+        await UpdateOrder(updatedData);
 
         toast({
           title: 'Line updated',

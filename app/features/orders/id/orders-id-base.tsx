@@ -93,9 +93,8 @@ export default function OrdersIdBase({
     setStatus(order.status);
     setCustomerName(order.customerName || '');
     setCustomerEmail(order.customerEmail || '');
-
     setItemsCount(lineItemCount);
-  }, [order]); // Re-run effect when `order` changes
+  }, [order, lineItemCount]); // Re-run effect when `order` changes
 
   const handleSaveOrder = async () => {
     setIsProcessing(true);
