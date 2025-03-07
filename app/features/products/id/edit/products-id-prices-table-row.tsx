@@ -42,7 +42,7 @@ export default function ProductsByIdPricesTableRow({
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log(productName);
+  //console.log(productName);
 
   //const [toggleEditDialog, setToggleEditDialog] = useState(false);
 

@@ -82,6 +82,19 @@ export default function BaseProductForm({
     checkAccess();
   }, []);
 
+  const defaultValues = initialData || {
+    _id: '',
+    name: '',
+    description: '',
+    basePrice: 0,
+    status: 'draft',
+    imageUrl: '',
+    sizeOptions: [],
+    spiceOptions: [],
+    isOutOfStock: false,
+    isSellable: true,
+  };
+
   const form = useForm<ProductBase>({
     resolver: zodResolver(ProductZodSchema),
     defaultValues: initialData || {
@@ -114,6 +127,26 @@ export default function BaseProductForm({
     setValue('imageFile', file, { shouldDirty: true });
 
     if (file) {
+      const allowedTypes = [
+        'image/png',
+        'image/jpeg',
+        'image/jpg',
+        'image/webp',
+      ]; // ✅ Allow WebP
+
+      const MAX_FILE_SIZE = 1 * 1024 * 1024; // MB
+
+      if (!allowedTypes.includes(file.type)) {
+        alert('Only PNG, JPEG, JPG, and WEBP formats are allowed.');
+        return;
+      }
+
+      // Check file size
+      if (file.size > MAX_FILE_SIZE) {
+        alert('File is too large. Maximum size is 1MB.');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelectedFile(reader.result as string);
@@ -132,18 +165,18 @@ export default function BaseProductForm({
     initialData?.imageUrl || null,
   );
   */
-  const [showDialog, setShowDialog] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   const handleCancel = () => {
     if (isDirty) {
-      setShowDialog(true); // Show confirmation modal if form is dirty
+      setShowCancelDialog(true); // Show confirmation modal if form is dirty
     } else {
       router.back(); // If no changes, navigate back
     }
   };
 
   const discardChanges = () => {
-    setShowDialog(false);
+    setShowCancelDialog(false);
     router.back();
   };
 
@@ -198,6 +231,7 @@ export default function BaseProductForm({
                   alt="image"
                   width={100}
                   height={100}
+                  priority
                   className={cn(
                     'h-auto w-auto object-cover transition-all hover:scale-105',
                     'aspect-square',
@@ -220,7 +254,7 @@ export default function BaseProductForm({
                     <Input
                       type="file"
                       className="hidden"
-                      accept="image/png, image/jpeg, image/jpg"
+                      accept="image/png, image/jpeg, image/jpg, image/webp"
                       ref={fileInputRef}
                       onChange={handleFileChange}
                       onBlur={field.onBlur} // Use the onBlur to track blur event
@@ -587,7 +621,7 @@ export default function BaseProductForm({
       </CardContent>
 
       {/* Discard Changes Confirmation Dialog */}
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+      <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Discard Changes?</DialogTitle>
@@ -596,7 +630,10 @@ export default function BaseProductForm({
             You have unsaved changes. Are you sure you want to discard them?
           </p>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowCancelDialog(false)}
+            >
               No, Keep Editing
             </Button>
             <Button variant="destructive" onClick={discardChanges}>

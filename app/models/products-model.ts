@@ -40,7 +40,10 @@ export const ProductZodSchema = z.object({
   imageFile: z
     .instanceof(File, { message: 'A valid file is required' })
     .refine(
-      (file) => ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type),
+      (file) =>
+        ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'].includes(
+          file.type,
+        ),
       {
         message: 'Only PNG, JPG, and JPEG files are allowed',
       },
