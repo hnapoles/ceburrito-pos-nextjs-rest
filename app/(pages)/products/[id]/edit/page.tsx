@@ -20,7 +20,8 @@ import { UserWhoProps } from '@/app/models/users-model';
 
 import ProductsByIdPricesTableSimple from '@/app/features/products/id/edit/products-id-prices-table-simple';
 
-//import { ProductsByIdPricesSearchInput } from '@/app/features/products/id/products-id-prices-search-input';
+import { IsUserPermissionLevelAllowed } from '@/app/actions/server/permissions-actions';
+import ErrorDisplay from '@/app/features/error/error-display';
 
 //start of function
 export default async function ProductUpdatePage({
@@ -29,6 +30,17 @@ export default async function ProductUpdatePage({
   params: Promise<{ id: string }>;
 }) {
   const id = (await params).id;
+
+  /*
+  const isAllowed = await IsUserPermissionLevelAllowed('admin');
+  if (!isAllowed)
+    return (
+      <ErrorDisplay
+        message={'No permission to access this page'}
+        type={'error'}
+      />
+    );
+  */
 
   const product = await GetProductById(id);
   const lookups = await GetLookups('product', null);

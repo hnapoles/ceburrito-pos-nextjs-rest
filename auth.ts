@@ -18,6 +18,7 @@ declare module 'next-auth' {
       accessToken: string;
       apiKey?: string;
       primaryRole?: string;
+      uiRoutesAccess?: string[];
       /**
        * By default, TypeScript merges new interface properties and overwrites existing ones.
        * In this case, the default session user properties will be overwritten,
@@ -90,6 +91,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           //throw new Error("Failed to get server data");
         }
         const data = await response.json();
+        //console.log(data);
 
         return {
           ...session,
@@ -99,6 +101,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             apiKey: data.apiKey,
             primaryRole: data.primaryRole,
             provider: token.provider,
+            uiRoutesAccess: data.permissions,
           },
         };
       } catch (error) {
