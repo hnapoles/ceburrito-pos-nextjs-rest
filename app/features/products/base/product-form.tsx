@@ -82,19 +82,6 @@ export default function BaseProductForm({
     checkAccess();
   }, []);
 
-  const defaultValues = initialData || {
-    _id: '',
-    name: '',
-    description: '',
-    basePrice: 0,
-    status: 'draft',
-    imageUrl: '',
-    sizeOptions: [],
-    spiceOptions: [],
-    isOutOfStock: false,
-    isSellable: true,
-  };
-
   const form = useForm<ProductBase>({
     resolver: zodResolver(ProductZodSchema),
     defaultValues: initialData || {
