@@ -35,6 +35,7 @@ export default function ProductsByIdEdit({
 }: ProductsByIdEditProps) {
   const handleProductSubmit = async (data: ProductBase) => {
     let newImageUrl = '';
+
     if (data.imageFile) {
       const formData = new FormData();
       formData.append('file', data.imageFile);

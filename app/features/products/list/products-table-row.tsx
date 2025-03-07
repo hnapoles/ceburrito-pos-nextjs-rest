@@ -80,7 +80,7 @@ export default function ProductsTableRow({
       className="hover:pointer-cursor"
       onClick={() => router.push(viewLink)}
     >
-      <TableCell className="hidden sm:table-cell">
+      <TableCell className="table-cell">
         {product.imageUrl ? (
           <Image
             alt="User image"
@@ -94,7 +94,7 @@ export default function ProductsTableRow({
       <TableCell className="font-medium">
         {product.name} <Badge variant="outline">{product.status}</Badge>{' '}
       </TableCell>
-      <TableCell>
+      <TableCell className="hidden sm:table-cell">
         <Badge variant="outline">{product.category}</Badge>
         {product.description}
       </TableCell>
