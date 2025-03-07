@@ -8,7 +8,7 @@ import NotFoundGlobal from '@/app/nav/not-found-global';
 import OrdersIdBase from '@/app/features/orders/id/orders-id-base';
 
 //start of function
-export default async function OrdersByIdPage({
+export default async function OrdersByIdEditPage({
   params,
 }: {
   params: Promise<{ id: string }>;

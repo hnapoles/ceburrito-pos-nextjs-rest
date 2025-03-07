@@ -1,3 +1,5 @@
+
+
 /* v1 ---
 export { auth as middleware } from '@/auth';
 
@@ -11,10 +13,18 @@ export const config = {
 };
 */
 
-// v3
+/* v2 ---
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
-import { match } from 'path-to-regexp';
+
+// ✅ Define route permissions for each role
+const adminRoutes = [/\/create$/, /\/edit$/, /\/settings$/]; 
+
+const managerRoutes = [
+  /\/orders\/create$/, 
+  /^\/orders\/create\/.*/,
+  /^\/orders\/[^/]+\/edit$/, 
+]; 
 
 export async function middleware(req: NextRequest) {
   const session = await auth(); // ✅ Get session
@@ -33,26 +43,31 @@ export async function middleware(req: NextRequest) {
   }
 
   const userRole = session.user.primaryRole;
-  const isAdmin =
-    userRole === 'admin' ||
-    userRole === 'superadmin' ||
-    userRole === 'superuser';
+  const isAdmin = userRole === 'admin';
   const isManager = userRole === 'manager';
 
   console.log(`🔍 Checking permissions for ${userRole} on ${pathname}`);
 
-  if (isAdmin) return NextResponse.next();
+  // ✅ Managers can access only `/orders/create` and `/orders/:id/edit`
+  if (managerRoutes.some((route) => route.test(pathname))) {
+    if (!(isManager || isAdmin)) {
+      console.warn(`🚫 Access denied to ${userRole} on ${pathname}`);
+      return NextResponse.redirect(new URL('/unauthorized', req.url));
+    }
+    return NextResponse.next();
+  }
 
-  const uiRouteAccess = session.user.uiRoutesAccess;
-  const hasAccess = uiRouteAccess?.some((routePattern) => {
-    const matcher = match(routePattern, { decode: decodeURIComponent });
-    return !!matcher(pathname); // Returns true if the route matches
-  });
+  // ✅ Admin can access all `/edit` and `/create` pages
+  if (adminRoutes.some((route) => route.test(pathname))) {
+    if (!isAdmin) {
+      console.warn(`🚫 Access denied to ${userRole} on ${pathname}`);
+      return NextResponse.redirect(new URL('/unauthorized', req.url));
+    }
+    return NextResponse.next();
+  }
 
-  if (hasAccess) return NextResponse.next();
-
-  console.warn(`🚫 Access denied to ${userRole} on ${pathname}`);
-  return NextResponse.redirect(new URL('/unauthorized', req.url));
+  // ✅ Allow all authenticated users to access unrestricted pages
+  return NextResponse.next();
 }
 
 // ✅ Exclude static assets, API routes, and prevent infinite loops

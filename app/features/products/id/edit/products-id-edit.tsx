@@ -1,7 +1,7 @@
 'use client';
 
 import { ProductBase } from '@/app/models/products-model';
-import BaseProductForm from '../base/product-form';
+import BaseProductForm from '../../base/product-form';
 import { Lookup } from '@/app/models/lookups-model';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
@@ -81,6 +81,7 @@ export default function ProductsByIdEdit({
       statuses={statusLookup}
       sizes={sizeLookup}
       spices={spiceLookup}
+      isViewOnly={false}
     />
   );
 }

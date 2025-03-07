@@ -45,7 +45,7 @@ export default async function OrdersIdAddItemsPage(props: {
     <OrdersIdAddItemsBase
       products={products}
       categories={categoriesLookup}
-      order={order}
+      orderData={order}
     />
   );
 }
