@@ -185,61 +185,63 @@ export default function OrdersByIdView({
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
         <TabsContent value="items">
-          <Table className="w-full md:w-1/2">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Product</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Size</TableHead>
-                <TableHead>Spice</TableHead>
-                <TableHead className="text-right">Unit Cost</TableHead>
-                <TableHead className="text-right">Qty</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {order.orderLines?.map((row, index) => (
-                <TableRow key={index}>
-                  {' '}
-                  {/* ✅ Ensure unique key */}
-                  <TableCell>
-                    {row.imageUrl ? (
-                      <Image
-                        alt="User image"
-                        className="aspect-square rounded-md object-cover"
-                        height="64"
-                        src={row.imageUrl}
-                        width="64"
-                      />
-                    ) : null}
+          <div className="border border-sm rounded-sm p-4">
+            <Table className="w-full md:w-1/2">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Product</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Size</TableHead>
+                  <TableHead>Spice</TableHead>
+                  <TableHead className="text-right">Unit Cost</TableHead>
+                  <TableHead className="text-right">Qty</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {order.orderLines?.map((row, index) => (
+                  <TableRow key={index}>
+                    {' '}
+                    {/* ✅ Ensure unique key */}
+                    <TableCell>
+                      {row.imageUrl ? (
+                        <Image
+                          alt="User image"
+                          className="aspect-square rounded-md object-cover"
+                          height="64"
+                          src={row.imageUrl}
+                          width="64"
+                        />
+                      ) : null}
+                    </TableCell>
+                    <TableCell>{row.productName}</TableCell>
+                    <TableCell>{row.sizeOption}</TableCell>
+                    <TableCell>{row.spiceOption || 'n/na'}</TableCell>
+                    <TableCell className="text-right">
+                      {formatPesoNoDecimals(Math.floor(row.unitPrice || 0))}
+                    </TableCell>
+                    <TableCell className="text-right">{row.quantity}</TableCell>
+                    <TableCell className="text-right">
+                      {formatPesoNoDecimals(
+                        Math.floor(row.unitPrice * row.quantity || 0),
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                <TableRow className="mt-4">
+                  <TableCell className="font-medium text-right" colSpan={5}>
+                    Total
                   </TableCell>
-                  <TableCell>{row.productName}</TableCell>
-                  <TableCell>{row.sizeOption}</TableCell>
-                  <TableCell>{row.spiceOption || 'n/na'}</TableCell>
-                  <TableCell className="text-right">
-                    {formatPesoNoDecimals(Math.floor(row.unitPrice || 0))}
+                  <TableCell className="text-right text-gray-900">
+                    {lineItemCount}
                   </TableCell>
-                  <TableCell className="text-right">{row.quantity}</TableCell>
-                  <TableCell className="text-right">
-                    {formatPesoNoDecimals(
-                      Math.floor(row.unitPrice * row.quantity || 0),
-                    )}
+                  <TableCell className="text-right text-gray-900">
+                    {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
                   </TableCell>
                 </TableRow>
-              ))}
-              <TableRow className="mt-4">
-                <TableCell className="font-medium text-right" colSpan={5}>
-                  Total
-                </TableCell>
-                <TableCell className="text-right text-gray-900">
-                  {lineItemCount}
-                </TableCell>
-                <TableCell className="text-right text-gray-900">
-                  {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+              </TableBody>
+            </Table>
+          </div>
         </TabsContent>
         <TabsContent value="history">
           <WhoTabContent who={who} />
