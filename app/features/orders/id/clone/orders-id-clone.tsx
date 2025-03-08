@@ -11,6 +11,16 @@ import {
   TableCell,
 } from '@/components/ui/table';
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
 import { Button } from '@/components/ui/button-rounded-sm';
 
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
@@ -43,6 +53,7 @@ export default function OrdersByIdClone({
   const [customerName, setCustomerName] = React.useState(
     order.customerName || '',
   );
+  console.log('customerName ', customerName);
   const [customerEmail, setCustomerEmail] = React.useState(
     order.customerEmail || '',
   );
@@ -62,15 +73,20 @@ export default function OrdersByIdClone({
 
   const [paymentMethod, setPaymentMethod] = React.useState(order.paymentMethod);
 
+  /*
+  const isInitialRender = React.useRef(true);
+
   React.useEffect(() => {
-    //setOrder(order);
-    setDineMode(order.mode);
-    setPaymentMethod(order.paymentMethod);
-    //setStatus(order.status);
-    setCustomerName(order.customerName || '');
-    setCustomerEmail(order.customerEmail || '');
-    //setItemsCount(lineItemCount);
-  }, [order]); // Re-run effect when `order` changes
+    if (isInitialRender.current) {
+      setCustomerName(order.customerName || '');
+      setCustomerEmail(order.customerEmail || '');
+      setCustomerAddress(order.customerAddress || '');
+      setDineMode(order.mode);
+      setPaymentMethod(order.paymentMethod);
+      isInitialRender.current = false; // Mark initial render as done
+    }
+  }, [order]); // Runs only when `order` changes
+ */
 
   //const [order, setOrder] = React.useState(orderData);
 
@@ -216,7 +232,7 @@ export default function OrdersByIdClone({
                 <Input
                   type="text"
                   id="customerName"
-                  defaultValue={customerName}
+                  value={customerName}
                   readOnly
                   className="w-2/3 md:w-1/2"
                   placeholder="Enter name"
@@ -229,7 +245,7 @@ export default function OrdersByIdClone({
                 <Input
                   type="text"
                   id="customerAddress"
-                  defaultValue={customerAddress}
+                  value={customerAddress}
                   readOnly
                   className="w-2/3 md:w-1/2"
                   placeholder="Enter address"
@@ -241,7 +257,7 @@ export default function OrdersByIdClone({
                 <Input
                   type="email"
                   id="customerEmail"
-                  defaultValue={customerEmail}
+                  value={customerEmail}
                   placeholder="Enter email"
                   readOnly
                   className="w-2/3 md:w-1/2"
@@ -250,9 +266,27 @@ export default function OrdersByIdClone({
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Mode</span>
-                <span className="text-right text-red-700">
-                  {order.mode ?? 'n/a'}
-                </span>
+                <Select
+                  value={dineMode}
+                  onValueChange={setDineMode}
+                  disabled={order.status !== 'open'}
+                >
+                  <SelectTrigger className="w-2/3 md:w-1/2">
+                    <SelectValue>
+                      {selectedMode?.lookupDescription || 'Select Dine Mode'}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Dine Options</SelectLabel>
+                      {dineModes.map((mode) => (
+                        <SelectItem key={mode._id} value={mode.lookupValue}>
+                          {mode.lookupDescription}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Store Name</span>
