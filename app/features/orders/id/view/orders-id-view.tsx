@@ -9,6 +9,15 @@ import {
   TableCell,
 } from '@/components/ui/table';
 
+import { Button } from '@/components/ui/button-rounded-sm';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Lookup } from '@/app/models/lookups-model';
 import React from 'react';
@@ -19,6 +28,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { UserWhoProps } from '@/app/models/users-model';
 import { WhoTabContent } from '@/app/nav/who-tab-content';
 import Image from 'next/image';
+import { MoreHorizontal } from 'lucide-react';
 
 export default function OrdersByIdView({
   dineModes,
@@ -53,34 +63,56 @@ export default function OrdersByIdView({
   //setOrder(orderData);
 
   return (
-    <div className="gap-4 bg-white border border-sm rounded-sm p-4">
+    <div className="relative gap-4 bg-white border border-sm rounded-sm p-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="flex flex-col h-full">
-          <div>Order</div>
+          <div className="flex items-center">
+            <p className="text-lg">Order</p>
+          </div>
+
           <div className="border border-sm rounded-sm p-4 flex-1">
             <div className="flex justify-between items-center">
               <span className="font-medium">Id</span>
-              <span className="text-right text-blue-700">
+              <span className="text-right text-gray-900">
                 {orderIdWithDashes.toUpperCase()}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Order Date</span>
-              <span className="text-right text-blue-700">
+              <span className="text-right text-gray-900">
                 {order.orderedAt
                   ? new Date(order.orderedAt).toLocaleString()
                   : ''}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="font-medium">Store Name</span>
-              <span className="text-right text-blue-700">
-                {order.storeName}
+              <span className="font-medium">Status</span>
+              <span className="text-right text-gray-900 ml-2">
+                {order.status.toUpperCase()}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Order Type</span>
               <span className="text-right text-red-700">{order.type}</span>
+            </div>
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button aria-haspopup="true" size="sm" variant="ghost">
+                    <MoreHorizontal className="h-4 w-4 text-blue-900" />
+                    <span className="sr-only">Toggle menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem>View Receipt</DropdownMenuItem>
+                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                  <DropdownMenuItem>Clone</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <button>Cancel</button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -90,24 +122,30 @@ export default function OrdersByIdView({
           <div className="border border-sm rounded-sm p-4 flex-1">
             <div className="flex justify-between items-center">
               <span className="font-medium">Customer Name</span>
-              <span className="text-right text-blue-700">
+              <span className="text-right text-gray-900">
                 {order.customerName}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Address</span>
-              <span className="text-right text-blue-700">...</span>
+              <span className="text-right text-gray-900">n/a</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Email</span>
-              <span className="text-right text-blue-700">
-                {order.customerEmail ?? '...'}
+              <span className="text-right text-gray-900">
+                {order.customerEmail ?? 'n/a'}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Mode</span>
               <span className="text-right text-red-700">
-                {order.mode ?? '...'}
+                {order.mode ?? 'n/a'}
+              </span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="font-medium">Store Name</span>
+              <span className="text-right text-gray-900">
+                {order.storeName}
               </span>
             </div>
           </div>
@@ -118,19 +156,19 @@ export default function OrdersByIdView({
           <div className="border border-sm rounded-sm p-4 flex-1">
             <div className="flex justify-between items-center">
               <span className="font-medium">Payment Method</span>
-              <span className="text-right text-blue-700">
+              <span className="text-right text-gray-900">
                 {order.paymentMethod?.toUpperCase()}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Reference</span>
-              <span className="text-right text-blue-700">
+              <span className="text-right text-gray-900">
                 {order.paymentReference ?? 'n/a'}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Items</span>
-              <span className="text-right text-blue-700">{lineItemCount}</span>
+              <span className="text-right text-gray-900">{lineItemCount}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Total Amount</span>
@@ -177,7 +215,7 @@ export default function OrdersByIdView({
                   </TableCell>
                   <TableCell>{row.productName}</TableCell>
                   <TableCell>{row.sizeOption}</TableCell>
-                  <TableCell>{row.spiceOption}</TableCell>
+                  <TableCell>{row.spiceOption || 'n/na'}</TableCell>
                   <TableCell className="text-right">
                     {formatPesoNoDecimals(Math.floor(row.unitPrice || 0))}
                   </TableCell>
