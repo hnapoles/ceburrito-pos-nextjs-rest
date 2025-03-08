@@ -31,11 +31,12 @@ import { OrderBase } from '@/app/models/orders-model';
 
 import Image from 'next/image';
 import { UpdateOrder } from '@/app/actions/server/orders-actions';
-import { toast } from '@/hooks/use-toast';
+
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 import { Input } from '@/components/ui/input';
 import KeyboardTouchEmailDialog from '@/app/features/keyboard/keyboard-touch-email-dialog';
 import KeyboardTouchLettersDialog from '@/app/features/keyboard/keyboard-touch-letters-dialog';
+import { Loader2 } from 'lucide-react';
 
 export default function OrdersByIdClone({
   dineModes,
@@ -72,6 +73,8 @@ export default function OrdersByIdClone({
   const selectedMode = dineModes.find((mode) => mode.lookupValue === dineMode);
 
   const [paymentMethod, setPaymentMethod] = React.useState(order.paymentMethod);
+
+  console.log(paymentMethods, dineModes);
 
   /*
   const isInitialRender = React.useRef(true);
@@ -340,8 +343,20 @@ export default function OrdersByIdClone({
         >
           Cancel
         </Button>
-        <Button className="w-full md:w-[100px]" onClick={() => handleSave()}>
-          Save
+
+        <Button
+          className="w-full md:w-[100px]"
+          onClick={handleSave}
+          disabled={isProcessing} // Disable when processing
+        >
+          {isProcessing ? (
+            <>
+              <Loader2 className="animate-spin mr-2 h-4 w-4" />
+              <span>Processing...</span>
+            </>
+          ) : (
+            'Save'
+          )}
         </Button>
       </div>
       <>
