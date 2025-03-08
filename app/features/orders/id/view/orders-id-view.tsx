@@ -98,7 +98,7 @@ export default function OrdersByIdView({
             <div className="flex justify-end">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button aria-haspopup="true" size="sm" variant="ghost">
+                  <Button aria-haspopup="true" size="icon" variant="ghost">
                     <MoreHorizontal className="h-4 w-4 text-blue-900" />
                     <span className="sr-only">Toggle menu</span>
                   </Button>
@@ -227,6 +227,17 @@ export default function OrdersByIdView({
                   </TableCell>
                 </TableRow>
               ))}
+              <TableRow className="mt-4">
+                <TableCell className="font-medium text-right" colSpan={5}>
+                  Total
+                </TableCell>
+                <TableCell className="text-right text-gray-900">
+                  {lineItemCount}
+                </TableCell>
+                <TableCell className="text-right text-gray-900">
+                  {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TabsContent>
