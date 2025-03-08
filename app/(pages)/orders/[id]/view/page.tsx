@@ -5,10 +5,10 @@ import {
 } from '@/app/actions/server/lookups-actions';
 import NotFoundGlobal from '@/app/nav/not-found-global';
 
-import OrdersIdBase from '@/app/features/orders/id/edit/orders-id-base';
+import OrdersByIdView from '@/app/features/orders/id/view/orders-id-view';
 
 //start of function
-export default async function OrdersByIdPage({
+export default async function OrdersByIdEditPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -53,7 +53,7 @@ export default async function OrdersByIdPage({
     );
 
   return (
-    <OrdersIdBase
+    <OrdersByIdView
       orderData={order}
       dineModes={dineModes}
       paymentMethods={paymentMethods}

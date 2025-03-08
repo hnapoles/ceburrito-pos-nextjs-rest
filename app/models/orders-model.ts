@@ -53,6 +53,11 @@ export const OrderZodSchema = z.object({
     .min(3, 'Payment method must be at least 3 characters')
     .max(32, 'Payment method must not exceed 32 characters')
     .optional(), //cash, card, Gcash
+  paymentReference: z
+    .string()
+    .min(3, 'Reference must be at least 3 characters')
+    .max(64, 'Reference must not exceed 64 characters')
+    .optional(),
   storeName: z
     .string()
     .min(3, 'Must be at least 3 characters')
