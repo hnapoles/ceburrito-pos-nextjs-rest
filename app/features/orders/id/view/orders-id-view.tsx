@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import {
   TableHead,
   TableRow,
@@ -29,6 +31,7 @@ import { UserWhoProps } from '@/app/models/users-model';
 import { WhoTabContent } from '@/app/nav/who-tab-content';
 import Image from 'next/image';
 import { MoreHorizontal } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default function OrdersByIdView({
   dineModes,
@@ -41,6 +44,8 @@ export default function OrdersByIdView({
   statuses: Lookup[];
   orderData: OrderBase;
 }) {
+  const router = useRouter();
+
   console.log(dineModes, paymentMethods, statuses);
   //const [order, setOrder] = React.useState(orderData);
   const order = orderData;
@@ -82,7 +87,7 @@ export default function OrdersByIdView({
               <span className="text-right text-gray-900">
                 {order.orderedAt
                   ? new Date(order.orderedAt).toLocaleString()
-                  : ''}
+                  : 'n/a'}
               </span>
             </div>
             <div className="flex justify-between items-center">
@@ -105,11 +110,28 @@ export default function OrdersByIdView({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuItem>View Receipt</DropdownMenuItem>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
-                  <DropdownMenuItem>Clone</DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <button>Cancel</button>
+                  <Separator />
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/orders/${order._id}/receipt`)}
+                  >
+                    View Receipt
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/orders/${order._id}/clone`)}
+                  >
+                    Clone
+                  </DropdownMenuItem>
+                  {order.status === 'open' && (
+                    <DropdownMenuItem>
+                      <button>Cancel</button>
+                    </DropdownMenuItem>
+                  )}
+                  <Separator />
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/orders/${order._id}/edit`)}
+                  >
+                    Edit
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -201,8 +223,6 @@ export default function OrdersByIdView({
               <TableBody>
                 {order.orderLines?.map((row, index) => (
                   <TableRow key={index}>
-                    {' '}
-                    {/* ✅ Ensure unique key */}
                     <TableCell>
                       {row.imageUrl ? (
                         <Image
