@@ -52,7 +52,7 @@ export default async function OrdersByIdClonePage({
 
   return (
     <OrdersByIdClone
-      orderData={order}
+      order={order}
       dineModes={dineModes}
       paymentMethods={paymentMethods}
       statuses={statuses}
