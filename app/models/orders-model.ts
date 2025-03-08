@@ -32,6 +32,7 @@ export const OrderZodSchema = z.object({
     .max(64, 'Id must not exceed 64 characters')
     .optional(),
   customerEmail: z.string().email().optional(),
+  customerAddress: z.string().email().optional(),
   description: z.string().optional(),
   totalAmount: z.coerce
     .number()

@@ -20,23 +20,59 @@ import React from 'react';
 import { OrderBase } from '@/app/models/orders-model';
 
 import Image from 'next/image';
+import { UpdateOrder } from '@/app/actions/server/orders-actions';
+import { toast } from '@/hooks/use-toast';
+import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
+import { Input } from '@/components/ui/input';
+import KeyboardTouchEmailDialog from '@/app/features/keyboard/keyboard-touch-email-dialog';
+import KeyboardTouchLettersDialog from '@/app/features/keyboard/keyboard-touch-letters-dialog';
 
 export default function OrdersByIdClone({
   dineModes,
   paymentMethods,
   statuses,
-  orderData,
+  order,
 }: {
   dineModes: Lookup[];
   paymentMethods: Lookup[];
   statuses: Lookup[];
-  orderData: OrderBase;
+  order: OrderBase;
 }) {
   const router = useRouter();
 
-  console.log(dineModes, paymentMethods, statuses);
+  const [customerName, setCustomerName] = React.useState(
+    order.customerName || '',
+  );
+  const [customerEmail, setCustomerEmail] = React.useState(
+    order.customerEmail || '',
+  );
+  const [customerAddress, setCustomerAddress] = React.useState(
+    order.customerAddress || '',
+  );
+
+  const [isNameTouchDialogOpen, setIsNameTouchDialogOpen] =
+    React.useState(false);
+  const [isEmailTouchDialogOpen, setIsEmailTouchDialogOpen] =
+    React.useState(false);
+
+  const [isProcessing, setIsProcessing] = React.useState(false);
+
+  const [dineMode, setDineMode] = React.useState(order.mode);
+  const selectedMode = dineModes.find((mode) => mode.lookupValue === dineMode);
+
+  const [paymentMethod, setPaymentMethod] = React.useState(order.paymentMethod);
+
+  React.useEffect(() => {
+    //setOrder(order);
+    setDineMode(order.mode);
+    setPaymentMethod(order.paymentMethod);
+    //setStatus(order.status);
+    setCustomerName(order.customerName || '');
+    setCustomerEmail(order.customerEmail || '');
+    //setItemsCount(lineItemCount);
+  }, [order]); // Re-run effect when `order` changes
+
   //const [order, setOrder] = React.useState(orderData);
-  const order = orderData;
 
   const orderIdWithDashes = `${(order._id || '').slice(0, 4)}-${(
     order._id || ''
@@ -47,6 +83,25 @@ export default function OrdersByIdClone({
     .reduce((sum, line) => sum + line.quantity, 0);
 
   const handleSave = async () => {
+    setIsProcessing(true);
+    const updatedData: OrderBase = {
+      _id: order._id,
+      paymentMethod: paymentMethod,
+      mode: dineMode,
+      status: status,
+      customerName: customerName,
+      customerEmail: customerEmail,
+      totalAmount: order.totalAmount,
+      type: order.type,
+    };
+
+    await UpdateOrder(updatedData);
+
+    setIsProcessing(false);
+    await revalidateAndRedirectUrl('/orders');
+  };
+
+  const handleCancel = async () => {
     router.push(`/orders`);
   };
 
@@ -155,22 +210,43 @@ export default function OrdersByIdClone({
           {/* customer */}
           <div className="flex flex-col h-full">
             <div>Customer</div>
-            <div className="border border-sm rounded-sm p-4 flex-1">
+            <div className="border border-sm rounded-sm p-4 flex-1 space-y-1">
               <div className="flex justify-between items-center">
                 <span className="font-medium">Customer Name</span>
-                <span className="text-right text-gray-900">
-                  {order.customerName}
-                </span>
+                <Input
+                  type="text"
+                  id="customerName"
+                  defaultValue={customerName}
+                  readOnly
+                  className="w-2/3 md:w-1/2"
+                  placeholder="Enter name"
+                  onClick={() => setIsNameTouchDialogOpen(true)}
+                />
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Address</span>
-                <span className="text-right text-gray-900">n/a</span>
+
+                <Input
+                  type="text"
+                  id="customerAddress"
+                  defaultValue={customerAddress}
+                  readOnly
+                  className="w-2/3 md:w-1/2"
+                  placeholder="Enter address"
+                  onClick={() => setIsNameTouchDialogOpen(true)}
+                />
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Email</span>
-                <span className="text-right text-gray-900">
-                  {order.customerEmail ?? 'n/a'}
-                </span>
+                <Input
+                  type="email"
+                  id="customerEmail"
+                  defaultValue={customerEmail}
+                  placeholder="Enter email"
+                  readOnly
+                  className="w-2/3 md:w-1/2"
+                  onClick={() => setIsEmailTouchDialogOpen(true)}
+                />
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Mode</span>
@@ -223,13 +299,31 @@ export default function OrdersByIdClone({
       </div>
       {/* END grid grid-cols-1 lg:grid-cols-2 */}
       <div className="flex items-center justify-end gap-2 mt-2">
-        <Button variant="outline" className="w-full md:w-[100px]">
+        <Button
+          variant="outline"
+          className="w-full md:w-[100px]"
+          onClick={() => handleSave()}
+        >
           Cancel
         </Button>
         <Button className="w-full md:w-[100px]" onClick={() => handleSave()}>
           Save
         </Button>
       </div>
+      <>
+        <KeyboardTouchLettersDialog
+          currentValue={customerName || ''}
+          setTouchValue={setCustomerName}
+          setIsTouchDialogOpen={setIsNameTouchDialogOpen}
+          isTouchDialogOpen={isNameTouchDialogOpen}
+        />
+        <KeyboardTouchEmailDialog
+          currentValue={customerEmail}
+          setTouchValue={setCustomerEmail}
+          setIsTouchDialogOpen={setIsEmailTouchDialogOpen}
+          isTouchDialogOpen={isEmailTouchDialogOpen}
+        />
+      </>
     </div>
   );
 }
