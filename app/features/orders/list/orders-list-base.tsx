@@ -46,51 +46,55 @@ const OrdersListBase: React.FC<orderListProps> = ({
   };
 
   return (
-    <Tabs
-      defaultValue={currentTab}
-      value={currentTab}
-      onValueChange={handleTabChange}
-    >
-      <div className="flex items-center">
-        <TabsList>
-          {statusesLookup.map((item) => (
-            <TabsTrigger key={item._id} value={item.lookupValue}>
-              {item.lookupDescription}
-            </TabsTrigger>
-          ))}
-          <TabsTrigger value="all">All</TabsTrigger>
-        </TabsList>
-        <div className="ml-auto flex items-center gap-2">
-          <OrderListViewSwitcher />
-          <OrdersSearchInput />
-          <Button size="sm" variant="outline" className="h-8 gap-1">
-            <File className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Export
-            </span>
-          </Button>
+    <div className="grid grid-cols-1 lg:grid-cols-2">
+      <Tabs
+        defaultValue={currentTab}
+        value={currentTab}
+        onValueChange={handleTabChange}
+      >
+        <div className="flex items-center">
+          <TabsList>
+            {statusesLookup.map((item) => (
+              <TabsTrigger key={item._id} value={item.lookupValue}>
+                {item.lookupDescription}
+              </TabsTrigger>
+            ))}
+            <TabsTrigger value="all">All</TabsTrigger>
+          </TabsList>
+          <div className="ml-auto flex items-center gap-2">
+            <OrderListViewSwitcher />
+            <OrdersSearchInput />
+            <Button size="sm" variant="outline" className="h-8 gap-1">
+              <File className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Export
+              </span>
+            </Button>
 
-          <Button
-            size="sm"
-            className="h-8 gap-1"
-            onClick={() => (window.location.href = createLink)}
-          >
-            <PlusCircle className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Add Order
-            </span>
-          </Button>
+            <Button
+              size="sm"
+              className="h-8 gap-1"
+              onClick={() => (window.location.href = createLink)}
+            >
+              <PlusCircle className="h-3.5 w-3.5" />
+              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                Add Order
+              </span>
+            </Button>
+          </div>
         </div>
-      </div>
-      <TabsContent value={currentTab}>
-        <OrdersListViewGrid
-          orders={orders}
-          limit={limit}
-          page={page}
-          totalDataCount={totalDataCount}
-        />
-      </TabsContent>
-    </Tabs>
+        <div className="grid grid-cols-1 lg:grids-cols-6">
+          <TabsContent value={currentTab}>
+            <OrdersListViewGrid
+              orders={orders}
+              limit={limit}
+              page={page}
+              totalDataCount={totalDataCount}
+            />
+          </TabsContent>
+        </div>
+      </Tabs>
+    </div>
   );
 };
 
