@@ -20,7 +20,7 @@ import { Minus, Plus, Trash, Loader2 } from 'lucide-react';
 import { UpdateOrder } from '@/app/actions/server/orders-actions';
 import { toast } from '@/hooks/use-toast';
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
-import { Separator } from '@/components/ui/separator';
+//import { Separator } from '@/components/ui/separator';
 
 export default function OrdersIdLines({
   orderType,
@@ -37,7 +37,7 @@ export default function OrdersIdLines({
   order: OrderBase;
   setOrder: React.Dispatch<React.SetStateAction<OrderBase>>;
 }) {
-  console.log(orderType);
+  console.log(orderType, onCheckout);
   const searchParams = useSearchParams();
   const query = new URLSearchParams(searchParams);
   const router = useRouter();
