@@ -38,7 +38,7 @@ import React from 'react';
 import { OrderBase } from '@/app/models/orders-model';
 
 import Image from 'next/image';
-import { CreateOrder } from '@/app/actions/server/orders-actions';
+import { UpdateOrder } from '@/app/actions/server/orders-actions';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 import { Input } from '@/components/ui/input';
@@ -46,7 +46,7 @@ import KeyboardTouchEmailDialog from '@/app/features/keyboard/keyboard-touch-ema
 import KeyboardTouchLettersDialog from '@/app/features/keyboard/keyboard-touch-letters-dialog';
 import { Loader2 } from 'lucide-react';
 
-export default function OrdersByIdClone({
+export default function OrdersByIdEdit({
   dineModes,
   paymentMethods,
   statuses,
@@ -119,20 +119,19 @@ export default function OrdersByIdClone({
   const handleSave = async () => {
     setIsProcessing(true);
 
-    const newOrder: OrderBase = {
-      orderedAt: new Date().toISOString(),
-      type: order.type,
-      mode: dineMode,
+    const updatedData: OrderBase = {
+      _id: order._id,
       paymentMethod: paymentMethod,
-      status: 'open',
-      storeName: order.storeName,
+      paymentReference: paymentReference,
+      mode: dineMode,
+      status: status,
       customerName: customerName,
       customerEmail: customerEmail,
       totalAmount: order.totalAmount,
-      orderLines: order.orderLines,
+      type: order.type,
     };
 
-    await CreateOrder(newOrder);
+    await UpdateOrder(updatedData);
 
     setIsProcessing(false);
     await revalidateAndRedirectUrl('/orders');
@@ -224,7 +223,7 @@ export default function OrdersByIdClone({
           {/* order */}
           <div className="flex flex-col h-full">
             <div className="flex items-center">
-              <p className="text-base font-semibold">Clone from Order</p>
+              <p className="text-base font-semibold">Edit Order</p>
             </div>
 
             <div className="border border-sm rounded-sm p-4 flex-1 space-y-1">
@@ -378,7 +377,7 @@ export default function OrdersByIdClone({
                   type="text"
                   id="paymentReference"
                   value={paymentReference}
-                  readOnly={order.paymentMethod === 'cash'}
+                  readOnly={paymentMethod === 'cash'}
                   className="w-2/3 md:w-1/2 text-xs"
                   placeholder="Enter payment reference"
                   onChange={(e) => setPaymentReference(e.target.value)}
@@ -422,7 +421,7 @@ export default function OrdersByIdClone({
           {isProcessing ? (
             <>
               <Loader2 className="animate-spin mr-2 h-4 w-4" />
-              <span>...</span>
+              <span></span>
             </>
           ) : (
             'Save'

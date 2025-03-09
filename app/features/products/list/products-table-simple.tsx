@@ -64,7 +64,9 @@ export default function ProductsTableSimple({
                 <span className="sr-only">Image</span>
               </TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
+              <TableHead className="hidden md:table-cell">
+                Description
+              </TableHead>
               <TableHead className="hidden md:table-cell">ID</TableHead>
               <TableHead className="hidden md:table-cell">Updated At</TableHead>
               <TableHead className="hidden md:table-cell">Updated By</TableHead>

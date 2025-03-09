@@ -5,7 +5,7 @@ import {
 } from '@/app/actions/server/lookups-actions';
 import NotFoundGlobal from '@/app/nav/not-found-global';
 
-import OrdersIdBase from '@/app/features/orders/id/edit/orders-id-base';
+import OrdersByIdEdit from '@/app/features/orders/id/orders-id-edit';
 
 //start of function
 export default async function OrdersByIdEditPage({
@@ -53,8 +53,8 @@ export default async function OrdersByIdEditPage({
     );
 
   return (
-    <OrdersIdBase
-      orderData={order}
+    <OrdersByIdEdit
+      order={order}
       dineModes={dineModes}
       paymentMethods={paymentMethods}
       statuses={statuses}
