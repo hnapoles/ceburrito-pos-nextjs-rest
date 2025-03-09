@@ -81,7 +81,7 @@ export default function OrdersByIdView({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="flex flex-col h-full">
           <div className="flex items-center">
-            <p className="text-lg">Order</p>
+            <p className="text-base font-semibold">Order</p>
           </div>
           <div
             className="border border-sm rounded-sm p-4 flex-1 cursor-pointer hover:bg-gray-100 transition"
@@ -89,13 +89,13 @@ export default function OrdersByIdView({
           >
             <div className="flex justify-between items-center">
               <span className="font-medium">Id</span>
-              <span className="text-right text-gray-900">
+              <span className="text-right text-gray-900 text-xs">
                 {orderIdWithDashes.toUpperCase()}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Order Date</span>
-              <span className="text-right text-gray-900">
+              <span className="text-right text-gray-900 text-xs">
                 {order.orderedAt
                   ? new Date(order.orderedAt).toLocaleString()
                   : 'n/a'}
@@ -103,7 +103,7 @@ export default function OrdersByIdView({
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Status</span>
-              <span className="text-right text-gray-900 ml-2">
+              <span className="text-right text-gray-900 text-xs ml-2">
                 {order.status.toUpperCase()}
               </span>
             </div>
@@ -162,21 +162,21 @@ export default function OrdersByIdView({
         </div>
 
         <div className="flex flex-col h-full">
-          <div>Customer</div>
+          <div className="text-base font-semibold">Customer</div>
           <div className="border border-sm rounded-sm p-4 flex-1">
             <div className="flex justify-between items-center">
               <span className="font-medium">Customer Name</span>
-              <span className="text-right text-gray-900">
+              <span className="text-right text-gray-900 text-xs">
                 {order.customerName}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Address</span>
-              <span className="text-right text-gray-900">n/a</span>
+              <span className="text-right text-gray-900 text-xs">n/a</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Email</span>
-              <span className="text-right text-gray-900">
+              <span className="text-right text-gray-900 text-xs">
                 {order.customerEmail ?? 'n/a'}
               </span>
             </div>
@@ -188,7 +188,7 @@ export default function OrdersByIdView({
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Store Name</span>
-              <span className="text-right text-gray-900">
+              <span className="text-right text-gray-900 text-xs">
                 {order.storeName}
               </span>
             </div>
@@ -196,23 +196,25 @@ export default function OrdersByIdView({
         </div>
 
         <div className="flex flex-col h-full">
-          <div>Payment</div>
+          <div className="text-base font-semibold">Payment</div>
           <div className="border border-sm rounded-sm p-4 flex-1">
             <div className="flex justify-between items-center">
               <span className="font-medium">Payment Method</span>
-              <span className="text-right text-gray-900">
+              <span className="text-right text-gray-900 text-xs">
                 {order.paymentMethod?.toUpperCase()}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Reference</span>
-              <span className="text-right text-gray-900">
+              <span className="text-right text-gray-900 text-xs">
                 {order.paymentReference ?? 'n/a'}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Items</span>
-              <span className="text-right text-gray-900">{lineItemCount}</span>
+              <span className="text-right text-gray-900 text-xs">
+                {lineItemCount}
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">Total Amount</span>
@@ -276,10 +278,10 @@ export default function OrdersByIdView({
                   <TableCell className="font-medium text-right" colSpan={6}>
                     Total
                   </TableCell>
-                  <TableCell className="text-right text-gray-900">
+                  <TableCell className="text-right text-gray-900 text-xs">
                     {lineItemCount}
                   </TableCell>
-                  <TableCell className="text-right text-gray-900">
+                  <TableCell className="text-right text-gray-900 text-xs">
                     {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
                   </TableCell>
                 </TableRow>
