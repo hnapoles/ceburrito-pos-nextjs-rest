@@ -38,7 +38,7 @@ import React from 'react';
 import { OrderBase } from '@/app/models/orders-model';
 
 import Image from 'next/image';
-import { CreateOrder, UpdateOrder } from '@/app/actions/server/orders-actions';
+import { UpdateOrder } from '@/app/actions/server/orders-actions';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 import { Input } from '@/components/ui/input';
