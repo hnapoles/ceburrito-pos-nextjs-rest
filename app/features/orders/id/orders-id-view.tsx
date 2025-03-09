@@ -41,19 +41,12 @@ import {
 import { Separator } from '@/components/ui/separator';
 
 export default function OrdersByIdView({
-  dineModes,
-  paymentMethods,
-  statuses,
   orderData,
 }: {
-  dineModes: Lookup[];
-  paymentMethods: Lookup[];
-  statuses: Lookup[];
   orderData: OrderBase;
 }) {
   const router = useRouter();
 
-  console.log(dineModes, paymentMethods, statuses);
   //const [order, setOrder] = React.useState(orderData);
   const order = orderData;
 
@@ -81,7 +74,7 @@ export default function OrdersByIdView({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="flex flex-col h-full">
           <div className="flex items-center">
-            <p className="text-base font-semibold">Order</p>
+            <p className="text-base font-semibold">View Order</p>
           </div>
           <div
             className="border border-sm rounded-sm p-4 flex-1 cursor-pointer hover:bg-gray-100 transition"
@@ -223,16 +216,14 @@ export default function OrdersByIdView({
           </div>
         </div>
       </div>
-      <Tabs defaultValue="items" className="w-full mt-2 ml-0">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-2 md:grid-cols-6">
+      <Tabs defaultValue="items" className="mt-2 ml-0">
+        <TabsList>
           <TabsTrigger value="items">Items</TabsTrigger>
           <TabsTrigger value="history">History</TabsTrigger>
-          <TabsTrigger value="attributes">Attributes</TabsTrigger>
-          <TabsTrigger value="future">Future</TabsTrigger>
         </TabsList>
         <TabsContent value="items">
           <div className="border border-sm rounded-sm p-4">
-            <Table className="w-full md:w-1/2">
+            <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Product</TableHead>

@@ -230,13 +230,13 @@ export default function OrdersByIdClone({
             <div className="border border-sm rounded-sm p-4 flex-1 space-y-1">
               <div className="flex justify-between items-center">
                 <span className="font-medium">Id</span>
-                <span className="text-right text-gray-900 text-xs">
+                <span className="text-right text-gray-900">
                   {orderIdWithDashes.toUpperCase()}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Order Date</span>
-                <span className="text-right text-gray-900 text-xs">
+                <span className="text-right text-gray-900">
                   {order.orderedAt
                     ? new Date(order.orderedAt).toLocaleString()
                     : 'n/a'}
@@ -245,7 +245,7 @@ export default function OrdersByIdClone({
               <div className="flex justify-between items-center">
                 <span className="font-medium">Status</span>
                 <Select value={status} onValueChange={setStatus}>
-                  <SelectTrigger className="w-2/3 md:w-1/2 text-xs">
+                  <SelectTrigger className="w-2/3 md:w-1/2">
                     <SelectValue>
                       {selectedStatus?.lookupDescription || 'Select Status'}
                     </SelectValue>
@@ -264,9 +264,7 @@ export default function OrdersByIdClone({
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Order Type</span>
-                <span className="text-right text-red-700 text-xs">
-                  {order.type}
-                </span>
+                <span className="text-right text-red-700">{order.type}</span>
               </div>
             </div>
           </div>
@@ -283,7 +281,7 @@ export default function OrdersByIdClone({
                   id="customerName"
                   value={customerName}
                   readOnly
-                  className="w-2/3 md:w-1/2 text-xs"
+                  className="w-2/3 md:w-1/2"
                   placeholder="Enter name"
                   onClick={() => setIsNameTouchDialogOpen(true)}
                 />
@@ -295,7 +293,7 @@ export default function OrdersByIdClone({
                   id="customerAddress"
                   value={customerAddress}
                   readOnly={order.type === 'pos'}
-                  className="w-2/3 md:w-1/2 text-xs"
+                  className="w-2/3 md:w-1/2"
                   placeholder="Enter address"
                   onChange={(e) => setCustomerAddress(e.target.value)}
                 />
@@ -308,7 +306,7 @@ export default function OrdersByIdClone({
                   value={customerEmail}
                   placeholder="Enter email"
                   readOnly
-                  className="w-2/3 md:w-1/2 text-xs"
+                  className="w-2/3 md:w-1/2"
                   onClick={() => setIsEmailTouchDialogOpen(true)}
                 />
               </div>
@@ -319,7 +317,7 @@ export default function OrdersByIdClone({
                   onValueChange={setDineMode}
                   disabled={order.status !== 'open'}
                 >
-                  <SelectTrigger className="w-2/3 md:w-1/2 text-xs">
+                  <SelectTrigger className="w-2/3 md:w-1/2">
                     <SelectValue>
                       {selectedMode?.lookupDescription || 'Select Dine Mode'}
                     </SelectValue>
@@ -338,7 +336,7 @@ export default function OrdersByIdClone({
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Store Name</span>
-                <span className="text-right text-red-700 text-xs">
+                <span className="text-right text-red-700">
                   {order.storeName}
                 </span>
               </div>
@@ -357,7 +355,7 @@ export default function OrdersByIdClone({
                   onValueChange={setPaymentMethod}
                   disabled={order.status !== 'open'}
                 >
-                  <SelectTrigger className="w-2/3 md:w-1/2 text-xs">
+                  <SelectTrigger className="w-2/3 md:w-1/2">
                     <SelectValue placeholder="Select Payment Method" />
                   </SelectTrigger>
                   <SelectContent>
@@ -379,20 +377,20 @@ export default function OrdersByIdClone({
                   id="paymentReference"
                   value={paymentReference}
                   readOnly={paymentMethod === 'cash'}
-                  className="w-2/3 md:w-1/2 text-xs"
+                  className="w-2/3 md:w-1/2"
                   placeholder="Enter payment reference"
                   onChange={(e) => setPaymentReference(e.target.value)}
                 />
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Items</span>
-                <span className="text-right text-gray-900 text-xs">
+                <span className="text-right text-gray-900">
                   {lineItemCount}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Total Amount</span>
-                <span className="text-right text-red-700 text-xs">
+                <span className="text-right text-red-700">
                   {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
                 </span>
               </div>
