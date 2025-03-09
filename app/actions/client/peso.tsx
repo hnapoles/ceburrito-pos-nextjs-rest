@@ -15,6 +15,13 @@ export const formatPeso = (amount: number | null | undefined) => {
   }).format(amount || 0);
 };
 
+export const formatNumberNoDecimals = (amount: number) => {
+  return new Intl.NumberFormat('en-PH', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+};
+
 //console.log(formatPesoNoDecimals(1000)); // ₱1,000
 
 /*

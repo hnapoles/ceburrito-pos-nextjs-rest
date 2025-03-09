@@ -45,6 +45,8 @@ import { Input } from '@/components/ui/input';
 import KeyboardTouchEmailDialog from '@/app/features/keyboard/keyboard-touch-email-dialog';
 import KeyboardTouchLettersDialog from '@/app/features/keyboard/keyboard-touch-letters-dialog';
 import { Loader2 } from 'lucide-react';
+import KeyboardTouchNumbersDialog from '../../keyboard/keyboard-touch-numbers-dialog';
+import KeyboardTouchCashTendered from '../../keyboard/keyboard-touch-cash-tendered';
 
 export default function OrdersByIdEdit({
   dineModes,
@@ -77,6 +79,12 @@ export default function OrdersByIdEdit({
     React.useState(false);
   const [isEmailTouchDialogOpen, setIsEmailTouchDialogOpen] =
     React.useState(false);
+  const [isPayRefTouchDialogOpen, setIsPayRefTouchDialogOpen] =
+    React.useState(false);
+  const [isCashTendTouchDialogOpen, setIsCashTendTouchDialogOpen] =
+    React.useState(false);
+
+  const [cashTendered, setCashTendered] = React.useState('');
 
   const [isProcessing, setIsProcessing] = React.useState(false);
 
@@ -84,6 +92,17 @@ export default function OrdersByIdEdit({
   const selectedMode = dineModes.find((mode) => mode.lookupValue === dineMode);
 
   const [paymentMethod, setPaymentMethod] = React.useState(order.paymentMethod);
+
+  const handlePaymentMethod = (value: string) => {
+    if (value) {
+      setPaymentMethod(value);
+      if (value === 'cash') {
+        setIsCashTendTouchDialogOpen(true);
+      } else {
+        setIsPayRefTouchDialogOpen(true);
+      }
+    }
+  };
 
   const [paymentReference, setPaymentReference] = React.useState(
     order.paymentReference || 'n/a',
@@ -351,7 +370,7 @@ export default function OrdersByIdEdit({
                 <span className="font-medium">Payment Method</span>
                 <Select
                   value={paymentMethod}
-                  onValueChange={setPaymentMethod}
+                  onValueChange={handlePaymentMethod}
                   disabled={order.status !== 'open'}
                 >
                   <SelectTrigger className="w-2/3 md:w-1/2">
@@ -438,6 +457,20 @@ export default function OrdersByIdEdit({
           setTouchValue={setCustomerEmail}
           setIsTouchDialogOpen={setIsEmailTouchDialogOpen}
           isTouchDialogOpen={isEmailTouchDialogOpen}
+        />
+        <KeyboardTouchNumbersDialog
+          currentValue={paymentReference || ''}
+          setTouchValue={setPaymentReference}
+          setIsTouchDialogOpen={setIsPayRefTouchDialogOpen}
+          isTouchDialogOpen={isPayRefTouchDialogOpen}
+        />
+        <KeyboardTouchCashTendered
+          currentValue={cashTendered}
+          setTouchValue={setCashTendered}
+          setIsTouchDialogOpen={setIsCashTendTouchDialogOpen}
+          isTouchDialogOpen={isCashTendTouchDialogOpen}
+          title={'Cash Tendered'}
+          amountDue={order.totalAmount || 0}
         />
       </>
       {/* Discard Changes Confirmation Dialog */}
