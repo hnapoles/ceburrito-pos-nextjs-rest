@@ -44,7 +44,7 @@ import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 import { Input } from '@/components/ui/input';
 import KeyboardTouchEmailDialog from '@/app/features/keyboard/keyboard-touch-email-dialog';
 import KeyboardTouchLettersDialog from '@/app/features/keyboard/keyboard-touch-letters-dialog';
-import { Loader2, TrendingUpDownIcon } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import KeyboardTouchNumbersDialog from '../../keyboard/keyboard-touch-numbers-dialog';
 import KeyboardTouchCashTendered from '../../keyboard/keyboard-touch-cash-tendered';
 
