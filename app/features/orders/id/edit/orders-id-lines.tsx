@@ -175,29 +175,55 @@ export default function OrdersIdLines({
     .filter((line) => (line.status ?? 'open') !== 'canceled') // Default status to "open"
     .reduce((sum, line) => sum + line.quantity, 0);
 
+  const orderIdWithDashes = `${(order._id || '').slice(0, 4)}-${(
+    order._id || ''
+  ).slice(4, -4)}-${(order._id || '').slice(-4)}`;
+
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Order</CardTitle>
-        <div className="border-md bg-gray-100">
-          <p className="p-2">Order Id : {order._id}</p>
-          <p className="p-2">Status : {order.status}</p>
-        </div>
-        <Separator />
-        <p className="p-2">Order Id : {order._id}</p>
-        <p className="p-2">Status : {order.status}</p>
-        <Separator />
-        <CardTitle>Order LInes</CardTitle>
 
-        <p className="p-2">
-          {`Items (${itemsCount}) : ${formatPesoNoDecimals(
-            Math.floor(totalAmount),
-          )}`}
-          <span className="text-xs">
-            .{totalAmount.toFixed(2).toString().split('.')[1]}
-          </span>
-        </p>
-        {onCheckout && order.status === 'open' ? (
+        <div className="border border-sm rounded-sm p-4 flex-1 cursor-pointer hover:bg-gray-100 transition">
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Id</span>
+            <span className="text-right text-gray-900">
+              {orderIdWithDashes.toUpperCase()}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Order Date</span>
+            <span className="text-right text-gray-900">
+              {order.orderedAt
+                ? new Date(order.orderedAt).toLocaleString()
+                : 'n/a'}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Status</span>
+            <span className="text-right text-gray-900 ml-2">
+              {order.status.toUpperCase()}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Store Name</span>
+            <span className="text-right text-gray-900 ml-2">
+              {order.storeName || ''}
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Order Type</span>
+            <span className="text-right text-red-700">{order.type}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Items ({itemsCount})</span>
+            <span className="text-right text-red-700">
+              {formatPesoNoDecimals(Math.floor(totalAmount))}
+            </span>
+          </div>
+        </div>
+
+        {/*onCheckout && order.status === 'open' ? (
           <Button
             className="w-full"
             onClick={() => {
@@ -208,7 +234,7 @@ export default function OrdersIdLines({
           </Button>
         ) : (
           <Separator />
-        )}
+        )*/}
       </CardHeader>
       <CardContent>
         {sortedData.map((l) => (
