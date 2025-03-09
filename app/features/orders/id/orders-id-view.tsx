@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
-import { Lookup } from '@/app/models/lookups-model';
 
 import { OrderBase } from '@/app/models/orders-model';
 
