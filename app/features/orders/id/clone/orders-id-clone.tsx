@@ -12,6 +12,14 @@ import {
 } from '@/components/ui/table';
 
 import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -30,7 +38,7 @@ import React from 'react';
 import { OrderBase } from '@/app/models/orders-model';
 
 import Image from 'next/image';
-import { UpdateOrder } from '@/app/actions/server/orders-actions';
+import { CreateOrder } from '@/app/actions/server/orders-actions';
 
 import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
 import { Input } from '@/components/ui/input';
@@ -81,6 +89,8 @@ export default function OrdersByIdClone({
     order.paymentReference || 'n/a',
   );
 
+  const [showCancelDialog, setShowCancelDialog] = React.useState(false);
+
   /*
   const isInitialRender = React.useRef(true);
 
@@ -108,25 +118,33 @@ export default function OrdersByIdClone({
 
   const handleSave = async () => {
     setIsProcessing(true);
-    const updatedData: OrderBase = {
-      _id: order._id,
-      paymentMethod: paymentMethod,
+
+    const newOrder: OrderBase = {
+      orderedAt: new Date().toISOString(),
+      type: order.type,
       mode: dineMode,
-      status: status,
+      paymentMethod: paymentMethod,
+      status: 'open',
+      storeName: order.storeName,
       customerName: customerName,
       customerEmail: customerEmail,
       totalAmount: order.totalAmount,
-      type: order.type,
+      orderLines: order.orderLines,
     };
 
-    await UpdateOrder(updatedData);
+    await CreateOrder(newOrder);
 
     setIsProcessing(false);
     await revalidateAndRedirectUrl('/orders');
   };
 
   const handleCancel = async () => {
-    router.push(`/orders`);
+    setShowCancelDialog(true);
+  };
+
+  const discardChanges = () => {
+    setShowCancelDialog(false);
+    router.back();
   };
 
   return (
@@ -397,12 +415,14 @@ export default function OrdersByIdClone({
         <Button
           className="w-full md:w-[100px]"
           onClick={handleSave}
-          disabled={isProcessing} // Disable when processing
+          disabled={
+            !paymentMethod || !dineMode || !customerName || isProcessing
+          } // Disable when processing
         >
           {isProcessing ? (
             <>
               <Loader2 className="animate-spin mr-2 h-4 w-4" />
-              <span>Processing...</span>
+              <span>...</span>
             </>
           ) : (
             'Save'
@@ -423,6 +443,28 @@ export default function OrdersByIdClone({
           isTouchDialogOpen={isEmailTouchDialogOpen}
         />
       </>
+      {/* Discard Changes Confirmation Dialog */}
+      <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Discard Changes?</DialogTitle>
+          </DialogHeader>
+          <p>
+            You have unsaved changes. Are you sure you want to discard them?
+          </p>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowCancelDialog(false)}
+            >
+              No, Keep Editing
+            </Button>
+            <Button variant="destructive" onClick={discardChanges}>
+              Yes, Discard
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

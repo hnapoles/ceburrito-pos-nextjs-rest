@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -22,7 +23,6 @@ import {
 
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Lookup } from '@/app/models/lookups-model';
-import React from 'react';
 
 import { OrderBase } from '@/app/models/orders-model';
 
@@ -30,7 +30,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { UserWhoProps } from '@/app/models/users-model';
 import { WhoTabContent } from '@/app/nav/who-tab-content';
 import Image from 'next/image';
-import { MoreHorizontal } from 'lucide-react';
+import {
+  Copy,
+  Edit,
+  MoreHorizontal,
+  ReceiptText,
+  RefreshCw,
+  Trash2,
+} from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export default function OrdersByIdView({
@@ -67,6 +74,8 @@ export default function OrdersByIdView({
 
   //setOrder(orderData);
 
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
     <div className="relative gap-4 bg-white border border-sm rounded-sm p-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -74,8 +83,10 @@ export default function OrdersByIdView({
           <div className="flex items-center">
             <p className="text-lg">Order</p>
           </div>
-
-          <div className="border border-sm rounded-sm p-4 flex-1">
+          <div
+            className="border border-sm rounded-sm p-4 flex-1 cursor-pointer hover:bg-gray-100 transition"
+            onClick={() => setIsOpen(true)}
+          >
             <div className="flex justify-between items-center">
               <span className="font-medium">Id</span>
               <span className="text-right text-gray-900">
@@ -101,7 +112,7 @@ export default function OrdersByIdView({
               <span className="text-right text-red-700">{order.type}</span>
             </div>
             <div className="flex justify-end">
-              <DropdownMenu>
+              <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
                 <DropdownMenuTrigger asChild>
                   <Button aria-haspopup="true" size="icon" variant="ghost">
                     <MoreHorizontal className="h-4 w-4 text-blue-900" />
@@ -114,23 +125,34 @@ export default function OrdersByIdView({
                   <DropdownMenuItem
                     onClick={() => router.push(`/orders/${order._id}/receipt`)}
                   >
+                    <ReceiptText className="mr-1 h-4 w-4" />
                     View Receipt
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className={order.status === 'open' ? '' : 'hidden'}
+                  >
+                    <RefreshCw className="mr-1 h-4 w-4" />
+                    Close Order
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
                     onClick={() => router.push(`/orders/${order._id}/clone`)}
                   >
-                    Clone
+                    <Copy className="mr-1 h-4 w-4" /> Duplicate
                   </DropdownMenuItem>
-                  {order.status === 'open' && (
-                    <DropdownMenuItem>
-                      <button>Cancel</button>
-                    </DropdownMenuItem>
-                  )}
+
+                  <DropdownMenuItem
+                    className={order.status === 'open' ? '' : 'hidden'}
+                  >
+                    <Trash2 className="mr-1 h-4 w-4 text-red-600" />
+                    Cancel Order
+                  </DropdownMenuItem>
+
                   <Separator />
                   <DropdownMenuItem
                     onClick={() => router.push(`/orders/${order._id}/edit`)}
                   >
+                    <Edit className="mr-1 h-4 w-4" />
                     Edit
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -215,6 +237,7 @@ export default function OrdersByIdView({
                   <TableHead>Name</TableHead>
                   <TableHead>Size</TableHead>
                   <TableHead>Spice</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead className="text-right">Unit Cost</TableHead>
                   <TableHead className="text-right">Qty</TableHead>
                   <TableHead className="text-right">Amount</TableHead>
@@ -237,6 +260,7 @@ export default function OrdersByIdView({
                     <TableCell>{row.productName}</TableCell>
                     <TableCell>{row.sizeOption}</TableCell>
                     <TableCell>{row.spiceOption || 'n/na'}</TableCell>
+                    <TableCell>{row.status || 'open'}</TableCell>
                     <TableCell className="text-right">
                       {formatPesoNoDecimals(Math.floor(row.unitPrice || 0))}
                     </TableCell>
@@ -249,7 +273,7 @@ export default function OrdersByIdView({
                   </TableRow>
                 ))}
                 <TableRow className="mt-4">
-                  <TableCell className="font-medium text-right" colSpan={5}>
+                  <TableCell className="font-medium text-right" colSpan={6}>
                     Total
                   </TableCell>
                   <TableCell className="text-right text-gray-900">
