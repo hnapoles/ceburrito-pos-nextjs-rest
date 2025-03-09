@@ -26,9 +26,9 @@ export default async function OrdersByIdEditPage({
     (item) => item.lookupCode === 'type',
   );
 
-  const { data: dineModes } = await GetLookups(order.type || '', 'dineMode');
-  const { data: paymentMethods } = await GetLookups('order', 'paymentMethod');
-  const { data: statuses } = await GetLookups('order', 'status');
+  //const { data: dineModes } = await GetLookups(order.type || '', 'dineMode');
+  //const { data: paymentMethods } = await GetLookups('order', 'paymentMethod');
+  //const { data: statuses } = await GetLookups('order', 'status');
 
   if (!order) {
     return (
@@ -50,12 +50,5 @@ export default async function OrdersByIdEditPage({
       </>
     );
 
-  return (
-    <OrdersByIdView
-      orderData={order}
-      dineModes={dineModes}
-      paymentMethods={paymentMethods}
-      statuses={statuses}
-    />
-  );
+  return <OrdersByIdView orderData={order} />;
 }
