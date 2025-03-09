@@ -66,7 +66,7 @@ export async function GetOrders(
     entity: 'order',
     ...(status !== 'all' && { andFilter: { status } }), // Conditionally add andFilter
     keyword: keyword,
-    searchKeywordFields: ['name', 'description'],
+    searchKeywordFields: ['customerName', 'customerEmail', 'description'],
     page: parseInt(page),
     limit: parseInt(limit),
   };

@@ -13,25 +13,28 @@ import {
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 
 const nameSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters'),
+  name: z.string().min(1, 'Name must be a number'),
 });
 
 type FormData = z.infer<typeof nameSchema>;
 
-export default function KeyboardTouchLettersDialog({
+export default function KeyboardTouchCashTendered({
   currentValue,
   setTouchValue,
   setIsTouchDialogOpen,
   isTouchDialogOpen,
-  title = 'Name',
+  title = 'Cash Tendered',
+  amountDue = 0,
 }: {
   currentValue: string;
   setTouchValue: React.Dispatch<React.SetStateAction<string>>;
   setIsTouchDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isTouchDialogOpen: boolean;
   title?: string;
+  amountDue: number;
 }) {
   const {
     setValue,
@@ -77,8 +80,12 @@ export default function KeyboardTouchLettersDialog({
       <Dialog open={isTouchDialogOpen} onOpenChange={setIsTouchDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Enter {title}</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
+          <Label>Amount Due</Label>
+          <div className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text">
+            {formatPesoNoDecimals(Math.floor(amountDue))}
+          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <Label>{title}</Label>
@@ -101,62 +108,36 @@ export default function KeyboardTouchLettersDialog({
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
               )}
             </div>
-            <div className="grid grid-cols-6 gap-1 p-2 bg-gray-200 rounded-md">
-              {[
-                'A',
-                'B',
-                'C',
-                'D',
-                'E',
-                'F',
-                'G',
-                'H',
-                'I',
-                'J',
-                'K',
-                'L',
-                'M',
-                'N',
-                'O',
-                'P',
-                'Q',
-                'R',
-                'S',
-                'T',
-                'U',
-                'V',
-                'W',
-                'X',
-                'Y',
-                'Z',
-                '-',
-                '.',
-              ].map((char) => (
-                <Button
-                  key={char}
-                  type="button"
-                  variant="outline"
-                  onClick={() => handleKeyPress(char)}
-                  className="text-lg"
-                >
-                  {char}
-                </Button>
-              ))}
-              {/* Space Key */}
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => handleKeyPress(' ')}
-                className="col-span-2 text-lg"
+            <div className="mb-4">
+              <Label>Change</Label>
+              <div
+                className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text"
+                onClick={() => setIsFocused(true)}
               >
-                Space
-              </Button>
+                {amountDue - parseFloat(nameValue)}
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-1 p-2 bg-gray-200 rounded-md">
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '-'].map(
+                (char) => (
+                  <Button
+                    key={char}
+                    type="button"
+                    variant="outline"
+                    onClick={() => handleKeyPress(char)}
+                    className="text-lg"
+                  >
+                    {char}
+                  </Button>
+                ),
+              )}
+
               {/* Backspace Key */}
               <Button
                 type="button"
                 variant="destructive"
                 onClick={() => handleKeyPress('⌫')}
-                className="col-span-2 text-lg"
+                className="col-span-3 text-lg"
               >
                 ⌫
               </Button>
@@ -166,7 +147,7 @@ export default function KeyboardTouchLettersDialog({
                 type="button"
                 variant="destructive"
                 onClick={() => handleKeyPress('Clear')}
-                className="col-span-2 text-lg"
+                className="col-span-3 text-lg"
               >
                 Clear
               </Button>

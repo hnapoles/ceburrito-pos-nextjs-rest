@@ -20,12 +20,12 @@ const nameSchema = z.object({
 
 type FormData = z.infer<typeof nameSchema>;
 
-export default function KeyboardTouchLettersDialog({
+export default function KeyboardTouchNumbersDialog({
   currentValue,
   setTouchValue,
   setIsTouchDialogOpen,
   isTouchDialogOpen,
-  title = 'Name',
+  title = 'Reference',
 }: {
   currentValue: string;
   setTouchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -101,62 +101,27 @@ export default function KeyboardTouchLettersDialog({
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
               )}
             </div>
-            <div className="grid grid-cols-6 gap-1 p-2 bg-gray-200 rounded-md">
-              {[
-                'A',
-                'B',
-                'C',
-                'D',
-                'E',
-                'F',
-                'G',
-                'H',
-                'I',
-                'J',
-                'K',
-                'L',
-                'M',
-                'N',
-                'O',
-                'P',
-                'Q',
-                'R',
-                'S',
-                'T',
-                'U',
-                'V',
-                'W',
-                'X',
-                'Y',
-                'Z',
-                '-',
-                '.',
-              ].map((char) => (
-                <Button
-                  key={char}
-                  type="button"
-                  variant="outline"
-                  onClick={() => handleKeyPress(char)}
-                  className="text-lg"
-                >
-                  {char}
-                </Button>
-              ))}
-              {/* Space Key */}
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => handleKeyPress(' ')}
-                className="col-span-2 text-lg"
-              >
-                Space
-              </Button>
+            <div className="grid grid-cols-3 gap-1 p-2 bg-gray-200 rounded-md">
+              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '-'].map(
+                (char) => (
+                  <Button
+                    key={char}
+                    type="button"
+                    variant="outline"
+                    onClick={() => handleKeyPress(char)}
+                    className="text-lg"
+                  >
+                    {char}
+                  </Button>
+                ),
+              )}
+
               {/* Backspace Key */}
               <Button
                 type="button"
                 variant="destructive"
                 onClick={() => handleKeyPress('⌫')}
-                className="col-span-2 text-lg"
+                className="col-span-3 text-lg"
               >
                 ⌫
               </Button>
@@ -166,7 +131,7 @@ export default function KeyboardTouchLettersDialog({
                 type="button"
                 variant="destructive"
                 onClick={() => handleKeyPress('Clear')}
-                className="col-span-2 text-lg"
+                className="col-span-3 text-lg"
               >
                 Clear
               </Button>
