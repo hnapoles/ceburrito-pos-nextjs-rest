@@ -51,7 +51,7 @@ export default function ProductsTableSimple({
   }
 
   return (
-    <Card>
+    <Card className="m-1 md:m-2">
       <CardHeader>
         <CardTitle>Products</CardTitle>
         <CardDescription>Manage your products.</CardDescription>
