@@ -51,15 +51,18 @@ export default function OrdersByIdClone({
 }) {
   const router = useRouter();
 
+  const [status, setStatus] = React.useState(order.status);
+  const selectedStatus = statuses.find((s) => s.lookupValue === status);
+
   const [customerName, setCustomerName] = React.useState(
     order.customerName || '',
   );
-  console.log('customerName ', customerName);
+
   const [customerEmail, setCustomerEmail] = React.useState(
     order.customerEmail || '',
   );
   const [customerAddress, setCustomerAddress] = React.useState(
-    order.customerAddress || '',
+    order.customerAddress || 'n/a',
   );
 
   const [isNameTouchDialogOpen, setIsNameTouchDialogOpen] =
@@ -74,7 +77,9 @@ export default function OrdersByIdClone({
 
   const [paymentMethod, setPaymentMethod] = React.useState(order.paymentMethod);
 
-  console.log(paymentMethods, dineModes);
+  const [paymentReference, setPaymentReference] = React.useState(
+    order.paymentReference || 'n/a',
+  );
 
   /*
   const isInitialRender = React.useRef(true);
@@ -131,7 +136,7 @@ export default function OrdersByIdClone({
         {/* items */}
         <div className="flex flex-col h-full flex-1">
           <div className="flex items-center">
-            <p className="text-lg">Items</p>
+            <p className="text-base font-semibold">Items</p>
           </div>
           <div className="border border-sm rounded-sm p-4 flex-1 overflow-auto">
             <Table className="w-full">
@@ -141,6 +146,7 @@ export default function OrdersByIdClone({
                   <TableHead>Name</TableHead>
                   <TableHead>Size</TableHead>
                   <TableHead>Spice</TableHead>
+                  <TableHead>Status</TableHead>
                   <TableHead className="text-right">Unit Cost</TableHead>
                   <TableHead className="text-right">Qty</TableHead>
                   <TableHead className="text-right">Amount</TableHead>
@@ -162,20 +168,25 @@ export default function OrdersByIdClone({
                     </TableCell>
                     <TableCell>{row.productName}</TableCell>
                     <TableCell>{row.sizeOption}</TableCell>
-                    <TableCell>{row.spiceOption || 'n/na'}</TableCell>
+                    <TableCell>{row.spiceOption || 'n/a'}</TableCell>
+                    <TableCell>{row.status || 'open'}</TableCell>
                     <TableCell className="text-right">
                       {formatPesoNoDecimals(Math.floor(row.unitPrice || 0))}
                     </TableCell>
-                    <TableCell className="text-right">{row.quantity}</TableCell>
+                    <TableCell className="text-right">
+                      {row.status === 'canceled' ? 0 : row.quantity}
+                    </TableCell>
                     <TableCell className="text-right">
                       {formatPesoNoDecimals(
-                        Math.floor(row.unitPrice * row.quantity || 0),
+                        row.status === 'canceled'
+                          ? 0
+                          : Math.floor(row.unitPrice * row.quantity),
                       )}
                     </TableCell>
                   </TableRow>
                 ))}
                 <TableRow className="mt-4">
-                  <TableCell className="font-medium text-right" colSpan={5}>
+                  <TableCell className="font-medium text-right" colSpan={6}>
                     Total
                   </TableCell>
                   <TableCell className="text-right text-gray-900">
@@ -191,23 +202,23 @@ export default function OrdersByIdClone({
         </div>
         {/* END items */}
         {/* information */}
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 text-sm">
           {/* order */}
           <div className="flex flex-col h-full">
             <div className="flex items-center">
-              <p className="text-lg">Clone Order</p>
+              <p className="text-base font-semibold">Clone from Order</p>
             </div>
 
-            <div className="border border-sm rounded-sm p-4 flex-1">
+            <div className="border border-sm rounded-sm p-4 flex-1 space-y-1">
               <div className="flex justify-between items-center">
-                <span className="font-medium">From Id</span>
-                <span className="text-right text-gray-900">
+                <span className="font-medium">Id</span>
+                <span className="text-right text-gray-900 text-xs">
                   {orderIdWithDashes.toUpperCase()}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Order Date</span>
-                <span className="text-right text-gray-900">
+                <span className="text-right text-gray-900 text-xs">
                   {order.orderedAt
                     ? new Date(order.orderedAt).toLocaleString()
                     : 'n/a'}
@@ -215,20 +226,37 @@ export default function OrdersByIdClone({
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Status</span>
-                <span className="text-right text-gray-900 ml-2">
-                  {order.status.toUpperCase()}
-                </span>
+                <Select value={status} onValueChange={setStatus}>
+                  <SelectTrigger className="w-2/3 md:w-1/2 text-xs">
+                    <SelectValue>
+                      {selectedStatus?.lookupDescription || 'Select Status'}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Status Options</SelectLabel>
+                      {statuses.map((s) => (
+                        <SelectItem key={s._id} value={s.lookupValue}>
+                          {s.lookupDescription}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Order Type</span>
-                <span className="text-right text-red-700">{order.type}</span>
+                <span className="text-right text-red-700 text-xs">
+                  {order.type}
+                </span>
               </div>
             </div>
           </div>
           {/* END order */}
+
           {/* customer */}
           <div className="flex flex-col h-full">
-            <div>Customer</div>
+            <div className="text-base font-semibold">Customer</div>
             <div className="border border-sm rounded-sm p-4 flex-1 space-y-1">
               <div className="flex justify-between items-center">
                 <span className="font-medium">Customer Name</span>
@@ -237,22 +265,21 @@ export default function OrdersByIdClone({
                   id="customerName"
                   value={customerName}
                   readOnly
-                  className="w-2/3 md:w-1/2"
+                  className="w-2/3 md:w-1/2 text-xs"
                   placeholder="Enter name"
                   onClick={() => setIsNameTouchDialogOpen(true)}
                 />
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Address</span>
-
                 <Input
                   type="text"
                   id="customerAddress"
                   value={customerAddress}
-                  readOnly
-                  className="w-2/3 md:w-1/2"
+                  readOnly={order.type === 'pos'}
+                  className="w-2/3 md:w-1/2 text-xs"
                   placeholder="Enter address"
-                  onClick={() => setIsNameTouchDialogOpen(true)}
+                  onChange={(e) => setCustomerAddress(e.target.value)}
                 />
               </div>
               <div className="flex justify-between items-center">
@@ -263,7 +290,7 @@ export default function OrdersByIdClone({
                   value={customerEmail}
                   placeholder="Enter email"
                   readOnly
-                  className="w-2/3 md:w-1/2"
+                  className="w-2/3 md:w-1/2 text-xs"
                   onClick={() => setIsEmailTouchDialogOpen(true)}
                 />
               </div>
@@ -274,7 +301,7 @@ export default function OrdersByIdClone({
                   onValueChange={setDineMode}
                   disabled={order.status !== 'open'}
                 >
-                  <SelectTrigger className="w-2/3 md:w-1/2">
+                  <SelectTrigger className="w-2/3 md:w-1/2 text-xs">
                     <SelectValue>
                       {selectedMode?.lookupDescription || 'Select Dine Mode'}
                     </SelectValue>
@@ -293,38 +320,61 @@ export default function OrdersByIdClone({
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Store Name</span>
-                <span className="text-right text-gray-900">
+                <span className="text-right text-red-700 text-xs">
                   {order.storeName}
                 </span>
               </div>
             </div>
           </div>
           {/* END customer */}
+
           {/* payment */}
           <div className="flex flex-col h-full">
-            <div>Payment</div>
-            <div className="border border-sm rounded-sm p-4 flex-1">
+            <div className="text-base font-semibold">Payment</div>
+            <div className="border border-sm rounded-sm p-4 flex-1 space-y-1">
               <div className="flex justify-between items-center">
                 <span className="font-medium">Payment Method</span>
-                <span className="text-right text-gray-900">
-                  {order.paymentMethod?.toUpperCase()}
-                </span>
+                <Select
+                  value={paymentMethod}
+                  onValueChange={setPaymentMethod}
+                  disabled={order.status !== 'open'}
+                >
+                  <SelectTrigger className="w-2/3 md:w-1/2 text-xs">
+                    <SelectValue placeholder="Select Payment Method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Payment Options</SelectLabel>
+                      {paymentMethods.map((method) => (
+                        <SelectItem key={method._id} value={method.lookupValue}>
+                          {method.lookupDescription}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Reference</span>
-                <span className="text-right text-gray-900">
-                  {order.paymentReference ?? 'n/a'}
-                </span>
+                <Input
+                  type="text"
+                  id="paymentReference"
+                  value={paymentReference}
+                  readOnly={order.paymentMethod === 'cash'}
+                  className="w-2/3 md:w-1/2 text-xs"
+                  placeholder="Enter payment reference"
+                  onChange={(e) => setPaymentReference(e.target.value)}
+                />
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Items</span>
-                <span className="text-right text-gray-900">
+                <span className="text-right text-gray-900 text-xs">
                   {lineItemCount}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-medium">Total Amount</span>
-                <span className="text-right text-red-700">
+                <span className="text-right text-red-700 text-xs">
                   {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
                 </span>
               </div>
@@ -339,7 +389,7 @@ export default function OrdersByIdClone({
         <Button
           variant="outline"
           className="w-full md:w-[100px]"
-          onClick={() => handleSave()}
+          onClick={() => handleCancel()}
         >
           Cancel
         </Button>
