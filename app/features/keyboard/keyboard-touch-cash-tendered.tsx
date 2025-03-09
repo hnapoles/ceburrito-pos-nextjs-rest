@@ -72,7 +72,7 @@ export default function KeyboardTouchCashTendered({
   const onSubmit = (data: FormData) => {
     console.log('Submitted Name:', data.name);
     setTouchValue(data.name);
-    setIsTouchDialogOpen(false); // Close the dialog after submission
+    //setIsTouchDialogOpen(false); // Close the dialog after submission
   };
 
   return (
@@ -111,10 +111,13 @@ export default function KeyboardTouchCashTendered({
             <div className="mb-4">
               <Label>Change</Label>
               <div
-                className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text"
+                className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text text-red-500"
                 onClick={() => setIsFocused(true)}
               >
-                {amountDue - parseFloat(nameValue)}
+                {formatPesoNoDecimals(
+                  amountDue -
+                    parseFloat(nameValue === '' ? '0' : nameValue ?? '0'),
+                )}
               </div>
             </div>
             <div className="grid grid-cols-3 gap-1 p-2 bg-gray-200 rounded-md">
