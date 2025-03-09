@@ -13,7 +13,11 @@ import {
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { formatPesoNoDecimals } from '@/app/actions/client/peso';
+import {
+  formatNumberNoDecimals,
+  formatPesoNoDecimals,
+} from '@/app/actions/client/peso';
+import { cn } from '@/lib/utils';
 
 const nameSchema = z.object({
   name: z.string().min(1, 'Name must be a number'),
@@ -72,7 +76,7 @@ export default function KeyboardTouchCashTendered({
   const onSubmit = (data: FormData) => {
     console.log('Submitted Name:', data.name);
     setTouchValue(data.name);
-    //setIsTouchDialogOpen(false); // Close the dialog after submission
+    setIsTouchDialogOpen(false); // Close the dialog after submission
   };
 
   return (
@@ -93,7 +97,11 @@ export default function KeyboardTouchCashTendered({
                 className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text"
                 onClick={() => setIsFocused(true)}
               >
-                {nameValue}
+                {nameValue === ''
+                  ? nameValue
+                  : formatNumberNoDecimals(
+                      parseFloat(nameValue === '' ? '0' : nameValue ?? '0'),
+                    )}
                 {isFocused && (
                   <span
                     className={`ml-1 ${
@@ -111,12 +119,15 @@ export default function KeyboardTouchCashTendered({
             <div className="mb-4">
               <Label>Change</Label>
               <div
-                className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text text-red-500"
+                className={cn(
+                  'w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text',
+                  'text-red-500',
+                )}
                 onClick={() => setIsFocused(true)}
               >
                 {formatPesoNoDecimals(
-                  amountDue -
-                    parseFloat(nameValue === '' ? '0' : nameValue ?? '0'),
+                  parseFloat(nameValue === '' ? '0' : nameValue ?? '0') -
+                    amountDue,
                 )}
               </div>
             </div>
@@ -156,7 +167,7 @@ export default function KeyboardTouchCashTendered({
               </Button>
             </div>
             <DialogFooter className="mt-4 flex justify-end">
-              <Button type="submit">Submit</Button>
+              <Button type="submit">Done</Button>
             </DialogFooter>
           </form>
         </DialogContent>
