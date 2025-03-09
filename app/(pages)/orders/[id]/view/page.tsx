@@ -5,7 +5,7 @@ import {
 } from '@/app/actions/server/lookups-actions';
 import NotFoundGlobal from '@/app/nav/not-found-global';
 
-import OrdersByIdView from '@/app/features/orders/id/view/orders-id-view';
+import OrdersByIdView from '@/app/features/orders/id/orders-id-view';
 
 //start of function
 export default async function OrdersByIdEditPage({

@@ -104,14 +104,14 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
 
   return (
     <div className="container lg:p-4 md:p-2 p-1">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1 auto-rows-fr">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         {orders.map((order) => (
           <Link
             href={`/orders/${order._id}/view`}
             key={order._id}
-            className="h-full"
+            className="block w-full"
           >
-            <Card className="h-full flex flex-col">
+            <Card className="h-full flex flex-col min-w-[180px] max-w-[250px] mx-auto">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
                   <div>
@@ -133,11 +133,10 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
                   {order._id?.slice(0, 4)}-{order._id?.slice(4, -4)}-
                   {order._id?.slice(-4)}
                 </div>
-
                 <div className="text-2xl font-bold">
                   {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
                   <span className="text-xs">
-                    .{order?.totalAmount?.toFixed(2).toString().split('.')[1]}{' '}
+                    .{order?.totalAmount?.toFixed(2).split('.')[1]}
                   </span>
                 </div>
                 <div>
@@ -159,8 +158,8 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
                       order.status === 'xclosed' ? 'hidden' : 'flex',
                     )}
                     onClick={(e) => {
-                      e.preventDefault(); // Prevents navigation
-                      e.stopPropagation(); // Stops Card click
+                      e.preventDefault();
+                      e.stopPropagation();
                       setSelectedOrder(order);
                     }}
                     disabled={order.status !== 'open'}
@@ -176,62 +175,6 @@ const OrdersListViewGrid: React.FC<orderGridViewProps> = ({
           </Link>
         ))}
       </div>
-      <form className="flex items-center w-full justify-between">
-        <div className="text-xs text-muted-foreground">
-          Showing{' '}
-          <strong>
-            {totalDataCount > 0 ? (page - 1) * rowsPerPage + 1 : 0}-
-            {Math.min(page * rowsPerPage, totalDataCount)}
-          </strong>{' '}
-          of <strong>{totalDataCount}</strong> products
-        </div>
-        <div className="flex">
-          <Button
-            formAction={prevPage}
-            variant="ghost"
-            size="sm"
-            type="submit"
-            disabled={page <= 1}
-          >
-            <ChevronLeft className="mr-2 h-4 w-4" />
-            Prev
-          </Button>
-          <Button
-            formAction={nextPage}
-            variant="ghost"
-            size="sm"
-            type="submit"
-            disabled={page * rowsPerPage >= totalDataCount}
-          >
-            Next
-            <ChevronRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      </form>
-      {/* Dialog outside the loop */}
-      <Dialog
-        open={!!selectedOrder}
-        onOpenChange={(isOpen) => {
-          if (!isOpen) setSelectedOrder(null);
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Close Order</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to close order{' '}
-              <strong>{selectedOrder?._id?.slice(-4).toUpperCase()}</strong> for{' '}
-              <strong>{selectedOrder?.customerName}</strong>?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedOrder(null)}>
-              Cancel
-            </Button>
-            <Button onClick={() => markOrderAsClosed()}>Confirm</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

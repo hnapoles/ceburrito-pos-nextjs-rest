@@ -46,14 +46,16 @@ const OrdersListBase: React.FC<orderListProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2">
+    <div className="grid grid-cols-1">
       <Tabs
         defaultValue={currentTab}
         value={currentTab}
         onValueChange={handleTabChange}
       >
-        <div className="flex items-center">
-          <TabsList>
+        {/* ✅ FLEXBOX FIX for Tabs & Actions: Aligns properly on ALL screens */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full">
+          {/* ✅ Tabs List - Always aligned left */}
+          <TabsList className="flex flex-wrap md:flex-nowrap">
             {statusesLookup.map((item) => (
               <TabsTrigger key={item._id} value={item.lookupValue}>
                 {item.lookupDescription}
@@ -61,14 +63,14 @@ const OrdersListBase: React.FC<orderListProps> = ({
             ))}
             <TabsTrigger value="all">All</TabsTrigger>
           </TabsList>
-          <div className="ml-auto flex items-center gap-2">
+
+          {/* ✅ Actions - Aligns right on md+ screens, moves below tabs on sm */}
+          <div className="flex flex-wrap md:flex-nowrap gap-2 mt-2 md:mt-0 w-full md:w-auto">
             <OrderListViewSwitcher />
             <OrdersSearchInput />
             <Button size="sm" variant="outline" className="h-8 gap-1">
               <File className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Export
-              </span>
+              <span className="hidden sm:inline">Export</span>
             </Button>
 
             <Button
@@ -77,13 +79,13 @@ const OrdersListBase: React.FC<orderListProps> = ({
               onClick={() => (window.location.href = createLink)}
             >
               <PlusCircle className="h-3.5 w-3.5" />
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Add Order
-              </span>
+              <span className="hidden sm:inline">Add Order</span>
             </Button>
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grids-cols-6">
+
+        {/* ✅ Orders List Content - Properly aligned on all screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4">
           <TabsContent value={currentTab}>
             <OrdersListViewGrid
               orders={orders}

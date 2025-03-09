@@ -5,7 +5,7 @@ import {
 } from '@/app/actions/server/lookups-actions';
 import NotFoundGlobal from '@/app/nav/not-found-global';
 
-import OrdersByIdClone from '@/app/features/orders/id/clone/orders-id-clone';
+import OrdersByIdClone from '@/app/features/orders/id/orders-id-clone';
 
 //start of function
 export default async function OrdersByIdClonePage({

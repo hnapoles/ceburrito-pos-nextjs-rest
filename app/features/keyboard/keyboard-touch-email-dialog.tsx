@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const nameSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters'),
+  name: z.string().email().min(3, 'Email must be at least 3 characters'),
 });
 
 type FormData = z.infer<typeof nameSchema>;
@@ -79,7 +79,7 @@ export default function KeyboardTouchEmailDialog({
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <Label>Name</Label>
+              <Label>Email Address</Label>
               <div
                 className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text"
                 onClick={() => setIsFocused(true)}
