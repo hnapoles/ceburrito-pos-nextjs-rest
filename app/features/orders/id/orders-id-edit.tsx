@@ -3,6 +3,13 @@
 import { useRouter } from 'next/navigation';
 
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
+import {
   TableHead,
   TableRow,
   TableHeader,
@@ -172,7 +179,19 @@ export default function OrdersByIdEdit({
         {/* items */}
         <div className="flex flex-col h-full flex-1">
           <div className="flex items-center">
-            <p className="text-base font-semibold">Items</p>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    onClick={() => router.push(`/orders/${order._id}/addItems`)}
+                  >
+                    <p className="text-base font-semibold">Items</p>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Click to Manage Items</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
           <div className="border border-sm rounded-sm p-4 flex-1 overflow-auto">
             <Table className="w-full">
@@ -388,7 +407,13 @@ export default function OrdersByIdEdit({
                   </SelectContent>
                 </Select>
               </div>
-              <div className="flex justify-between items-center">
+              <div
+                className={
+                  paymentMethod !== 'cash'
+                    ? 'flex justify-between items-center'
+                    : 'hidden'
+                }
+              >
                 <span className="font-medium">Reference</span>
                 <Input
                   type="text"
@@ -398,6 +423,26 @@ export default function OrdersByIdEdit({
                   className="w-2/3 md:w-1/2"
                   placeholder="Enter payment reference"
                   onChange={(e) => setPaymentReference(e.target.value)}
+                  onClick={() => setIsPayRefTouchDialogOpen(true)}
+                />
+              </div>
+              <div
+                className={
+                  paymentMethod === 'cash'
+                    ? 'flex justify-between items-center'
+                    : 'hidden'
+                }
+              >
+                <span className="font-medium">Cash Tendered</span>
+                <Input
+                  type="text"
+                  id="cashTendered"
+                  value={formatPesoNoDecimals(parseFloat(cashTendered))}
+                  readOnly={paymentMethod !== 'cash'}
+                  className="w-2/3 md:w-1/2 text-right"
+                  placeholder="Enter cash tendered"
+                  onChange={(e) => setCashTendered(e.target.value)}
+                  onClick={() => setIsCashTendTouchDialogOpen(true)}
                 />
               </div>
               <div className="flex justify-between items-center">
