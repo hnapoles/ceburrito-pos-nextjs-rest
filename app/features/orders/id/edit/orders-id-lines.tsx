@@ -191,10 +191,10 @@ export default function OrdersIdLines({
               {orderIdWithDashes.toUpperCase()}
             </span>
             <span className="text-right text-gray-900 inline">
-              ...{order._id?.slice(-4).toUpperCase()}
+              ... {order._id?.slice(-4).toUpperCase()}
             </span>
           </div>
-          <div className="hidden lg:flex justify-between items-center">
+          <div className="hidden flex justify-between items-center">
             <span className="font-medium">Order Date</span>
             <span className="text-right text-gray-900">
               {order.orderedAt

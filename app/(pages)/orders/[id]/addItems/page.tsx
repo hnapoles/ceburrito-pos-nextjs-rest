@@ -1,7 +1,8 @@
 import { GetLookups } from '@/app/actions/server/lookups-actions';
 import { GetOrderById } from '@/app/actions/server/orders-actions';
 import { GetProducts } from '@/app/actions/server/products-actions';
-import OrdersIdAddItemsBase from '@/app/features/orders/id/addItems/zorders-id-addItems-base';
+//import OrdersIdAddItemsBase from '@/app/features/orders/id/addItems/zorders-id-addItems-base';
+import OrdersByIdAddItems from '@/app/features/orders/id/orders-id-additems';
 import NotFoundGlobal from '@/app/nav/not-found-global';
 
 export default async function OrdersIdAddItemsPage(props: {
@@ -42,7 +43,7 @@ export default async function OrdersIdAddItemsPage(props: {
   }
 
   return (
-    <OrdersIdAddItemsBase
+    <OrdersByIdAddItems
       products={products}
       categories={categoriesLookup}
       orderData={order}
