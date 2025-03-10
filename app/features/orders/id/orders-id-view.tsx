@@ -32,6 +32,7 @@ import Image from 'next/image';
 import {
   Copy,
   Edit,
+  Grid2x2,
   MoreHorizontal,
   ReceiptText,
   RefreshCw,
@@ -115,6 +116,13 @@ export default function OrdersByIdView({
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <Separator />
                   <DropdownMenuItem
+                    onClick={() => router.push(`/orders/${order._id}/addItems`)}
+                  >
+                    <Grid2x2 className="mr-1 h-4 w-4" />
+                    Manage Items
+                  </DropdownMenuItem>
+                  <Separator />
+                  <DropdownMenuItem
                     onClick={() => router.push(`/orders/${order._id}/receipt`)}
                   >
                     <ReceiptText className="mr-1 h-4 w-4" />
@@ -130,7 +138,7 @@ export default function OrdersByIdView({
                   <DropdownMenuItem
                     onClick={() => router.push(`/orders/${order._id}/clone`)}
                   >
-                    <Copy className="mr-1 h-4 w-4" /> Duplicate
+                    <Copy className="mr-1 h-4 w-4" /> Clone Order
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
@@ -145,7 +153,7 @@ export default function OrdersByIdView({
                     onClick={() => router.push(`/orders/${order._id}/edit`)}
                   >
                     <Edit className="mr-1 h-4 w-4" />
-                    Edit
+                    Edit Order
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

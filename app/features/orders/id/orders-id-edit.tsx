@@ -179,6 +179,8 @@ export default function OrdersByIdEdit({
         {/* items */}
         <div className="flex flex-col h-full flex-1">
           <div className="flex items-center">
+            <p className="text-base font-semibold">Items</p>
+            {/** 
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -191,7 +193,7 @@ export default function OrdersByIdEdit({
                 </TooltipTrigger>
                 <TooltipContent>Click to Manage Items</TooltipContent>
               </Tooltip>
-            </TooltipProvider>
+            </TooltipProvider>*/}
           </div>
           <div className="border border-sm rounded-sm p-4 flex-1 overflow-auto">
             <Table className="w-full">
@@ -464,32 +466,44 @@ export default function OrdersByIdEdit({
         {/* END information */}
       </div>
       {/* END grid grid-cols-1 lg:grid-cols-2 */}
-      <div className="flex items-center justify-end gap-2 mt-2">
-        <Button
-          variant="outline"
-          className="w-full md:w-[100px]"
-          onClick={() => handleCancel()}
-        >
-          Cancel
-        </Button>
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="flex items-center justify-end gap-2 mt-2 mr-2">
+          <Button
+            variant="outline"
+            className="w-full md:w-[120px]"
+            onClick={() => router.push(`/orders/${order._id}/addItems`)}
+          >
+            Manage Items
+          </Button>
+        </div>
+        <div className="flex items-center justify-end gap-2 mt-2">
+          <Button
+            variant="outline"
+            className="w-full md:w-[100px]"
+            onClick={() => handleCancel()}
+          >
+            Cancel
+          </Button>
 
-        <Button
-          className="w-full md:w-[100px]"
-          onClick={handleSave}
-          disabled={
-            !paymentMethod || !dineMode || !customerName || isProcessing
-          } // Disable when processing
-        >
-          {isProcessing ? (
-            <>
-              <Loader2 className="animate-spin mr-2 h-4 w-4" />
-              <span></span>
-            </>
-          ) : (
-            'Save'
-          )}
-        </Button>
+          <Button
+            className="w-full md:w-[100px]"
+            onClick={handleSave}
+            disabled={
+              !paymentMethod || !dineMode || !customerName || isProcessing
+            } // Disable when processing
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                <span></span>
+              </>
+            ) : (
+              'Save'
+            )}
+          </Button>
+        </div>
       </div>
+
       <>
         <KeyboardTouchLettersDialog
           currentValue={customerName || ''}
