@@ -18,7 +18,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
 
 import { useStore } from '@/app/providers/zustand-provider';
-import OrdersIdAddItemsViewGrid from './orders-id-addItems-view-grid';
+import OrdersIdAddItemsViewGrid from './zorders-id-addItems-view-grid';
 import { OrderBase } from '@/app/models/orders-model';
 
 interface ordersCreatePosProps {
