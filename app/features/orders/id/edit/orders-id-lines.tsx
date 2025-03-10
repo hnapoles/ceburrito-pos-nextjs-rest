@@ -187,11 +187,14 @@ export default function OrdersIdLines({
         <div className="border border-sm rounded-sm p-4 flex-1 cursor-pointer hover:bg-gray-100 transition">
           <div className="flex justify-between items-center">
             <span className="font-medium">Id</span>
-            <span className="text-right text-gray-900">
+            <span className="text-right text-gray-900 hidden lg:inline">
               {orderIdWithDashes.toUpperCase()}
             </span>
+            <span className="text-right text-gray-900 lg:hidden">
+              ...{order._id?.slice(-4).toUpperCase()}
+            </span>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="hidden lg:flex justify-between items-center">
             <span className="font-medium">Order Date</span>
             <span className="text-right text-gray-900">
               {order.orderedAt
@@ -199,13 +202,13 @@ export default function OrdersIdLines({
                 : 'n/a'}
             </span>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="hidden lg:flex justify-between items-center">
             <span className="font-medium">Status</span>
             <span className="text-right text-gray-900 ml-2">
               {order.status.toUpperCase()}
             </span>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="hidden lg:flex justify-between items-center">
             <span className="font-medium">Store Name</span>
             <span className="text-right text-gray-900 ml-2">
               {order.storeName || ''}
