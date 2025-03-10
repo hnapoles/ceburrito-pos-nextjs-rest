@@ -30,30 +30,31 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 //import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
-import { toast } from '@/hooks/use-toast';
+
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { GetProductSellingPriceByOrderType } from '@/app/actions/server/product-selling-prices-actions';
 import { Minus, Plus } from 'lucide-react';
-import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
-import { UpdateOrder } from '@/app/actions/server/orders-actions';
+import { OrderLineBase } from '@/app/models/orders-model';
 
 interface productGridViewProps {
   products: ProductBase[];
   storeName?: string | null;
   totalDataCount?: number | 1;
   statusesLookup?: Lookup[];
-  order: OrderBase;
-  setOrder: React.Dispatch<React.SetStateAction<OrderBase>>;
+  //order: OrderBase;
+  //setOrder: React.Dispatch<React.SetStateAction<OrderBase>>;
+  onSubmit: (data: OrderLineBase) => void;
 }
 
-const OrdersByIdAddItemsGrid: React.FC<productGridViewProps> = ({
+const OrdersProductCard: React.FC<productGridViewProps> = ({
   products,
   storeName,
-  order,
-  setOrder,
+  //order,
+  //setOrder,
+  onSubmit,
 }) => {
   //const router = useRouter();
   const [selectedProduct, setSelectedProduct] =
@@ -164,60 +165,16 @@ const OrdersByIdAddItemsGrid: React.FC<productGridViewProps> = ({
         status: 'open',
       };
 
-      const orderLines = order.orderLines || [];
-      let updatedOrder: OrderBase;
+      //do callBack here instead
+      onSubmit(newOrderLine);
 
-      const existingIndex =
-        orderLines.findIndex(
-          (orderLine) =>
-            orderLine.productName === selectedProduct.name &&
-            orderLine.sizeOption === size &&
-            orderLine.spiceOption === spice &&
-            orderLine.status === 'open',
-        ) || 0;
-
-      if (existingIndex !== -1) {
-        const updatedOrderLines = [...orderLines];
-        const existingOrder = updatedOrderLines[existingIndex];
-
-        updatedOrderLines[existingIndex] = {
-          ...existingOrder,
-          quantity: existingOrder.quantity + qty,
-          amount: existingOrder.amount + existingOrder.unitPrice * qty,
-        };
-
-        updatedOrder = {
-          ...order,
-          totalAmount: order.totalAmount || 0 + amount,
-          orderLines: updatedOrderLines,
-        };
-      } else {
-        updatedOrder = {
-          ...order,
-          totalAmount: order.totalAmount || 0 + amount,
-          orderLines: [...orderLines, newOrderLine],
-        };
-      }
-
-      const updatedData = await UpdateOrder(updatedOrder);
-
-      toast({
-        title: 'Update success',
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <p className="text-white">
-              {selectedProduct.name}, added to order {order._id}{' '}
-            </p>
-          </pre>
-        ),
-      });
       setSelectedProduct(null);
       setQty(0);
       setAmount(0);
       setSize('');
       setSpice('');
       ///revalidateAndRedirectUrl(`/orders/${order._id}/addItems`);
-      setOrder(updatedData);
+      //setOrder(updatedData);
     }
   }
 
@@ -258,35 +215,31 @@ const OrdersByIdAddItemsGrid: React.FC<productGridViewProps> = ({
                   '/images/products/no-image-for-display.webp'
                 }
                 alt="image"
-                width={200} // Ensures correct size for Next.js optimization
-                height={200} // Keeps a consistent aspect ratio
+                width={200} // Fixed width for Next.js optimization
+                height={200} // Fixed height to prevent distortion
                 className={cn(
-                  'w-full h-auto aspect-square object-cover transition-all hover:scale-105',
+                  'max-w-full h-auto aspect-square object-cover transition-all hover:scale-105',
                   product.isOutOfStock
-                    ? 'grayscale-50 saturate-95 opacity-95'
-                    : '', // Apply grayscale when out of stock
+                    ? 'saturate-95 opacity-95' // Apply grayscale effect
+                    : '',
                 )}
               />
               {/* Cross-out overlay */}
               {product.isOutOfStock && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="absolute w-full h-0.5 bg-red-600 rotate-45"></div>
-                  <div className="absolute w-full h-0.5 bg-red-600 -rotate-45"></div>
+                <div className="absolute top-2 left-0 right-0 flex items-center justify-center">
+                  <span className="bg-red-900 text-white text-xs font-bold px-2 py-1 rounded-md">
+                    Out Of Stock
+                  </span>
                 </div>
               )}
             </CardHeader>
-            <CardContent className="text-center flex flex-col items-center">
+
+            <CardContent className="text-center flex flex-col items-top">
               <div className="text-black-500 text-xs w-35 overflow-hidden text-ellipsis whitespace-nowrap">
                 {product.name}
               </div>
 
-              {product.isOutOfStock ? (
-                <Badge variant="outline" className="border-red-200">
-                  out of stock
-                </Badge>
-              ) : (
-                <Badge variant="outline">{product.category}</Badge>
-              )}
+              <Badge variant="outline">{product.category}</Badge>
             </CardContent>
           </Card>
         ))}
@@ -441,4 +394,4 @@ const OrdersByIdAddItemsGrid: React.FC<productGridViewProps> = ({
   );
 };
 
-export default OrdersByIdAddItemsGrid;
+export default OrdersProductCard;

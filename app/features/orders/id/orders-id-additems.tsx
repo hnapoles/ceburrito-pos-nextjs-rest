@@ -12,15 +12,17 @@ import {
 } from '@/components/ui/card-rounded-sm';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import OrdersIdLines from './edit/orders-id-lines';
 import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
 
 import { useStore } from '@/app/providers/zustand-provider';
 //import OrdersIdAddItemsViewGrid from './addItems/zorders-id-addItems-view-grid';
-import { OrderBase } from '@/app/models/orders-model';
-import OrdersByIdAddItemsGrid from './orders-id-additems-grid';
+import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
+import OrdersByIdOrderDetails from './orders-id-additems-orderdetails';
+import OrdersProductCard from '../base/orders-product-card';
+import { UpdateOrder } from '@/app/actions/server/orders-actions';
+import { toast } from '@/hooks/use-toast';
 
 interface ordersByIdAddItemsProps {
   products: ProductBase[];
@@ -76,24 +78,67 @@ export default function OrdersByIdAddItems({
       setCurrentPage(currentPage + 1);
   };
 
+  //use callBack instead
+  const handleAddOrUpdateOrderLine = async (newOrderLine: OrderLineBase) => {
+    const orderLines = order.orderLines || [];
+    let updatedOrder: OrderBase;
+
+    const existingIndex =
+      orderLines.findIndex(
+        (orderLine) =>
+          orderLine.productName === newOrderLine.productName &&
+          (orderLine.sizeOption ?? '') === (newOrderLine.sizeOption ?? '') &&
+          (orderLine.spiceOption ?? '') === (newOrderLine.spiceOption ?? '') &&
+          orderLine.status === 'open',
+      ) || 0;
+
+    if (existingIndex !== -1) {
+      const updatedOrderLines = [...orderLines];
+      const existingOrder = updatedOrderLines[existingIndex];
+
+      updatedOrderLines[existingIndex] = {
+        ...existingOrder,
+        quantity: existingOrder.quantity + newOrderLine.quantity,
+        amount:
+          existingOrder.amount +
+          existingOrder.unitPrice * newOrderLine.quantity,
+      };
+
+      updatedOrder = {
+        ...order,
+        totalAmount: (order.totalAmount || 0) + newOrderLine.amount,
+        orderLines: updatedOrderLines,
+      };
+    } else {
+      updatedOrder = {
+        ...order,
+        totalAmount: (order.totalAmount || 0) + newOrderLine.amount,
+        orderLines: [...orderLines, newOrderLine],
+      };
+    }
+
+    const updatedData = await UpdateOrder(updatedOrder);
+
+    toast({
+      title: 'Update success',
+      description: <span>{newOrderLine.productName}, added to order</span>,
+    });
+    ///revalidateAndRedirectUrl(`/orders/${order._id}/addItems`);
+    setOrder(updatedData);
+  };
+  // end handleAddOrUpdateOrderLine()
+
   return (
     <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
       {/* Right Side - cart */}
       <div className="col-span-1 h-full">
-        <OrdersIdLines
-          orderType={order.type || ''}
-          onCheckout={false}
-          orderLines={order.orderLines || []}
-          totalAmount={order.totalAmount || 0}
-          order={order}
-          setOrder={setOrder}
-        />
+        <OrdersByIdOrderDetails order={order} setOrder={setOrder} />
       </div>
       {/* Left Side - add items */}
       <div className="md:col-span-3 col-span-1">
         <Card className="h-full flex flex-col">
           <CardHeader>
-            <CardTitle>Add Items</CardTitle>
+            <CardTitle>Select Items</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs
@@ -128,11 +173,10 @@ export default function OrdersByIdAddItems({
                     <span className="text-gray-500">Loading store...</span>
                   </div>
                 ) : (
-                  <OrdersByIdAddItemsGrid
+                  <OrdersProductCard
                     products={paginatedProducts}
                     storeName={storeName}
-                    order={order}
-                    setOrder={setOrder}
+                    onSubmit={handleAddOrUpdateOrderLine}
                   />
                 )}
               </TabsContent>

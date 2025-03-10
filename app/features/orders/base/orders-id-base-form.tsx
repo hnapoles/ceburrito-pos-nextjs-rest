@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import OrdersIdLines from '../id/edit/orders-id-lines';
+import OrdersIdLines from '../id/zedit/orders-id-lines';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { formatPeso } from '@/app/actions/client/peso';
