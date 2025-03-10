@@ -241,7 +241,7 @@ const OrdersByIdAddItemsGrid: React.FC<productGridViewProps> = ({
 
   return (
     <div className="container mx-auto lg:p-1 md:p-1 p-1">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1">
         {products.map((product) => (
           <Card
             key={product._id}
