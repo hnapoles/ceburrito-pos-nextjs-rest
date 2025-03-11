@@ -28,7 +28,7 @@ import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { GetProductSellingPriceByOrderType } from '@/app/actions/server/product-selling-prices-actions';
-import { Loader2, Minus, Plus } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { OrderLineBase } from '@/app/models/orders-model';
 
 interface productGridViewProps {
@@ -68,10 +68,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
     ProductSellingPriceBase[] | undefined | null
   >([]);
   const [currentPrice, setCurrentPrice] = React.useState<number>(0);
-
-  const [loadingItems, setLoadingItems] = React.useState<
-    Record<string, boolean>
-  >({});
 
   async function handleSelectProduct(p: ProductBase) {
     //get product price based on selected product
@@ -231,44 +227,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               <p className="text-sm font-medium text-gray-900">
                 {product.basePrice}
               </p>
-            </div>
-
-            <div className="flex w-full mt-2">
-              {' '}
-              {/* Ensures full width */}
-              <Button
-                variant="ghost"
-                onClick={() => handleChangeQty('subtract')}
-                className="rounded-none bg-gray-100 w-full"
-                size="icon"
-                disabled={loadingItems[product._id || '']} // Disable button when loading
-              >
-                {loadingItems[product._id || ''] ? (
-                  <Loader2 className="animate-spin" size={8} />
-                ) : (
-                  <Minus />
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                className="rounded-none w-full"
-                size="icon"
-              >
-                {qty}
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => handleChangeQty('add')}
-                className="rounded-none bg-gray-100 w-full"
-                size="icon"
-                disabled={loadingItems[product._id || '']} // Disable button when loading
-              >
-                {loadingItems[product._id || ''] ? (
-                  <Loader2 className="animate-spin" size={16} />
-                ) : (
-                  <Plus />
-                )}
-              </Button>
             </div>
           </div>
         ))}
