@@ -28,7 +28,7 @@ import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { GetProductSellingPriceByOrderType } from '@/app/actions/server/product-selling-prices-actions';
-import { Loader2, Minus, Plus } from 'lucide-react';
+import { Minus, Plus } from 'lucide-react';
 import { OrderLineBase } from '@/app/models/orders-model';
 
 interface productGridViewProps {
@@ -68,10 +68,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
     ProductSellingPriceBase[] | undefined | null
   >([]);
   const [currentPrice, setCurrentPrice] = React.useState<number>(0);
-
-  const [loadingItems, setLoadingItems] = React.useState<
-    Record<string, boolean>
-  >({});
 
   async function handleSelectProduct(p: ProductBase) {
     //get product price based on selected product
@@ -121,9 +117,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
     setQty(1);
   }
 
-  async function handleChangeQty(p: ProductBase, action: string) {
-    const lineKey = `${p._id || ''}`;
-    setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
+  async function handleChangeQty(action: string) {
     setQty((prev) => {
       let newQty = prev;
 
@@ -147,8 +141,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
 
       return newQty; // Return the updated qty
     });
-
-    setLoadingItems((prev) => ({ ...prev, [lineKey]: false }));
   }
 
   async function handleAddToOrder() {
@@ -222,6 +214,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                       'flex flex-col items-center border-none',
                       product.isOutOfStock ? '' : 'hover:pointer-cursor',
                     )}
+                    onClick={() => handleSelectProduct(product)}
                   >
                     <span aria-hidden="true" className="absolute inset-0" />
                     {product.name}
@@ -234,47 +227,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               <p className="text-sm font-medium text-gray-900">
                 {product.basePrice}
               </p>
-            </div>
-
-            <div className="flex w-full mt-2">
-              {' '}
-              {/* Ensures full width */}
-              <Button
-                variant="ghost"
-                onClick={() => handleChangeQty(product, 'subtract')}
-                className="rounded-none bg-gray-100 w-full"
-                size="icon"
-                disabled={loadingItems[product._id || '']} // Disable button when loading
-              >
-                {loadingItems[product._id || ''] ? (
-                  <Loader2 className="animate-spin" size={8} />
-                ) : (
-                  <Minus />
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                className="rounded-none w-full"
-                size="icon"
-              >
-                {qty}
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => handleChangeQty(product, 'add')}
-                className="rounded-none bg-gray-100 w-full"
-                size="icon"
-                disabled={loadingItems[product._id || '']} // Disable button when loading
-              >
-                {loadingItems[product._id || ''] ? (
-                  <Loader2 className="animate-spin" size={16} />
-                ) : (
-                  <Plus />
-                )}
-              </Button>
-            </div>
-            <div className="flex w-full mt-1">
-              <Button className="w-full">Add</Button>
             </div>
           </div>
         ))}
@@ -369,7 +321,12 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               <Label className="mb-0">Quantity:</Label>
             </div>
             <div className="mt-0 flex">
-              <Button variant="outline" className="rounded-none" size="icon">
+              <Button
+                variant="outline"
+                onClick={() => handleChangeQty('subtract')}
+                className="rounded-none"
+                size="icon"
+              >
                 <Minus />
               </Button>
               <Button
@@ -382,7 +339,12 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               >
                 {qty}
               </Button>
-              <Button variant="outline" className="rounded-none" size="icon">
+              <Button
+                variant="outline"
+                onClick={() => handleChangeQty('add')}
+                className="rounded-none"
+                size="icon"
+              >
                 <Plus />
               </Button>
             </div>
