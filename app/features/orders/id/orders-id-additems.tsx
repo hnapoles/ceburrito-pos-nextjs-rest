@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { Lookup } from '@/app/models/lookups-model';
 import { ProductBase } from '@/app/models/products-model';
 import {
@@ -23,6 +25,7 @@ import OrdersByIdOrderDetails from './orders-id-additems-orderdetails';
 import OrdersProductCard from '../base/orders-product-card';
 import { UpdateOrder } from '@/app/actions/server/orders-actions';
 import { toast } from '@/hooks/use-toast';
+import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 
 interface ordersByIdAddItemsProps {
   products: ProductBase[];
@@ -35,6 +38,7 @@ export default function OrdersByIdAddItems({
   categories,
   orderData,
 }: ordersByIdAddItemsProps) {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
@@ -128,8 +132,12 @@ export default function OrdersByIdAddItems({
   };
   // end handleAddOrUpdateOrderLine()
 
+  const itemsCount = (order.orderLines || [])
+    .filter((line) => (line.status ?? 'open') !== 'canceled') // Default status to "open"
+    .reduce((sum, line) => sum + line.quantity, 0);
+
   return (
-    <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
+    <div className="grid gap-0 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
       {/* Right Side - cart */}
       <div className="col-span-1 h-full">
         <OrdersByIdOrderDetails order={order} setOrder={setOrder} />
@@ -215,6 +223,45 @@ export default function OrdersByIdAddItems({
             </div>
           </CardFooter>
         </Card>
+      </div>
+      {/* Floater - Order Summary */}
+      <div className="fixed bottom-0 left-0 w-full bg-white px-4 py-2 shadow-md border-t flex items-center justify-between gap-x-4">
+        <div className="flex items-center space-x-6 overflow-hidden ml-16">
+          <div className="flex items-center space-x-2">
+            <span className="font-medium whitespace-nowrap">
+              Items (
+              <span className="text-purple-700 whitespace-nowrap">
+                {itemsCount}
+              </span>
+              ):
+            </span>
+            <span className="text-purple-700 whitespace-nowrap">
+              {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
+            </span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="font-medium whitespace-nowrap">Order Type:</span>
+            <span className="text-purple-700 whitespace-nowrap">
+              {order.type?.toUpperCase()}
+            </span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span className="font-medium whitespace-nowrap">Id:</span>
+            <span className="text-purple-700 whitespace-nowrap">
+              ... {order._id?.slice(-4).toUpperCase()}
+            </span>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <Button
+          variant="default"
+          size="lg"
+          onClick={() => router.push(`/orders/${order._id}/edit`)}
+          className="whitespace-nowrap"
+        >
+          Edit Order Information
+        </Button>
       </div>
     </div>
   );

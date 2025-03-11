@@ -178,9 +178,9 @@ export default function OrdersByIdOrderDetails({
   return (
     <Card className="h-full flex flex-col">
       <CardHeader>
-        <CardTitle>Order</CardTitle>
+        <CardTitle className="hidden">Order</CardTitle>
 
-        <div className="border border-sm rounded-sm p-4 flex-1 cursor-pointer hover:bg-gray-100 transition">
+        <div className="border border-sm rounded-sm p-4 flex-1 cursor-pointer hover:bg-gray-100 transition hidden">
           <div className="flex justify-between items-center">
             <span className="font-medium">Id</span>
             <span className="text-right text-gray-900 hidden">
