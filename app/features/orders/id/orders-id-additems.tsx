@@ -9,8 +9,8 @@ import {
   Card,
   CardContent,
   CardFooter,
-  CardHeader,
-  CardTitle,
+  //CardHeader,
+  //CardTitle,
 } from '@/components/ui/card-rounded-sm';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -137,24 +137,24 @@ export default function OrdersByIdAddItems({
     .reduce((sum, line) => sum + line.quantity, 0);
 
   return (
-    <div className="grid gap-0 sm:grid-cols-1 lg:grid-cols-3 md:grid-cols-3 grid-auto-rows-fr">
+    <div className="grid gap-0 grid-cols-1 md:grid-cols-3 grid-auto-rows-fr">
       {/* Right Side - cart */}
       <div className="col-span-1 h-full">
         <OrdersByIdOrderDetails order={order} setOrder={setOrder} />
       </div>
       {/* Left Side - add items */}
-      <div className="md:col-span-2 col-span-1 pb-20">
+      <div className="md:col-span-2 col-span-1 h-full">
         <Card className="h-full flex flex-col">
-          <CardHeader>
+          {/*<CardHeader>
             <CardTitle>Select Items</CardTitle>
-          </CardHeader>
+          </CardHeader>*/}
           <CardContent>
             <Tabs
               defaultValue={category}
               value={category}
               onValueChange={setCategory}
             >
-              <div className="flex items-center">
+              <div className="flex items-center gap-2 w-full mt-1">
                 <TabsList>
                   <TabsTrigger value="all">All</TabsTrigger>
                   {categories.map((item) => (
@@ -163,7 +163,7 @@ export default function OrdersByIdAddItems({
                     </TabsTrigger>
                   ))}
                 </TabsList>
-                <div className="ml-auto flex items-center gap-2">
+                <div className="ml-auto w-48 h-full flex items-center">
                   <Input
                     placeholder="Quick Search..."
                     value={search}
@@ -171,7 +171,7 @@ export default function OrdersByIdAddItems({
                       setSearch(e.target.value);
                       setCurrentPage(1); // Reset to first page on search change
                     }}
-                    className="mr-2 mb-4 h-8"
+                    className="h-10"
                   />
                 </div>
               </div>
