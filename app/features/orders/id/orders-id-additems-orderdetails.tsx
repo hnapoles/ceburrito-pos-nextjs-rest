@@ -1,22 +1,14 @@
 import React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card-rounded-sm';
-
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
-import { Badge } from '@/components/ui/badge';
+import { formatPesoNoDecimals } from '@/app/actions/client/peso';
+//import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button-rounded-sm';
 
 import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
-import { Minus, Plus, Trash, Loader2 } from 'lucide-react';
+import { Minus, Plus, Loader2 } from 'lucide-react';
 import { UpdateOrder } from '@/app/actions/server/orders-actions';
 import { toast } from '@/hooks/use-toast';
 //import { revalidateAndRedirectUrl } from '@/lib/revalidate-path';
@@ -39,7 +31,7 @@ export default function OrdersByIdOrderDetails({
     a.productName.localeCompare(b.productName),
   );
 
-  const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
+  //const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
 
   const [loadingItems, setLoadingItems] = React.useState<
     Record<string, boolean>
@@ -48,8 +40,7 @@ export default function OrdersByIdOrderDetails({
   const handleCancelLine = async (line: OrderLineBase) => {
     const lineKey = `${line.productId ?? 'na'}-${line.sizeOption ?? ''}-${
       line.spiceOption ?? ''
-    }-${line.status ?? 'open'}
-    }`;
+    }-${line.status ?? 'open'}`;
 
     setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
     const existingIndex = order.orderLines?.findIndex(
@@ -78,11 +69,17 @@ export default function OrdersByIdOrderDetails({
       toast({
         title: 'Line canceled',
         description: (
-          <p>{`Data : ${line.productName}, ${line.sizeOption || ''}, ${
-            line.spiceOption || ''
-          }`}</p>
+          <p>
+            {`${line.productName}, ${line.sizeOption || ''}, ${
+              line.spiceOption || ''
+            }`}
+          </p>
         ),
       });
+
+      setOrder(updatedData);
+      query.set('refresh', Date.now().toString()); // Change URL to trigger a refresh
+      router.push(`?${query.toString()}`);
 
       //await revalidateAndRedirectUrl(`/orders/${order._id}`);
     } else {
@@ -94,8 +91,7 @@ export default function OrdersByIdOrderDetails({
   async function handleChangeQty(line: OrderLineBase, action: string) {
     const lineKey = `${line.productId ?? 'na'}-${line.sizeOption ?? ''}-${
       line.spiceOption ?? ''
-    }-${line.status ?? 'open'}
-      }`;
+    }-${line.status ?? 'open'}`;
     setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
 
     try {
@@ -146,7 +142,7 @@ export default function OrdersByIdOrderDetails({
         toast({
           title: 'Line item updated',
           description: (
-            <p>{`Data : ${line.productName}, ${line.sizeOption || ''}, ${
+            <p>{`${line.productName}, ${line.sizeOption || ''}, ${
               line.spiceOption || ''
             }`}</p>
           ),
@@ -167,6 +163,7 @@ export default function OrdersByIdOrderDetails({
     }
   }
 
+  /*
   const itemsCount = (order.orderLines || [])
     .filter((line) => (line.status ?? 'open') !== 'canceled') // Default status to "open"
     .reduce((sum, line) => sum + line.quantity, 0);
@@ -174,217 +171,167 @@ export default function OrdersByIdOrderDetails({
   const orderIdWithDashes = `${(order._id || '').slice(0, 4)}-${(
     order._id || ''
   ).slice(4, -4)}-${(order._id || '').slice(-4)}`;
+  */
 
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader>
-        <CardTitle className="hidden">Order</CardTitle>
-
-        <div className="border border-sm rounded-sm p-4 flex-1 cursor-pointer hover:bg-gray-100 transition hidden">
-          <div className="flex justify-between items-center">
-            <span className="font-medium">Id</span>
-            <span className="text-right text-gray-900 hidden">
-              {orderIdWithDashes.toUpperCase()}
-            </span>
-            <span className="text-right text-gray-900 inline">
-              ... {order._id?.slice(-4).toUpperCase()}
-            </span>
-          </div>
-          <div className="hidden flex justify-between items-center">
-            <span className="font-medium">Order Date</span>
-            <span className="text-right text-gray-900">
-              {order.orderedAt
-                ? new Date(order.orderedAt).toLocaleString()
-                : 'n/a'}
-            </span>
-          </div>
-          <div className="hidden flex justify-between items-center">
-            <span className="font-medium">Status</span>
-            <span className="text-right text-gray-900 ml-2">
-              {order.status.toUpperCase()}
-            </span>
-          </div>
-          <div className="hidden flex justify-between items-center">
-            <span className="font-medium">Store Name</span>
-            <span className="text-right text-gray-900 ml-2">
-              {order.storeName || ''}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-medium">Order Type</span>
-            <span className="text-right text-red-700">{order.type}</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-medium">Items ({itemsCount})</span>
-            <span className="text-right text-red-700">
-              {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
-            </span>
-          </div>
+    <div className="flex h-full flex-col  bg-white shadow-xl border rounded-sm pb-20">
+      <div className="flex-1  px-2 py-2 sm:px-6">
+        <div className="flex items-start justify-between">
+          <div className="text-base font-semibold">Order cart</div>
         </div>
 
-        {/*onCheckout && order.status === 'open' ? (
-          <Button
-            className="w-full"
-            onClick={() => {
-              router.push(`/orders/${order._id}/addItems`);
-            }}
-          >
-            Add More Items
-          </Button>
-        ) : (
-          <Separator />
-        )*/}
-      </CardHeader>
-      <CardContent>
-        {sortedData?.map((l) => (
-          <div key={l.productId + l.sizeOption + l.spiceOption}>
-            <div className="grid gap-4 py-2">
-              <div className="grid grid-cols-4 items-left gap-1 grid-auto-rows-fr">
-                <div
-                  className="relative"
-                  onMouseEnter={() => setHoveredItem(l.productId)}
-                  onMouseLeave={() => setHoveredItem(null)}
+        <div className="mt-6">
+          <div className="flow-root">
+            <ul role="list" className="-my-6 divide-y divide-gray-200">
+              {sortedData?.map((l) => (
+                <li
+                  key={l.productId + l.sizeOption + l.spiceOption + l.status}
+                  className="flex py-2"
                 >
-                  {/* Product Image */}
-                  <Image
-                    src={
-                      l.imageUrl || '/images/products/no-image-for-display.webp'
-                    }
-                    alt="image"
-                    width={100}
-                    height={100}
-                    className="h-auto w-auto aspect-square object-cover transition-all hover:scale-105"
-                  />
+                  <div className="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
+                    <Image
+                      src={
+                        l.imageUrl ||
+                        '/images/products/no-image-for-display.webp'
+                      }
+                      alt="image"
+                      width={100}
+                      height={100}
+                      className="size-full object-cover"
+                    />
+                  </div>
 
-                  {/* CANCELED Overlay */}
-                  {l.status === 'canceled' && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60">
-                      <span className="text-white text-sm font-bold">
-                        CANCELED
-                      </span>
+                  <div className="ml-4 flex flex-1 flex-col">
+                    <div>
+                      <div className="flex justify-between text-base font-medium text-gray-900">
+                        <h3>
+                          <a href="#">{l.productName}</a>
+                        </h3>
+                        <p className="ml-4">
+                          {formatPesoNoDecimals(
+                            Math.floor(
+                              l.status !== 'canceled' ? l.amount || 0 : 0,
+                            ),
+                          )}
+                        </p>
+                      </div>
+                      <p className="mt-0 text-sm text-gray-500">
+                        <span className="text-gray-900">{l.sizeOption}</span>
+
+                        <span className="ml-3 text-gray-900">
+                          {l.spiceOption}
+                        </span>
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        Unit Price{' '}
+                        {formatPesoNoDecimals(Math.floor(l.unitPrice || 0))}
+                      </p>
                     </div>
-                  )}
-
-                  {/* Delete Button (Shown on Hover) */}
-                  {hoveredItem === l.productId &&
-                    l.status !== 'canceled' &&
-                    order.status === 'open' && (
-                      <Button
-                        className="absolute top-1 right-1 bg-red-500 text-white p-2 rounded-full shadow-md hover:bg-red-600 transition"
-                        size="icon"
-                        onClick={() => handleCancelLine(l)}
-                        disabled={
-                          loadingItems[
-                            `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                          ]
-                        }
-                      >
-                        {loadingItems[
-                          `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                        ] ? (
-                          <Loader2 className="animate-spin" size={16} />
-                        ) : (
-                          <Trash size={16} />
+                    <div className="flex flex-1 items-end justify-between text-sm">
+                      <div
+                        className={cn(
+                          'mt-0 flex',
+                          order.status === 'open' && l.status !== 'canceled'
+                            ? ''
+                            : 'hidden',
                         )}
-                      </Button>
-                    )}
-                </div>
-                <div className="col-span-3 ml-0">
-                  <div>
-                    <strong>{l.productName}</strong>
+                      >
+                        <Button
+                          variant="ghost"
+                          onClick={() => handleChangeQty(l, 'subtract')}
+                          className="rounded-none bg-gray-100"
+                          size="sm"
+                          disabled={
+                            loadingItems[
+                              `${l.productId ?? 'na'}-${l.sizeOption ?? ''}-${
+                                l.spiceOption ?? ''
+                              }-${l.status ?? 'open'}`
+                            ]
+                          } // Disable button when loading
+                        >
+                          {loadingItems[
+                            `${l.productId ?? 'na'}-${l.sizeOption ?? ''}-${
+                              l.spiceOption ?? ''
+                            }-${l.status ?? 'open'}`
+                          ] ? (
+                            <Loader2 className="animate-spin" size={16} />
+                          ) : (
+                            <Minus />
+                          )}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="rounded-none"
+                          size="sm"
+                        >
+                          {l.quantity}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          onClick={() => handleChangeQty(l, 'add')}
+                          className="rounded-none bg-gray-100"
+                          size="sm"
+                          disabled={
+                            loadingItems[
+                              `${l.productId ?? 'na'}-${l.sizeOption ?? ''}-${
+                                l.spiceOption ?? ''
+                              }-${l.status ?? 'open'}`
+                            ]
+                          } // Disable button when loading
+                        >
+                          {loadingItems[
+                            `${l.productId ?? 'na'}-${l.sizeOption ?? ''}-${
+                              l.spiceOption ?? ''
+                            }-${l.status ?? 'open'}`
+                          ] ? (
+                            <Loader2 className="animate-spin" size={16} />
+                          ) : (
+                            <Plus />
+                          )}
+                        </Button>
+                      </div>
+                      <div className="flex">
+                        <p
+                          className={cn(
+                            'text-gray-500',
+                            l.status === 'canceled' ? 'text-red-500' : 'hidden',
+                          )}
+                        >
+                          Canceled qty {l.quantity}
+                        </p>
+                        <button
+                          type="button"
+                          className={cn(
+                            'font-medium text-red-600 hover:text-indigo-500',
+                            l.status === 'canceled' ? 'hidden' : '',
+                          )}
+                          onClick={() => handleCancelLine(l)}
+                          disabled={
+                            loadingItems[
+                              `${l.productId ?? 'na'}-${l.sizeOption ?? ''}-${
+                                l.spiceOption ?? ''
+                              }-${l.status ?? 'open'}`
+                            ]
+                          }
+                        >
+                          {' '}
+                          {loadingItems[
+                            `${l.productId}-${l.sizeOption}-${l.spiceOption}`
+                          ] ? (
+                            <Loader2 className="animate-spin" size={16} />
+                          ) : (
+                            'Cancel'
+                          )}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  {formatPesoNoDecimals(Math.floor(l.quantity * l.unitPrice))}
-                  <span className="text-xs mr-2">
-                    .
-                    {
-                      (l.quantity * l.unitPrice)
-                        .toFixed(2)
-                        .toString()
-                        .split('.')[1]
-                    }
-                  </span>
-                  <Badge variant="outline" className="border-blue-300">
-                    {l.sizeOption}
-                  </Badge>{' '}
-                  {l.spiceOption && (
-                    <Badge variant="outline" className="border-red-500">
-                      {l.spiceOption}
-                    </Badge>
-                  )}
-                  <div className="text-xs">
-                    ( {formatPeso(l.unitPrice)} / item )
-                  </div>
-                  <div
-                    className={cn(
-                      'text-xs',
-                      order.status === 'open' && l.status !== 'canceled'
-                        ? 'hidden'
-                        : 'mt-3',
-                    )}
-                  >
-                    {l.quantity} item(s)
-                  </div>
-                  <div
-                    className={cn(
-                      'mt-0 flex',
-                      order.status === 'open' && l.status !== 'canceled'
-                        ? ''
-                        : 'hidden',
-                    )}
-                  >
-                    <Button
-                      variant="outline"
-                      onClick={() => handleChangeQty(l, 'subtract')}
-                      className="rounded-none"
-                      size="icon"
-                      disabled={
-                        loadingItems[
-                          `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                        ]
-                      } // Disable button when loading
-                    >
-                      {loadingItems[
-                        `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                      ] ? (
-                        <Loader2 className="animate-spin" size={16} />
-                      ) : (
-                        <Minus />
-                      )}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="rounded-none"
-                      size="icon"
-                    >
-                      {l.quantity}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => handleChangeQty(l, 'add')}
-                      className="rounded-none"
-                      size="icon"
-                      disabled={
-                        loadingItems[
-                          `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                        ]
-                      } // Disable button when loading
-                    >
-                      {loadingItems[
-                        `${l.productId}-${l.sizeOption}-${l.spiceOption}`
-                      ] ? (
-                        <Loader2 className="animate-spin" size={16} />
-                      ) : (
-                        <Plus />
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+                </li>
+              ))}
+            </ul>
           </div>
-        ))}
-      </CardContent>
-      <CardFooter className="flex w-full mt-auto"></CardFooter>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 }
