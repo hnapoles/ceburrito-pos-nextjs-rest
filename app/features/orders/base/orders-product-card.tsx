@@ -121,7 +121,9 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
     setQty(1);
   }
 
-  async function handleChangeQty(action: string) {
+  async function handleChangeQty(p: ProductBase, action: string) {
+    const lineKey = `${p._id || ''}`;
+    setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
     setQty((prev) => {
       let newQty = prev;
 
@@ -145,6 +147,8 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
 
       return newQty; // Return the updated qty
     });
+
+    setLoadingItems((prev) => ({ ...prev, [lineKey]: false }));
   }
 
   async function handleAddToOrder() {
@@ -218,7 +222,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                       'flex flex-col items-center border-none',
                       product.isOutOfStock ? '' : 'hover:pointer-cursor',
                     )}
-                    onClick={() => handleSelectProduct(product)}
                   >
                     <span aria-hidden="true" className="absolute inset-0" />
                     {product.name}
@@ -238,7 +241,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               {/* Ensures full width */}
               <Button
                 variant="ghost"
-                onClick={() => handleChangeQty('subtract')}
+                onClick={() => handleChangeQty(product, 'subtract')}
                 className="rounded-none bg-gray-100 w-full"
                 size="icon"
                 disabled={loadingItems[product._id || '']} // Disable button when loading
@@ -258,7 +261,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               </Button>
               <Button
                 variant="ghost"
-                onClick={() => handleChangeQty('add')}
+                onClick={() => handleChangeQty(product, 'add')}
                 className="rounded-none bg-gray-100 w-full"
                 size="icon"
                 disabled={loadingItems[product._id || '']} // Disable button when loading
@@ -269,6 +272,9 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                   <Plus />
                 )}
               </Button>
+            </div>
+            <div className="flex w-full mt-1">
+              <Button className="w-full">Add</Button>
             </div>
           </div>
         ))}
@@ -363,12 +369,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               <Label className="mb-0">Quantity:</Label>
             </div>
             <div className="mt-0 flex">
-              <Button
-                variant="outline"
-                onClick={() => handleChangeQty('subtract')}
-                className="rounded-none"
-                size="icon"
-              >
+              <Button variant="outline" className="rounded-none" size="icon">
                 <Minus />
               </Button>
               <Button
@@ -381,12 +382,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               >
                 {qty}
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => handleChangeQty('add')}
-                className="rounded-none"
-                size="icon"
-              >
+              <Button variant="outline" className="rounded-none" size="icon">
                 <Plus />
               </Button>
             </div>
