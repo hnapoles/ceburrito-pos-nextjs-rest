@@ -10,6 +10,14 @@ import {
 } from '@/app/models/products-model';
 import { Lookup } from '@/app/models/lookups-model';
 
+import {
+  Card,
+  CardContent,
+  //CardFooter,
+  //CardDescription,
+  CardHeader,
+  //CardTitle,
+} from '@/components/ui/card-rounded-sm';
 import { formatPeso } from '@/app/actions/client/peso';
 import { Button } from '@/components/ui/button-rounded-sm';
 
@@ -189,48 +197,54 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
   }
 
   return (
-    <div>
-      <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-6 xl:gap-x-8">
+    <div className="container mx-auto lg:p-1 md:p-1 p-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1">
         {products.map((product) => (
-          <div
+          <Card
             key={product._id}
-            className="group relative"
+            className={cn(
+              'flex flex-col items-center border-none',
+              product.isOutOfStock ? '' : 'hover:pointer-cursor',
+            )}
             onClick={() => handleSelectProduct(product)}
           >
-            <Image
-              alt="image"
-              src={
-                product.imageUrl || '/images/products/no-image-for-display.webp'
-              }
-              width={200}
-              height={200}
-              className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-auto"
-            />
-            <div className="mt-4 flex justify-between">
-              <div>
-                <h3 className="text-sm text-gray-700">
-                  <div
-                    className={cn(
-                      'flex flex-col items-center border-none',
-                      product.isOutOfStock ? '' : 'hover:pointer-cursor',
-                    )}
-                    onClick={() => handleSelectProduct(product)}
-                  >
-                    <span aria-hidden="true" className="absolute inset-0" />
-                    {product.name}
-                  </div>
-                </h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  {product.isOutOfStock ? 'out of stock' : product.category}
-                </p>
+            <CardHeader className="w-full flex justify-center pb-2 relative">
+              <Image
+                src={
+                  product.imageUrl ||
+                  '/images/products/no-image-for-display.webp'
+                }
+                alt="image"
+                width={200} // Fixed width for Next.js optimization
+                height={200} // Fixed height to prevent distortion
+                className={cn(
+                  'max-w-full h-auto aspect-square object-cover transition-all hover:scale-105',
+                  product.isOutOfStock
+                    ? 'saturate-95 opacity-95' // Apply grayscale effect
+                    : '',
+                )}
+              />
+              {/* Cross-out overlay */}
+              {product.isOutOfStock && (
+                <div className="absolute top-2 left-0 right-0 flex items-center justify-center">
+                  <span className="bg-red-900 text-white text-xs font-bold px-2 py-1 rounded-md">
+                    Out Of Stock
+                  </span>
+                </div>
+              )}
+            </CardHeader>
+
+            <CardContent className="text-center flex flex-col items-top">
+              <div className="text-black-500 text-xs w-35 overflow-hidden text-ellipsis whitespace-nowrap">
+                {product.name}
               </div>
-              <p className="text-sm font-medium text-gray-900">
-                {product.basePrice}
-              </p>
-            </div>
-          </div>
+
+              <Badge variant="outline">{product.category}</Badge>
+            </CardContent>
+          </Card>
         ))}
       </div>
+
       {/* Size Selection Dialog -- outside the loop */}
       <Dialog
         open={!!selectedProduct}
