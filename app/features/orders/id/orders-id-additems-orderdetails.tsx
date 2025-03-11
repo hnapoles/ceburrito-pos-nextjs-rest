@@ -196,7 +196,7 @@ export default function OrdersByIdOrderDetails({
                       }
                       alt="image"
                       width={100}
-                      height={100}
+                      height={200}
                       className="size-full object-cover"
                     />
                   </div>
@@ -254,7 +254,7 @@ export default function OrdersByIdOrderDetails({
                               l.spiceOption ?? ''
                             }-${l.status ?? 'open'}`
                           ] ? (
-                            <Loader2 className="animate-spin" size={16} />
+                            <Loader2 className="animate-spin" size={8} />
                           ) : (
                             <Minus />
                           )}
