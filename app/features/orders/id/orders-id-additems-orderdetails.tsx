@@ -195,15 +195,15 @@ export default function OrdersByIdOrderDetails({
                         '/images/products/no-image-for-display.webp'
                       }
                       alt="image"
-                      width={100}
-                      height={200}
+                      width={64}
+                      height={64}
                       className="size-full object-cover"
                     />
                   </div>
 
                   <div className="ml-4 flex flex-1 flex-col">
                     <div>
-                      <div className="flex justify-between text-base font-medium text-gray-900">
+                      <div className="flex justify-between text-xs font-medium text-gray-900">
                         <h3>
                           <a href="#">{l.productName}</a>
                         </h3>
@@ -215,14 +215,14 @@ export default function OrdersByIdOrderDetails({
                           )}
                         </p>
                       </div>
-                      <p className="mt-0 text-sm text-gray-500">
+                      <p className="mt-0 text-xs text-gray-500">
                         <span className="text-gray-900">{l.sizeOption}</span>
 
                         <span className="ml-3 text-gray-900">
                           {l.spiceOption}
                         </span>
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs text-gray-500">
                         Unit Price{' '}
                         {formatPesoNoDecimals(Math.floor(l.unitPrice || 0))}
                       </p>
@@ -240,7 +240,7 @@ export default function OrdersByIdOrderDetails({
                           variant="ghost"
                           onClick={() => handleChangeQty(l, 'subtract')}
                           className="rounded-none bg-gray-100"
-                          size="sm"
+                          size="icon"
                           disabled={
                             loadingItems[
                               `${l.productId ?? 'na'}-${l.sizeOption ?? ''}-${
@@ -262,7 +262,7 @@ export default function OrdersByIdOrderDetails({
                         <Button
                           variant="outline"
                           className="rounded-none"
-                          size="sm"
+                          size="icon"
                         >
                           {l.quantity}
                         </Button>
@@ -270,7 +270,7 @@ export default function OrdersByIdOrderDetails({
                           variant="ghost"
                           onClick={() => handleChangeQty(l, 'add')}
                           className="rounded-none bg-gray-100"
-                          size="sm"
+                          size="icon"
                           disabled={
                             loadingItems[
                               `${l.productId ?? 'na'}-${l.sizeOption ?? ''}-${
@@ -290,7 +290,7 @@ export default function OrdersByIdOrderDetails({
                           )}
                         </Button>
                       </div>
-                      <div className="flex">
+                      <div className="flex text-xs">
                         <p
                           className={cn(
                             'text-gray-500',

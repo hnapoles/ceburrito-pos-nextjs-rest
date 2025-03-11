@@ -42,82 +42,129 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/login',
   },
   providers: [Google],
-  session: { strategy: 'jwt' },
+  session: { strategy: 'jwt' }, // Use JWT sessions
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-
-      return isLoggedIn;
-    },
     async jwt({ token, account }) {
+      // Store provider on first login
       if (account) {
         token.provider = account.provider;
       }
 
+      // If accessToken is already set, return token (prevents unnecessary API calls)
+      if (token.accessToken) {
+        return token;
+      }
+
+      // Generate new access token
+      const accessToken = await generateAccessToken(
+        token.email || '', // Use token.email instead of session
+        token.email || '',
+        token.provider,
+      );
+
+      // Fetch user permissions only once
+      const response = await fetch(`${appApiServerUrl}/auth/login/jwt`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Store fetched data in the token
+      token.accessToken = accessToken;
+      token.apiKey = data.apiKey;
+      token.primaryRole = data.primaryRole;
+      token.uiRoutesAccess = data.permissions;
+
       return token;
     },
+
     async session({ session, token }) {
-      try {
-        const accessToken = await generateAccessToken(
-          session.user.email,
-          session.user.email,
-          token.provider,
-        );
-        //console.log(accessToken)
+      // Use cached data from the token to prevent unnecessary API calls
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          accessToken: token.accessToken,
+          apiKey: token.apiKey,
+          primaryRole: token.primaryRole,
+          provider: token.provider,
+          uiRoutesAccess: token.uiRoutesAccess,
+        },
+      };
+    },
+  },
+});
 
-        const method = 'POST';
-        const url = `${appApiServerUrl}/auth/login/jwt`;
-
-        const response = await fetch(url, {
-          method: method,
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`, // Example header
-          },
-        });
-        if (!response.ok) {
-          //console.log(response)
-          const errorData = await response.json().catch(() => ({}));
-          if (errorData.error) {
-            throw new Error(
-              errorData.message ||
-                `HTTP Error: ${response.status} ${errorData.error} method=${method} url=${url}`,
-            );
-          }
-          throw new Error(
-            errorData.message ||
-              `HTTP Error: ${response.status} method=${method} url=${url}`,
-          );
-          //throw new Error("Failed to get server data");
-        }
-        const data = await response.json();
-        //console.log(data);
-
+/*
+callbacks: {
+  async session({ session, token }) {
+    try {
+      // If accessToken already exists, prevent unnecessary API calls
+      if (session.user.accessToken) {
         return {
           ...session,
           user: {
             ...session.user,
-            accessToken: accessToken,
-            apiKey: data.apiKey,
-            primaryRole: data.primaryRole,
+            accessToken: token.accessToken, // Use stored accessToken
+            apiKey: token.apiKey,
+            primaryRole: token.primaryRole,
             provider: token.provider,
-            uiRoutesAccess: data.permissions,
+            uiRoutesAccess: token.uiRoutesAccess,
           },
         };
-      } catch (error) {
-        console.error('error session jwt ', error);
-        throw error;
       }
-    },
-    async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      /*
-        const queryString = url.split('?')[1]
-        const callbackUrl = new URLSearchParams(queryString).get('callbackUrl')
-        if (callbackUrl) return `${callbackUrl}`
-        return '/dashboard'
-        */
-      return url.startsWith(baseUrl) ? url : baseUrl;
-    },
-  }, //end of callbacks
-});
+
+      // Generate access token only when required
+      const accessToken = await generateAccessToken(
+        session.user.email,
+        session.user.email,
+        token.provider
+      );
+
+      const response = await fetch(`${appApiServerUrl}/auth/login/jwt`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Store response in token to avoid repeated API calls
+      token.accessToken = accessToken;
+      token.apiKey = data.apiKey;
+      token.primaryRole = data.primaryRole;
+      token.uiRoutesAccess = data.permissions;
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          accessToken: accessToken,
+          apiKey: data.apiKey,
+          primaryRole: data.primaryRole,
+          provider: token.provider,
+          uiRoutesAccess: data.permissions,
+        },
+      };
+    } catch (error) {
+      console.error("Session error:", error);
+      return session; // Return the session even if there's an error
+    }
+  },
+}
+
+*/
