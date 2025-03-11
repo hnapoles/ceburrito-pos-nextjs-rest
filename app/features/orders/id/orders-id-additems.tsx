@@ -137,13 +137,13 @@ export default function OrdersByIdAddItems({
     .reduce((sum, line) => sum + line.quantity, 0);
 
   return (
-    <div className="grid gap-0 sm:grid-cols-1 lg:grid-cols-4 md:grid-cols-4 grid-auto-rows-fr">
+    <div className="grid gap-0 sm:grid-cols-1 lg:grid-cols-3 md:grid-cols-3 grid-auto-rows-fr">
       {/* Right Side - cart */}
       <div className="col-span-1 h-full">
         <OrdersByIdOrderDetails order={order} setOrder={setOrder} />
       </div>
       {/* Left Side - add items */}
-      <div className="md:col-span-3 col-span-1 pb-20">
+      <div className="md:col-span-2 col-span-1 pb-20">
         <Card className="h-full flex flex-col">
           <CardHeader>
             <CardTitle>Select Items</CardTitle>
