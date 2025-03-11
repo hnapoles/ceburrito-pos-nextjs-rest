@@ -143,7 +143,7 @@ export default function OrdersByIdAddItems({
         <OrdersByIdOrderDetails order={order} setOrder={setOrder} />
       </div>
       {/* Left Side - add items */}
-      <div className="md:col-span-3 col-span-1">
+      <div className="md:col-span-3 col-span-1 pb-20">
         <Card className="h-full flex flex-col">
           <CardHeader>
             <CardTitle>Select Items</CardTitle>
@@ -226,7 +226,7 @@ export default function OrdersByIdAddItems({
       </div>
       {/* Floater - Order Summary */}
       <div className="fixed bottom-0 left-0 w-full bg-white px-4 py-2 shadow-md border-t flex items-center justify-between gap-x-4">
-        <div className="flex items-center space-x-6 overflow-hidden ml-16">
+        <div className="flex items-center space-x-6 overflow-hidden ml-12">
           <div className="flex items-center space-x-2">
             <span className="font-medium whitespace-nowrap">
               Items (
@@ -255,7 +255,7 @@ export default function OrdersByIdAddItems({
 
         {/* Action Button */}
         <Button
-          variant="default"
+          variant="outline"
           size="lg"
           onClick={() => router.push(`/orders/${order._id}/edit`)}
           className="whitespace-nowrap"
