@@ -14,9 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card-rounded-sm';
-import { Label } from '@/components/ui/label';
+//import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
+//import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -56,8 +56,8 @@ interface baseProductFormProps {
   initialData?: ProductBase;
   categories: Lookup[];
   statuses: Lookup[];
-  sizes: Lookup[];
-  spices: Lookup[];
+  sizes?: Lookup[];
+  spices?: Lookup[];
   onSubmit: (data: ProductBase) => void;
   isViewOnly?: boolean;
 }
@@ -66,8 +66,6 @@ export default function BaseProductForm({
   initialData,
   categories,
   statuses,
-  sizes,
-  spices,
   onSubmit,
   isViewOnly = true,
 }: baseProductFormProps) {
@@ -184,8 +182,8 @@ export default function BaseProductForm({
     }
   };
 
-  const sizeOptions = sizes.map((option) => option.lookupValue);
-  const spiceOptions = spices.map((option) => option.lookupValue);
+  //const sizeOptions = sizes.map((option) => option.lookupValue);
+  //const spiceOptions = spices.map((option) => option.lookupValue);
   const imageUrl = initialData?.imageUrl;
 
   const [newSize, setNewSize] = useState('');
