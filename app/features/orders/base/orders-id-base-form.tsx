@@ -251,7 +251,7 @@ export default function OrdersIdBase({
                     <Input
                       type="text"
                       id="totalAmount"
-                      defaultValue={formatPeso(order.totalAmount)}
+                      defaultValue={formatPeso(order.totalAmount || 0)}
                       readOnly
                       className="bg-transparent border-none w-full text-right focus:ring-0 focus:outline-none"
                     />

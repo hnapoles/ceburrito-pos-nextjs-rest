@@ -57,6 +57,14 @@ export const ProductZodSchema = z.object({
 
 export type ProductBase = z.infer<typeof ProductZodSchema>;
 
+export type ProductBaseForCart = ProductBase & {
+  cartQty?: number;
+  cartUnitPrice?: number;
+  cartAmt?: number;
+  cartSizeOption?: string;
+  cartSpiceOption?: string;
+};
+
 export interface ProductForPos extends ProductBase {
   sellingPrices: [];
 }

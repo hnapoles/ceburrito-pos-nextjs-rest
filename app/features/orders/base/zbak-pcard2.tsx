@@ -269,7 +269,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               <div className="col-span-3 ml-4">
                 <strong>{selectedProduct?.name}</strong>
                 <p>{selectedProduct?.description}</p>
-                {formatPeso(selectedProduct?.basePrice)}{' '}
+                {formatPeso(selectedProduct?.basePrice || 0)}{' '}
                 <Badge variant="outline">base</Badge>
               </div>
             </div>

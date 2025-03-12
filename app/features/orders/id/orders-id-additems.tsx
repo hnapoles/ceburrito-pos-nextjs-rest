@@ -205,6 +205,8 @@ export default function OrdersByIdAddItems({
                     products={paginatedProducts}
                     storeName={storeName}
                     onSubmit={handleAddOrUpdateOrderLine}
+                    order={order}
+                    itemsCount={itemsCount}
                   />
                 )}
               </TabsContent>
