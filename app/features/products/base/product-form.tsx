@@ -51,6 +51,7 @@ import { Lookup } from '@/app/models/lookups-model';
 import { IsUserPermissionLevelAllowed } from '@/app/actions/server/permissions-actions';
 
 import { X } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 interface baseProductFormProps {
   initialData?: ProductBase;
@@ -96,6 +97,8 @@ export default function BaseProductForm({
       isOutOfStock: false,
       isSellable: true,
       posDisplaySeq: 1,
+      isPricingBySize: false,
+      isPricingBySpice: false,
     },
     mode: 'onBlur',
   });
@@ -463,6 +466,7 @@ export default function BaseProductForm({
               )}
             />
             */}
+            <Separator />
             <FormField
               control={form.control}
               name="sizeOptions"
@@ -497,7 +501,26 @@ export default function BaseProductForm({
                   </div>
 
                   {/* Input for adding new size */}
-                  <div className={cn('flex gap-2', isViewOnly ? 'hidden' : '')}>
+                  <div className={cn('flex gap-2')}>
+                    <FormField
+                      control={form.control}
+                      name="isPricingBySize"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center space-x-2">
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={isViewOnly}
+                            className={cn(
+                              isViewOnly ? 'disabled:opacity-100' : '',
+                            )}
+                          />
+                          <FormLabel className="w-32">
+                            Pricing by Size?
+                          </FormLabel>
+                        </FormItem>
+                      )}
+                    />
                     <Input
                       type="text"
                       placeholder="Enter size and press Add"
@@ -567,6 +590,7 @@ export default function BaseProductForm({
               )}
             />
             */}
+            <Separator />
 
             <FormField
               control={form.control}
@@ -602,7 +626,26 @@ export default function BaseProductForm({
                   </div>
 
                   {/* Input for adding new spice option */}
-                  <div className={cn('flex gap-2', isViewOnly ? 'hidden' : '')}>
+                  <div className={cn('flex gap-2')}>
+                    <FormField
+                      control={form.control}
+                      name="isPricingBySpice"
+                      render={({ field }) => (
+                        <FormItem className="flex items-center space-x-2">
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            disabled={isViewOnly}
+                            className={cn(
+                              isViewOnly ? 'disabled:opacity-100' : '',
+                            )}
+                          />
+                          <FormLabel className="w-32">
+                            Pricing by Spice?
+                          </FormLabel>
+                        </FormItem>
+                      )}
+                    />
                     <Input
                       type="text"
                       placeholder="Enter spice and press Add"
@@ -633,6 +676,8 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
+
+            <Separator />
 
             <div className="flex items-center space-x-2"></div>
             <FormField

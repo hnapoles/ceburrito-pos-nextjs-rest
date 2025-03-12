@@ -23,8 +23,6 @@ export default async function Page(props: {
 
   const { data: statusesLookup } = await GetLookups('product', 'status');
 
-  console.log(products);
-
   if (
     !products ||
     totalProducts <= 0 ||

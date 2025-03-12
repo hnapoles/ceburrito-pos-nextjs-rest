@@ -298,9 +298,9 @@ export default function ProductsByIdPricesFormBase({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {sizeOptions.map((l) => (
-                        <SelectItem key={l.lookupValue} value={l.lookupValue}>
-                          {l.lookupDescription}
+                      {product.sizeOptions?.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
                         </SelectItem>
                       ))}
                     </SelectContent>

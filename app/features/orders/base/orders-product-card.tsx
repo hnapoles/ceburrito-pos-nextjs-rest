@@ -86,10 +86,12 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
     setSelectedProduct(p);
 
     // Define the custom order
+    // This is not used for now
     const sizeOrder = ['S', 'M', 'L', 'XL'];
     const spiceOrder = ['Mild', 'Regular', 'Spicy', 'Extra Spicy'];
 
     // Sort sizeOptions based on the custom order
+    // not used for now
     const newSizeOptions = p.sizeOptions?.sort((a, b) => {
       return sizeOrder.indexOf(a) - sizeOrder.indexOf(b);
     });
@@ -99,6 +101,9 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
       return spiceOrder.indexOf(a) - spiceOrder.indexOf(b);
     });
     setSortedSpiceOptions(newSpiceOptions || []);
+
+    setCurrentPrice(prices?.[0]?.sellingPrice ?? p.basePrice ?? 0);
+    setAmount((currentPrice ?? 0) * 1);
   }
 
   async function handleSelectSize(size: string) {
@@ -167,6 +172,8 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
       setAmount(0);
       setSize('');
       setSpice('');
+      setPrices([]);
+      setCurrentPrice(0);
       ///revalidateAndRedirectUrl(`/orders/${order._id}/addItems`);
       //setOrder(updatedData);
     }
@@ -216,7 +223,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                       'flex flex-col items-center border-none',
                       product.isOutOfStock ? '' : 'hover:pointer-cursor',
                     )}
-                    onClick={() => handleSelectProduct(product)}
                   >
                     <span aria-hidden="true" className="absolute inset-0" />
                     {product.name}
@@ -244,6 +250,8 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
             setAmount(0);
             setSize('');
             setSpice('');
+            setPrices([]);
+            setCurrentPrice(0);
           }
         }}
       >
