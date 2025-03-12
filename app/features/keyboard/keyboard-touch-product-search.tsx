@@ -13,32 +13,23 @@ import {
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  formatNumberNoDecimals,
-  formatPesoNoDecimals,
-} from '@/app/actions/client/peso';
-import { cn } from '@/lib/utils';
 
 const nameSchema = z.object({
-  name: z.string().min(1, 'Name must be a number'),
+  name: z.string().min(3, 'Name must be at least 3 characters'),
 });
 
 type FormData = z.infer<typeof nameSchema>;
 
-export default function KeyboardTouchCashTendered({
+export default function KeyboardTouchProductSearch({
   currentValue,
   setTouchValue,
   setIsTouchDialogOpen,
   isTouchDialogOpen,
-  title = 'Cash Tendered',
-  amountDue = 0,
 }: {
   currentValue: string;
   setTouchValue: React.Dispatch<React.SetStateAction<string>>;
   setIsTouchDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isTouchDialogOpen: boolean;
-  title?: string;
-  amountDue: number;
 }) {
   const {
     setValue,
@@ -69,7 +60,7 @@ export default function KeyboardTouchCashTendered({
     } else if (char === 'Clear') {
       setValue('name', '');
     } else {
-      setValue('name', nameValue + char);
+      setValue('name', nameValue + char.toLowerCase());
     }
   };
 
@@ -84,24 +75,16 @@ export default function KeyboardTouchCashTendered({
       <Dialog open={isTouchDialogOpen} onOpenChange={setIsTouchDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle>Enter Email</DialogTitle>
           </DialogHeader>
-          <Label>Amount Due</Label>
-          <div className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text">
-            {formatPesoNoDecimals(Math.floor(amountDue))}
-          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <Label>{title}</Label>
+              <Label>Email Address</Label>
               <div
                 className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text"
                 onClick={() => setIsFocused(true)}
               >
-                {nameValue === ''
-                  ? nameValue
-                  : formatNumberNoDecimals(
-                      parseFloat(nameValue === '' ? '0' : nameValue ?? '0'),
-                    )}
+                {nameValue}
                 {isFocused && (
                   <span
                     className={`ml-1 ${
@@ -116,42 +99,98 @@ export default function KeyboardTouchCashTendered({
                 <p className="text-red-500 text-sm">{errors.name.message}</p>
               )}
             </div>
-            <div className="mb-4">
-              <Label>Change</Label>
-              <div
-                className={cn(
-                  'w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text',
-                  'text-red-500',
-                )}
-                onClick={() => setIsFocused(true)}
+            <div className="grid grid-cols-6 gap-1 p-2 bg-gray-200 rounded-md">
+              {[
+                'A',
+                'B',
+                'C',
+                'D',
+                'E',
+                'F',
+                'G',
+                'H',
+                'I',
+                'J',
+                'K',
+                'L',
+                'M',
+                'N',
+                'O',
+                'P',
+                'Q',
+                'R',
+                'S',
+                'T',
+                'U',
+                'V',
+                'W',
+                'X',
+                'Y',
+                'Z',
+                '@',
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+                '0',
+                '-',
+                '.',
+                '_',
+                '#',
+              ].map((char) => (
+                <Button
+                  key={char}
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleKeyPress(char)}
+                  className="text-lg"
+                >
+                  {char}
+                </Button>
+              ))}
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => handleKeyPress('beef')}
+                className="col-span-2 text-lg"
               >
-                {formatPesoNoDecimals(
-                  parseFloat(nameValue === '' ? '0' : nameValue ?? '0') -
-                    amountDue,
-                )}
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-1 p-2 bg-gray-200 rounded-md">
-              {['1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '0', '.'].map(
-                (char) => (
-                  <Button
-                    key={char}
-                    type="button"
-                    variant="outline"
-                    onClick={() => handleKeyPress(char)}
-                    className="text-lg"
-                  >
-                    {char}
-                  </Button>
-                ),
-              )}
-
+                beef
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => handleKeyPress('chicken')}
+                className="col-span-2 text-lg"
+              >
+                chicken
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => handleKeyPress('pork')}
+                className="col-span-2 text-lg"
+              >
+                pork
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => handleKeyPress('vege')}
+                className="col-span-2 text-lg"
+              >
+                vege
+              </Button>
               {/* Backspace Key */}
               <Button
                 type="button"
                 variant="destructive"
                 onClick={() => handleKeyPress('⌫')}
-                className="col-span-3 text-lg"
+                className="col-span-2 text-lg"
               >
                 ⌫
               </Button>
@@ -161,13 +200,13 @@ export default function KeyboardTouchCashTendered({
                 type="button"
                 variant="destructive"
                 onClick={() => handleKeyPress('Clear')}
-                className="col-span-3 text-lg"
+                className="col-span-2 text-lg"
               >
                 Clear
               </Button>
             </div>
             <DialogFooter className="mt-4 flex justify-end">
-              <Button type="submit">Done</Button>
+              <Button type="submit">Submit</Button>
             </DialogFooter>
           </form>
         </DialogContent>

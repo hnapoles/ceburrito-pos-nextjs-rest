@@ -42,7 +42,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/login',
   },
   providers: [Google],
-  session: { strategy: 'jwt' }, // Use JWT sessions
+  session: {
+    strategy: 'jwt',
+    maxAge: 7 * 24 * 60 * 60, // 7 days (in seconds)
+    updateAge: 7 * 24 * 60 * 60,
+  },
   callbacks: {
     async jwt({ token, account }) {
       // Store provider on first login

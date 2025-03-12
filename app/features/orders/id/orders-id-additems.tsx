@@ -26,6 +26,7 @@ import OrdersProductCard from '../base/orders-product-card';
 import { UpdateOrder } from '@/app/actions/server/orders-actions';
 import { toast } from '@/hooks/use-toast';
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
+import KeyboardTouchProductSearch from '../../keyboard/keyboard-touch-product-search';
 
 interface ordersByIdAddItemsProps {
   products: ProductBase[];
@@ -56,6 +57,8 @@ export default function OrdersByIdAddItems({
 
   //
   const { storeName } = useStore();
+
+  const [isSearchTouchDialogOpen, setIsSearchTouchDialogOpen] = useState(false);
 
   // Filtering logic
   const filteredProducts = products.filter((product) => {
@@ -192,6 +195,7 @@ export default function OrdersByIdAddItems({
                       setCurrentPage(1); // Reset to first page on search change
                     }}
                     className="h-10"
+                    onClick={() => setIsSearchTouchDialogOpen(true)}
                   />
                 </div>
               </div>
@@ -285,6 +289,12 @@ export default function OrdersByIdAddItems({
           Edit Order Information
         </Button>
       </div>
+      <KeyboardTouchProductSearch
+        currentValue={search}
+        setTouchValue={setSearch}
+        setIsTouchDialogOpen={setIsSearchTouchDialogOpen}
+        isTouchDialogOpen={isSearchTouchDialogOpen}
+      />
     </div>
   );
 }
