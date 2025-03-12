@@ -10,7 +10,7 @@ import {
 } from '@/app/models/products-model';
 import { Lookup } from '@/app/models/lookups-model';
 
-import { formatPeso } from '@/app/actions/client/peso';
+import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { Button } from '@/components/ui/button-rounded-sm';
 
 import {
@@ -28,15 +28,16 @@ import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { GetProductSellingPriceByOrderType } from '@/app/actions/server/product-selling-prices-actions';
-import { Loader2, Minus, Plus } from 'lucide-react';
-import { OrderLineBase } from '@/app/models/orders-model';
+import { Minus, Plus } from 'lucide-react';
+import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
 
 interface productGridViewProps {
   products: ProductBase[];
   storeName?: string | null;
   totalDataCount?: number | 1;
   statusesLookup?: Lookup[];
-  //order: OrderBase;
+  order: OrderBase;
+  itemsCount: number | 0;
   //setOrder: React.Dispatch<React.SetStateAction<OrderBase>>;
   onSubmit: (data: OrderLineBase) => void;
 }
@@ -44,7 +45,8 @@ interface productGridViewProps {
 const OrdersProductCard: React.FC<productGridViewProps> = ({
   products,
   storeName,
-  //order,
+  order,
+  itemsCount,
   //setOrder,
   onSubmit,
 }) => {
@@ -68,10 +70,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
     ProductSellingPriceBase[] | undefined | null
   >([]);
   const [currentPrice, setCurrentPrice] = React.useState<number>(0);
-
-  const [loadingItems, setLoadingItems] = React.useState<
-    Record<string, boolean>
-  >({});
 
   async function handleSelectProduct(p: ProductBase) {
     //get product price based on selected product
@@ -121,9 +119,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
     setQty(1);
   }
 
-  async function handleChangeQty(p: ProductBase, action: string) {
-    const lineKey = `${p._id || ''}`;
-    setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
+  async function handleChangeQty(action: string) {
     setQty((prev) => {
       let newQty = prev;
 
@@ -147,8 +143,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
 
       return newQty; // Return the updated qty
     });
-
-    setLoadingItems((prev) => ({ ...prev, [lineKey]: false }));
   }
 
   async function handleAddToOrder() {
@@ -222,6 +216,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                       'flex flex-col items-center border-none',
                       product.isOutOfStock ? '' : 'hover:pointer-cursor',
                     )}
+                    onClick={() => handleSelectProduct(product)}
                   >
                     <span aria-hidden="true" className="absolute inset-0" />
                     {product.name}
@@ -234,47 +229,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               <p className="text-sm font-medium text-gray-900">
                 {product.basePrice}
               </p>
-            </div>
-
-            <div className="flex w-full mt-2">
-              {' '}
-              {/* Ensures full width */}
-              <Button
-                variant="ghost"
-                onClick={() => handleChangeQty(product, 'subtract')}
-                className="rounded-none bg-gray-100 w-full"
-                size="icon"
-                disabled={loadingItems[product._id || '']} // Disable button when loading
-              >
-                {loadingItems[product._id || ''] ? (
-                  <Loader2 className="animate-spin" size={8} />
-                ) : (
-                  <Minus />
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                className="rounded-none w-full"
-                size="icon"
-              >
-                {qty}
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => handleChangeQty(product, 'add')}
-                className="rounded-none bg-gray-100 w-full"
-                size="icon"
-                disabled={loadingItems[product._id || '']} // Disable button when loading
-              >
-                {loadingItems[product._id || ''] ? (
-                  <Loader2 className="animate-spin" size={16} />
-                ) : (
-                  <Plus />
-                )}
-              </Button>
-            </div>
-            <div className="flex w-full mt-1">
-              <Button className="w-full">Add</Button>
             </div>
           </div>
         ))}
@@ -298,8 +252,32 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
         >
           <DialogHeader>
             <DialogTitle>Select Options</DialogTitle>
+            <div className="flex justify-between w-full">
+              <div className="flex items-center space-x-2">
+                <span className="font-medium whitespace-nowrap">
+                  Cart Items (
+                  <span className="text-purple-700 whitespace-nowrap">
+                    {itemsCount}
+                  </span>
+                  ):
+                </span>
+                <span className="text-purple-700 whitespace-nowrap">
+                  {formatPesoNoDecimals(Math.floor(order.totalAmount || 0))}
+                </span>
+              </div>
+
+              <div className="flex items-center space-x-2 ml-4">
+                <span className="font-medium whitespace-nowrap">
+                  Order Type:
+                </span>
+                <span className="text-purple-700 whitespace-nowrap">
+                  {order.type?.toUpperCase()}
+                </span>
+              </div>
+            </div>
             <DialogDescription></DialogDescription>
           </DialogHeader>
+
           <div className="grid gap-1">
             <div className="grid grid-cols-4 items-top gap-1">
               <div>
@@ -317,7 +295,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               <div className="col-span-3 ml-4">
                 <strong>{selectedProduct?.name}</strong>
                 <p>{selectedProduct?.description}</p>
-                {formatPeso(selectedProduct?.basePrice)}{' '}
+                {formatPesoNoDecimals(selectedProduct?.basePrice || 0)}{' '}
                 <Badge variant="outline">base</Badge>
               </div>
             </div>
@@ -369,7 +347,12 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               <Label className="mb-0">Quantity:</Label>
             </div>
             <div className="mt-0 flex">
-              <Button variant="outline" className="rounded-none" size="icon">
+              <Button
+                variant="outline"
+                onClick={() => handleChangeQty('subtract')}
+                className="rounded-none"
+                size="icon"
+              >
                 <Minus />
               </Button>
               <Button
@@ -382,7 +365,12 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
               >
                 {qty}
               </Button>
-              <Button variant="outline" className="rounded-none" size="icon">
+              <Button
+                variant="outline"
+                onClick={() => handleChangeQty('add')}
+                className="rounded-none"
+                size="icon"
+              >
                 <Plus />
               </Button>
             </div>
@@ -399,7 +387,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                   amount > 0 ? 'border-purple-500' : '',
                 )}
               >
-                {formatPeso(amount)}
+                {formatPesoNoDecimals(amount)}
               </Button>
             </div>
           </div>

@@ -1,9 +1,9 @@
-export const formatPesoNoDecimals = (amount: number) => {
+export const formatPesoNoDecimals = (amount: number | null | undefined) => {
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: 'PHP',
     minimumFractionDigits: 0,
-  }).format(amount);
+  }).format(amount || 0);
 };
 
 export const formatPeso = (amount: number | null | undefined) => {
@@ -19,7 +19,7 @@ export const formatNumberNoDecimals = (amount: number) => {
   return new Intl.NumberFormat('en-PH', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(amount || 0);
 };
 
 //console.log(formatPesoNoDecimals(1000)); // ₱1,000
