@@ -23,6 +23,22 @@ export default async function Page(props: {
 
   const { data: statusesLookup } = await GetLookups('product', 'status');
 
+  console.log(products);
+
+  if (
+    !products ||
+    totalProducts <= 0 ||
+    products.length <= 0 ||
+    products === undefined
+  ) {
+    return (
+      <NotFoundGlobal
+        display={'Product data not found'}
+        backUrl={'/dashboard'}
+      />
+    );
+  }
+
   if (products) {
     return (
       <ProductsMainPage
@@ -34,9 +50,5 @@ export default async function Page(props: {
         currentTab={status}
       />
     );
-  }
-
-  if (!products) {
-    <NotFoundGlobal display={'Product data not found'} backUrl={'/product'} />;
   }
 }
