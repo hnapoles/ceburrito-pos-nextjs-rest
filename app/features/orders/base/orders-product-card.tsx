@@ -222,12 +222,12 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                     {product.name}
                   </div>
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                {/*<p className="mt-1 text-sm text-gray-500">
                   {product.isOutOfStock ? 'out of stock' : product.category}
-                </p>
+                </p>*/}
               </div>
               <p className="text-sm font-medium text-gray-900">
-                {product.basePrice}
+                {formatPesoNoDecimals(product.basePrice)}
               </p>
             </div>
           </div>

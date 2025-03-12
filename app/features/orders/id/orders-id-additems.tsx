@@ -41,19 +41,13 @@ export default function OrdersByIdAddItems({
 }: ordersByIdAddItemsProps) {
   const router = useRouter();
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState<string>('all');
+  const [category, setCategory] = useState<string>(
+    categories[0].lookupValue || 'all',
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 24; // Define rows per page
 
   const [order, setOrder] = useState(orderData);
-  const meatKeywords = [
-    'chicken',
-    'beef',
-    'pork',
-    'fish',
-    'shrimp',
-    'vegetarian',
-  ];
 
   //
   const { storeName } = useStore();
@@ -62,8 +56,6 @@ export default function OrdersByIdAddItems({
 
   // Filtering logic
   const filteredProducts = products.filter((product) => {
-    const lowerCaseSearch = search.toLowerCase();
-
     const matchesCategory =
       category === 'all' || category === ''
         ? true
@@ -77,16 +69,7 @@ export default function OrdersByIdAddItems({
           )
       : true;
 
-    // Auto-detect meat type from search
-    const matchesMeatType = meatKeywords.some((meat) =>
-      lowerCaseSearch.includes(meat),
-    )
-      ? [product.name, product.description].some((value) =>
-          meatKeywords.some((meat) => value.toLowerCase().includes(meat)),
-        )
-      : true;
-
-    return matchesCategory && matchesSearch && matchesMeatType;
+    return matchesCategory && matchesSearch;
   });
 
   // Get paginated data

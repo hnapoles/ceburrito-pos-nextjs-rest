@@ -6,10 +6,6 @@ import {
   GetLookupStores,
 } from '@/app/actions/server/lookups-actions';
 import NotFoundGlobal from '@/app/nav/not-found-global';
-import {
-  DefaultSizeOptions,
-  DefaultSpiceOptions,
-} from '@/app/models/lookups-model';
 
 import ProductsByIdView from '@/app/features/products/id/view/products-id-view';
 
@@ -52,10 +48,13 @@ export default async function ProductViewPage({
   const customers = await GetLookupCustomers();
   const stores = await GetLookupStores();
   const { data: orderTypesLookup } = await GetLookups('order', 'type'); //specific to order and type - returns count and data
+
+  /*
   let { data: sizeOptionsLookup } = await GetLookups('order', 'sizeOptions');
   if (!sizeOptionsLookup) sizeOptionsLookup = DefaultSizeOptions;
   let { data: spiceOptionsLookup } = await GetLookups('order', 'spiceOptions');
   if (!spiceOptionsLookup) spiceOptionsLookup = DefaultSpiceOptions;
+  */
 
   //if-testing - set to true
   if (false)
@@ -69,9 +68,6 @@ export default async function ProductViewPage({
         <pre>customersLookup: {JSON.stringify(customers, null, 2)}</pre>
         <pre>storesLookup: {JSON.stringify(stores, null, 2)}</pre>
         <pre>orderTypesLookup: {JSON.stringify(orderTypesLookup, null, 2)}</pre>
-        <pre>
-          sizeOptionsLookup: {JSON.stringify(sizeOptionsLookup, null, 2)}
-        </pre>
       </>
     );
 
@@ -91,8 +87,6 @@ export default async function ProductViewPage({
           product={product}
           categoryLookup={categoriesLookup}
           statusLookup={statusesLookup}
-          sizeLookup={sizeOptionsLookup}
-          spiceLookup={spiceOptionsLookup}
         />
       </div>
       {/* Right Side - Product Tabs */}

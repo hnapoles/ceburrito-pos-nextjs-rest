@@ -15,8 +15,8 @@ interface ProductsByIdEditProps {
   product: ProductBase;
   categoryLookup: Lookup[];
   statusLookup: Lookup[];
-  sizeLookup: Lookup[];
-  spiceLookup: Lookup[];
+  sizeLookup?: Lookup[];
+  spiceLookup?: Lookup[];
 }
 
 const entity = 'product';
@@ -30,8 +30,6 @@ export default function ProductsByIdEdit({
   product,
   categoryLookup,
   statusLookup,
-  sizeLookup,
-  spiceLookup,
 }: ProductsByIdEditProps) {
   const handleProductSubmit = async (data: ProductBase) => {
     let newImageUrl = '';
@@ -80,8 +78,6 @@ export default function ProductsByIdEdit({
       onSubmit={handleProductSubmit}
       categories={categoryLookup}
       statuses={statusLookup}
-      sizes={sizeLookup}
-      spices={spiceLookup}
       isViewOnly={false}
     />
   );

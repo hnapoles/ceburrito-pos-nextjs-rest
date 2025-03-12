@@ -13,8 +13,8 @@ interface ProductsByIdViewProps {
   product: ProductBase;
   categoryLookup: Lookup[];
   statusLookup: Lookup[];
-  sizeLookup: Lookup[];
-  spiceLookup: Lookup[];
+  sizeLookup?: Lookup[];
+  spiceLookup?: Lookup[];
 }
 
 const entity = 'product';
@@ -26,8 +26,6 @@ export default function ProductsByIdView({
   product,
   categoryLookup,
   statusLookup,
-  sizeLookup,
-  spiceLookup,
 }: ProductsByIdViewProps) {
   const handleProductSubmit = async (data: ProductBase) => {
     let newImageUrl = '';
@@ -52,8 +50,6 @@ export default function ProductsByIdView({
       onSubmit={handleProductSubmit}
       categories={categoryLookup}
       statuses={statusLookup}
-      sizes={sizeLookup}
-      spices={spiceLookup}
       isViewOnly={true}
     />
   );

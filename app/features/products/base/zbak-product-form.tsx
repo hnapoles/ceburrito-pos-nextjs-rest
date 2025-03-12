@@ -14,9 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card-rounded-sm';
-//import { Label } from '@/components/ui/label';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-//import { Checkbox } from '@/components/ui/checkbox';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -50,14 +50,12 @@ import { Lookup } from '@/app/models/lookups-model';
 
 import { IsUserPermissionLevelAllowed } from '@/app/actions/server/permissions-actions';
 
-import { X } from 'lucide-react';
-
 interface baseProductFormProps {
   initialData?: ProductBase;
   categories: Lookup[];
   statuses: Lookup[];
-  sizes?: Lookup[];
-  spices?: Lookup[];
+  sizes: Lookup[];
+  spices: Lookup[];
   onSubmit: (data: ProductBase) => void;
   isViewOnly?: boolean;
 }
@@ -66,6 +64,8 @@ export default function BaseProductForm({
   initialData,
   categories,
   statuses,
+  sizes,
+  spices,
   onSubmit,
   isViewOnly = true,
 }: baseProductFormProps) {
@@ -182,12 +182,9 @@ export default function BaseProductForm({
     }
   };
 
-  //const sizeOptions = sizes.map((option) => option.lookupValue);
-  //const spiceOptions = spices.map((option) => option.lookupValue);
+  const sizeOptions = sizes.map((option) => option.lookupValue);
+  const spiceOptions = spices.map((option) => option.lookupValue);
   const imageUrl = initialData?.imageUrl;
-
-  const [newSize, setNewSize] = useState('');
-  const [newSpice, setNewSpice] = useState('');
 
   //
   return (
@@ -235,6 +232,7 @@ export default function BaseProductForm({
                 />
               </div>
             </div>
+
             <FormField
               control={form.control}
               name="imageFile"
@@ -253,6 +251,7 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
+
             {initialData && (
               <FormField
                 control={form.control}
@@ -274,6 +273,7 @@ export default function BaseProductForm({
                 )}
               />
             )}
+
             <FormField
               control={form.control}
               name="name"
@@ -320,6 +320,7 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="category"
@@ -356,6 +357,7 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
+
             {/*
             <FormField
               control={form.control}
@@ -425,7 +427,7 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
-            {/* old sizeOptions 
+
             <FormField
               control={form.control}
               name="sizeOptions"
@@ -462,74 +464,7 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
-            */}
-            <FormField
-              control={form.control}
-              name="sizeOptions"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <div className="flex items-center gap-0">
-                    <FormLabel className="w-32">Size Options</FormLabel>
-                    {/* Display list of added sizes */}
-                    <div className="flex flex-wrap gap-2">
-                      {field.value?.map((size, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-1 border border-purple-500 px-2 py-1 rounded-sm "
-                        >
-                          <span>{size}</span>
-                          {!isViewOnly && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                field.onChange(
-                                  field.value?.filter((_, i) => i !== index),
-                                )
-                              }
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              <X size={14} />
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
 
-                  {/* Input for adding new size */}
-                  <div className={cn('flex gap-2', isViewOnly ? 'hidden' : '')}>
-                    <Input
-                      type="text"
-                      placeholder="Enter size and press Add"
-                      value={newSize}
-                      onChange={(e) => setNewSize(e.target.value)}
-                      disabled={isViewOnly}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        if (newSize.trim()) {
-                          field.onChange([
-                            ...(field.value || []),
-                            newSize.trim(),
-                          ]);
-                          setNewSize('');
-                        }
-                      }}
-                      disabled={isViewOnly}
-                      className="border border-purple-500"
-                    >
-                      Add Size Option
-                    </Button>
-                  </div>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* old spiceOptions 
             <FormField
               control={form.control}
               name="spiceOptions"
@@ -566,73 +501,6 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
-            */}
-
-            <FormField
-              control={form.control}
-              name="spiceOptions"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <div className="flex items-center gap-0">
-                    <FormLabel className="w-32">Spice Options</FormLabel>
-                    {/* Display list of added spice options */}
-                    <div className="flex flex-wrap gap-2">
-                      {field.value?.map((spice, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center gap-1 border border-purple-500 px-2 py-1 rounded-md"
-                        >
-                          <span>{spice}</span>
-                          {!isViewOnly && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                field.onChange(
-                                  field.value?.filter((_, i) => i !== index),
-                                )
-                              }
-                              className="text-red-500 hover:text-red-700"
-                            >
-                              <X size={14} />
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Input for adding new spice option */}
-                  <div className={cn('flex gap-2', isViewOnly ? 'hidden' : '')}>
-                    <Input
-                      type="text"
-                      placeholder="Enter spice and press Add"
-                      value={newSpice}
-                      onChange={(e) => setNewSpice(e.target.value)}
-                      disabled={isViewOnly}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        if (newSpice.trim()) {
-                          field.onChange([
-                            ...(field.value || []),
-                            newSpice.trim(),
-                          ]);
-                          setNewSpice('');
-                        }
-                      }}
-                      disabled={isViewOnly}
-                      className="border border-purple-500"
-                    >
-                      Add Spice Option
-                    </Button>
-                  </div>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <div className="flex items-center space-x-2"></div>
             <FormField
@@ -650,6 +518,7 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="isOutOfStock"
@@ -665,6 +534,7 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="posDisplaySeq"
@@ -688,6 +558,7 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="status"
@@ -727,6 +598,7 @@ export default function BaseProductForm({
                 </FormItem>
               )}
             />
+
             {isViewOnly && isEditAllowed && (
               <div className="flex justify-end pt-2 md:pt-4">
                 <Button

@@ -33,6 +33,8 @@ export const ProductZodSchema = z.object({
   imageUrl: z.string().optional(),
   sizeOptions: z.array(z.string()).optional(),
   spiceOptions: z.array(z.string()).optional(),
+  posDisplaySeq: z.coerce.number().optional(),
+  webDisplaySeq: z.number().optional(),
   createdAt: z.string().datetime().optional(),
   updatedAt: z.string().datetime().optional(),
   createdBy: z.string().optional(),

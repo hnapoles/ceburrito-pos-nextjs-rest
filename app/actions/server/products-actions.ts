@@ -78,6 +78,20 @@ export async function GetProducts(
     searchKeywordFields: ['name', 'description'],
     page: parseInt(page),
     limit: parseInt(limit),
+    sortOptions: [
+      {
+        sortField: 'posDisplaySeq',
+        sortOrder: 1,
+      },
+      {
+        sortField: 'category',
+        sortOrder: 1,
+      },
+      {
+        sortField: 'name',
+        sortOrder: 1,
+      },
+    ],
   };
 
   try {

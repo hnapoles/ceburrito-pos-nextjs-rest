@@ -14,8 +14,8 @@ import { toast } from '@/hooks/use-toast';
 interface productsCreateProps {
   categoryLookup: Lookup[];
   statusLookup: Lookup[];
-  sizeLookup: Lookup[];
-  spiceLookup: Lookup[];
+  sizeLookup?: Lookup[];
+  spiceLookup?: Lookup[];
 }
 
 const entity = 'product';
@@ -28,8 +28,6 @@ const appInstance = process.env.NEXT_PUBLIC_APP_INSTANCE || 'dev';
 export default function ProductsCreate({
   categoryLookup,
   statusLookup,
-  sizeLookup,
-  spiceLookup,
 }: productsCreateProps) {
   //handleSubmit
   const handleProductSubmit = async (data: ProductBase) => {
@@ -79,8 +77,6 @@ export default function ProductsCreate({
       onSubmit={handleProductSubmit}
       categories={categoryLookup}
       statuses={statusLookup}
-      sizes={sizeLookup}
-      spices={spiceLookup}
       isViewOnly={false}
     />
   );

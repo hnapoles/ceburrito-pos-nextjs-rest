@@ -16,6 +16,7 @@ export interface FindAllProps {
   page?: number | 1;
   andFilter?: object;
   orFilter?: object;
+  sortOptions?: object[];
 }
 
 export interface FindOneProps {

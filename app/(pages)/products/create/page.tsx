@@ -1,8 +1,4 @@
 import { GetLookups } from '@/app/actions/server/lookups-actions';
-import {
-  DefaultSizeOptions,
-  DefaultSpiceOptions,
-} from '@/app/models/lookups-model';
 
 import ProductsCreate from '@/app/features/products/create/products-create';
 
@@ -17,11 +13,13 @@ export default async function ProductUpdatePage() {
     (item) => item.lookupCode === 'status',
   );
 
+  /*
   let { data: sizeOptionsLookup } = await GetLookups('order', 'sizeOptions');
   if (!sizeOptionsLookup) sizeOptionsLookup = DefaultSizeOptions;
 
   let { data: spiceOptionsLookup } = await GetLookups('order', 'spiceOptions');
   if (!spiceOptionsLookup) spiceOptionsLookup = DefaultSpiceOptions;
+  */
 
   //if-testing - set to true
   if (false)
@@ -31,10 +29,6 @@ export default async function ProductUpdatePage() {
 
         <pre>categories: {JSON.stringify(categoriesLookup, null, 2)}</pre>
         <pre>statuses: {JSON.stringify(statusesLookup, null, 2)}</pre>
-
-        <pre>
-          sizeOptionsLookup: {JSON.stringify(sizeOptionsLookup, null, 2)}
-        </pre>
       </>
     );
 
@@ -46,8 +40,6 @@ export default async function ProductUpdatePage() {
         <ProductsCreate
           categoryLookup={categoriesLookup}
           statusLookup={statusesLookup}
-          sizeLookup={sizeOptionsLookup}
-          spiceLookup={spiceOptionsLookup}
         />
       </div>
       {/* Right Side - Product Tabs */}
