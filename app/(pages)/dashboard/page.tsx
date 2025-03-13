@@ -1,5 +1,5 @@
 //import { Metadata } from 'next';
-import Image from 'next/image';
+//import Image from 'next/image';
 
 import { Button } from '@/components/ui/button-rounded-sm';
 import {
@@ -32,65 +32,61 @@ export const metadata: Metadata = {
 export default function DashboardPage() {
   return (
     <>
-      <div className="md:hidden">
-        <Image
-          src="/examples/dashboard-light.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="block dark:hidden"
-        />
-        <Image
-          src="/examples/dashboard-dark.png"
-          width={1280}
-          height={866}
-          alt="Dashboard"
-          className="hidden dark:block"
-        />
-      </div>
-      <div className="hidden flex-col md:flex">
-        <div className="border-b">
+      {/* ✅ Remove md:hidden to show Dashboard on all screens */}
+      <div className="flex flex-col w-full min-h-screen">
+        {/* Top Navigation Bar */}
+        <div className="border-b bg-white shadow-sm">
           <div className="flex h-16 items-center px-4">
             <TeamSwitcher />
-            <MainNav className="mx-6" />
+            <MainNav className="mx-2 md:mx-6 hidden sm:flex" />
             <div className="ml-auto flex items-center space-x-4">
-              {/*<Search />
-              <UserNav />*/}
+              {/* Search & UserNav can be added here */}
             </div>
           </div>
         </div>
-        <div className="flex-1 space-y-4 p-8 pt-6">
-          <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-            <div className="flex items-center space-x-2">
+
+        {/* Dashboard Content */}
+        <div className="flex-1 space-y-4 p-4 md:p-6">
+          {/* Title & Actions */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
+              Dashboard
+            </h2>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
               <CalendarDateRangePicker />
               <Button>Download</Button>
             </div>
           </div>
+
+          {/* Tabs Section */}
           <Tabs defaultValue="overview" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics" disabled>
-                Analytics
-              </TabsTrigger>
-              <TabsTrigger value="reports" disabled>
-                Reports
-              </TabsTrigger>
-              <TabsTrigger value="notifications" disabled>
-                Notifications
-              </TabsTrigger>
-            </TabsList>
+            <div className="overflow-x-auto sm:overflow-hidden whitespace-nowrap">
+              <TabsList className="flex w-max space-x-2">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="analytics" disabled>
+                  Analytics
+                </TabsTrigger>
+                <TabsTrigger value="reports" disabled>
+                  Reports
+                </TabsTrigger>
+                <TabsTrigger value="notifications" disabled>
+                  Notifications
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
             <TabsContent value="overview" className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {/* Responsive Grid Layout */}
+              <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="text-sm font-medium">
                       Sales Today
                     </CardTitle>
                     <PhilippinePesoSvg />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">
+                    <div className="text-lg md:text-2xl font-bold">
                       {formatPeso(4545.5)}
                     </div>
                     <p className="text-xs text-muted-foreground">
@@ -98,74 +94,77 @@ export default function DashboardPage() {
                     </p>
                   </CardContent>
                 </Card>
-                <Link href="/orders?status=open" className="card-link">
+
+                <Link href="/orders?status=open" className="block">
                   <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-sm font-medium">
                         Open Orders
                       </CardTitle>
                       <UtinsilsSvg />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">+3</div>
+                      <div className="text-lg md:text-2xl font-bold">+3</div>
                       <p className="text-xs text-muted-foreground">
                         +180.1% from last hour
                       </p>
                     </CardContent>
                   </Card>
                 </Link>
+
                 <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="text-sm font-medium">Sales</CardTitle>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 text-muted-foreground"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
                     >
                       <rect width="20" height="14" x="2" y="5" rx="2" />
                       <path d="M2 10h20" />
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
+                    <div className="text-lg md:text-2xl font-bold">+12,234</div>
                     <p className="text-xs text-muted-foreground">
                       +19% from last month
                     </p>
                   </CardContent>
                 </Card>
+
                 <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="text-sm font-medium">
                       Active Now
                     </CardTitle>
                     <svg
-                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 text-muted-foreground"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
                     >
                       <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
+                    <div className="text-lg md:text-2xl font-bold">+573</div>
                     <p className="text-xs text-muted-foreground">
                       +201 since last hour
                     </p>
                   </CardContent>
                 </Card>
               </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
+
+              {/* Charts & Recent Sales */}
+              <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="col-span-7 lg:col-span-4">
                   <CardHeader>
                     <CardTitle>Overview</CardTitle>
                   </CardHeader>
@@ -173,7 +172,7 @@ export default function DashboardPage() {
                     <Overview />
                   </CardContent>
                 </Card>
-                <Card className="col-span-3">
+                <Card className="col-span-7 lg:col-span-3">
                   <CardHeader>
                     <CardTitle>Recent Sales</CardTitle>
                     <CardDescription>

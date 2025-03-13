@@ -178,7 +178,7 @@ export default function OrdersCheckout({
         <div className="grid grid-cols-1 gap-4 text-sm">
           {/* order */}
           <div className="flex flex-col h-full">
-            <div className="border border-sm rounded-sm p-4 flex-1 space-y-1">
+            <div className="border border-sm rounded-sm p-4 flex-1 space-y-6">
               <div className="flex items-center">
                 <p className="text-base font-semibold">Checkout</p>
               </div>
