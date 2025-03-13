@@ -86,10 +86,12 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
     setSelectedProduct(p);
 
     // Define the custom order
+    // This is not used for now
     const sizeOrder = ['S', 'M', 'L', 'XL'];
     const spiceOrder = ['Mild', 'Regular', 'Spicy', 'Extra Spicy'];
 
     // Sort sizeOptions based on the custom order
+    // not used for now
     const newSizeOptions = p.sizeOptions?.sort((a, b) => {
       return sizeOrder.indexOf(a) - sizeOrder.indexOf(b);
     });
@@ -99,6 +101,9 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
       return spiceOrder.indexOf(a) - spiceOrder.indexOf(b);
     });
     setSortedSpiceOptions(newSpiceOptions || []);
+
+    setCurrentPrice(prices?.[0]?.sellingPrice ?? p.basePrice ?? 0);
+    setAmount((currentPrice ?? 0) * 1);
   }
 
   async function handleSelectSize(size: string) {
@@ -167,6 +172,8 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
       setAmount(0);
       setSize('');
       setSpice('');
+      setPrices([]);
+      setCurrentPrice(0);
       ///revalidateAndRedirectUrl(`/orders/${order._id}/addItems`);
       //setOrder(updatedData);
     }
@@ -216,7 +223,6 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                       'flex flex-col items-center border-none',
                       product.isOutOfStock ? '' : 'hover:pointer-cursor',
                     )}
-                    onClick={() => handleSelectProduct(product)}
                   >
                     <span aria-hidden="true" className="absolute inset-0" />
                     {product.name}
@@ -244,6 +250,8 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
             setAmount(0);
             setSize('');
             setSpice('');
+            setPrices([]);
+            setCurrentPrice(0);
           }
         }}
       >
@@ -266,12 +274,18 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                 </span>
               </div>
 
-              <div className="flex items-center space-x-2 ml-4">
+              <div className="flex items-center space-x-2 ml-4 hidden">
                 <span className="font-medium whitespace-nowrap">
                   Order Type:
                 </span>
                 <span className="text-purple-700 whitespace-nowrap">
                   {order.type?.toUpperCase()}
+                </span>
+              </div>
+              <div className="flex items-center space-x-2 ml-4">
+                <span className="font-medium whitespace-nowrap">Store:</span>
+                <span className="text-purple-700 whitespace-nowrap">
+                  {storeName?.toUpperCase()}
                 </span>
               </div>
             </div>
@@ -301,7 +315,12 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
             </div>
           </div>
           <div className="grid grid-cols-1">
-            <div className="mb-0">
+            <div
+              className={cn(
+                'mb-0',
+                (selectedProduct?.sizeOptions?.length || 0) > 0 ? '' : 'hidden',
+              )}
+            >
               <Label className="mb-0">Size:</Label>
             </div>
             <div className="grid grid-cols-4 items-left gap-2">
@@ -340,6 +359,28 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                   {s}
                 </Button>
               ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-1">
+            <div className="mb-0">
+              <Label className="mb-0">Unit Price:</Label>
+            </div>
+            <div className="flex gap-2">
+              <span hidden={(selectedProduct?.sizeOptions?.length || 0) > 0}>
+                {formatPesoNoDecimals(selectedProduct?.basePrice || 0)}{' '}
+                <Badge variant="outline">base</Badge>
+              </span>
+              {selectedProduct?.sizeOptions && (
+                <div className="flex gap-2">
+                  {prices?.map((p) => (
+                    <div key={p._id}>
+                      {' '}
+                      {formatPesoNoDecimals(p.sellingPrice)}{' '}
+                      <Badge variant="outline">{p.size}</Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-1">
