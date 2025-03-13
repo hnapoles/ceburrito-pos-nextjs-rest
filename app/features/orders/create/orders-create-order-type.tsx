@@ -135,7 +135,7 @@ export default function OrdersCreateByOrderType({
     <div className="grid gap-0 grid-cols-1 md:grid-cols-3 grid-auto-rows-fr">
       {/* Right Side - cart */}
       <div className="col-span-1 h-full">
-        <OrdersCartDetails orderType={'pos'} />
+        <OrdersCartDetails orderType={orderType} />
       </div>
       {/* Left Side - add items */}
       <div className="md:col-span-2 col-span-1 h-full">
@@ -280,8 +280,9 @@ export default function OrdersCreateByOrderType({
         <Button
           variant="default"
           size="lg"
-          onClick={() => router.push(`/orders/checkout`)}
+          onClick={() => router.push(`/orders/checkout/${orderType}`)}
           className="whitespace-nowrap border border-purple-500"
+          disabled={totalAmount <= 0 || totalItems <= 0}
         >
           Checkout
         </Button>
