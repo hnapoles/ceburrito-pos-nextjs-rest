@@ -63,14 +63,13 @@ export default function ProductsByIdPricesFormBase({
   product,
   initialData,
   orderTypes,
-  sizeOptions,
   customers,
   stores,
 }: {
   product: ProductBase;
   initialData?: ProductSellingPriceBase;
   orderTypes: Lookup[];
-  sizeOptions: Lookup[];
+  sizeOptions?: Lookup[];
   customers: CustomerBase[];
   stores: StoreBase[];
 }) {

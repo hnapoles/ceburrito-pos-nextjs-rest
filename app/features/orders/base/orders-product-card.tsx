@@ -274,12 +274,18 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                 </span>
               </div>
 
-              <div className="flex items-center space-x-2 ml-4">
+              <div className="flex items-center space-x-2 ml-4 hidden">
                 <span className="font-medium whitespace-nowrap">
                   Order Type:
                 </span>
                 <span className="text-purple-700 whitespace-nowrap">
                   {order.type?.toUpperCase()}
+                </span>
+              </div>
+              <div className="flex items-center space-x-2 ml-4">
+                <span className="font-medium whitespace-nowrap">Store:</span>
+                <span className="text-purple-700 whitespace-nowrap">
+                  {storeName?.toUpperCase()}
                 </span>
               </div>
             </div>
@@ -309,7 +315,12 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
             </div>
           </div>
           <div className="grid grid-cols-1">
-            <div className="mb-0">
+            <div
+              className={cn(
+                'mb-0',
+                (selectedProduct?.sizeOptions?.length || 0) > 0 ? '' : 'hidden',
+              )}
+            >
               <Label className="mb-0">Size:</Label>
             </div>
             <div className="grid grid-cols-4 items-left gap-2">
@@ -348,6 +359,28 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                   {s}
                 </Button>
               ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-1">
+            <div className="mb-0">
+              <Label className="mb-0">Unit Price:</Label>
+            </div>
+            <div className="flex gap-2">
+              <span hidden={(selectedProduct?.sizeOptions?.length || 0) > 0}>
+                {formatPesoNoDecimals(selectedProduct?.basePrice || 0)}{' '}
+                <Badge variant="outline">base</Badge>
+              </span>
+              {selectedProduct?.sizeOptions && (
+                <div className="flex gap-2">
+                  {prices?.map((p) => (
+                    <div key={p._id}>
+                      {' '}
+                      {formatPesoNoDecimals(p.sellingPrice)}{' '}
+                      <Badge variant="outline">{p.size}</Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-1">
