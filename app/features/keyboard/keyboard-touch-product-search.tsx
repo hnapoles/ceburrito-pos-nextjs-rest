@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 const nameSchema = z.object({
-  name: z.string().min(3, 'Name must be at least 3 characters'),
+  name: z.string().optional(),
 });
 
 type FormData = z.infer<typeof nameSchema>;
@@ -25,11 +25,13 @@ export default function KeyboardTouchProductSearch({
   setTouchValue,
   setIsTouchDialogOpen,
   isTouchDialogOpen,
+  searchTags,
 }: {
   currentValue: string;
   setTouchValue: React.Dispatch<React.SetStateAction<string>>;
   setIsTouchDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isTouchDialogOpen: boolean;
+  searchTags: string[];
 }) {
   const {
     setValue,
@@ -56,7 +58,7 @@ export default function KeyboardTouchProductSearch({
 
   const handleKeyPress = (char: string) => {
     if (char === '⌫') {
-      setValue('name', nameValue.slice(0, -1));
+      setValue('name', nameValue?.slice(0, -1));
     } else if (char === 'Clear') {
       setValue('name', '');
     } else {
@@ -66,7 +68,7 @@ export default function KeyboardTouchProductSearch({
 
   const onSubmit = (data: FormData) => {
     console.log('Submitted Name:', data.name);
-    setTouchValue(data.name);
+    setTouchValue((data.name || '').trimEnd().trimStart());
     setIsTouchDialogOpen(false); // Close the dialog after submission
   };
 
@@ -75,11 +77,11 @@ export default function KeyboardTouchProductSearch({
       <Dialog open={isTouchDialogOpen} onOpenChange={setIsTouchDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Enter Email</DialogTitle>
+            <DialogTitle>Enter Keyword </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <Label>Email Address</Label>
+              <Label>Keyword or Search Tag</Label>
               <div
                 className="w-full min-h-[40px] text-xl border rounded-md p-2 bg-white cursor-text"
                 onClick={() => setIsFocused(true)}
@@ -100,6 +102,20 @@ export default function KeyboardTouchProductSearch({
               )}
             </div>
             <div className="grid grid-cols-6 gap-1 p-2 bg-gray-200 rounded-md">
+              {searchTags &&
+                searchTags.length > 0 &&
+                (searchTags || []).map((t) => (
+                  <Button
+                    key={t}
+                    type="button"
+                    variant="outline"
+                    onClick={() => handleKeyPress(t + ' ')}
+                    className="col-span-2 text-lg"
+                  >
+                    {t}
+                  </Button>
+                ))}
+
               {[
                 'A',
                 'B',
@@ -153,38 +169,7 @@ export default function KeyboardTouchProductSearch({
                   {char}
                 </Button>
               ))}
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => handleKeyPress('beef')}
-                className="col-span-2 text-lg"
-              >
-                beef
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => handleKeyPress('chicken')}
-                className="col-span-2 text-lg"
-              >
-                chicken
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => handleKeyPress('pork')}
-                className="col-span-2 text-lg"
-              >
-                pork
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => handleKeyPress('vege')}
-                className="col-span-2 text-lg"
-              >
-                vege
-              </Button>
+
               {/* Backspace Key */}
               <Button
                 type="button"

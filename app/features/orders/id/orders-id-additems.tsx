@@ -32,12 +32,14 @@ interface ordersByIdAddItemsProps {
   products: ProductBase[];
   categories: Lookup[];
   orderData: OrderBase;
+  searchTags?: string[];
 }
 
 export default function OrdersByIdAddItems({
   products,
   categories,
   orderData,
+  searchTags,
 }: ordersByIdAddItemsProps) {
   const router = useRouter();
   const [search, setSearch] = useState('');
@@ -161,25 +163,28 @@ export default function OrdersByIdAddItems({
               onValueChange={setCategory}
             >
               <div className="flex items-center gap-2 w-full mt-1">
-                <TabsList>
-                  <TabsTrigger value="all">All</TabsTrigger>
-                  {categories.map((item) => (
-                    <TabsTrigger key={item._id} value={item.lookupValue}>
-                      {item.lookupDescription}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-                <div className="ml-auto w-48 h-full flex items-center">
-                  <Input
-                    placeholder="Quick Search..."
-                    value={search}
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                      setCurrentPage(1); // Reset to first page on search change
-                    }}
-                    className="h-10"
-                    onClick={() => setIsSearchTouchDialogOpen(true)}
-                  />
+                <div className="overflow-x-auto whitespace-nowrap">
+                  <TabsList>
+                    <TabsTrigger value="all">All</TabsTrigger>
+                    {categories.map((item) => (
+                      <TabsTrigger key={item._id} value={item.lookupValue}>
+                        {item.lookupDescription}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+
+                  <div className="ml-auto w-48 h-full flex items-center">
+                    <Input
+                      placeholder="Quick Search..."
+                      value={search}
+                      onChange={(e) => {
+                        setSearch(e.target.value);
+                        setCurrentPage(1); // Reset to first page on search change
+                      }}
+                      className="h-10"
+                      onClick={() => setIsSearchTouchDialogOpen(true)}
+                    />
+                  </div>
                 </div>
               </div>
               <TabsContent value={category}>
@@ -277,6 +282,7 @@ export default function OrdersByIdAddItems({
         setTouchValue={setSearch}
         setIsTouchDialogOpen={setIsSearchTouchDialogOpen}
         isTouchDialogOpen={isSearchTouchDialogOpen}
+        searchTags={searchTags || []}
       />
     </div>
   );

@@ -35,6 +35,9 @@ export default async function OrdersIdAddItemsPage(props: {
   //const totalProducts = results.count;
 
   const { data: categoriesLookup } = await GetLookups('product', 'category');
+  const { data: searchTagsLookup } = await GetLookups('product', 'searchTag');
+
+  const searchTags = (searchTagsLookup || []).map((item) => item.lookupValue);
 
   if (!products) {
     return (
@@ -47,6 +50,7 @@ export default async function OrdersIdAddItemsPage(props: {
       products={products}
       categories={categoriesLookup}
       orderData={order}
+      searchTags={searchTags}
     />
   );
 }
