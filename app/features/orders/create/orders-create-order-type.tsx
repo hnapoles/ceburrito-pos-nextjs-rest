@@ -255,7 +255,7 @@ export default function OrdersCreateByOrderType({
       </div>
       {/* Floater - Order Summary */}
       <div className="fixed bottom-0 left-0 w-full bg-white px-4 py-2 shadow-md border-t border-black-900 flex items-center justify-between gap-x-4">
-        <div className="flex items-center space-x-6 overflow-hidden ml-12">
+        <div className="flex items-center space-x-6 overflow-hidden ml-0 md:ml-12">
           <div className="flex items-center space-x-2">
             <span className="font-medium whitespace-nowrap">
               Items (
@@ -268,7 +268,7 @@ export default function OrdersCreateByOrderType({
               {formatPesoNoDecimals(Math.floor(totalAmount))}
             </span>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="items-center space-x-2 hidden md:flex">
             <span className="font-medium whitespace-nowrap">Order Type:</span>
             <span className="text-purple-700 whitespace-nowrap">
               {orderType.toUpperCase()}
