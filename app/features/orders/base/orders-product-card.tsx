@@ -38,6 +38,7 @@ interface productGridViewProps {
   statusesLookup?: Lookup[];
   order?: OrderBase;
   itemsCount: number | 0;
+  totalAmount: number | 0;
   //setOrder: React.Dispatch<React.SetStateAction<OrderBase>>;
   onSubmit: (data: OrderLineBase) => void;
 }
@@ -47,6 +48,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
   storeName,
   order,
   itemsCount,
+  totalAmount,
   //setOrder,
   onSubmit,
 }) => {
@@ -270,7 +272,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                   ):
                 </span>
                 <span className="text-purple-700 whitespace-nowrap">
-                  {formatPesoNoDecimals(Math.floor(order?.totalAmount || 0))}
+                  {formatPesoNoDecimals(Math.floor(totalAmount || 0))}
                 </span>
               </div>
 

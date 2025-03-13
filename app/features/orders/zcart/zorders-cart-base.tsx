@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@/components/ui/card-rounded-sm';
 
-import { useCartStore, useStore } from '@/app/providers/zustand-provider';
+import { useCartStore, useStoreName } from '@/app/providers/zustand-provider';
 //import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { formatPeso, formatPesoNoDecimals } from '@/app/actions/client/peso';
@@ -27,7 +27,7 @@ export default function OrdersCartBase({
   onCheckout?: boolean;
 }) {
   const router = useRouter();
-  const { storeName } = useStore();
+  const { storeName } = useStoreName();
   const { orderLines } = useCartStore();
 
   // Sort by productName (case-insensitive)

@@ -17,8 +17,8 @@ import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
 
-import { useStore } from '@/app/providers/zustand-provider';
-import OrdersCartBase from '../../cart/orders-cart-base';
+import { useStoreName } from '@/app/providers/zustand-provider';
+import OrdersCartBase from '../../zcart/zorders-cart-base';
 
 interface ordersCreatePosProps {
   products: ProductBase[];
@@ -37,7 +37,7 @@ export default function OrdersCreatePosBase({
   const rowsPerPage = 24; // Define rows per page
 
   //
-  const { storeName } = useStore();
+  const { storeName } = useStoreName();
 
   // Filtering logic
   const filteredProducts = products.filter((product) => {

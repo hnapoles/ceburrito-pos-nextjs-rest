@@ -10,6 +10,8 @@ import {
   CardContent,
   CardFooter,
   //CardHeader,
+  CardTitle,
+  //CardHeader,
   //CardTitle,
 } from '@/components/ui/card-rounded-sm';
 
@@ -27,7 +29,7 @@ import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight, CircleX } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
 
-import { useCartStore, useStore } from '@/app/providers/zustand-provider';
+import { useCartStore, useStoreName } from '@/app/providers/zustand-provider';
 //import OrdersIdAddItemsViewGrid from './addItems/zorders-id-addItems-view-grid';
 import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
 
@@ -36,7 +38,7 @@ import { toast } from '@/hooks/use-toast';
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import KeyboardTouchProductSearch from '../../keyboard/keyboard-touch-product-search';
 
-import OrdersCartBase from '../cart/orders-cart-base';
+import OrdersCartDetails from '../base/orders-cart-details';
 
 interface ordersByIdAddItemsProps {
   products: ProductBase[];
@@ -61,9 +63,11 @@ export default function OrdersCreateByOrderType({
   const rowsPerPage = 24; // Define rows per page
 
   //const [order, setOrder] = useState(orderData);
+  const totalAmount = useCartStore((state) => state.totalAmount());
+  const totalItems = useCartStore((state) => state.totalItems());
 
   //
-  const { storeName } = useStore();
+  const { storeName } = useStoreName();
 
   const [isSearchTouchDialogOpen, setIsSearchTouchDialogOpen] = useState(false);
 
@@ -101,8 +105,6 @@ export default function OrdersCreateByOrderType({
       setCurrentPage(currentPage + 1);
   };
 
-  const itemsCount = 1;
-
   const addOrUpdateOrderLine = useCartStore(
     (state) => state.addOrUpdateOrderLine,
   );
@@ -133,14 +135,12 @@ export default function OrdersCreateByOrderType({
     <div className="grid gap-0 grid-cols-1 md:grid-cols-3 grid-auto-rows-fr">
       {/* Right Side - cart */}
       <div className="col-span-1 h-full">
-        <OrdersCartBase orderType={'pos'} />
+        <OrdersCartDetails orderType={'pos'} />
       </div>
       {/* Left Side - add items */}
       <div className="md:col-span-2 col-span-1 h-full">
         <Card className="h-full flex flex-col">
-          {/*<CardHeader>
-            <CardTitle>Select Items</CardTitle>
-          </CardHeader>*/}
+          <CardTitle className="ml-5 mb-2 mt-4">Select Items</CardTitle>
           <CardContent>
             <Tabs
               defaultValue={category}
@@ -212,7 +212,8 @@ export default function OrdersCreateByOrderType({
                     products={paginatedProducts}
                     storeName={storeName}
                     onSubmit={handleAddToCart}
-                    itemsCount={itemsCount}
+                    itemsCount={totalItems}
+                    totalAmount={totalAmount}
                   />
                 )}
               </TabsContent>
@@ -253,18 +254,18 @@ export default function OrdersCreateByOrderType({
         </Card>
       </div>
       {/* Floater - Order Summary */}
-      <div className="fixed bottom-0 left-0 w-full bg-white px-4 py-2 shadow-md border-t flex items-center justify-between gap-x-4">
+      <div className="fixed bottom-0 left-0 w-full bg-white px-4 py-2 shadow-md border-t border-black-900 flex items-center justify-between gap-x-4">
         <div className="flex items-center space-x-6 overflow-hidden ml-12">
           <div className="flex items-center space-x-2">
             <span className="font-medium whitespace-nowrap">
               Items (
               <span className="text-purple-700 whitespace-nowrap">
-                {itemsCount}
+                {totalItems}
               </span>
               ):
             </span>
             <span className="text-purple-700 whitespace-nowrap">
-              {formatPesoNoDecimals(Math.floor(100.0))}
+              {formatPesoNoDecimals(Math.floor(totalAmount))}
             </span>
           </div>
           <div className="flex items-center space-x-2">
@@ -277,10 +278,10 @@ export default function OrdersCreateByOrderType({
 
         {/* Action Button */}
         <Button
-          variant="outline"
+          variant="default"
           size="lg"
           onClick={() => router.push(`/orders/checkout`)}
-          className="whitespace-nowrap"
+          className="whitespace-nowrap border border-purple-500"
         >
           Checkout
         </Button>
