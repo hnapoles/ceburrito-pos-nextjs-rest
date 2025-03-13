@@ -172,19 +172,19 @@ export default function OrdersByIdAddItems({
                       </TabsTrigger>
                     ))}
                   </TabsList>
+                </div>
 
-                  <div className="ml-auto w-48 h-full flex items-center">
-                    <Input
-                      placeholder="Quick Search..."
-                      value={search}
-                      onChange={(e) => {
-                        setSearch(e.target.value);
-                        setCurrentPage(1); // Reset to first page on search change
-                      }}
-                      className="h-10"
-                      onClick={() => setIsSearchTouchDialogOpen(true)}
-                    />
-                  </div>
+                <div className="ml-auto w-30 lg:w-48 h-full flex items-center">
+                  <Input
+                    placeholder="Quick Search..."
+                    value={search}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      setCurrentPage(1); // Reset to first page on search change
+                    }}
+                    className="h-10"
+                    onClick={() => setIsSearchTouchDialogOpen(true)}
+                  />
                 </div>
               </div>
               <TabsContent value={category}>
