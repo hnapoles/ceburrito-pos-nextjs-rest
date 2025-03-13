@@ -67,13 +67,7 @@ export default function OrdersCartDetails({
 
       toast({
         title: 'Line removed',
-        description: (
-          <p>
-            {`${line.productName}, ${line.sizeOption || ''}, ${
-              line.spiceOption || ''
-            }`}
-          </p>
-        ),
+        description: <p>{line.productName}</p>,
       });
 
       query.set('refresh', Date.now().toString()); // Change URL to trigger a refresh
@@ -93,47 +87,47 @@ export default function OrdersCartDetails({
     setLoadingItems((prev) => ({ ...prev, [lineKey]: true })); // Start loading
 
     try {
-      const existingIndex = orderLines?.findIndex(
-        (orderLine) =>
-          orderLine.productName === line.productName &&
-          (orderLine.sizeOption ?? '') === (line.sizeOption ?? '') &&
-          (orderLine.spiceOption ?? '') === (line.spiceOption ?? '') &&
-          (orderLine.status ?? 'open') === (line.status ?? 'open'),
-      );
+      if (action === 'add') {
+        const newQuantity = 1;
+        const newAmount = line.unitPrice * newQuantity;
 
-      //let totalAmount = totalAmount;
-      if (existingIndex !== -1) {
-        if (action === 'add') {
-          addOrUpdateOrderLine(line);
-        } else if (action === 'subtract') {
-          if (line.quantity === 1) {
-            removeOrderLine(
-              line.productName,
-              line.sizeOption,
-              line.spiceOption,
-            );
-          } else {
-            line.quantity = line.quantity - 1;
-            addOrUpdateOrderLine(line);
-          }
+        const newData = {
+          ...line,
+          quantity: newQuantity,
+          amount: newAmount,
+        };
+        addOrUpdateOrderLine(newData);
+      }
+
+      if (action === 'subtract') {
+        if (line.quantity === 1) {
+          removeOrderLine(line.productName, line.sizeOption, line.spiceOption);
         }
 
-        toast({
-          title: 'Cart item updated',
-          description: (
-            <p>{`${line.productName}, ${line.sizeOption || ''}, ${
-              line.spiceOption || ''
-            }`}</p>
-          ),
-        });
+        if (line.quantity > 1) {
+          const newQuantity = -1;
+          const newAmount = line.unitPrice * newQuantity;
 
-        //await revalidateAndRedirectUrl(pathname);
-        //router.refresh(); // ✅ Forces a fresh fetch from the server
-        query.set('refresh', Date.now().toString()); // Change URL to trigger a refresh
-        router.push(`?${query.toString()}`);
-      } else {
-        console.log('Cart line not found - cannot update');
+          if (newQuantity !== line.quantity || newAmount !== line.amount) {
+            const newData = {
+              ...line,
+              quantity: newQuantity,
+              amount: newAmount,
+            };
+            addOrUpdateOrderLine(newData);
+          }
+        }
       }
+
+      toast({
+        title: 'Cart item updated',
+        description: <p>{line.productName}</p>,
+      });
+
+      //await revalidateAndRedirectUrl(pathname);
+      //router.refresh(); // ✅ Forces a fresh fetch from the server
+      query.set('refresh', Date.now().toString()); // Change URL to trigger a refresh
+      router.push(`?${query.toString()}`);
     } catch (error) {
       console.error('Error updating cart line:', error);
     } finally {

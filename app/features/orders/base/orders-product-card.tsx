@@ -55,7 +55,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
   //const router = useRouter();
   const [selectedProduct, setSelectedProduct] =
     React.useState<ProductBase | null>(null);
-  const [qty, setQty] = React.useState<number>(1);
+  const [qty, setQty] = React.useState<number>(0);
   const [amount, setAmount] = React.useState<number>(0);
   const [size, setSize] = React.useState<string>('');
   const [spice, setSpice] = React.useState<string>('');

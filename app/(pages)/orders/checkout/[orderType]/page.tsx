@@ -1,5 +1,5 @@
 import { GetLookups } from '@/app/actions/server/lookups-actions';
-import OrdersCheckoutBase from '@/app/features/orders/checkout/orders-checkout-base';
+import OrdersCheckout from '@/app/features/orders/checkout/orders-checkout';
 
 //start of function
 export default async function OrdersCheckoutByOrderType({
@@ -11,12 +11,14 @@ export default async function OrdersCheckoutByOrderType({
 
   const { data: dineModes } = await GetLookups(orderType, 'dineMode');
   const { data: paymentMethods } = await GetLookups('order', 'paymentMethod');
+  const { data: statuses } = await GetLookups('order', 'status');
 
   return (
-    <OrdersCheckoutBase
+    <OrdersCheckout
       orderType={orderType}
       dineModes={dineModes}
       paymentMethods={paymentMethods}
+      statuses={statuses}
     />
   );
 }

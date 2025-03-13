@@ -19,11 +19,11 @@ import {
 } from '@/app/actions/client/peso';
 import { cn } from '@/lib/utils';
 
+/*
 const nameSchema = z.object({
   name: z.string().min(1, 'Name must be a number'),
 });
-
-type FormData = z.infer<typeof nameSchema>;
+*/
 
 export default function KeyboardTouchCashTendered({
   currentValue,
@@ -40,6 +40,22 @@ export default function KeyboardTouchCashTendered({
   title?: string;
   amountDue: number;
 }) {
+  const nameSchema = z.object({
+    name: z
+      .string()
+      .min(1, 'Amount is required')
+      .refine(
+        (val) => !isNaN(Number(val)) && Number(val) >= Number(amountDue),
+        {
+          message: `Amount must be at least ${formatPesoNoDecimals(
+            Number(amountDue),
+          )}`,
+        },
+      ),
+  });
+
+  type FormData = z.infer<typeof nameSchema>;
+
   const {
     setValue,
     handleSubmit,
