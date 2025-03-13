@@ -161,20 +161,25 @@ export default function OrdersByIdAddItems({
               defaultValue={category}
               value={category}
               onValueChange={setCategory}
+              className="w-full"
             >
               <div className="flex items-center gap-2 w-full mt-1">
-                <div className="overflow-x-auto whitespace-nowrap">
-                  <TabsList>
-                    <TabsTrigger value="all">All</TabsTrigger>
-                    {categories.map((item) => (
-                      <TabsTrigger key={item._id} value={item.lookupValue}>
-                        {item.lookupDescription}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
+                {/* Scrollable Tabs Wrapper */}
+                <div className="flex-1 min-w-0 overflow-hidden">
+                  <div className="w-full overflow-x-auto sm:overflow-x-auto md:overflow-x-auto">
+                    <TabsList className="flex w-max space-x-2">
+                      <TabsTrigger value="all">All</TabsTrigger>
+                      {categories.map((item) => (
+                        <TabsTrigger key={item._id} value={item.lookupValue}>
+                          {item.lookupDescription}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </div>
                 </div>
 
-                <div className="ml-auto w-30 lg:w-48 h-full flex items-center">
+                {/* Search Input (No Overlapping) */}
+                <div className="w-32 lg:w-40 flex-shrink-0">
                   <Input
                     placeholder="Quick Search..."
                     value={search}
@@ -187,6 +192,7 @@ export default function OrdersByIdAddItems({
                   />
                 </div>
               </div>
+
               <TabsContent value={category}>
                 {!storeName ? (
                   <div className="flex justify-center items-center h-20">
