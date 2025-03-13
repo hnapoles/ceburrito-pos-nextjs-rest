@@ -8,12 +8,15 @@ import MobileNav from '@/app/nav/nav-mobile';
 import PagesBreadCrumb from '@/app/nav/nav-bread-crumb';
 
 import StoreSelectionModal from '../features/stores/select/store-selection-for-local-storage';
+import { auth } from '@/auth';
 
-export default function DashboardDefaultLayout({
+export default async function DashboardDefaultLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+  const user = session?.user;
   return (
     <NavProvider>
       <main className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -24,7 +27,9 @@ export default function DashboardDefaultLayout({
             <PagesBreadCrumb />
             {/*<SearchInput />*/}
             <div className="relative ml-auto flex-1 md:grow-0"></div>
-            <User />
+            <User
+              user={user ? { image: user.image ?? undefined } : undefined}
+            />
           </header>
           <main className="grid flex-1 items-start gap-2 p-0 sm:px-0 sm:py-0 md:gap-4 bg-muted/40">
             {children}
