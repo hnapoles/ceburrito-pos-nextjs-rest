@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card-rounded-sm';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import OrdersCreatePosViewGrid from './orders-create-pos-view-grid';
+import OrdersCreatePosViewGrid from './zorders-create-pos-view-grid';
 import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
