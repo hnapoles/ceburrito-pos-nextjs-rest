@@ -66,6 +66,8 @@ export default function OrdersCheckout({
 }) {
   const router = useRouter();
 
+  const { clearCart } = useCartStore();
+
   const [status, setStatus] = React.useState('open');
   const selectedStatus = statuses.find((s) => s.lookupValue === status);
 
@@ -149,6 +151,7 @@ export default function OrdersCheckout({
 
     await CreateOrder(newOrder);
 
+    clearCart();
     setIsProcessing(false);
     await revalidateAndRedirectUrl('/orders');
   };
@@ -344,6 +347,7 @@ export default function OrdersCheckout({
         {/* END information */}
       </div>
       {/* END grid grid-cols-1 lg:grid-cols-2 */}
+      {/** 
       <div className="grid grid-cols-1 lg:grid-cols-2">
         <div className="flex items-center justify-end gap-2 mt-2 mr-2">
           <Button
@@ -381,6 +385,7 @@ export default function OrdersCheckout({
           </Button>
         </div>
       </div>
+      */}
       {/* Floater - Order Summary */}
       <div className="fixed bottom-0 left-0 w-full bg-white px-4 py-2 shadow-md border-t border-black-900 flex items-center justify-between gap-x-4">
         <div className="flex items-center space-x-6 overflow-hidden ml-12">
