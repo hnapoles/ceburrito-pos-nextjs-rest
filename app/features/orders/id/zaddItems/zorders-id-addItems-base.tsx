@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
 
-import { useStore } from '@/app/providers/zustand-provider';
+import { useStoreName } from '@/app/providers/zustand-provider';
 import OrdersIdAddItemsViewGrid from './zorders-id-addItems-view-grid';
 import { OrderBase } from '@/app/models/orders-model';
 
@@ -40,7 +40,7 @@ export default function OrdersIdAddItemsBase({
   const [order, setOrder] = useState(orderData);
 
   //
-  const { storeName } = useStore();
+  const { storeName } = useStoreName();
 
   // Filtering logic
   const filteredProducts = products.filter((product) => {

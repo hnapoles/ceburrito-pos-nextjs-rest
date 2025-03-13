@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useStore } from '@/app/providers/zustand-provider';
+import { useStoreName } from '@/app/providers/zustand-provider';
 import {
   Dialog,
   DialogContent,
@@ -20,7 +20,7 @@ import { GetLookupStores } from '@/app/actions/server/lookups-actions';
 import { StoreBase } from '@/app/models/stores-model';
 
 const StoreSelectionModal = () => {
-  const { storeName, setStoreName } = useStore();
+  const { storeName, setStoreName } = useStoreName();
   const [open, setOpen] = useState(!storeName); // Open if no store selected
   const [stores, setStores] = useState<StoreBase[]>([]);
 

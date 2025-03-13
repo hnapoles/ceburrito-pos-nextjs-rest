@@ -9,7 +9,7 @@ interface StoreState {
   setStoreName: (name: string) => void;
 }
 
-export const useStore = create<StoreState>((set) => ({
+export const useStoreName = create<StoreState>((set) => ({
   storeName:
     typeof window !== 'undefined' ? localStorage.getItem('storeName') : null,
   setStoreName: (name) => {

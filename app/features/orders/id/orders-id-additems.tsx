@@ -27,7 +27,7 @@ import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight, CircleX } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
 
-import { useStore } from '@/app/providers/zustand-provider';
+import { useStoreName } from '@/app/providers/zustand-provider';
 //import OrdersIdAddItemsViewGrid from './addItems/zorders-id-addItems-view-grid';
 import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
 import OrdersByIdOrderDetails from './orders-id-additems-orderdetails';
@@ -61,7 +61,7 @@ export default function OrdersByIdAddItems({
   const [order, setOrder] = useState(orderData);
 
   //
-  const { storeName } = useStore();
+  const { storeName } = useStoreName();
 
   const [isSearchTouchDialogOpen, setIsSearchTouchDialogOpen] = useState(false);
 
@@ -238,6 +238,7 @@ export default function OrdersByIdAddItems({
                     onSubmit={handleAddOrUpdateOrderLine}
                     order={order}
                     itemsCount={itemsCount}
+                    totalAmount={order.totalAmount || 0}
                   />
                 )}
               </TabsContent>

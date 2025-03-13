@@ -16,10 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import OrdersCartBase from '../cart/orders-cart-base';
+import OrdersCartBase from '../zcart/zorders-cart-base';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { useCartStore, useStore } from '@/app/providers/zustand-provider';
+import { useCartStore, useStoreName } from '@/app/providers/zustand-provider';
 import ErrorDisplay from '../../error/error-display';
 import { formatPeso } from '@/app/actions/client/peso';
 import { Lookup } from '@/app/models/lookups-model';
@@ -43,7 +43,7 @@ export default function OrdersCheckoutBase({
   dineModes: Lookup[];
   paymentMethods: Lookup[];
 }) {
-  const { storeName } = useStore();
+  const { storeName } = useStoreName();
   const { orderLines } = useCartStore();
   const totalAmount = useCartStore((state) => state.totalAmount());
   const totalItems = useCartStore((state) => state.totalItems());
