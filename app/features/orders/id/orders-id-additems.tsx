@@ -13,7 +13,16 @@ import {
   //CardTitle,
 } from '@/components/ui/card-rounded-sm';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useMediaQuery } from 'react-responsive'; // Install if needed: npm install react-responsive
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select';
+
 import { Input } from '@/components/ui/input';
 import { ChevronLeft, ChevronRight, CircleX } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
@@ -164,32 +173,46 @@ export default function OrdersByIdAddItems({
               className="w-full"
             >
               <div className="flex items-center gap-2 w-full mt-1">
-                {/* Scrollable Tabs Wrapper */}
-                <div className="flex-1 min-w-0 overflow-hidden">
-                  <div className="w-full overflow-x-auto sm:overflow-x-auto md:overflow-x-auto">
-                    <TabsList className="flex w-max space-x-2">
-                      <TabsTrigger value="all">All</TabsTrigger>
-                      {categories.map((item) => (
-                        <TabsTrigger key={item._id} value={item.lookupValue}>
-                          {item.lookupDescription}
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
-                  </div>
+                {/* Responsive: Use Select on small screens, TabsList on larger screens */}
+                <div className="flex-1 min-w-0">
+                  {useMediaQuery({ maxWidth: 768 }) ? ( // Show Select only on small screens
+                    <Select onValueChange={setCategory} value={category}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All</SelectItem>
+                        {categories.map((item) => (
+                          <SelectItem key={item._id} value={item.lookupValue}>
+                            {item.lookupDescription}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <div className="w-full overflow-x-auto sm:overflow-x-auto md:overflow-x-auto">
+                      <TabsList className="flex w-max space-x-2">
+                        <TabsTrigger value="all">All</TabsTrigger>
+                        {categories.map((item) => (
+                          <TabsTrigger key={item._id} value={item.lookupValue}>
+                            {item.lookupDescription}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                    </div>
+                  )}
                 </div>
 
+                {/* Search Input & Clear Button */}
                 <Button
                   variant="outline"
                   className="h-10 gap-1"
                   onClick={() => setSearch('')}
                 >
-                  <CircleX className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Clear
-                  </span>
+                  <CircleX className="h-8 w-8" />
+                  <span className="sr-only sm:whitespace-nowrap">Clear</span>
                 </Button>
-                {/* Search Input (No Overlapping) */}
-                <div className="w-32 lg:w-40 flex-shrink-0">
+                <div className="w-24 xl:w-40 flex-shrink-0">
                   <Input
                     placeholder="Quick Search..."
                     value={search}
@@ -206,7 +229,7 @@ export default function OrdersByIdAddItems({
               <TabsContent value={category}>
                 {!storeName ? (
                   <div className="flex justify-center items-center h-20">
-                    <span className="text-gray-500">Loading store...</span>
+                    <span className="text-gray-500">Loading data...</span>
                   </div>
                 ) : (
                   <OrdersProductCard
