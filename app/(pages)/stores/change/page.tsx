@@ -37,7 +37,8 @@ export default function StoresChangePage() {
 
   const handleSelectStore = (name: string) => {
     setStoreName(name);
-    router.push('/dashboard');
+    //router.push('/dashboard');
+    router.back();
   };
 
   return (
