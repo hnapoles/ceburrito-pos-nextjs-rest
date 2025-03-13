@@ -387,7 +387,7 @@ export default function OrdersCheckout({
       </div>
       */}
       {/* Floater - Order Summary */}
-      <div className="fixed bottom-0 left-0 w-full bg-white px-2 sm:px-4 py-2 shadow-md border-t border-black-900 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-x-4 lg:justify-between">
+      <div className="fixed bottom-0 left-0 w-full bg-white px-2 sm:px-4 py-2 shadow-md border-t border-black-900 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-x-4 lg:flex-nowrap">
         {/* Left Section - Items & Order Details */}
         <div className="flex flex-col sm:flex-row items-center sm:space-x-6 overflow-hidden w-full sm:w-auto">
           <div className="flex items-center space-x-1 sm:space-x-2">
@@ -407,42 +407,51 @@ export default function OrdersCheckout({
               {orderType.toUpperCase()}
             </span>
           </div>
+        </div>
 
-          {/* Add More Items Button (Moves Below on Small Screens) */}
+        {/* Center Section - Add More Items Button (Centered on lg+) */}
+        <div className="flex justify-center w-full sm:w-auto lg:flex-1 lg:flex lg:justify-center">
           <Button
             variant="outline"
-            className="w-full sm:w-[120px] mt-2 sm:mt-0"
+            className="w-full sm:w-[120px]"
             onClick={() => router.push(`/orders/create/${orderType}`)}
           >
             Add More Items
           </Button>
         </div>
 
-        {/* Right Section - Cancel & Save Buttons (Move to Right on lg+) */}
-        <div className="grid grid-cols-2 sm:flex flex-1 w-full sm:w-auto gap-2 lg:flex-row lg:justify-end lg:w-auto">
-          <Button
-            variant="outline"
-            className="w-full sm:w-[100px]"
-            onClick={() => handleCancel()}
-          >
-            Cancel
-          </Button>
-          <Button
-            className="w-full sm:w-[100px]"
-            onClick={handleSave}
-            disabled={
-              !paymentMethod || !dineMode || !customerName || isProcessing
-            } // Disable when processing
-          >
-            {isProcessing ? (
-              <>
-                <Loader2 className="animate-spin mr-2 h-4 w-4" />
-                <span></span>
-              </>
-            ) : (
-              'Save'
-            )}
-          </Button>
+        {/* Right Section - Cancel & Save Buttons */}
+        <div className="w-full sm:w-auto flex flex-col sm:flex-row lg:flex lg:justify-between lg:w-full">
+          {/* Cancel Button - Moves to the Left on lg+ */}
+          <div className="lg:flex-1 lg:flex lg:justify-start">
+            <Button
+              variant="outline"
+              className="w-full sm:w-[100px]"
+              onClick={() => handleCancel()}
+            >
+              Cancel
+            </Button>
+          </div>
+
+          {/* Save Button - Stays on the Right */}
+          <div className="lg:flex-1 lg:flex lg:justify-end">
+            <Button
+              className="w-full sm:w-[100px]"
+              onClick={handleSave}
+              disabled={
+                !paymentMethod || !dineMode || !customerName || isProcessing
+              }
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                  <span></span>
+                </>
+              ) : (
+                'Save'
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 

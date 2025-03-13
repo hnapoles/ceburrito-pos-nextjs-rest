@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 
 //import Image from 'next/image'
@@ -13,6 +15,7 @@ import {
 import { NavItem } from './nav-item';
 
 import { listNavItems } from '@/app/models/nav-model';
+import { useStoreName } from '../providers/zustand-provider';
 
 const DesktopNav: React.FC = () => {
   /*
@@ -51,6 +54,9 @@ const DesktopNav: React.FC = () => {
     </aside>
   );
   */
+
+  const { storeName } = useStoreName();
+
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
       <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
@@ -59,7 +65,10 @@ const DesktopNav: React.FC = () => {
           className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
         >
           {/*<VercelLogo className="h-3 w-3 transition-all group-hover:scale-110" />*/}
-          CB
+          {storeName
+            ?.split(' ')
+            .map((word) => word.charAt(0).toUpperCase())
+            .join('')}
           <span className="sr-only">Ceburrito.ph</span>
         </Link>
 

@@ -2,12 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useStoreName } from '@/app/providers/zustand-provider';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+
 import {
   Select,
   SelectContent,
@@ -19,10 +14,18 @@ import {
 import { GetLookupStores } from '@/app/actions/server/lookups-actions';
 import { StoreBase } from '@/app/models/stores-model';
 
-const StoreSelectionModal = () => {
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card-rounded-sm';
+import { useRouter } from 'next/navigation';
+
+export default function StoresChangePage() {
   const { storeName, setStoreName } = useStoreName();
-  const [open, setOpen] = useState(!storeName); // Open if no store selected
   const [stores, setStores] = useState<StoreBase[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const getStores = async () => {
@@ -30,50 +33,39 @@ const StoreSelectionModal = () => {
       setStores(storesLookup);
     };
     getStores();
-
-    setOpen(!storeName);
   }, [storeName]);
 
   const handleSelectStore = (name: string) => {
     setStoreName(name);
-    setOpen(false);
+    router.push('/dashboard');
   };
 
   return (
-    <Dialog open={open}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Select a Store</DialogTitle>
-        </DialogHeader>
-        <div className="flex flex-col gap-4">
-          {/*
-          <Button onClick={() => handleSelectStore('Store A')}>Store A</Button>
-          <Button onClick={() => handleSelectStore('Store B')}>Store B</Button>
-          */}
-          <Select onValueChange={(value) => handleSelectStore(value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select store name" />
-            </SelectTrigger>
-
-            <SelectContent>
-              {stores.map((s) => (
-                <SelectItem key={s._id} value={s.name}>
-                  {s.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="text-sm">
-          Please contact manager and/or system administrator if you do not have
+    <Card className="max-w-md mx-auto shadow-md border border-gray-300">
+      <CardHeader>
+        <CardTitle>Select a Store</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-4">
+        <Select onValueChange={(value) => handleSelectStore(value)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select store name" />
+          </SelectTrigger>
+          <SelectContent>
+            {stores.map((s) => (
+              <SelectItem key={s._id} value={s.name}>
+                {s.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <div className="text-sm text-gray-600">
+          Please contact the manager or system administrator if you do not have
           access to the store.
         </div>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   );
-};
-
-export default StoreSelectionModal;
+}
 
 /*
  <Select
