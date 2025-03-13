@@ -7,6 +7,8 @@ import type { JWT } from 'next-auth/jwt';
 const appApiServerUrl =
   process.env.NEXT_PUBLIC_APP_API_SERVER_URL || 'http://172.104.117.139:3000';
 
+const isLocalhost = (process.env.APP_ENV || 'dev') === 'dev';
+
 declare module 'next-auth' {
   /**
    * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
@@ -46,6 +48,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
     maxAge: 7 * 24 * 60 * 60, // 7 days (in seconds)
     updateAge: 7 * 24 * 60 * 60,
+  },
+  cookies: {
+    sessionToken: {
+      name: 'next-auth.session-token',
+      options: {
+        domain: isLocalhost ? 'localhost' : '.ceburrito.ph', // ✅ Ensures cookie works across subdomains
+        path: '/',
+        secure: true,
+        httpOnly: true,
+        sameSite: 'lax',
+      },
+    },
   },
   callbacks: {
     async jwt({ token, account }) {
