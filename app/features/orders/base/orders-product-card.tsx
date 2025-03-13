@@ -199,7 +199,7 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
 
   return (
     <div>
-      <div className="mt-0 grid grid-cols-1 gap-x-2 gap-y-2 md:gap-y-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+      <div className="mt-4 grid grid-cols-1 gap-x-2 gap-y-4 md:gap-y-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         {products.map((product) => (
           <div
             key={product._id}

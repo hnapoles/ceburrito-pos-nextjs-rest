@@ -15,7 +15,7 @@ import {
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CircleX } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
 
 import { useStore } from '@/app/providers/zustand-provider';
@@ -178,6 +178,16 @@ export default function OrdersByIdAddItems({
                   </div>
                 </div>
 
+                <Button
+                  variant="outline"
+                  className="h-10 gap-1"
+                  onClick={() => setSearch('')}
+                >
+                  <CircleX className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Clear
+                  </span>
+                </Button>
                 {/* Search Input (No Overlapping) */}
                 <div className="w-32 lg:w-40 flex-shrink-0">
                   <Input
