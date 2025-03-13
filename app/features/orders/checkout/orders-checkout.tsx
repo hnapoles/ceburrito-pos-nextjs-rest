@@ -387,48 +387,48 @@ export default function OrdersCheckout({
       </div>
       */}
       {/* Floater - Order Summary */}
-      <div className="fixed bottom-0 left-0 w-full bg-white px-4 py-2 shadow-md border-t border-black-900 flex items-center justify-between gap-x-4">
-        <div className="flex items-center space-x-6 overflow-hidden ml-12">
-          <div className="flex items-center space-x-2">
-            <span className="font-medium whitespace-nowrap">
-              Items (
-              <span className="text-purple-700 whitespace-nowrap">
-                {lineItemCount}
-              </span>
-              ):
+      <div className="fixed bottom-0 left-0 w-full bg-white px-2 sm:px-4 py-2 shadow-md border-t border-black-900 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-x-4 lg:justify-between">
+        {/* Left Section - Items & Order Details */}
+        <div className="flex flex-col sm:flex-row items-center sm:space-x-6 overflow-hidden w-full sm:w-auto">
+          <div className="flex items-center space-x-1 sm:space-x-2">
+            <span className="font-medium whitespace-nowrap text-sm sm:text-base">
+              Items (<span className="text-purple-700">{lineItemCount}</span>):
             </span>
-            <span className="text-purple-700 whitespace-nowrap">
+            <span className="text-purple-700 text-sm sm:text-base">
               {formatPesoNoDecimals(Math.floor(totalAmount))}
             </span>
           </div>
-          <div className="flex items-center space-x-2">
-            <span className="font-medium whitespace-nowrap">Order Type:</span>
-            <span className="text-purple-700 whitespace-nowrap">
+
+          <div className="flex items-center space-x-1 sm:space-x-2 mt-1 sm:mt-0">
+            <span className="font-medium whitespace-nowrap text-sm sm:text-base">
+              Order Type:
+            </span>
+            <span className="text-purple-700 text-sm sm:text-base">
               {orderType.toUpperCase()}
             </span>
           </div>
-          <div className="flex items-center justify-end gap-2 mt-2 mr-2">
-            <Button
-              variant="outline"
-              className="w-full md:w-[120px]"
-              onClick={() => router.push(`/orders/create/${orderType}`)}
-            >
-              Add More Items
-            </Button>
-          </div>
-        </div>
 
-        {/* Action Button */}
-        <div className="">
+          {/* Add More Items Button (Moves Below on Small Screens) */}
           <Button
             variant="outline"
-            className="w-full md:w-[100px] mr-2"
+            className="w-full sm:w-[120px] mt-2 sm:mt-0"
+            onClick={() => router.push(`/orders/create/${orderType}`)}
+          >
+            Add More Items
+          </Button>
+        </div>
+
+        {/* Right Section - Cancel & Save Buttons (Move to Right on lg+) */}
+        <div className="grid grid-cols-2 sm:flex flex-1 w-full sm:w-auto gap-2 lg:flex-row lg:justify-end lg:w-auto">
+          <Button
+            variant="outline"
+            className="w-full sm:w-[100px]"
             onClick={() => handleCancel()}
           >
             Cancel
           </Button>
           <Button
-            className="w-full md:w-[100px]"
+            className="w-full sm:w-[100px]"
             onClick={handleSave}
             disabled={
               !paymentMethod || !dineMode || !customerName || isProcessing
@@ -445,7 +445,6 @@ export default function OrdersCheckout({
           </Button>
         </div>
       </div>
-      {/* END Floater*/}
 
       <>
         <KeyboardTouchLettersDialog
