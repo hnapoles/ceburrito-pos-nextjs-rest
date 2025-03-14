@@ -24,7 +24,8 @@ export async function middleware(req: NextRequest) {
   if (
     pathname === '/login' ||
     pathname === '/unauthorized' ||
-    pathname.startsWith('/pub/')
+    pathname.startsWith('/pub/') ||
+    pathname === '/api/pdf'
   ) {
     return NextResponse.next();
   }
