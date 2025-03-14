@@ -33,7 +33,7 @@ export function OrdersSearchInput() {
         type="search"
         placeholder="Enter keyword..."
         defaultValue={searchParams.get('keyword')?.toString()}
-        className="w-full rounded-lg bg-background pl-2 md:w-[100px] lg:w-[150px]"
+        className="w-2/3 rounded-lg bg-background pl-2 md:w-[100px] lg:w-[150px]"
       />
       {isPending && <Spinner />}
     </form>
