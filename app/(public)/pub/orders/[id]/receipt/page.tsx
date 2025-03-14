@@ -1,4 +1,7 @@
-import { GetOrderByIdForPublic } from '@/app/actions/server/orders-actions';
+import {
+  GetOrderByIdForPublic,
+  GetOrganizationByIdForPublic,
+} from '@/app/actions/server/orders-actions';
 
 import NotFoundGlobal from '@/app/nav/not-found-global';
 
@@ -20,6 +23,9 @@ export default async function PubOrdersByIdReceiptPage({
   const showButtons = (await searchParams).showButtons || undefined;
 
   const order = await GetOrderByIdForPublic(id, pubKey);
+  const defaultOrgId =
+    process.env.APP_DEFAULT_ORG_ID || '67d3b82d98e8865f5b172af1';
+  const org = await GetOrganizationByIdForPublic(defaultOrgId, defaultOrgId);
 
   if (!order) {
     return (
@@ -29,6 +35,7 @@ export default async function PubOrdersByIdReceiptPage({
 
   return (
     <OrdersByIdReceipt
+      org={org}
       order={order}
       showQrCode={false}
       showButtons={showButtons}

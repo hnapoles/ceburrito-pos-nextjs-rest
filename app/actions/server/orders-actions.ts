@@ -2,7 +2,11 @@
 
 import { apiClientDq, apiPublic } from '@/lib/fetch-helper';
 
-import { OrderBase, FindOrdersOutput } from '@/app/models/orders-model';
+import {
+  OrderBase,
+  FindOrdersOutput,
+  OrganizationBase,
+} from '@/app/models/orders-model';
 import {
   ApiOperationNames,
   FindAllProps,
@@ -98,6 +102,19 @@ export async function GetOrderById(id: string) {
   return order;
 }
 
+export async function GetOrganizationById(id: string) {
+  const method = 'POST';
+
+  const organization = await apiClientDq<OrganizationBase, FindOneProps>(
+    'organization',
+    ApiOperationNames.FindOne,
+    id,
+    { method: method },
+  );
+
+  return organization;
+}
+
 //Public facing api
 export async function GetOrderByIdForPublic(id: string, pubKey: string) {
   const method = 'GET';
@@ -111,4 +128,18 @@ export async function GetOrderByIdForPublic(id: string, pubKey: string) {
   );
 
   return order;
+}
+
+export async function GetOrganizationByIdForPublic(id: string, pubKey: string) {
+  const method = 'GET';
+
+  const organization = await apiPublic<OrganizationBase, FindOneProps>(
+    'organization',
+    ApiOperationNames.FindOne,
+    id,
+    pubKey,
+    { method: method },
+  );
+
+  return organization;
 }

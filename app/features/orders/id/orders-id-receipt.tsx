@@ -4,7 +4,7 @@ import React from 'react';
 //import { useRouter } from 'next/navigation';
 
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
-import { OrderBase } from '@/app/models/orders-model';
+import { OrderBase, OrganizationBase } from '@/app/models/orders-model';
 import { Button } from '@/components/ui/button-rounded-sm';
 import {
   Card,
@@ -30,6 +30,7 @@ import jsPDF from 'jspdf';
 import { Loader2 } from 'lucide-react';
 
 interface OrderReceiptProps {
+  org: OrganizationBase;
   order: OrderBase;
   showQrCode: boolean;
   showButtons?: string;
@@ -39,6 +40,7 @@ const pubSiteUrl =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://pos.ceburrito.ph/pub';
 
 export default function OrdersByIdReceipt({
+  org,
   order,
   showQrCode = true,
   showButtons,
@@ -126,9 +128,10 @@ export default function OrdersByIdReceipt({
         <div className="grid grid-cols-2">
           <div>
             <CardTitle className="text-xl font-semibold">
-              Order Receipt
+              Sales Invoice
             </CardTitle>
             <p className="text-sm text-gray-500">Order ID: {order._id}</p>
+            <p>{org.owner}</p>
           </div>
           {showQrCode && (
             <div className="flex justify-center mb-4">
