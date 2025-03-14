@@ -1,6 +1,6 @@
 'use server';
 
-import { apiClientDq } from '@/lib/fetch-helper';
+import { apiClientDq, apiPublic } from '@/lib/fetch-helper';
 
 import { OrderBase, FindOrdersOutput } from '@/app/models/orders-model';
 import {
@@ -92,6 +92,21 @@ export async function GetOrderById(id: string) {
     'order',
     ApiOperationNames.FindOne,
     id,
+    { method: method },
+  );
+
+  return order;
+}
+
+//Public facing api
+export async function GetOrderByIdForPublic(id: string, pubKey: string) {
+  const method = 'POST';
+
+  const order = await apiPublic<OrderBase, FindOneProps>(
+    'order',
+    ApiOperationNames.FindOne,
+    id,
+    pubKey,
     { method: method },
   );
 

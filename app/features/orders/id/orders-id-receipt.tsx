@@ -1,5 +1,8 @@
 'use client';
 
+import React from 'react';
+//import { useRouter } from 'next/navigation';
+
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { OrderBase } from '@/app/models/orders-model';
 import { Button } from '@/components/ui/button-rounded-sm';
@@ -24,6 +27,7 @@ import Image from 'next/image';
 import QRCode from 'react-qr-code';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { Loader2 } from 'lucide-react';
 
 interface OrderReceiptProps {
   order: OrderBase;
@@ -37,7 +41,9 @@ export default function OrdersByIdReceipt({
   order,
   showQrCode = true,
 }: OrderReceiptProps) {
-  const receiptUrl = `${pubSiteUrl}/orders/${order._id}/receipt/`;
+  const receiptUrl = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}`;
+
+  //const router = useRouter();
 
   const handleDownloadPDF = async () => {
     const receiptElement = document.getElementById('receipt-content');
@@ -64,6 +70,47 @@ export default function OrdersByIdReceipt({
 
     pdf.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight);
     pdf.save(`receipt_${order._id}.pdf`);
+  };
+
+  const [processing, setProcessing] = React.useState(false);
+  /*
+  const handleDownloadPDF2 = async () => {
+    setProcessing(true);
+    router.push(`/api/pdf?url=${encodeURIComponent(receiptUrl)}`);
+    setProcessing(false);
+  };
+*/
+
+  const handleDownloadPDF2 = async () => {
+    setProcessing(true);
+
+    try {
+      console.log('Generating PDF...');
+      const response = await fetch(
+        `/api/pdf?url=${encodeURIComponent(receiptUrl)}`,
+      );
+
+      if (!response.ok) {
+        throw new Error(`Failed to generate PDF: ${response.statusText}`);
+      }
+
+      // Convert response to Blob
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      // Create a temporary link and trigger download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `receipt_${order._id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setProcessing(false); // ✅ This now gets executed after fetch completes
+    }
   };
 
   return (
@@ -156,8 +203,17 @@ export default function OrdersByIdReceipt({
             ))}
           </TableBody>
         </Table>
-        <div className="flex justify-end items-center mt-6">
+        <div className="flex justify-end items-center mt-6 hidden">
           <Button onClick={handleDownloadPDF}>Download Receipt</Button>
+        </div>
+        <div className="flex justify-end items-center mt-6">
+          <Button onClick={handleDownloadPDF2} disabled={processing}>
+            {processing ? (
+              <Loader2 className="w-10 h-10 animate-spin text-gray-500" />
+            ) : (
+              'Download as PDF'
+            )}
+          </Button>
         </div>
       </CardContent>
     </Card>
