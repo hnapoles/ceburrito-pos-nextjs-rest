@@ -44,7 +44,7 @@ export default function OrdersByIdReceipt({
   showButtons,
 }: OrderReceiptProps) {
   const receiptUrlForDownload = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}`;
-  const receiptUrlForQrCode = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}`;
+  const receiptUrlForQrCode = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}&showButtons=true`;
 
   //const router = useRouter();
 
@@ -89,9 +89,13 @@ export default function OrdersByIdReceipt({
 
     try {
       console.log('Generating PDF...');
+      /*
       const response = await fetch(
         `/api/pdf?url=${encodeURIComponent(receiptUrlForDownload)}`,
       );
+      */
+
+      const response = await fetch(`/api/pdf?url=${receiptUrlForDownload}`);
 
       if (!response.ok) {
         throw new Error(`Failed to generate PDF: ${response.statusText}`);
