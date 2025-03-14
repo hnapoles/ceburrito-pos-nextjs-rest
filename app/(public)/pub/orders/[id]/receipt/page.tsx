@@ -5,7 +5,7 @@ import NotFoundGlobal from '@/app/nav/not-found-global';
 import OrdersByIdReceipt from '@/app/features/orders/id/orders-id-receipt';
 
 //start of function
-export default async function OrdersByIdReceiptPage({
+export default async function PubOrdersByIdReceiptPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -20,5 +20,5 @@ export default async function OrdersByIdReceiptPage({
     );
   }
 
-  return <OrdersByIdReceipt order={order} showQrCode={true} />;
+  return <OrdersByIdReceipt order={order} showQrCode={false} />;
 }
