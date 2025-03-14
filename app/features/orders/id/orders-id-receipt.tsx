@@ -20,16 +20,38 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import Image from 'next/image';
 
+import QRCode from 'react-qr-code';
+
 interface OrderReceiptProps {
   order: OrderBase;
+  showQrCode: boolean;
 }
 
-export default function OrdersByIdReceipt({ order }: OrderReceiptProps) {
+const pubSiteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://pos.ceburrito.ph/pub';
+
+export default function OrdersByIdReceipt({
+  order,
+  showQrCode = true,
+}: OrderReceiptProps) {
+  const receiptUrl = `${pubSiteUrl}/orders/${order._id}/receipt/`;
+
   return (
     <Card className="w-full max-w-2xl mx-auto p-4 shadow-lg rounded-lg">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">Order Receipt</CardTitle>
-        <p className="text-sm text-gray-500">Order ID: {order._id}</p>
+        <div className="grid grid-cols-2">
+          <div>
+            <CardTitle className="text-xl font-semibold">
+              Order Receipt
+            </CardTitle>
+            <p className="text-sm text-gray-500">Order ID: {order._id}</p>
+          </div>
+          {showQrCode && (
+            <div className="flex justify-center mb-4">
+              <QRCode value={receiptUrl} size={64} />
+            </div>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <div className="mb-4 text-sm">

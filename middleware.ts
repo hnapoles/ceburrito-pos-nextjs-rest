@@ -21,7 +21,11 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // ✅ Allow access to login & unauthorized pages to prevent infinite redirects
-  if (pathname === '/login' || pathname === '/unauthorized') {
+  if (
+    pathname === '/login' ||
+    pathname === '/unauthorized' ||
+    pathname.startsWith('/pub/')
+  ) {
     return NextResponse.next();
   }
 
