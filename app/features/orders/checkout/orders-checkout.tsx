@@ -47,7 +47,7 @@ import { Loader2 } from 'lucide-react';
 import KeyboardTouchNumbersDialog from '../../keyboard/keyboard-touch-numbers-dialog';
 import KeyboardTouchCashTendered from '../../keyboard/keyboard-touch-cash-tendered';
 import { useCartStore, useStoreName } from '@/app/providers/zustand-provider';
-import OrdersCartDetails from '../base/orders-cart-details';
+import OrdersCartDetails from '../base/orders-cart-card';
 import { cn } from '@/lib/utils';
 
 //
@@ -157,6 +157,7 @@ export default function OrdersCheckout({
   };
 
   const handleCancel = async () => {
+    clearCart();
     setShowCancelDialog(true);
   };
 

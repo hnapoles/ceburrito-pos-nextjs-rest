@@ -235,7 +235,13 @@ const OrdersProductCard: React.FC<productGridViewProps> = ({
                 </p>*/}
               </div>
               <p className="text-sm font-medium text-gray-900">
-                {formatPesoNoDecimals(product.basePrice)}
+                {product.isOutOfStock ? (
+                  <Badge variant="outline" className="border border-red-500">
+                    out of stock
+                  </Badge>
+                ) : (
+                  formatPesoNoDecimals(product.basePrice)
+                )}
               </p>
             </div>
           </div>
