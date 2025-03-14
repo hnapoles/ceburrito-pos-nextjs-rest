@@ -38,7 +38,7 @@ import { toast } from '@/hooks/use-toast';
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import KeyboardTouchProductSearch from '../../keyboard/keyboard-touch-product-search';
 
-import OrdersCartDetails from '../base/orders-cart-details';
+import OrdersCartDetails from '../base/orders-cart-card';
 
 interface ordersByIdAddItemsProps {
   products: ProductBase[];
