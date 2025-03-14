@@ -12,10 +12,12 @@ export default async function PubOrdersByIdReceiptPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{
     pubKey: string;
+    showButtons: string;
   }>;
 }) {
   const id = (await params).id;
   const pubKey = (await searchParams).pubKey || 'no-key';
+  const showButtons = (await searchParams).showButtons || undefined;
 
   const order = await GetOrderByIdForPublic(id, pubKey);
 
@@ -25,5 +27,11 @@ export default async function PubOrdersByIdReceiptPage({
     );
   }
 
-  return <OrdersByIdReceipt order={order} showQrCode={false} />;
+  return (
+    <OrdersByIdReceipt
+      order={order}
+      showQrCode={false}
+      showButtons={showButtons}
+    />
+  );
 }

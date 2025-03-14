@@ -32,6 +32,7 @@ import { Loader2 } from 'lucide-react';
 interface OrderReceiptProps {
   order: OrderBase;
   showQrCode: boolean;
+  showButtons?: string;
 }
 
 const pubSiteUrl =
@@ -40,8 +41,10 @@ const pubSiteUrl =
 export default function OrdersByIdReceipt({
   order,
   showQrCode = true,
+  showButtons,
 }: OrderReceiptProps) {
-  const receiptUrl = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}`;
+  const receiptUrlForDownload = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}`;
+  const receiptUrlForQrCode = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}&showButtons=true`;
 
   //const router = useRouter();
 
@@ -87,7 +90,7 @@ export default function OrdersByIdReceipt({
     try {
       console.log('Generating PDF...');
       const response = await fetch(
-        `/api/pdf?url=${encodeURIComponent(receiptUrl)}`,
+        `/api/pdf?url=${encodeURIComponent(receiptUrlForDownload)}`,
       );
 
       if (!response.ok) {
@@ -125,7 +128,7 @@ export default function OrdersByIdReceipt({
           </div>
           {showQrCode && (
             <div className="flex justify-center mb-4">
-              <QRCode value={receiptUrl} size={64} />
+              <QRCode value={receiptUrlForQrCode} size={64} />
             </div>
           )}
         </div>
@@ -206,15 +209,17 @@ export default function OrdersByIdReceipt({
         <div className="flex justify-end items-center mt-6 hidden">
           <Button onClick={handleDownloadPDF}>Download Receipt</Button>
         </div>
-        <div className="flex justify-end items-center mt-6">
-          <Button onClick={handleDownloadPDF2} disabled={processing}>
-            {processing ? (
-              <Loader2 className="w-10 h-10 animate-spin text-gray-500" />
-            ) : (
-              'Download as PDF'
-            )}
-          </Button>
-        </div>
+        {showButtons && (
+          <div className="flex justify-end items-center mt-6">
+            <Button onClick={handleDownloadPDF2} disabled={processing}>
+              {processing ? (
+                <Loader2 className="w-10 h-10 animate-spin text-gray-500" />
+              ) : (
+                'Download as PDF'
+              )}
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

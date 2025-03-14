@@ -20,5 +20,7 @@ export default async function OrdersByIdReceiptPage({
     );
   }
 
-  return <OrdersByIdReceipt order={order} showQrCode={true} />;
+  return (
+    <OrdersByIdReceipt order={order} showQrCode={true} showButtons={'true'} />
+  );
 }
