@@ -197,15 +197,15 @@ export default function OrdersByIdEdit({
               </Tooltip>
             </TooltipProvider>*/}
           </div>
-          <div className="border border-sm rounded-sm p-4 flex-1 overflow-auto">
-            <Table className="w-full">
+          <div className="border border-sm rounded-sm p-4">
+            <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Product</TableHead>
                   <TableHead>Name</TableHead>
-                  <TableHead>Size</TableHead>
-                  <TableHead>Spice</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden lg:table-cell">Size</TableHead>
+                  <TableHead className="hidden lg:table-cell">Spice</TableHead>
+                  <TableHead className="hidden lg:table-cell">Status</TableHead>
                   <TableHead className="text-right">Unit Cost</TableHead>
                   <TableHead className="text-right">Qty</TableHead>
                   <TableHead className="text-right">Amount</TableHead>
@@ -225,27 +225,48 @@ export default function OrdersByIdEdit({
                         />
                       ) : null}
                     </TableCell>
-                    <TableCell>{row.productName}</TableCell>
-                    <TableCell>{row.sizeOption}</TableCell>
-                    <TableCell>{row.spiceOption || 'n/a'}</TableCell>
-                    <TableCell>{row.status || 'open'}</TableCell>
+                    <TableCell>
+                      <div className="grid grid-cols-1">
+                        <div>{row.productName}</div>
+                        <div className="flex lg:hidden">
+                          {row.sizeOption} {row.spiceOption}
+                        </div>
+                        <div className="flex lg:hidden">
+                          status:{row.status || 'open'}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      {row.sizeOption || '-'}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      {row.spiceOption || '-'}
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell">
+                      {row.status || 'open'}
+                    </TableCell>
                     <TableCell className="text-right">
                       {formatPesoNoDecimals(Math.floor(row.unitPrice || 0))}
                     </TableCell>
-                    <TableCell className="text-right">
-                      {row.status === 'canceled' ? 0 : row.quantity}
-                    </TableCell>
+                    <TableCell className="text-right">{row.quantity}</TableCell>
                     <TableCell className="text-right">
                       {formatPesoNoDecimals(
-                        row.status === 'canceled'
-                          ? 0
-                          : Math.floor(row.unitPrice * row.quantity),
+                        Math.floor(row.unitPrice * row.quantity || 0),
                       )}
                     </TableCell>
                   </TableRow>
                 ))}
                 <TableRow className="mt-4">
-                  <TableCell className="font-medium text-right" colSpan={6}>
+                  <TableCell className="hidden lg:table-cell">
+                    <span></span>
+                  </TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    <span></span>
+                  </TableCell>
+                  <TableCell className="hidden lg:table-cell">
+                    <span></span>
+                  </TableCell>
+                  <TableCell className="font-medium text-right" colSpan={3}>
                     Total
                   </TableCell>
                   <TableCell className="text-right text-gray-900">

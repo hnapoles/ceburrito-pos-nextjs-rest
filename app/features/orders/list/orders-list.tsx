@@ -145,9 +145,9 @@ const OrdersList: React.FC<orderListProps> = ({
               <TableHeader>
                 <TableRow>
                   <TableHead>Customer Name</TableHead>
-                  <TableHead>Mode</TableHead>
+                  <TableHead className="hidden md:table-cell">Mode</TableHead>
                   <TableHead>Order</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden md:table-cell">Status</TableHead>
                   <TableHead>Ordered Date</TableHead>
                   <TableHead className="text-right">Items</TableHead>
                   <TableHead className="text-right">Total Amount</TableHead>
@@ -183,9 +183,13 @@ const OrdersList: React.FC<orderListProps> = ({
                       <TableCell className="font-medium">
                         {row.customerName}{' '}
                       </TableCell>
-                      <TableCell>{row.mode}</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {row.mode}
+                      </TableCell>
                       <TableCell>{row._id?.slice(-4).toUpperCase()}</TableCell>
-                      <TableCell>{row.status}</TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        {row.status}
+                      </TableCell>
                       <TableCell>
                         {row.orderedAt
                           ? new Date(row.orderedAt).toLocaleString()
