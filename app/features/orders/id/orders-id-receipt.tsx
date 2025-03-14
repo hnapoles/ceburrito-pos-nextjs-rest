@@ -44,7 +44,7 @@ export default function OrdersByIdReceipt({
   showButtons,
 }: OrderReceiptProps) {
   const receiptUrlForDownload = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}`;
-  const receiptUrlForQrCode = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}&showButtons=true`;
+  const receiptUrlForQrCode = `${pubSiteUrl}/orders/${order._id}/receipt?pubKey=${order.pubKey}`;
 
   //const router = useRouter();
 

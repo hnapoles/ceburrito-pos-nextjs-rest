@@ -396,7 +396,7 @@ export async function apiPublic<TResponse, TBody = unknown>(
 
   // Fallback to default if operation is not found
   const { dqMethod, url } = operationConfig[operation] || {
-    dqMethod: 'POST',
+    dqMethod: 'GET',
     url: `${base}/entities/${pubKey}/${entity}/${operation}/find`,
   };
 

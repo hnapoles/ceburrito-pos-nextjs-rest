@@ -100,7 +100,7 @@ export async function GetOrderById(id: string) {
 
 //Public facing api
 export async function GetOrderByIdForPublic(id: string, pubKey: string) {
-  const method = 'POST';
+  const method = 'GET';
 
   const order = await apiPublic<OrderBase, FindOneProps>(
     'order',
