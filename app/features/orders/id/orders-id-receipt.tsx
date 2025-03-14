@@ -2,6 +2,7 @@
 
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import { OrderBase } from '@/app/models/orders-model';
+import { Button } from '@/components/ui/button-rounded-sm';
 import {
   Card,
   CardContent,
@@ -21,6 +22,8 @@ import { format } from 'date-fns';
 import Image from 'next/image';
 
 import QRCode from 'react-qr-code';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 interface OrderReceiptProps {
   order: OrderBase;
@@ -35,6 +38,33 @@ export default function OrdersByIdReceipt({
   showQrCode = true,
 }: OrderReceiptProps) {
   const receiptUrl = `${pubSiteUrl}/orders/${order._id}/receipt/`;
+
+  const handleDownloadPDF = async () => {
+    const receiptElement = document.getElementById('receipt-content');
+    if (!receiptElement) return;
+
+    // Ensure fonts and styles are rendered correctly
+    const canvas = await html2canvas(receiptElement, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: true,
+      windowWidth: receiptElement.scrollWidth,
+      windowHeight: receiptElement.scrollHeight,
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+    const imgWidth = 210;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight);
+    pdf.save(`receipt_${order._id}.pdf`);
+  };
 
   return (
     <Card className="w-full max-w-2xl mx-auto p-4 shadow-lg rounded-lg">
@@ -126,6 +156,9 @@ export default function OrdersByIdReceipt({
             ))}
           </TableBody>
         </Table>
+        <div className="flex justify-end items-center mt-6">
+          <Button onClick={handleDownloadPDF}>Download Receipt</Button>
+        </div>
       </CardContent>
     </Card>
   );
