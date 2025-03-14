@@ -336,53 +336,104 @@ export async function apiComplexDq<TResponse, TBody = unknown>(
   }
 }
 
-/* how to use examples */
-/*
-import { apiClient } from '@/utils/apiClient';
+export async function apiPublic<TResponse, TBody = unknown>(
+  entity: string,
+  operation: ApiOperationNames,
+  id?: string,
+  pubKey?: string,
+  options: FetchOptions<TBody> = {},
+): Promise<TResponse> {
+  const { method = 'GET', body, headers = {}, timeout = 10000 } = options;
 
-async function fetchUsers() {
-  try {
-    const users = await apiClient<User[]>('https://api.example.com/users');
-    console.log(users);
-  } catch (error) {
-    console.error(error);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  let token;
+  //let apiKey;
+  const session = await auth();
+  if (session?.user?.accessToken) {
+    token = session?.user?.accessToken;
   }
-}
+  /*
+  if (session?.user?.apiKey) {
+    apiKey = session?.user?.apiKey;
+  }
+    */
 
-import { apiClient } from '@/utils/apiClient';
+  const base =
+    process.env.NEXT_PUBLIC_APP_API_SERVER_PUB_URL ||
+    'http://172.104.117.139:3000/pub';
 
-async function createUser() {
+  const operationConfig: Record<
+    ApiOperationNames,
+    { dqMethod: string; url: string }
+  > = {
+    [ApiOperationNames.Create]: {
+      dqMethod: 'POST',
+      url: `${base}/entities/${pubKey}/${entity}/Create`,
+    },
+    [ApiOperationNames.FindAll]: {
+      dqMethod: 'POST',
+      url: `${base}/entities/${pubKey}/${entity}/FindAll/find`,
+    },
+    [ApiOperationNames.FindOne]: {
+      dqMethod: 'GET',
+      url: `${base}/entities/${pubKey}/${entity}/FindOne/${id}`,
+    },
+    [ApiOperationNames.Delete]: {
+      dqMethod: 'DELETE',
+      url: `${base}/entities/${pubKey}/${entity}/Delete/${id}`,
+    },
+    [ApiOperationNames.Update]: {
+      dqMethod: 'PUT',
+      url: `${base}/entities/${pubKey}/${entity}/Update/${id}`,
+    },
+    [ApiOperationNames.FileUpload]: {
+      dqMethod: 'POST',
+      url: `${base}/files/upload/${pubKey}/${entity}`,
+    },
+  };
+
+  // Fallback to default if operation is not found
+  const { dqMethod, url } = operationConfig[operation] || {
+    dqMethod: 'POST',
+    url: `${base}/entities/${pubKey}/${entity}/${operation}/find`,
+  };
+
   try {
-    const newUser = await apiClient<User, { name: string }>('https://api.example.com/users', {
-      method: 'POST',
-      body: { name: 'John Doe' },
+    const response = await fetch(url, {
+      method: dqMethod,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...headers,
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: controller.signal,
     });
-    console.log(newUser);
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      if (errorData.error) {
+        throw new Error(
+          errorData.message ||
+            `HTTP Error: ${response.status} ${errorData.error} method=${method} url=${url}`,
+        );
+      }
+      throw new Error(
+        errorData.message ||
+          `HTTP Error: ${response.status} method=${method} url=${url}`,
+      );
+    }
+
+    return (await response.json()) as TResponse;
   } catch (error) {
-    console.error(error);
+    console.log('err from catch ', error);
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Request timed out');
+    }
+    throw error;
   }
 }
-
-
-import { apiClient } from '@/utils/apiClient';
-
-async function fetchProfile(token: string) {
-  try {
-    const profile = await apiClient<User>('https://api.example.com/profile', { token });
-    console.log(profile);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-import { apiClient } from '@/utils/apiClient';
-
-async function fetchWithTimeout() {
-  try {
-    const data = await apiClient<DataType>('https://api.example.com/slow-endpoint', { timeout: 5000 });
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-*/

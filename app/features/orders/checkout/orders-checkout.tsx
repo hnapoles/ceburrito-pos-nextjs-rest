@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
+import { v4 as uuidv4 } from 'uuid';
+
 /*
 import {
   Tooltip,
@@ -146,7 +148,9 @@ export default function OrdersCheckout({
       customerEmail: customerEmail,
       totalAmount: totalAmount,
       type: orderType,
+      storeName: storeName || '',
       orderLines: orderLines,
+      pubKey: uuidv4(),
     };
 
     await CreateOrder(newOrder);

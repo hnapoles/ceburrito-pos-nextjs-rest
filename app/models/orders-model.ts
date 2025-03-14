@@ -73,6 +73,7 @@ export const OrderZodSchema = z.object({
   updatedAt: z.string().datetime().optional(),
   createdBy: z.string().optional(),
   updatedBy: z.string().optional(),
+  pubKey: z.string().optional(),
 });
 
 export type OrderBase = z.infer<typeof OrderZodSchema>;
