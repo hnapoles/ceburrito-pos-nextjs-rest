@@ -1,4 +1,7 @@
-import { GetOrderById } from '@/app/actions/server/orders-actions';
+import {
+  GetOrderById,
+  GetOrganizationById,
+} from '@/app/actions/server/orders-actions';
 
 import NotFoundGlobal from '@/app/nav/not-found-global';
 
@@ -13,6 +16,9 @@ export default async function OrdersByIdReceiptPage({
   const id = (await params).id;
 
   const order = await GetOrderById(id);
+  const defaultOrgId =
+    process.env.APP_DEFAULT_ORG_ID || '67d3b82d98e8865f5b172af1';
+  const org = await GetOrganizationById(defaultOrgId);
 
   if (!order) {
     return (
@@ -21,6 +27,11 @@ export default async function OrdersByIdReceiptPage({
   }
 
   return (
-    <OrdersByIdReceipt order={order} showQrCode={true} showButtons={'true'} />
+    <OrdersByIdReceipt
+      org={org}
+      order={order}
+      showQrCode={true}
+      showButtons={'true'}
+    />
   );
 }
