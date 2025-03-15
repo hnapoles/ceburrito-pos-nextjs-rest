@@ -2,16 +2,13 @@
 
 import { apiClientDq, apiPublic } from '@/lib/fetch-helper';
 
-import {
-  OrderBase,
-  FindOrdersOutput,
-  OrganizationBase,
-} from '@/app/models/orders-model';
+import { OrderBase, FindOrdersOutput } from '@/app/models/orders-model';
 import {
   ApiOperationNames,
   FindAllProps,
   FindOneProps,
 } from '@/app/models/api-model';
+import { OrganizationBase } from '@/app/models/organizations-model';
 
 export async function DeleteOrderById(id: string) {
   const entity = 'order';

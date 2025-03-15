@@ -4,7 +4,7 @@ import React from 'react';
 //import { useRouter } from 'next/navigation';
 
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
-import { OrderBase, OrganizationBase } from '@/app/models/orders-model';
+import { OrderBase } from '@/app/models/orders-model';
 import { Button } from '@/components/ui/button-rounded-sm';
 import {
   Card,
@@ -28,6 +28,7 @@ import QRCode from 'react-qr-code';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Loader2 } from 'lucide-react';
+import { OrganizationBase } from '@/app/models/organizations-model';
 
 interface OrderReceiptProps {
   org: OrganizationBase;
