@@ -8,15 +8,14 @@ export default async function OrdersPage(props: {
     keyword: string;
     page: string;
     limit: string;
-    orderType: string;
   }>;
-  params: { orderType: string }; // Capture orderType from the path
+  params: Promise<{ orderType: string }>; // Capture orderType from the path
 }) {
   const searchParams = await props.searchParams;
   const keyword = searchParams.keyword ?? null;
   const limit = searchParams.limit ?? '99999';
   const page = searchParams.page ?? '1';
-  const orderType = (await props.params.orderType) || 'pos';
+  const orderType = (await props.params).orderType || 'pos';
 
   const results = await GetProducts(
     keyword,
