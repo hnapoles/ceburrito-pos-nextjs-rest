@@ -128,7 +128,7 @@ export default function OrdersCreateByOrderType({
       toast({
         title: 'Cart updated',
         description: <span>{selectedProduct.productName}, added to cart</span>,
-        duration: 1000, // x seconds
+        duration: 2000, // x seconds
       });
     }
   }

@@ -77,7 +77,7 @@ const OrdersList: React.FC<orderListProps> = ({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const createLink = `/orders/create`;
+  const createLink = `/orders/create/pos`;
 
   const rowsPerPage = limit;
 

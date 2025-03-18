@@ -10,12 +10,13 @@ export default async function OrdersPage(props: {
     limit: string;
     orderType: string;
   }>;
+  params: { orderType: string }; // Capture orderType from the path
 }) {
   const searchParams = await props.searchParams;
   const keyword = searchParams.keyword ?? null;
   const limit = searchParams.limit ?? '99999';
   const page = searchParams.page ?? '1';
-  const orderType = searchParams.orderType || 'pos';
+  const orderType = (await props.params.orderType) || 'pos';
 
   const results = await GetProducts(
     keyword,
@@ -33,11 +34,22 @@ export default async function OrdersPage(props: {
 
   const searchTags = (searchTagsLookup || []).map((item) => item.lookupValue);
 
+  //only allow pos order type on this page -- all other types (btb, btc) is on another app
+  //this is to simplify this app
   if (!products) {
     return (
       <NotFoundGlobal
         display={'Product data not found'}
         backUrl={'/dashboard'}
+      />
+    );
+  }
+
+  if (orderType !== 'pos') {
+    return (
+      <NotFoundGlobal
+        display={`Order type [${orderType}], not valid for this app.`}
+        backUrl={'/orders'}
       />
     );
   }
