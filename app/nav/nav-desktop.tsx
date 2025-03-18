@@ -106,9 +106,13 @@ const DesktopNav: React.FC = () => {
             </Link>*/}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button aria-haspopup="true" size="icon" variant="ghost">
-                  <SquareDashedMousePointer className="h-4 w-4" />
-                  <span className="sr-only">Toggle menu</span>
+                <Button
+                  aria-haspopup="true"
+                  variant="ghost"
+                  className="flex h-9 w-9 flex-col items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <SquareDashedMousePointer className="h-5 w-5 text-black" />
+                  <span className="hidden">Switch To</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -119,8 +123,9 @@ const DesktopNav: React.FC = () => {
                   <DropdownMenuItem
                     key={item.title}
                     onClick={() => router.push(item.href)}
+                    className="flex items-center gap-4 px-2.5  hover:text-foreground cursor-pointer"
                   >
-                    <item.iconName className="mr-1 h-4 w-4" />
+                    <item.iconName className="h-5 w-5 text-black" />
                     {item.title}
                   </DropdownMenuItem>
                 ))}

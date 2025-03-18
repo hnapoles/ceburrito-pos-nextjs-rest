@@ -111,7 +111,7 @@ export const listAppItems = [
   },
   {
     title: 'Admin App',
-    href: 'https://adm.ceburrito.ph',
+    href: 'https://app.ceburrito.ph',
     iconName: Settings,
   },
 ];
