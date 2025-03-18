@@ -24,6 +24,8 @@ export const StoreZodSchema = z.object({
     }),
   imageUrl: z.string().optional(),
   storeAddress: z.string().optional(),
+  memberOfOrganizationName: z.string().optional(),
+  memberOfOrganizationId: z.string().optional(),
   createdBy: z.string().optional(),
   createdAt: z.date().optional(),
   updatedBy: z.string().optional(),

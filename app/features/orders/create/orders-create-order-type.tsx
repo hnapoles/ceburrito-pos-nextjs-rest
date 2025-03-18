@@ -35,6 +35,7 @@ import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
 
 import OrdersProductCard from '../base/orders-product-card';
 import { toast } from '@/hooks/use-toast';
+
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import KeyboardTouchProductSearch from '../../keyboard/keyboard-touch-product-search';
 
@@ -125,8 +126,9 @@ export default function OrdersCreateByOrderType({
       });
 
       toast({
-        title: 'Update success',
+        title: 'Cart updated',
         description: <span>{selectedProduct.productName}, added to cart</span>,
+        duration: 1000, // x seconds
       });
     }
   }
@@ -255,7 +257,7 @@ export default function OrdersCreateByOrderType({
       </div>
       {/* Floater - Order Summary */}
       <div className="fixed bottom-0 left-0 w-full bg-white px-4 py-2 shadow-md border-t border-black-900 flex items-center justify-between gap-x-4">
-        <div className="flex items-center space-x-6 overflow-hidden ml-0 md:ml-12">
+        <div className="flex items-center space-x-6 overflow-hidden ml-0 md:ml-20">
           <div className="flex items-center space-x-2">
             <span className="font-medium whitespace-nowrap">
               Items (
