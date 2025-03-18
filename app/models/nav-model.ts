@@ -9,7 +9,7 @@ import {
   //Package,
   //Package2,
   //PanelLeft,
-  //Settings,
+  Settings,
   ShoppingCart,
   //Users2,
   //PhilippinePeso,
@@ -18,6 +18,8 @@ import {
   //Shapes,
   ListOrdered,
   Beef,
+  ReceiptCent,
+  FileUser,
   //ChartLine,
 } from 'lucide-react';
 
@@ -84,4 +86,32 @@ export const listNavItems = [
     iconName: CreditCard,
   },
   */
+];
+
+export interface AppItems {
+  title: string;
+  href: string;
+  iconName: LucideIcon;
+}
+
+export interface AppItemsProps {
+  navItems: AppItems[];
+}
+
+export const listAppItems = [
+  {
+    title: 'Finance App',
+    href: 'https://fin.ceburrito.ph',
+    iconName: ReceiptCent,
+  },
+  {
+    title: 'HR App',
+    href: 'https://hrs.ceburrito.ph',
+    iconName: FileUser,
+  },
+  {
+    title: 'Admin App',
+    href: 'https://adm.ceburrito.ph',
+    iconName: Settings,
+  },
 ];
