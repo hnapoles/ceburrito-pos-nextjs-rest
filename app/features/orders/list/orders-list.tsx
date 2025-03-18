@@ -135,7 +135,7 @@ const OrdersList: React.FC<orderListProps> = ({
         </div>
       </div>
       <TabsContent value={currentTab}>
-        <Card className="m-1 md:m-2">
+        <Card>
           <CardHeader>
             <CardTitle>Orders</CardTitle>
             <CardDescription>Manage orders list.</CardDescription>

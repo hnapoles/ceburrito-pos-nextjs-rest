@@ -45,6 +45,12 @@ export const listNavItems = [
     iconName: Beef,
   },
   {
+    title: 'POS',
+    href: '/orders/create/pos',
+    iconName: ShoppingCart,
+  },
+  /*
+  {
     title: 'Stores',
     href: '/stores',
     iconName: Building,
@@ -74,4 +80,5 @@ export const listNavItems = [
     href: '/orders/create/btc',
     iconName: CreditCard,
   },
+  */
 ];

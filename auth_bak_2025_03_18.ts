@@ -118,27 +118,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       };
     },
-
-    async redirect({ url, baseUrl }) {
-      try {
-        const parsedUrl = new URL(url, baseUrl); // Ensure URL is absolute
-        const destinationHost = parsedUrl.hostname;
-
-        // Allow all subdomains of ceburrito.ph
-        if (
-          destinationHost.endsWith('.ceburrito.ph') ||
-          destinationHost === 'ceburrito.ph'
-        ) {
-          return url;
-        }
-
-        // Default: Redirect to baseUrl if the URL is not allowed
-        return baseUrl;
-      } catch (error) {
-        console.error('Redirect error:', error);
-        return baseUrl;
-      }
-    },
   },
 });
 

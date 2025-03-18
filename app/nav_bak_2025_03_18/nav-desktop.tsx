@@ -58,7 +58,7 @@ const DesktopNav: React.FC = () => {
   const { storeName } = useStoreName();
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-20 flex-col border-r bg-background sm:flex">
+    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
       <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
         <Link
           href="/dashboard"
@@ -74,10 +74,7 @@ const DesktopNav: React.FC = () => {
 
         {listNavItems.map((item) => (
           <NavItem href={item.href} label={item.title} key={item.title}>
-            <div className="flex flex-col items-center justify-center text-center">
-              <item.iconName className="h-5 w-5 text-black" />
-              <span className="text-[10px] mt-1">{item.title}</span>
-            </div>
+            <item.iconName className="h-5 w-5 text-black" />
           </NavItem>
         ))}
       </nav>

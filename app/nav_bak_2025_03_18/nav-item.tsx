@@ -1,12 +1,10 @@
 'use client';
 
-/*
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-*/
 //import clsx from 'clsx';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -22,8 +20,7 @@ export function NavItem({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  //const isActive = pathname === href;
-  const isActive = pathname.includes(label.toLowerCase());
+  const isActive = pathname === href;
 
   /*
   return (
@@ -68,7 +65,6 @@ export function NavItem({
     </Link>
   );
   */
-  /*
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -84,18 +80,5 @@ export function NavItem({
       </TooltipTrigger>
       <TooltipContent side="right">{label}</TooltipContent>
     </Tooltip>
-  );
-*/
-  return (
-    <Link
-      href={href}
-      className={cn(
-        'flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground',
-        isActive ? 'text-blue-600' : 'text-black-500',
-      )}
-    >
-      {children}
-      <div className="hidden">{label}</div>
-    </Link>
   );
 }

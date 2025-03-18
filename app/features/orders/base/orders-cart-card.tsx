@@ -157,6 +157,12 @@ export default function OrdersCartDetails({
             <span>Item Count {totalItems}</span>
           </div>
         </div>
+        {!sortedData ||
+          (sortedData.length === 0 && (
+            <div className="text-red-500 text-sm mt-6">
+              Empty Cart. Please add items.
+            </div>
+          ))}
 
         <div className="mt-6">
           <div className="flow-root">
