@@ -35,6 +35,7 @@ import { OrderBase, OrderLineBase } from '@/app/models/orders-model';
 
 import OrdersProductCard from '../base/orders-product-card';
 import { toast } from '@/hooks/use-toast';
+
 import { formatPesoNoDecimals } from '@/app/actions/client/peso';
 import KeyboardTouchProductSearch from '../../keyboard/keyboard-touch-product-search';
 
@@ -125,8 +126,9 @@ export default function OrdersCreateByOrderType({
       });
 
       toast({
-        title: 'Update success',
+        title: 'Cart updated',
         description: <span>{selectedProduct.productName}, added to cart</span>,
+        duration: 1000, // x seconds
       });
     }
   }

@@ -1,4 +1,7 @@
-import { CreditCard, Handshake, LucideIcon } from 'lucide-react';
+import {
+  //CreditCard, Handshake,
+  LucideIcon,
+} from 'lucide-react';
 
 import {
   Home,
@@ -8,14 +11,14 @@ import {
   //PanelLeft,
   //Settings,
   ShoppingCart,
-  Users2,
+  //Users2,
   //PhilippinePeso,
   //Utensils,
-  Building,
+  //Building,
   //Shapes,
   ListOrdered,
   Beef,
-  ChartLine,
+  //ChartLine,
 } from 'lucide-react';
 
 export interface NavItems {
