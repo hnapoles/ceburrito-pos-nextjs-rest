@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 //import Image from 'next/image'
-import { Settings } from 'lucide-react';
+import { SquareDashedMousePointer } from 'lucide-react';
 //import { VercelLogo } from '../styles/icons';
 
 import {
@@ -14,8 +14,20 @@ import {
 
 import { NavItem } from './nav-item';
 
-import { listNavItems } from '@/app/models/nav-model';
+import { listNavItems, listAppItems } from '@/app/models/nav-model';
 import { useStoreName } from '../providers/zustand-provider';
+
+import { useRouter } from 'next/navigation';
+
+import { Button } from '@/components/ui/button-rounded-sm';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
 
 const DesktopNav: React.FC = () => {
   /*
@@ -56,6 +68,7 @@ const DesktopNav: React.FC = () => {
   */
 
   const { storeName } = useStoreName();
+  const router = useRouter();
 
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-20 flex-col border-r bg-background sm:flex">
@@ -84,15 +97,37 @@ const DesktopNav: React.FC = () => {
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link
+            {/*<Link
               href="#"
               className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
             >
-              <Settings className="h-5 w-5" />
-              <span className="sr-only">Settings</span>
-            </Link>
+              <SquareDashedMousePointer className="h-5 w-5" />
+              <span className="sr-only">Switch To</span>
+            </Link>*/}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button aria-haspopup="true" size="icon" variant="ghost">
+                  <SquareDashedMousePointer className="h-4 w-4" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>More Apps</DropdownMenuLabel>
+                <Separator />
+
+                {listAppItems.map((item) => (
+                  <DropdownMenuItem
+                    key={item.title}
+                    onClick={() => router.push(item.href)}
+                  >
+                    <item.iconName className="mr-1 h-4 w-4" />
+                    {item.title}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </TooltipTrigger>
-          <TooltipContent side="right">Settings</TooltipContent>
+          <TooltipContent side="right">Switch To</TooltipContent>
         </Tooltip>
       </nav>
     </aside>

@@ -33,9 +33,10 @@ import {
   Copy,
   Edit,
   Grid2x2,
-  MoreHorizontal,
+  //MoreHorizontal,
   ReceiptText,
   RefreshCw,
+  SquareDashedMousePointer,
   Trash2,
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
@@ -108,7 +109,7 @@ export default function OrdersByIdView({
               <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
                 <DropdownMenuTrigger asChild>
                   <Button aria-haspopup="true" size="icon" variant="ghost">
-                    <MoreHorizontal className="h-4 w-4 text-blue-900" />
+                    <SquareDashedMousePointer className="h-4 w-4 text-blue-900" />
                     <span className="sr-only">Toggle menu</span>
                   </Button>
                 </DropdownMenuTrigger>

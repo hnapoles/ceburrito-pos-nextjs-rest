@@ -18,12 +18,11 @@ export default async function OrdersCreatePage() {
   return (
     <div className="container mx-auto lg:p-4 md:p-2 p-1">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-1">
-        <Link href={`/orders/create/pos`}>
-          <Card className="text-center flex flex-col items-center justify-center">
+        <Link href={`/orders/create/pos`} className="flex">
+          <Card className="text-center flex flex-col items-center justify-center h-full w-full">
             <CardHeader>
               <CardTitle className="text-sm font-medium">POS</CardTitle>
             </CardHeader>
-
             <CardContent className="text-green-500">
               <ShoppingCart className="w-12 h-12" />
             </CardContent>
@@ -32,8 +31,8 @@ export default async function OrdersCreatePage() {
           </Card>
         </Link>
 
-        <Link href={`/orders/create/btb`}>
-          <Card className="text-center flex flex-col items-center justify-center">
+        <div className="flex opacity-50 pointer-events-none">
+          <Card className="text-center flex flex-col items-center justify-center h-full w-full">
             <CardHeader>
               <CardTitle className="text-sm font-medium">BTB</CardTitle>
             </CardHeader>
@@ -43,9 +42,10 @@ export default async function OrdersCreatePage() {
             <CardContent>Business To Business</CardContent>
             <CardFooter></CardFooter>
           </Card>
-        </Link>
-        <Link href={`/orders/create/btc`}>
-          <Card className="text-center flex flex-col items-center justify-center">
+        </div>
+
+        <div className="flex opacity-50 pointer-events-none">
+          <Card className="text-center flex flex-col items-center justify-center h-full w-full">
             <CardHeader>
               <CardTitle className="text-sm font-medium">BTC</CardTitle>
             </CardHeader>
@@ -55,7 +55,7 @@ export default async function OrdersCreatePage() {
             <CardContent>Business To Consumer</CardContent>
             <CardFooter></CardFooter>
           </Card>
-        </Link>
+        </div>
       </div>
     </div>
   );

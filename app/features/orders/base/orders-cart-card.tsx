@@ -68,6 +68,7 @@ export default function OrdersCartDetails({
       toast({
         title: 'Line removed',
         description: <p>{line.productName}</p>,
+        duration: 2000, // x seconds
       });
 
       query.set('refresh', Date.now().toString()); // Change URL to trigger a refresh
@@ -122,6 +123,7 @@ export default function OrdersCartDetails({
       toast({
         title: 'Cart item updated',
         description: <p>{line.productName}</p>,
+        duration: 2000, // x seconds
       });
 
       //await revalidateAndRedirectUrl(pathname);
