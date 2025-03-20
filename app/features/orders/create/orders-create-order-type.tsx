@@ -169,7 +169,7 @@ export default function OrdersCreateByOrderType({
                     </Select>
                   ) : (
                     <div className="w-full overflow-x-auto sm:overflow-x-auto md:overflow-x-auto">
-                      <TabsList className="flex w-max space-x-2">
+                      <TabsList className="flex w-max space-x-0">
                         <TabsTrigger value="all">All</TabsTrigger>
                         {categories.map((item) => (
                           <TabsTrigger key={item._id} value={item.lookupValue}>
@@ -181,16 +181,7 @@ export default function OrdersCreateByOrderType({
                   )}
                 </div>
 
-                {/* Search Input & Clear Button */}
-                <Button
-                  variant="ghost"
-                  className="w-4 h-10 gap-0"
-                  onClick={() => setSearch('')}
-                >
-                  <CircleX className="h-10 w-4" />
-                  <span className="sr-only sm:whitespace-nowrap">Clear</span>
-                </Button>
-                <div className="w-20 xl:w-40 flex-shrink-0">
+                <div className="w-24 xl:w-40 flex-shrink-0">
                   <Input
                     placeholder="Search..."
                     value={search}
@@ -202,6 +193,16 @@ export default function OrdersCreateByOrderType({
                     onClick={() => setIsSearchTouchDialogOpen(true)}
                   />
                 </div>
+                {/* Search Input & Clear Button */}
+                <Button
+                  variant="outline"
+                  className="h-10 gap-0 text-xs border border-red-500"
+                  onClick={() => setSearch('')}
+                >
+                  {/*}CircleX className="h-10 w-4" />*/}
+                  Clear
+                  <span className="sr-only sm:whitespace-nowrap">Clear</span>
+                </Button>
               </div>
 
               <TabsContent value={category}>
