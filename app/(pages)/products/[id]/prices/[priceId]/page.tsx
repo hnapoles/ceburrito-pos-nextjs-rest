@@ -12,12 +12,17 @@ import {
 } from '@/app/actions/server/lookups-actions';
 
 import { DefaultSizeOptions } from '@/app/models/lookups-model';
+import ErrorDisplay from '@/app/features/error/error-display';
 
 export default async function ProductsByIdPricesEditPage({
   params,
 }: {
   params: Promise<{ id: string; priceId: string }>;
 }) {
+  const isAllowed = false;
+  if (!isAllowed)
+    return <ErrorDisplay message={'Permission denied.'} type={'error'} />;
+
   const id = (await params).id;
   const priceId = (await params).priceId;
 

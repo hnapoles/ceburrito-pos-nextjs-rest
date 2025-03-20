@@ -21,6 +21,7 @@ import { WhoTabContent } from '@/app/nav/who-tab-content';
 import { UserWhoProps } from '@/app/models/users-model';
 
 import ProductsByIdPricesTableSimple from '@/app/features/products/id/edit/products-id-prices-table-simple';
+import ErrorDisplay from '@/app/features/error/error-display';
 
 //import { IsUserPermissionLevelAllowed } from '@/app/actions/server/permissions-actions';
 //import ErrorDisplay from '@/app/features/error/error-display';
@@ -43,6 +44,10 @@ export default async function ProductUpdatePage({
       />
     );
   */
+
+  const isAllowed = false;
+  if (!isAllowed)
+    return <ErrorDisplay message={'Permission denied.'} type={'error'} />;
 
   const product = await GetProductById(id);
   const lookups = await GetLookups('product', null);

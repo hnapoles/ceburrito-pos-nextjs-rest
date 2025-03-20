@@ -13,12 +13,17 @@ import {
 import { DefaultSizeOptions } from '@/app/models/lookups-model';
 
 import ProductsByIdPricesTableSimple from '@/app/features/products/id/edit/products-id-prices-table-simple';
+import ErrorDisplay from '@/app/features/error/error-display';
 
 export default async function ProductsByIdPricesCreatePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const isAllowed = false;
+  if (!isAllowed)
+    return <ErrorDisplay message={'Permission denied.'} type={'error'} />;
+
   const id = (await params).id;
 
   const product = await GetProductById(id);
