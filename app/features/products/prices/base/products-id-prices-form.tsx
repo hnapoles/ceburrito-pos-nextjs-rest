@@ -53,11 +53,12 @@ import {
 
 import { Lookup } from '@/app/models/lookups-model';
 import { CustomerBase } from '@/app/models/customers-model';
-import { StoreBase } from '@/app/models/stores-model';
+//import { StoreBase } from '@/app/models/stores-model';
 import {
   CreateProductSellingPrices,
   UpdateProductSellingPriceById,
 } from '@/app/actions/server/product-selling-prices-actions';
+import { OrganizationBase } from '@/app/models/organizations-model';
 
 export default function ProductsByIdPricesFormBase({
   product,
@@ -71,7 +72,7 @@ export default function ProductsByIdPricesFormBase({
   orderTypes: Lookup[];
   sizeOptions?: Lookup[];
   customers: CustomerBase[];
-  stores: StoreBase[];
+  stores: OrganizationBase[];
 }) {
   //const pathname = usePathname();
   const router = useRouter();
