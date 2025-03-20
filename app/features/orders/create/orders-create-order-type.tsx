@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/select';
 
 import { Input } from '@/components/ui/input';
-import { ChevronLeft, ChevronRight, CircleX } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button-rounded-sm';
 
 import { useCartStore, useStoreName } from '@/app/providers/zustand-provider';
