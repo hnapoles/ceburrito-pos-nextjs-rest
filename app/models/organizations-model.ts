@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const OrganizationZodSchema = z.object({
-  id: z.string().optional(), // MongoDB ObjectID (optional)
+  _id: z.string().optional(), // MongoDB ObjectID (optional)
 
   name: z
     .string()
@@ -71,7 +71,11 @@ export const OrganizationZodSchema = z.object({
   archivedAt: z.string().datetime().optional(),
 
   pubKey: z.string().optional(),
-
+  memberOfOrganizationId: z.string(),
+  memberOfOrganizationName: z
+    .string()
+    .min(6, 'Must be at least 6 characters')
+    .max(255, 'Must not exceed 255 characters'),
   createdAt: z.string().datetime().optional(),
   updatedAt: z.string().datetime().optional(),
 
@@ -80,3 +84,8 @@ export const OrganizationZodSchema = z.object({
 });
 
 export type OrganizationBase = z.infer<typeof OrganizationZodSchema>;
+
+export interface IGetOrganizationResults {
+  count: number;
+  data: OrganizationBase[];
+}

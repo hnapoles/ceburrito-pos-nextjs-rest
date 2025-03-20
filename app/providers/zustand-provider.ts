@@ -3,20 +3,29 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 import { OrderLineBase } from '../models/orders-model';
 
-//this is the only being used for now -- all other store is not used
 interface StoreState {
   storeName: string | null;
+  storeColor: string | null;
   setStoreName: (name: string) => void;
+  setStoreColor: (color: string) => void;
 }
 
-export const useStoreName = create<StoreState>((set) => ({
-  storeName:
-    typeof window !== 'undefined' ? localStorage.getItem('storeName') : null,
-  setStoreName: (name) => {
-    localStorage.setItem('storeName', name);
-    set({ storeName: name });
-  },
-}));
+export const useStoreName = create<StoreState>()(
+  persist(
+    (set) => ({
+      storeName: null,
+      storeColor: 'purple-500', // Default color
+      setStoreName: (name) => set({ storeName: name }),
+      setStoreColor: (color) => {
+        set(() => ({ storeColor: color }));
+      },
+    }),
+    {
+      name: 'store-settings', // Key used in localStorage
+      storage: createJSONStorage(() => localStorage),
+    },
+  ),
+);
 
 // Define Zustand store with localStorage persistence
 interface CartStoreState {
