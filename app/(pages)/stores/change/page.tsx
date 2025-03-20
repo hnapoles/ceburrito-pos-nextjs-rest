@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/select';
 //import { Button } from '@/components/ui/button';
 import { GetLookupStores } from '@/app/actions/server/lookups-actions';
-import { StoreBase } from '@/app/models/stores-model';
+import { OrganizationBase } from '@/app/models/organizations-model';
 
 import {
   Card,
@@ -23,8 +23,8 @@ import {
 import { useRouter } from 'next/navigation';
 
 export default function StoresChangePage() {
-  const { storeName, setStoreName } = useStoreName();
-  const [stores, setStores] = useState<StoreBase[]>([]);
+  const { storeName, setStoreName, setStoreColor } = useStoreName();
+  const [stores, setStores] = useState<OrganizationBase[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -36,11 +36,15 @@ export default function StoresChangePage() {
   }, [storeName]);
 
   const handleSelectStore = (name: string) => {
+    const selectedStore = stores.find((s) => s.name === name);
+
+    if (selectedStore) {
+      setStoreColor(selectedStore.color || 'purple-500');
+    }
+
     setStoreName(name);
-    //router.push('/dashboard');
     router.back();
   };
-
   return (
     <Card className="max-w-md mx-auto shadow-md border border-gray-300">
       <CardHeader>

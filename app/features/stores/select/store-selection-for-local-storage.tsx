@@ -17,12 +17,12 @@ import {
 } from '@/components/ui/select';
 //import { Button } from '@/components/ui/button';
 import { GetLookupStores } from '@/app/actions/server/lookups-actions';
-import { StoreBase } from '@/app/models/stores-model';
+import { OrganizationBase } from '@/app/models/organizations-model';
 
 const StoreSelectionModal = () => {
-  const { storeName, setStoreName } = useStoreName();
+  const { storeName, setStoreName, setStoreColor } = useStoreName();
   const [open, setOpen] = useState(!storeName); // Open if no store selected
-  const [stores, setStores] = useState<StoreBase[]>([]);
+  const [stores, setStores] = useState<OrganizationBase[]>([]);
 
   useEffect(() => {
     const getStores = async () => {
@@ -35,6 +35,12 @@ const StoreSelectionModal = () => {
   }, [storeName]);
 
   const handleSelectStore = (name: string) => {
+    const selectedStore = stores.find((s) => s.name === name);
+
+    if (selectedStore) {
+      setStoreColor(selectedStore.color || 'purple-500');
+    }
+
     setStoreName(name);
     setOpen(false);
   };
@@ -50,7 +56,10 @@ const StoreSelectionModal = () => {
           <Button onClick={() => handleSelectStore('Store A')}>Store A</Button>
           <Button onClick={() => handleSelectStore('Store B')}>Store B</Button>
           */}
-          <Select onValueChange={(value) => handleSelectStore(value)}>
+          <Select
+            value={storeName ?? undefined}
+            onValueChange={handleSelectStore} // No need for inline function
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select store name" />
             </SelectTrigger>

@@ -10,7 +10,8 @@ import {
 } from '@/app/models/lookups-model';
 
 import { FindCustomersOutput } from '@/app/models/customers-model';
-import { IGetStoresResults } from '@/app/models/stores-model';
+//import { IGetStoresResults } from '@/app/models/stores-model';
+import { IGetOrganizationResults } from '@/app/models/organizations-model';
 
 export async function GetLookupsOrderTypes() {
   const lookups = await apiClientDq<FindLookupOutput, FindAllProps>(
@@ -49,14 +50,15 @@ export async function GetLookupStores() {
   const apiProps: FindAllProps = {
     andFilter: {
       status: 'active',
+      type: 'store',
     },
     page: 1,
     limit: 99999,
   };
 
   try {
-    const results = await apiClientDq<IGetStoresResults, FindAllProps>(
-      'store',
+    const results = await apiClientDq<IGetOrganizationResults, FindAllProps>(
+      'organization',
       ApiOperationNames.FindAll,
       '',
       { method: 'POST', body: apiProps },

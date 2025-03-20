@@ -17,7 +17,13 @@ import { Separator } from '@/components/ui/separator';
 import { MessageCircleQuestion, Settings } from 'lucide-react';
 import { useState, useTransition } from 'react';
 
+import { useRouter } from 'next/navigation';
+import { useStoreName } from '../providers/zustand-provider';
+
 export function User({ user }: { user?: { image?: string } }) {
+  const router = useRouter();
+  const { setStoreName } = useStoreName();
+
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -26,6 +32,11 @@ export function User({ user }: { user?: { image?: string } }) {
     startTransition(() => {
       signOut(); // Trigger signOut without awaiting it
     });
+  };
+
+  const handleChangeStore = async () => {
+    setStoreName('');
+    router.refresh();
   };
 
   return (
@@ -53,8 +64,11 @@ export function User({ user }: { user?: { image?: string } }) {
         >
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <Separator />
-          <DropdownMenuItem asChild>
-            <Link href="/stores/change">Change Store</Link>
+          <DropdownMenuItem
+            onClick={() => handleChangeStore()}
+            className="cursor-pointer"
+          >
+            Change Store
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
