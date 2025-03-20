@@ -9,7 +9,8 @@ import {
 } from '@/app/models/products-model';
 
 import { CustomerBase } from '@/app/models/customers-model';
-import { StoreBase } from '@/app/models/stores-model';
+//import { StoreBase } from '@/app/models/stores-model';
+import { OrganizationBase } from '@/app/models/organizations-model';
 
 interface productsByIdPricesCreateProps {
   product: ProductBase;
@@ -17,7 +18,7 @@ interface productsByIdPricesCreateProps {
   orderTypes: Lookup[];
   sizeOptions: Lookup[];
   customers: CustomerBase[];
-  stores: StoreBase[];
+  stores: OrganizationBase[];
 }
 
 export default function ProductsIdPricesPriceIdEdit({
