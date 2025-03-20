@@ -183,22 +183,22 @@ export default function OrdersCreateByOrderType({
 
                 {/* Search Input & Clear Button */}
                 <Button
-                  variant="outline"
-                  className="h-10 gap-1"
+                  variant="ghost"
+                  className="w-4 h-10 gap-0"
                   onClick={() => setSearch('')}
                 >
-                  <CircleX className="h-8 w-8" />
+                  <CircleX className="h-10 w-4" />
                   <span className="sr-only sm:whitespace-nowrap">Clear</span>
                 </Button>
-                <div className="w-24 xl:w-40 flex-shrink-0">
+                <div className="w-20 xl:w-40 flex-shrink-0">
                   <Input
-                    placeholder="Quick Search..."
+                    placeholder="Search..."
                     value={search}
                     onChange={(e) => {
                       setSearch(e.target.value);
                       setCurrentPage(1); // Reset to first page on search change
                     }}
-                    className="h-10"
+                    className="h-10 text-xs"
                     onClick={() => setIsSearchTouchDialogOpen(true)}
                   />
                 </div>
@@ -270,10 +270,16 @@ export default function OrdersCreateByOrderType({
               {formatPesoNoDecimals(Math.floor(totalAmount))}
             </span>
           </div>
-          <div className="items-center space-x-2 hidden md:flex">
+          <div className="items-center space-x-2 hidden">
             <span className="font-medium whitespace-nowrap">Order Type:</span>
             <span className="text-purple-700 whitespace-nowrap">
               {orderType.toUpperCase()}
+            </span>
+          </div>
+          <div className="items-center space-x-2 hidden md:flex">
+            <span className="font-medium whitespace-nowrap">Store:</span>
+            <span className="text-purple-700 whitespace-nowrap">
+              {storeName || ''}
             </span>
           </div>
         </div>
